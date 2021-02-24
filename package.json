@@ -12,7 +12,10 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.63.4",
-    "react-native-elements": "^3.2.0"
+    "react-native-elements": "^3.2.0",
+    "react-native-svg": "^12.1.0",
+    "teaset": "^0.7.5",
+    "victory-native": "^35.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
