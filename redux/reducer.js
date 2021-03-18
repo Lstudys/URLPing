@@ -3,6 +3,9 @@ const states={
         y:0,//纵坐标，请求往返的时间(毫秒)
         x:0//横坐标，x值表示第x次请求
     },
+    chartDate:[
+        {y:0,x:0}
+    ],
     otherDate:{//请求的平均时间、最大最小时间、服务器域名、连接成功或失败的次数
         allTime:0,//总时间，即每次请求响应的时间和
         maxTime:0,//最长时间
@@ -15,7 +18,7 @@ const states={
 
 
 
-export const reducer=(state=states,action)=>{
+export const myReducer=(state=states,action)=>{
     if(action.type=='req'){
         state.timeDate.y=action.value.time;
         state.timeDate.x=action.value.x;
