@@ -18,7 +18,7 @@ import {
   Button,
 } from 'react-native';
 import {Toast} from 'teaset';
-import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis} from 'victory-native';
+import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay} from 'react-native-elements';
 import {store} from './redux/store';
 
@@ -33,7 +33,8 @@ export default class home extends Component{
         newReqTime:0,
         url:'',//用户输入的url
         OverlayAble:false,//控制Overlay组件的显示
-        chart:false,
+        linechart:false,//用来控制图表的显示
+        ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -43,12 +44,19 @@ export default class home extends Component{
     };
 
 
-    chartDates=[];//作为数据源
+    linechartDates=[];//折线图数据源
 
     chartDate=[{//用于setState以便刷新页面，并无实际意义
       y:1,
       x:1
     }];
+
+   
+
+
+
+   
+    
 
 
 //handleZoom、handleBrus是图表放大需要用到的函数
@@ -62,7 +70,11 @@ export default class home extends Component{
 
 //setReqTime控制浮层(设置时间)的显示
     setReqTime=()=>{
+      if(this.state.ifOverlayAble){
       this.setState({OverlayAble:true});
+    return;  
+    }
+      Toast.message('请稍后设置!');
     }
 
     reqTimeChange=(newTime)=>{
@@ -76,9 +88,11 @@ export default class home extends Component{
     下面是发送请求获取所需数据的函数
     */
    getReq=()=>{
-     this.setState({chart:true})//设置状态以显示图表
+     this.setState({ifOverlayAble:false});
+     this.refs.input.blur();//输入框失去焦点
+     this.setState({linechart:true})//设置状态以显示图表
     const reqTime=this.state.reqTime;//获取发送请求的持续时间
-    const beginTime=new Date().getMinutes();//点击PING后获取当前时间（分钟），用来控制循环
+    const beginTime=new Date().valueOf();//点击PING后获取当前时间（分钟），用来控制循环
     var x=1;//图表的横坐标
     var nowTime='';//当前时间
     const xhr=new XMLHttpRequest();//实例化XMLHttpRequest对象
@@ -94,24 +108,30 @@ export default class home extends Component{
         const t1=new Date().valueOf();
         value.begin=t1;
       }
-      if(xhr.readyState==4){//readystate等于3是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
+      if(xhr.readyState==4){//readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
         
 
         const t2=new Date().valueOf();
         value.end=t2;
         value.time=value.end-value.begin;
         const data={y:value.time,x:x};
-        this.chartDates.push(data);
-       
+        if(this.linechartDates.length>30){
+          this.linechartDates.shift();
+        }
+        this.linechartDates.push(data);
+      
 
         this.setState({chartDate:this.chartDate})
-        nowTime=new Date().getMinutes();
-        if(nowTime<beginTime+reqTime){
+        nowTime=new Date().valueOf();
+        if(nowTime<beginTime+reqTime*60*1000){
         
           x++;
           xhr.abort();
           xhr.open('GET',this.state.url,true);
           xhr.send();
+        }else{
+          this.setState({ifOverlayAble:true});
+          return;
         }
       }
     }
@@ -160,6 +180,7 @@ export default class home extends Component{
           </View>
           <View style={styles.serch}>
             <TextInput
+            ref={'input'}
             placeholder='输入网址...'//占位符
             placeholderTextColor='#ccc'//设置占位符颜色
             keyboardType='url'//设置键盘类型，url只在iOS端可用
@@ -181,30 +202,30 @@ export default class home extends Component{
               onPress={this.getReq}
               >PING</Text>
           </View>
-          <View style={{top:50,left:0}}>
-
-          
-          
-       { this.state.chart? <VictoryChart
+          <View style={{top:50,left:0}}>         
+          { this.state.linechart? <VictoryChart
             width={550}
             height={300}
             scale={{x: "time"}}
-            containerComponent={
+         /*   containerComponent={
               <VictoryZoomContainer responsive={false}
                 zoomDimension="x"
                 zoomDomain={this.state.zoomDomain}
                 onZoomDomainChange={this.handleZoom.bind(this)}
               />
-            }
+            }*/
           >
             <VictoryLine
               style={{
-                data: {stroke: "tomato"}
+                data: {stroke: "tomato"},
+                
               }}
-              data={this.chartDates}
+              data={this.linechartDates}
+             // labels={({ datum }) => datum.y}
             />
           </VictoryChart>: <Text> </Text> }
-          </View>         
+          </View>
+             
         </View>
       );
     }
