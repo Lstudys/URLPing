@@ -57,7 +57,7 @@ check:
 test:
     stage: test
     script:
-        -echo 'test successful'
+        -echo 'test successful!'
     tags:
         -RN-Run
 build:
