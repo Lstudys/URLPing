@@ -53,19 +53,19 @@ check:
     script:
         -echo: 'find 0 err'
     tags:
-        -RN-Run
+        -rnRunner
 test:
     stage: test
     script:
         -echo 'test successful!'
     tags:
-        -RN-Run
+        -rnRunner
 build:
     stage: build
     script:
         -echo 'build the app'
     tags:
-        -RN-Run
+        -rnRunner
 
 
 
