@@ -19,8 +19,9 @@ import {
 } from 'react-native';
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
-import {Overlay} from 'react-native-elements';
+import {Overlay, withTheme} from 'react-native-elements';
 import {store} from './redux/store';
+import { PickerIOSComponent } from 'react-native';
 
 
 
@@ -145,8 +146,8 @@ export default class home extends Component{
     render(){
 
       return(
-        <View height={height} style={{backgroundColor:'#000000'}} >
-         <Overlay 
+        <View height={height} style={{backgroundColor:'#1F2342'}} >
+        { /*<Overlay 
          
          isVisible={this.state.OverlayAble}
          onBackdropPress={()=>{this.setState({OverlayAble:false})}}
@@ -173,59 +174,15 @@ export default class home extends Component{
              Toast.message('设置成功！')}} />
            </View>
            </View>
-         </Overlay>
-          <View style={{top:12,left:10,flexDirection:'row'}}>
-            <Text style={{color:'#ffffff',fontSize:18,bottom:5}} onPress={this.setReqTime} >设置</Text>
-            <Text style={{color:'#ffffff',fontSize:18,left:256}} >关于</Text>
-          </View>
-          <View style={styles.serch}>
-            <TextInput
-            ref={'input'}
-            placeholder='输入网址...'//占位符
-            placeholderTextColor='#ccc'//设置占位符颜色
-            keyboardType='url'//设置键盘类型，url只在iOS端可用
-            color='#ffffff'//设置输入文字的颜色
-            onChangeText={this.textInputChange}
-            style={{borderBottomColor:'#ffffff',borderBottomWidth:1,width:280,left:12,}}
-            />
-            <Text style={{
-              color:'#ffffff',
-              backgroundColor:'#1E90FF',
-              alignSelf:'center',
-              textAlign:'center',
-              height:25,
-              width:40,
-              top:12,
-              left:20,
-              borderRadius:5
-              }}
-              onPress={this.getReq}
-              >PING</Text>
-          </View>
-          <View style={{top:50,left:0}}>         
-          { this.state.linechart? <VictoryChart
-            width={550}
-            height={300}
-            scale={{x: "time"}}
-         /*   containerComponent={
-              <VictoryZoomContainer responsive={false}
-                zoomDimension="x"
-                zoomDomain={this.state.zoomDomain}
-                onZoomDomainChange={this.handleZoom.bind(this)}
-              />
-            }*/
-          >
-            <VictoryLine
-              style={{
-                data: {stroke: "tomato"},
-                
-              }}
-              data={this.linechartDates}
-             // labels={({ datum }) => datum.y}
-            />
-          </VictoryChart>: <Text> </Text> }
-          </View>
-             
+         </Overlay> */}
+            <Text style={{color:'pink',fontSize:40,fontWeight:'bold',marginLeft:65,marginTop:180}}>Graphurlping</Text>
+            <View style={styles.TextStyle}>
+                <TextInput style={{width:250,marginLeft:30,marginTop:30,color:'black'}} placeholder='www.baidu.com' ></TextInput>
+                <View style={styles.ButtonStyle}>
+                  <Button title='Ping!' color='white' style={{marginLeft:-40}}>
+                  </Button>
+                </View>
+            </View>
         </View>
       );
     }
@@ -236,4 +193,29 @@ const styles=StyleSheet.create({
       flexDirection:'row',
       top:20,
     },
+    TextStyle:{
+      margin:10,
+      height:50,
+      width:250,
+      backgroundColor:'white',
+      borderRadius:15,
+      borderWidth:4,
+      color:'#1F2342',
+      fontSize:20,
+      borderColor:'pink',
+      marginLeft:30,
+      marginTop:45,
+      flexDirection:'row'
+    },
+    ButtonStyle:{
+      width:60,
+      height:50,
+      marginLeft:-30,
+      backgroundColor:'white',
+      borderColor:'pink',
+      borderRadius:15,
+      borderWidth:4,
+      marginTop:-3
+    }
 });
+
