@@ -20,8 +20,7 @@ import {
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay, withTheme} from 'react-native-elements';
-import {store} from './redux/store';
-import { PickerIOSComponent } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 
@@ -146,8 +145,10 @@ export default class home extends Component{
     render(){
 
       return(
+       
         <View height={height} style={{backgroundColor:'#1F2342'}} >
-        { /*<Overlay 
+         <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
+        <Overlay 
          
          isVisible={this.state.OverlayAble}
          onBackdropPress={()=>{this.setState({OverlayAble:false})}}
@@ -174,7 +175,7 @@ export default class home extends Component{
              Toast.message('设置成功！')}} />
            </View>
            </View>
-         </Overlay> */}
+         </Overlay> 
             <Text style={{color:'pink',fontSize:40,fontWeight:'bold',marginLeft:65,marginTop:180}}>Graphurlping</Text>
             <View style={styles.TextStyle}>
                 <TextInput style={{width:250,marginLeft:30,marginTop:30,color:'black'}} placeholder='www.baidu.com' ></TextInput>
@@ -216,6 +217,12 @@ const styles=StyleSheet.create({
       borderRadius:15,
       borderWidth:4,
       marginTop:-3
+    },
+    settingbtnstyle:{
+      color:'#FFB6C1',
+      fontSize:20,
+      top:10,
+      left:5
     }
 });
 
