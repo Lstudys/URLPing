@@ -147,7 +147,10 @@ export default class home extends Component{
       return(
        
         <View height={height} style={{backgroundColor:'#1F2342'}} >
+          <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
+         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} >About</Text>
+         </View>
         <Overlay 
          
          isVisible={this.state.OverlayAble}
