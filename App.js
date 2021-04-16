@@ -16,11 +16,13 @@ import {
   Text,
   Alert,
   Button,
+  TouchableOpacity 
 } from 'react-native';
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 
 
@@ -146,7 +148,7 @@ export default class home extends Component{
 
       return(
        
-        <View height={height} style={{backgroundColor:'#1F2342'}} >
+        <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input.blur()}} >
           <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
          <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} >About</Text>
@@ -180,14 +182,31 @@ export default class home extends Component{
            </View>
          </Overlay> 
             <Text style={{color:'pink',fontSize:40,fontWeight:'bold',marginLeft:65,marginTop:180}}>Graphurlping</Text>
-            <View style={styles.TextStyle}>
-                <TextInput style={{width:250,marginLeft:30,marginTop:30,color:'black'}} placeholder='www.baidu.com' ></TextInput>
-                <View style={styles.ButtonStyle}>
-                  <Button title='Ping!' color='white' style={{marginLeft:-40}}>
-                  </Button>
-                </View>
-            </View>
-        </View>
+            <View style={styles.serch}>
+            <TextInput
+            ref={'input'}
+            placeholder='输入网址...'//占位符
+            placeholderTextColor='#ccc'//设置占位符颜色
+            keyboardType='url'//设置键盘类型，url只在iOS端可用
+            color='#ffffff'//设置输入文字的颜色
+            onChangeText={this.textInputChange}
+            style={{borderBottomColor:'#ffffff',borderBottomWidth:1,width:280,left:12,}}
+            />
+            <Text style={{
+              color:'#ffffff',
+              backgroundColor:'#1E90FF',
+              alignSelf:'center',
+              textAlign:'center',
+              height:25,
+              width:40,
+              top:12,
+              left:20,
+              borderRadius:5
+              }}
+              onPress={this.getReq}
+              >PING</Text>
+          </View>
+        </TouchableOpacity>
       );
     }
 }
