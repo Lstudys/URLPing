@@ -21,7 +21,6 @@ import {
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay, withTheme} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 
@@ -148,7 +147,7 @@ export default class home extends Component{
 
       return(
        
-        <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input.blur()}} >
+       { this.state.linechart?<TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input.blur()}} >
           <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
          <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} >About</Text>
@@ -206,7 +205,7 @@ export default class home extends Component{
               onPress={this.getReq}
               >PING</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       );
     }
 }
