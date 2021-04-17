@@ -86,6 +86,7 @@ export default class home extends Component{
              this.firstpress=0;
             this.setState({linechart:true});
             this.setState({isPing:false});
+            this.setState({url:''});
             return true;
           }else{
             this.pressnum=1;
@@ -133,10 +134,16 @@ export default class home extends Component{
     textInputChange=(newText)=>{
       this.state.url=newText;
     }
+
+    testURL=(url)=>{
+      let match=/^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
+      return match.test(url);
+    }
     /*
     下面是发送请求获取所需数据的函数
     */
    getReq=()=>{
+     if(this.testURL(this.state.url)){
      this.setState({isPing:true});
      this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
      this.refs.input.blur();//输入框失去焦点
@@ -159,6 +166,12 @@ export default class home extends Component{
       sumtime:0,//每次请求的响应时长的总和
     } 
   
+    xhr.timeout=5000;//设置超时时间（5秒）
+    xhr.ontimeout=(e)=>{//超时事件，请求超时时触发
+      Toast.message('请求超时!');
+      xhr.abort();
+      return;
+    }
     
     xhr.onreadystatechange=()=>{  //当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
       if(xhr.readyState==2){//readystate等于2是请求发送的时刻，获取当前时间
@@ -211,13 +224,16 @@ export default class home extends Component{
           }
           this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
+          this.setState({url:''});
           return;
         }
       }
     }
     xhr.open('GET',this.state.url,true);//写请求头
     xhr.send();//发送请求
-
+  }else{
+    Toast.message('URL格式不正确!');
+  }
    
   }   
 
@@ -272,12 +288,12 @@ export default class home extends Component{
             />
             <Text style={{
               color:'#ffffff',
-              backgroundColor:'#1E90FF',
+              backgroundColor:'pink',
               alignSelf:'center',
               textAlign:'center',
               height:25,
               width:40,
-              top:12,
+              top:15,
               left:20,
               borderRadius:5
               }}
