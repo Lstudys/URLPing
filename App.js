@@ -47,9 +47,14 @@ export default class home extends Component{
     };
 
 
-    pressnum=0;
-    firstpress=0;
+    pressnum=0;//表示安卓手机返回键按压次数，以控制返回上一界面
+    firstpress=0;//第一次按返回键的时间戟
     linechartDates=[];//折线图数据源
+    maxTime=0;//最大时间
+    minTime='';//最小时间
+    avgTime=0;//平均时间
+    n95=0;//95%的数据
+    sumReqTime=[];//所有请求时间的数组，用来计算标准差
 
     chartDate=[{//用于setState以便刷新页面，并无实际意义
       y:1,
@@ -68,6 +73,7 @@ export default class home extends Component{
 
    
       backAction=()=>{
+        if(!this.state.linechart){
         if(this.state.isPing){
           this.pressnum++;
         if(this.pressnum==1){
@@ -93,6 +99,9 @@ export default class home extends Component{
         this.setState({linechart:true});
         return true;
       }
+    }else{
+      BackHandler.exitApp();
+    }
         
       }
 
@@ -129,18 +138,21 @@ export default class home extends Component{
     */
    getReq=()=>{
      this.setState({isPing:true});
-     this.setState({ifOverlayAble:false});
+     this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
      this.refs.input.blur();//输入框失去焦点
      this.setState({linechart:false})//设置状态以显示图表
+     this.linechartDates=[];//清空折线图的数据源数组
+     this.sumReqTime=[];//清空请求时间的数组
     const reqTime=this.state.reqTime;//获取发送请求的持续时间
     const beginTime=new Date().valueOf();//点击PING后获取当前时间（分钟），用来控制循环
     var x=1;//图表的横坐标
     var nowTime='';//当前时间
     const xhr=new XMLHttpRequest();//实例化XMLHttpRequest对象
     const value={//存储每次的发送、接收请求的时间戟和请求收到响应的时间
-      begin:0,
-      end:0,
-      time:0
+      begin:0,//发送请求时的时间戟
+      end:0,//收到响应时的时间戟
+      time:0,//响应时长
+      sumtime:0,//每次请求的响应时长的总和
     } 
   
     
@@ -155,15 +167,26 @@ export default class home extends Component{
         const t2=new Date().valueOf();
         value.end=t2;
         value.time=value.end-value.begin;
+        if(value.time!=0){
         const data={y:value.time,x:x};
         if(this.linechartDates.length>100){
           this.linechartDates.shift();
         }
         this.linechartDates.push(data);
-      
-
-        this.setState({chartDate:this.chartDate})
-        nowTime=new Date().valueOf();
+        this.sumReqTime.push(value.time);
+        value.sumtime+=value.time;//求和，算出总时间
+        this.avgTime=value.sumtime/x;
+        if(value.time>this.maxTime){
+          this.maxTime=value.time;
+        }
+        if(this.minTime==''){
+          this.minTime=value.time;
+        }else if(this.minTime>value.time){
+          this.minTime=value.time;
+        }
+        this.setState({chartDate:this.chartDate})//仅仅用来刷新UI
+      }
+        nowTime=new Date().valueOf();//获取当前时间戟
         if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
         
           x++;
@@ -173,7 +196,18 @@ export default class home extends Component{
         }else{
           this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
-          this.linechartDates=[];
+          let sum=0;//存储每个数减去平均数的平方的和
+          this.sumReqTime.forEach((num)=>{
+            const bzc=num-this.avgTime;
+            sum+=bzc*bzc;
+          });
+          let num1=sum/x;
+          let num2=Math.sqrt(num1);//num2是标准差,平均数减去标准差就是95%的数据分布点
+          if(num2>this.avgTime){
+            this.n95=num2-this.avgTime;
+          }else{
+            this.n95=this.avgTime-num2;
+          }
           return;
         }
       }
@@ -192,7 +226,7 @@ export default class home extends Component{
        this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input.blur()}} >
           <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
-         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} >About</Text>
+         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false})}} >About</Text>
          </View>
         <Overlay 
          
@@ -270,6 +304,14 @@ export default class home extends Component{
            // labels={({ datum }) => datum.y}
           />
         </VictoryChart>
+        <TouchableOpacity style={{flexDirection:'row'}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:160}}>MIN:{this.minTime}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{flexDirection:'column',top:40}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime}</Text>
+            <Text style={{color:'pink',fontSize:20,top:20,left:20}}>95%:{this.n95}</Text>
+        </TouchableOpacity>
         </View>
       );
     }
