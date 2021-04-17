@@ -21,6 +21,7 @@ import {
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay, withTheme} from 'react-native-elements';
+import { BackHandler } from 'react-native';
 
 
 
@@ -34,8 +35,9 @@ export default class home extends Component{
         newReqTime:0,
         url:'',//用户输入的url
         OverlayAble:false,//控制Overlay组件的显示
-        linechart:false,//用来控制图表的显示
+        linechart:true,//用来控制图表的显示
         ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
+        isPing:false,//控制是否正在ping
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -45,6 +47,8 @@ export default class home extends Component{
     };
 
 
+    pressnum=0;
+    firstpress=0;
     linechartDates=[];//折线图数据源
 
     chartDate=[{//用于setState以便刷新页面，并无实际意义
@@ -53,11 +57,46 @@ export default class home extends Component{
     }];
 
    
+    componentDidMount(){
+      BackHandler.addEventListener('hardwareBackPress',this.backAction);
+    }
+    componentWillUnmount(){
+      BackHandler.removeEventListener('hardwareBackPress',this.backAction);
+    }
 
 
 
    
-    
+      backAction=()=>{
+        if(this.state.isPing){
+          this.pressnum++;
+        if(this.pressnum==1){
+          this.firstpress=new Date().valueOf();
+          Toast.message('再按一次取消Ping');
+          return true;
+        }else {
+           if(this.firstpress+2000>new Date().valueOf()){
+             this.pressnum=0;
+             this.firstpress=0;
+            this.setState({linechart:true});
+            this.setState({isPing:false});
+            return true;
+          }else{
+            this.pressnum=1;
+            this.firstpress=new Date().valueOf();
+            Toast.message('再按一次取消Ping');
+            return true;
+          }
+        }
+       
+      }else{
+        this.setState({linechart:true});
+        return true;
+      }
+        
+      }
+
+
 
 
 //handleZoom、handleBrus是图表放大需要用到的函数
@@ -89,9 +128,10 @@ export default class home extends Component{
     下面是发送请求获取所需数据的函数
     */
    getReq=()=>{
+     this.setState({isPing:true});
      this.setState({ifOverlayAble:false});
      this.refs.input.blur();//输入框失去焦点
-     this.setState({linechart:true})//设置状态以显示图表
+     this.setState({linechart:false})//设置状态以显示图表
     const reqTime=this.state.reqTime;//获取发送请求的持续时间
     const beginTime=new Date().valueOf();//点击PING后获取当前时间（分钟），用来控制循环
     var x=1;//图表的横坐标
@@ -116,7 +156,7 @@ export default class home extends Component{
         value.end=t2;
         value.time=value.end-value.begin;
         const data={y:value.time,x:x};
-        if(this.linechartDates.length>30){
+        if(this.linechartDates.length>100){
           this.linechartDates.shift();
         }
         this.linechartDates.push(data);
@@ -124,14 +164,16 @@ export default class home extends Component{
 
         this.setState({chartDate:this.chartDate})
         nowTime=new Date().valueOf();
-        if(nowTime<beginTime+reqTime*60*1000){
+        if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
         
           x++;
           xhr.abort();
           xhr.open('GET',this.state.url,true);
           xhr.send();
         }else{
+          this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
+          this.linechartDates=[];
           return;
         }
       }
@@ -147,7 +189,7 @@ export default class home extends Component{
 
       return(
        
-       { this.state.linechart?<TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input.blur()}} >
+       this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input.blur()}} >
           <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
          <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} >About</Text>
@@ -205,7 +247,30 @@ export default class home extends Component{
               onPress={this.getReq}
               >PING</Text>
           </View>
-        </TouchableOpacity>}
+        </TouchableOpacity> : <View style={{top:50,left:0}}>         
+       <VictoryChart
+          width={550}
+          height={300}
+          scale={{x: "time"}}
+       /*   containerComponent={
+            <VictoryZoomContainer responsive={false}
+              zoomDimension="x"
+              zoomDomain={this.state.zoomDomain}
+              onZoomDomainChange={this.handleZoom.bind(this)}
+            />
+          }*/
+        >
+          <VictoryLine
+          minDomain={{y:0}}
+            style={{
+              data: {stroke: "tomato"},
+              
+            }}
+            data={this.linechartDates}
+           // labels={({ datum }) => datum.y}
+          />
+        </VictoryChart>
+        </View>
       );
     }
 }
