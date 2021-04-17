@@ -143,6 +143,10 @@ export default class home extends Component{
      this.setState({linechart:false})//设置状态以显示图表
      this.linechartDates=[];//清空折线图的数据源数组
      this.sumReqTime=[];//清空请求时间的数组
+     this.maxTime=0;
+     this.minTime='';
+     this.avgTime=0;
+     this.n95=0;//以上四行代码都是把四种数据清空
     const reqTime=this.state.reqTime;//获取发送请求的持续时间
     const beginTime=new Date().valueOf();//点击PING后获取当前时间（分钟），用来控制循环
     var x=1;//图表的横坐标
@@ -185,17 +189,14 @@ export default class home extends Component{
           this.minTime=value.time;
         }
         this.setState({chartDate:this.chartDate})//仅仅用来刷新UI
+        x++;
       }
         nowTime=new Date().valueOf();//获取当前时间戟
         if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
-        
-          x++;
           xhr.abort();
           xhr.open('GET',this.state.url,true);
           xhr.send();
         }else{
-          this.setState({isPing:false})
-          this.setState({ifOverlayAble:true});
           let sum=0;//存储每个数减去平均数的平方的和
           this.sumReqTime.forEach((num)=>{
             const bzc=num-this.avgTime;
@@ -208,6 +209,8 @@ export default class home extends Component{
           }else{
             this.n95=this.avgTime-num2;
           }
+          this.setState({isPing:false})
+          this.setState({ifOverlayAble:true});
           return;
         }
       }
