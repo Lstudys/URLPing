@@ -16,11 +16,13 @@ import {
   Text,
   Alert,
   Button,
+  TouchableOpacity 
 } from 'react-native';
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
-import {Overlay} from 'react-native-elements';
-import {store} from './redux/store';
+import {Overlay, withTheme} from 'react-native-elements';
+import { BackHandler } from 'react-native';
+
 
 
 
@@ -33,8 +35,9 @@ export default class home extends Component{
         newReqTime:0,
         url:'',//用户输入的url
         OverlayAble:false,//控制Overlay组件的显示
-        linechart:false,//用来控制图表的显示
+        linechart:true,//用来控制图表的显示
         ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
+        isPing:false,//控制是否正在ping
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -44,7 +47,14 @@ export default class home extends Component{
     };
 
 
+    pressnum=0;//表示安卓手机返回键按压次数，以控制返回上一界面
+    firstpress=0;//第一次按返回键的时间戟
     linechartDates=[];//折线图数据源
+    maxTime=0;//最大时间
+    minTime='';//最小时间
+    avgTime=0;//平均时间
+    n95=0;//95%的数据
+    sumReqTime=[];//所有请求时间的数组，用来计算标准差
 
     chartDate=[{//用于setState以便刷新页面，并无实际意义
       y:1,
@@ -52,11 +62,50 @@ export default class home extends Component{
     }];
 
    
+    componentDidMount(){
+      BackHandler.addEventListener('hardwareBackPress',this.backAction);
+    }
+    componentWillUnmount(){
+      BackHandler.removeEventListener('hardwareBackPress',this.backAction);
+    }
 
 
 
    
-    
+      backAction=()=>{
+        if(!this.state.linechart){
+        if(this.state.isPing){
+          this.pressnum++;
+        if(this.pressnum==1){
+          this.firstpress=new Date().valueOf();
+          Toast.message('再按一次取消Ping');
+          return true;
+        }else {
+           if(this.firstpress+2000>new Date().valueOf()){
+             this.pressnum=0;
+             this.firstpress=0;
+            this.setState({linechart:true});
+            this.setState({isPing:false});
+            return true;
+          }else{
+            this.pressnum=1;
+            this.firstpress=new Date().valueOf();
+            Toast.message('再按一次取消Ping');
+            return true;
+          }
+        }
+       
+      }else{
+        this.setState({linechart:true});
+        return true;
+      }
+    }else{
+      BackHandler.exitApp();
+    }
+        
+      }
+
+
 
 
 //handleZoom、handleBrus是图表放大需要用到的函数
@@ -88,18 +137,22 @@ export default class home extends Component{
     下面是发送请求获取所需数据的函数
     */
    getReq=()=>{
-     this.setState({ifOverlayAble:false});
+     this.setState({isPing:true});
+     this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
      this.refs.input.blur();//输入框失去焦点
-     this.setState({linechart:true})//设置状态以显示图表
+     this.setState({linechart:false})//设置状态以显示图表
+     this.linechartDates=[];//清空折线图的数据源数组
+     this.sumReqTime=[];//清空请求时间的数组
     const reqTime=this.state.reqTime;//获取发送请求的持续时间
     const beginTime=new Date().valueOf();//点击PING后获取当前时间（分钟），用来控制循环
     var x=1;//图表的横坐标
     var nowTime='';//当前时间
     const xhr=new XMLHttpRequest();//实例化XMLHttpRequest对象
     const value={//存储每次的发送、接收请求的时间戟和请求收到响应的时间
-      begin:0,
-      end:0,
-      time:0
+      begin:0,//发送请求时的时间戟
+      end:0,//收到响应时的时间戟
+      time:0,//响应时长
+      sumtime:0,//每次请求的响应时长的总和
     } 
   
     
@@ -114,23 +167,47 @@ export default class home extends Component{
         const t2=new Date().valueOf();
         value.end=t2;
         value.time=value.end-value.begin;
+        if(value.time!=0){
         const data={y:value.time,x:x};
-        if(this.linechartDates.length>30){
+        if(this.linechartDates.length>100){
           this.linechartDates.shift();
         }
         this.linechartDates.push(data);
-      
-
-        this.setState({chartDate:this.chartDate})
-        nowTime=new Date().valueOf();
-        if(nowTime<beginTime+reqTime*60*1000){
+        this.sumReqTime.push(value.time);
+        value.sumtime+=value.time;//求和，算出总时间
+        this.avgTime=value.sumtime/x;
+        if(value.time>this.maxTime){
+          this.maxTime=value.time;
+        }
+        if(this.minTime==''){
+          this.minTime=value.time;
+        }else if(this.minTime>value.time){
+          this.minTime=value.time;
+        }
+        this.setState({chartDate:this.chartDate})//仅仅用来刷新UI
+      }
+        nowTime=new Date().valueOf();//获取当前时间戟
+        if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
         
           x++;
           xhr.abort();
           xhr.open('GET',this.state.url,true);
           xhr.send();
         }else{
+          this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
+          let sum=0;//存储每个数减去平均数的平方的和
+          this.sumReqTime.forEach((num)=>{
+            const bzc=num-this.avgTime;
+            sum+=bzc*bzc;
+          });
+          let num1=sum/x;
+          let num2=Math.sqrt(num1);//num2是标准差,平均数减去标准差就是95%的数据分布点
+          if(num2>this.avgTime){
+            this.n95=num2-this.avgTime;
+          }else{
+            this.n95=this.avgTime-num2;
+          }
           return;
         }
       }
@@ -145,8 +222,13 @@ export default class home extends Component{
     render(){
 
       return(
-        <View height={height} style={{backgroundColor:'#000000'}} >
-         <Overlay 
+       
+       this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input.blur()}} >
+          <View style={{flexDirection:'row'}}>
+         <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
+         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false})}} >About</Text>
+         </View>
+        <Overlay 
          
          isVisible={this.state.OverlayAble}
          onBackdropPress={()=>{this.setState({OverlayAble:false})}}
@@ -173,12 +255,9 @@ export default class home extends Component{
              Toast.message('设置成功！')}} />
            </View>
            </View>
-         </Overlay>
-          <View style={{top:12,left:10,flexDirection:'row'}}>
-            <Text style={{color:'#ffffff',fontSize:18,bottom:5}} onPress={this.setReqTime} >设置</Text>
-            <Text style={{color:'#ffffff',fontSize:18,left:256}} >关于</Text>
-          </View>
-          <View style={styles.serch}>
+         </Overlay> 
+            <Text style={{color:'pink',fontSize:40,fontWeight:'bold',marginLeft:65,marginTop:180}}>Graphurlping</Text>
+            <View style={styles.serch}>
             <TextInput
             ref={'input'}
             placeholder='输入网址...'//占位符
@@ -202,30 +281,37 @@ export default class home extends Component{
               onPress={this.getReq}
               >PING</Text>
           </View>
-          <View style={{top:50,left:0}}>         
-          { this.state.linechart? <VictoryChart
-            width={550}
-            height={300}
-            scale={{x: "time"}}
-         /*   containerComponent={
-              <VictoryZoomContainer responsive={false}
-                zoomDimension="x"
-                zoomDomain={this.state.zoomDomain}
-                onZoomDomainChange={this.handleZoom.bind(this)}
-              />
-            }*/
-          >
-            <VictoryLine
-              style={{
-                data: {stroke: "tomato"},
-                
-              }}
-              data={this.linechartDates}
-             // labels={({ datum }) => datum.y}
+        </TouchableOpacity> : <View style={{top:50,left:0}}>         
+       <VictoryChart
+          width={550}
+          height={300}
+          scale={{x: "time"}}
+       /*   containerComponent={
+            <VictoryZoomContainer responsive={false}
+              zoomDimension="x"
+              zoomDomain={this.state.zoomDomain}
+              onZoomDomainChange={this.handleZoom.bind(this)}
             />
-          </VictoryChart>: <Text> </Text> }
-          </View>
-             
+          }*/
+        >
+          <VictoryLine
+          minDomain={{y:0}}
+            style={{
+              data: {stroke: "tomato"},
+              
+            }}
+            data={this.linechartDates}
+           // labels={({ datum }) => datum.y}
+          />
+        </VictoryChart>
+        <TouchableOpacity style={{flexDirection:'row'}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:160}}>MIN:{this.minTime}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{flexDirection:'column',top:40}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime}</Text>
+            <Text style={{color:'pink',fontSize:20,top:20,left:20}}>95%:{this.n95}</Text>
+        </TouchableOpacity>
         </View>
       );
     }
@@ -236,4 +322,35 @@ const styles=StyleSheet.create({
       flexDirection:'row',
       top:20,
     },
+    TextStyle:{
+      margin:10,
+      height:50,
+      width:250,
+      backgroundColor:'white',
+      borderRadius:15,
+      borderWidth:4,
+      color:'#1F2342',
+      fontSize:20,
+      borderColor:'pink',
+      marginLeft:30,
+      marginTop:45,
+      flexDirection:'row'
+    },
+    ButtonStyle:{
+      width:60,
+      height:50,
+      marginLeft:-30,
+      backgroundColor:'white',
+      borderColor:'pink',
+      borderRadius:15,
+      borderWidth:4,
+      marginTop:-3
+    },
+    settingbtnstyle:{
+      color:'#FFB6C1',
+      fontSize:20,
+      top:10,
+      left:5
+    }
 });
+
