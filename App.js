@@ -33,8 +33,8 @@ export default class home extends Component{
       this.state={
         reqTime:5,//控制请求发送持续时间的state
         newReqTime:0,
-        url:'',//用户输入的url
-        url2:'',
+        url:'1',//用户输入的url
+        url2:'1',
         OverlayAble:false,//控制Overlay组件的显示
         linechart:true,//用来控制图表的显示
         ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
@@ -56,6 +56,7 @@ export default class home extends Component{
     minTime='';//最小时间
     avgTime=0;//平均时间
     n95='';//95%的数据
+    status1='';
     sumReqTime=[];//所有请求时间的数组，用来计算标准差
     linechartDates=[];//折线图1的数据源
     /**
@@ -65,6 +66,7 @@ export default class home extends Component{
     minTime2='';//最小时间
     avgTime2=0;//平均时间
     n952='';//95%的数据
+    status2='';
     sumReqTime2=[];//所有请求时间的数组，用来计算标准差
     linechartDates2=[];//折线图2的数据源
 
@@ -99,6 +101,7 @@ export default class home extends Component{
             this.setState({linechart:true});
             this.setState({isPing:false});
             this.setState({url:''});
+            this.setState({url2:''});
             return true;
           }else{
             this.pressnum=1;
@@ -110,6 +113,8 @@ export default class home extends Component{
        
       }else{
         this.setState({linechart:true});
+        this.setState({url:''});
+        this.setState({url2:''});
         return true;
       }
     }else{
@@ -151,14 +156,16 @@ export default class home extends Component{
     }
 
     testURL=(url)=>{
-      let match=/^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
+      let match=/http|https/;
+      // /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
+     // /^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
       return match.test(url);
     }
     /*
     下面是发送请求获取所需数据的函数,变量中有2的表明是第二个图表的数据
     */
    getReq=()=>{
-     if(this.testURL(this.state.url)||this.testURL(this.state.url2)){
+     if((this.testURL(this.state.url)||this.testURL(this.state.url2))){
      this.setState({isPing:true});
      this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
      this.refs.input1.blur();//输入框失去焦点
@@ -201,13 +208,13 @@ export default class home extends Component{
     xhr.timeout=5000;//设置超时时间（5秒）
     xhr2.timeout=5000;
     xhr.ontimeout=(e)=>{//超时事件，请求超时时触发
-      Toast.message('请求超时!');
+      Toast.message(`${this.state.url}请求超时!`);
       xhr.abort();
       return;
     }
     xhr2.ontimeout=(e)=>{//超时事件，请求超时时触发
-      Toast.message('请求超时!');
-      xhr.abort();
+      Toast.message(`${this.state.url2}请求超时!`);
+      xhr2.abort();
       return;
     }
     
@@ -219,7 +226,7 @@ export default class home extends Component{
       }
       if(xhr2.readyState==4){//readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
         
-
+        this.status2=xhr2.status;
         const t2=new Date().valueOf();
         value2.end=t2;
         value2.time=value2.end-value2.begin;
@@ -231,7 +238,7 @@ export default class home extends Component{
         this.linechartDates2.push(data);
         this.sumReqTime2.push(value2.time);
         value2.sumtime+=value2.time;//求和，算出总时间
-        this.avgTime2=value2.sumtime/x;
+        this.avgTime2=value2.sumtime/x2;
         if(value2.time>this.maxTime2){
           this.maxTime2=value2.time;
         }
@@ -263,8 +270,7 @@ export default class home extends Component{
           }
           this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
-          this.setState({url2:''});
-          return;
+          
         }
       }
     }
@@ -276,7 +282,7 @@ export default class home extends Component{
       }
       if(xhr.readyState==4){//readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
         
-
+        this.status1=xhr.status;
         const t2=new Date().valueOf();
         value.end=t2;
         value.time=value.end-value.begin;
@@ -320,15 +326,18 @@ export default class home extends Component{
           }
           this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
-          this.setState({url:''});
           return;
         }
       }
     }
+    if(this.state.url!=''){
     xhr.open('GET',this.state.url,true);//写请求头
-    xhr2.open('GET',this.state.url2,true)
     xhr.send();//发送请求
+    }
+    if(this.state.url2!=''){
+    xhr2.open('GET',this.state.url2,true)
     xhr2.send();
+    }
   }else{
     Toast.message('URL格式不正确!');
   }
@@ -443,24 +452,30 @@ export default class home extends Component{
            // labels={({ datum }) => datum.y}
           />
         </VictoryChart>
+        {this.state.url ?
+        <View>
         <Text style={{color:'pink',left:20,fontSize:20}}>{`${this.state.url} :`}</Text>
+        <Text style={{color:'pink',fontSize:20,top:15,left:18}}>{`status:${this.status1}`}</Text>
         <TouchableOpacity style={{flexDirection:'column'}} activeOpacity={1.0}>
             <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}</Text>
             <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MIN:{this.minTime}</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={{flexDirection:'column',top:6}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>AVG:{this.avgTime}</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n95}</Text>
+        </TouchableOpacity></View> : <View></View>}
+        {this.state.url2 ? <View>
+        <Text style={{color:'pink',left:20,fontSize:20,top:35}}>{`${this.state.url2} :`}</Text>
+        <Text style={{color:'pink',fontSize:20,top:33,left:16}}>{`status:${this.status2}`}</Text>
         <TouchableOpacity style={{flexDirection:'column',top:20}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime}</Text>
-            <Text style={{color:'pink',fontSize:20,top:20,left:20}}>95%:{this.n95}</Text>
+            <Text style={{color:'pink',fontSize:20,top:10,left:20}}>MAX:{this.maxTime2}</Text>
+            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>MIN:{this.minTime2}</Text>
         </TouchableOpacity>
-        <Text style={{color:'pink',left:20,fontSize:20,top:55}}>{`${this.state.url2} :`}</Text>
-        <TouchableOpacity style={{flexDirection:'column',top:55}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime2}</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MIN:{this.minTime2}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{flexDirection:'column',top:65}} activeOpacity={1.0}>
+        <TouchableOpacity style={{flexDirection:'column',top:15}} activeOpacity={1.0}>
             <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime2}</Text>
             <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n952}</Text>
         </TouchableOpacity>
+        </View> : <View></View>}
         </View>
       );
     }
