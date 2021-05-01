@@ -33,14 +33,15 @@ export default class home extends Component{
       this.state={
         reqTime:5,//控制请求发送持续时间的state
         newReqTime:0,
-        url:'1',//用户输入的url
-        url2:'1',
+        url:'',//用户输入的url
+        url2:'',
         OverlayAble:false,//控制Overlay组件的显示
         linechart:true,//用来控制图表的显示
         ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
         isPing:false,//控制是否正在ping
         defaultvalue1:'',
         defaultvalue2:'',
+        backChart:false,
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -113,8 +114,6 @@ export default class home extends Component{
        
       }else{
         this.setState({linechart:true});
-        this.setState({url:''});
-        this.setState({url2:''});
         return true;
       }
     }else{
@@ -182,7 +181,8 @@ export default class home extends Component{
      this.avgTime=0;
      this.avgTime2=0;
      this.n95='';
-     this.n952='';//以上代码都是把四种数据清空
+     this.n952='';
+     //以上代码都是把数据清空
     const reqTime=this.state.reqTime;//获取发送请求的持续时间
     const beginTime=new Date().valueOf();//点击PING后获取当前时间（分钟），用来控制循环
     var x=1;//图表1的横坐标
@@ -227,7 +227,7 @@ export default class home extends Component{
       if(xhr2.readyState==4){//readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
         
         this.status2=xhr2.status;
-        const t2=new Date().valueOf();
+         const t2=new Date().valueOf();
         value2.end=t2;
         value2.time=value2.end-value2.begin;
         if(value2.time!=0){
@@ -270,7 +270,9 @@ export default class home extends Component{
           }
           this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
-          
+          if(nowTime>beginTime+reqTime*60*1000){
+            this.setState({backChart:true});
+          }
         }
       }
     }
@@ -326,6 +328,9 @@ export default class home extends Component{
           }
           this.setState({isPing:false})
           this.setState({ifOverlayAble:true});
+          if(nowTime>beginTime+reqTime*60*1000){
+            this.setState({backChart:true});
+          }
           return;
         }
       }
@@ -408,18 +413,21 @@ export default class home extends Component{
             </View>
             <Text style={{
               color:'#ffffff',
+              fontSize:25,
+              paddingTop:8,
               backgroundColor:'pink',
               alignSelf:'center',
               textAlign:'center',
-              height:28,
-              width:45,
+              height:50,
+              width:220,
               top:28,
-              left:25,
+              left:-8,
               borderRadius:5
               }}
               onPress={this.getReq}
               >PING</Text>
           </View>
+          {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}}>返回图表</Text>:<View></View>}
         </TouchableOpacity> : <View style={{top:50,left:0}}>         
        <VictoryChart
           width={550}
@@ -457,23 +465,23 @@ export default class home extends Component{
         <Text style={{color:'pink',left:20,fontSize:20}}>{`${this.state.url} :`}</Text>
         <Text style={{color:'pink',fontSize:20,top:15,left:18}}>{`status:${this.status1}`}</Text>
         <TouchableOpacity style={{flexDirection:'column'}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MIN:{this.minTime}</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MIN:{this.minTime}ms</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flexDirection:'column',top:6}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>AVG:{this.avgTime}</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n95}</Text>
+            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>AVG:{this.avgTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n95?`${this.n95}ms`:''}</Text>
         </TouchableOpacity></View> : <View></View>}
         {this.state.url2 ? <View>
         <Text style={{color:'pink',left:20,fontSize:20,top:35}}>{`${this.state.url2} :`}</Text>
         <Text style={{color:'pink',fontSize:20,top:33,left:16}}>{`status:${this.status2}`}</Text>
         <TouchableOpacity style={{flexDirection:'column',top:20}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:10,left:20}}>MAX:{this.maxTime2}</Text>
-            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>MIN:{this.minTime2}</Text>
+            <Text style={{color:'pink',fontSize:20,top:10,left:20}}>MAX:{this.maxTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>MIN:{this.minTime2}ms</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flexDirection:'column',top:15}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime2}</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n952}</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n952?`${this.n952}ms`:''}</Text>
         </TouchableOpacity>
         </View> : <View></View>}
         </View>
@@ -483,11 +491,12 @@ export default class home extends Component{
 
 const styles=StyleSheet.create({
     serch:{
-      flexDirection:'row',
+      flexDirection:'column',
       top:20,
     },
     textinput:{
       flexDirection:'column',
+      left:28
     },
     TextStyle:{
       margin:10,
