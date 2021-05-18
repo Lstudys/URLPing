@@ -242,8 +242,9 @@ export default class home extends Component{
         value2.end=t2;
         value2.time=value2.end-value2.begin;
         if(value2.time!=0){
-        const data={y:value2.time,x:x2};
-        if(this.linechartDates2.length>130){
+          let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
+        const data={y:value2.time,x:xtime};
+        if(this.linechartDates2.length>4){
           this.linechartDates2.shift();
         }
         this.linechartDates2.push(data);
@@ -300,8 +301,9 @@ export default class home extends Component{
         value.end=t2;
         value.time=value.end-value.begin;
         if(value.time!=0){
-        const data={y:value.time,x:x};
-        if(this.linechartDates.length>130){
+        let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
+        const data={y:value.time,x:xtime};
+        if(this.linechartDates.length>4){
           this.linechartDates.shift();
         }
         this.linechartDates.push(data);
