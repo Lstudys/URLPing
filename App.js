@@ -22,6 +22,8 @@ import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay, withTheme} from 'react-native-elements';
 import { BackHandler } from 'react-native';
+import NetInfo from '@react-native-community/netinfo'
+
 
 
 
@@ -49,7 +51,6 @@ export default class home extends Component{
       };
    
     };
-
 
     pressnum=0;//表示安卓手机返回键按压次数，以控制返回上一界面
     firstpress=0;//第一次按返回键的时间戟
@@ -165,6 +166,14 @@ export default class home extends Component{
     */
    getReq=()=>{
      if((this.testURL(this.state.url)||this.testURL(this.state.url2))){
+      let myNetInfo;
+      NetInfo.fetch().then(state => {
+        myNetInfo=state.isConnected;
+        // console.log("网络链接类型", state.type);
+        // console.log("网络是否链接?", state.isConnected);
+      if(!myNetInfo){
+        Toast.message('网络未连接!');
+      }else{
      this.setState({isPing:true});
      this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
      this.refs.input1.blur();//输入框失去焦点
@@ -225,7 +234,9 @@ export default class home extends Component{
         value2.begin=t1;
       }
       if(xhr2.readyState==4){//readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
-        
+
+
+
         this.status2=xhr2.status;
          const t2=new Date().valueOf();
         value2.end=t2;
@@ -343,7 +354,9 @@ export default class home extends Component{
     xhr2.open('GET',this.state.url2,true)
     xhr2.send();
     }
-  }else{
+  }
+})
+}else{
     Toast.message('URL格式不正确!');
   }
    
@@ -357,7 +370,7 @@ export default class home extends Component{
        this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
           <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
-         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false})}} >About</Text>
+         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});}} >About</Text>
          </View>
         <Overlay 
          
