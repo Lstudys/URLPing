@@ -23,6 +23,8 @@ import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrush
 import {Overlay, withTheme} from 'react-native-elements';
 import { BackHandler } from 'react-native';
 import NetInfo from '@react-native-community/netinfo'
+import Orientation from 'react-native-orientation';
+
 
 
 
@@ -104,6 +106,7 @@ export default class home extends Component{
             this.setState({isPing:false});
             this.setState({url:''});
             this.setState({url2:''});
+            Orientation.lockToPortrait();
             return true;
           }else{
             this.pressnum=1;
@@ -114,6 +117,7 @@ export default class home extends Component{
         }
        
       }else{
+        Orientation.lockToPortrait();
         this.setState({linechart:true});
         return true;
       }
@@ -164,6 +168,7 @@ export default class home extends Component{
       if(!myNetInfo){
         Toast.message('网络未连接!');
       }else{
+        Orientation.lockToLandscape();//横屏
      this.setState({isPing:true});
      this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
      this.refs.input1.blur();//输入框失去焦点
@@ -219,7 +224,7 @@ export default class home extends Component{
     
     //这是xhr2
     xhr2.onreadystatechange=()=>{  //当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
-      if(xhr2.readyState==1){//readystate等于2是请求发送的时刻，获取当前时间
+      if(xhr2.readyState==1){//readystate等于1是请求发送的时刻，获取当前时间
         const t1=new Date().valueOf();
         value2.begin=t1;
       }
@@ -256,12 +261,15 @@ export default class home extends Component{
         if(nowTime2s<beginTime+reqTime*60*1000&&this.state.isPing){
           xhr2.abort();
           setTimeout(()=>{
+            if(this.state.isPing){
             xhr2.open('GET',this.state.url2,true);
             xhr2.send();
+            }
           },1000)
           // xhr2.open('GET',this.state.url2,true);
           // xhr2.send();
         }else{
+          Orientation.lockToPortrait();//竖屏
           let sum=0;//存储每个数减去平均数的平方的和
           this.sumReqTime2.forEach((num)=>{
             const bzc=num-this.avgTime2;
@@ -284,7 +292,7 @@ export default class home extends Component{
     }
     //这是xhr1
     xhr.onreadystatechange=()=>{  //当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
-      if(xhr.readyState==1){//readystate等于2是请求发送的时刻，获取当前时间
+      if(xhr.readyState==1){//readystate等于1是请求发送的时刻，获取当前时间
         const t1=new Date().valueOf();
         value.begin=t1;
       }
@@ -319,12 +327,15 @@ export default class home extends Component{
         if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
           xhr.abort();
           setTimeout(()=>{
+            if(this.state.isPing){
             xhr.open('GET',this.state.url,true);
           xhr.send();
+            }
           },1000)
           // xhr.open('GET',this.state.url,true);
           // xhr.send();
         }else{
+          Orientation.lockToPortrait();
           let sum=0;//存储每个数减去平均数的平方的和
           this.sumReqTime.forEach((num)=>{
             const bzc=num-this.avgTime;
