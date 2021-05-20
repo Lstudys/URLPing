@@ -16,7 +16,8 @@ import {
   Text,
   Alert,
   Button,
-  TouchableOpacity 
+  TouchableOpacity, 
+  ScrollView
 } from 'react-native';
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
@@ -40,12 +41,13 @@ export default class home extends Component{
         url:'',//用户输入的url
         url2:'',
         OverlayAble:false,//控制Overlay组件的显示
-        linechart:true,//用来控制图表的显示
+        linechart:true,//用来控制图表的显示,true表示显示输入框，不显示图表
         ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
         isPing:false,//控制是否正在ping
         defaultvalue1:'',
         defaultvalue2:'',
-        backChart:false,
+        backChart:false,//ping过之后，点击返回图表
+        chartToData:false,
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -384,7 +386,7 @@ export default class home extends Component{
        this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
           <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
-         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});}} >About</Text>
+         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});Orientation.lockToLandscape()}} >About</Text>
          </View>
         <Overlay 
          
@@ -455,10 +457,11 @@ export default class home extends Component{
               >PING</Text>
           </View>
           {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}}>返回图表</Text>:<View></View>}
-        </TouchableOpacity> : <View style={{top:50,left:0}}>         
+        </TouchableOpacity> : <View>     
+        <ScrollView  >
        <VictoryChart
-          width={550}
-          height={300}
+          width={700}
+          height={styles.chartHeight}
           scale={{x: "time"}}
        /*   containerComponent={
             <VictoryZoomContainer responsive={false}
@@ -493,24 +496,25 @@ export default class home extends Component{
         <Text style={{color:'pink',fontSize:20,top:15,left:18}}>{`status:${this.status1}`}</Text>
         <TouchableOpacity style={{flexDirection:'column'}} activeOpacity={1.0}>
             <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MIN:{this.minTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:2,left:20}}>MIN:{this.minTime}ms</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{flexDirection:'column',top:6}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>AVG:{this.avgTime}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n95?`${this.n95}ms`:''}</Text>
+        <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>AVG:{this.avgTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n95?`${this.n95}ms`:''}</Text>
         </TouchableOpacity></View> : <View></View>}
         {this.state.url2 ? <View>
-        <Text style={{color:'pink',left:20,fontSize:20,top:35}}>{`${this.state.url2} :`}</Text>
-        <Text style={{color:'pink',fontSize:20,top:33,left:16}}>{`status:${this.status2}`}</Text>
-        <TouchableOpacity style={{flexDirection:'column',top:20}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:10,left:20}}>MAX:{this.maxTime2}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>MIN:{this.minTime2}ms</Text>
+        <Text style={{color:'pink',left:20,fontSize:20,top:20}}>{`${this.state.url2} :`}</Text>
+        <Text style={{color:'pink',fontSize:20,top:18,left:16}}>{`status:${this.status2}`}</Text>
+        <TouchableOpacity style={{flexDirection:'column',top:12}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>MAX:{this.maxTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,bottom:2,left:20}}>MIN:{this.minTime2}ms</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{flexDirection:'column',top:15}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime2}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n952?`${this.n952}ms`:''}</Text>
+        <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,left:20,top:2}}>AVG:{this.avgTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n952?`${this.n952}ms`:''}</Text>
         </TouchableOpacity>
         </View> : <View></View>}
+        </ScrollView>  
         </View>
       );
     }
@@ -554,6 +558,8 @@ const styles=StyleSheet.create({
       fontSize:20,
       top:10,
       left:5
-    }
+    },
+    
+
 });
 
