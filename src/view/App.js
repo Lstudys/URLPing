@@ -459,9 +459,10 @@ export default class home extends Component{
           {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}}>返回图表</Text>:<View></View>}
         </TouchableOpacity> : <View>     
         <ScrollView  >
+          {this.state.url?
        <VictoryChart
           width={700}
-          height={styles.chartHeight}
+          // height={100}
           scale={{x: "time"}}
        /*   containerComponent={
             <VictoryZoomContainer responsive={false}
@@ -480,7 +481,14 @@ export default class home extends Component{
             data={this.linechartDates}
            // labels={({ datum }) => datum.y}
           />
-           <VictoryLine
+          
+        </VictoryChart>:<View></View>}
+        {this.state.url2?
+        <VictoryChart
+         width={700}
+     
+         scale={{x: "time"}}>
+            <VictoryLine
           minDomain={{y:0}}
             style={{
               data: {stroke: "#1E90FF"},
@@ -489,7 +497,7 @@ export default class home extends Component{
             data={this.linechartDates2}
            // labels={({ datum }) => datum.y}
           />
-        </VictoryChart>
+         </VictoryChart>:<View></View>}
         {this.state.url ?
         <View>
         <Text style={{color:'pink',left:20,fontSize:20}}>{`${this.state.url} :`}</Text>
