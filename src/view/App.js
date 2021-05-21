@@ -16,7 +16,8 @@ import {
   Text,
   Alert,
   Button,
-  TouchableOpacity 
+  TouchableOpacity, 
+  ScrollView
 } from 'react-native';
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
@@ -38,12 +39,13 @@ export default class home extends Component{
         url:'',//用户输入的url
         url2:'',
         OverlayAble:false,//控制Overlay组件的显示
-        linechart:true,//用来控制图表的显示
+        linechart:true,//用来控制图表的显示,true表示显示输入框，不显示图表
         ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
         isPing:false,//控制是否正在ping
         defaultvalue1:'',
         defaultvalue2:'',
-        backChart:false,
+        backChart:false,//ping过之后，点击返回图表
+        chartToData:false,
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -104,6 +106,7 @@ export default class home extends Component{
             this.setState({isPing:false});
             this.setState({url:''});
             this.setState({url2:''});
+            Orientation.lockToPortrait();
             return true;
           }else{
             this.pressnum=1;
@@ -114,6 +117,7 @@ export default class home extends Component{
         }
        
       }else{
+        Orientation.lockToPortrait();
         this.setState({linechart:true});
         return true;
       }
@@ -126,14 +130,6 @@ export default class home extends Component{
 
 
 
-//handleZoom、handleBrus是图表放大需要用到的函数
-    handleZoom(domain) {
-      this.setState({selectedDomain: domain});
-    }
-  
-    handleBrush(domain) {
-      this.setState({zoomDomain: domain});
-    }
 
 //setReqTime控制浮层(设置时间)的显示
     setReqTime=()=>{
@@ -169,11 +165,10 @@ export default class home extends Component{
       let myNetInfo;
       NetInfo.fetch().then(state => {
         myNetInfo=state.isConnected;
-        // console.log("网络链接类型", state.type);
-        // console.log("网络是否链接?", state.isConnected);
       if(!myNetInfo){
         Toast.message('网络未连接!');
       }else{
+        Orientation.lockToLandscape();//横屏
      this.setState({isPing:true});
      this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
      this.refs.input1.blur();//输入框失去焦点
@@ -229,7 +224,7 @@ export default class home extends Component{
     
     //这是xhr2
     xhr2.onreadystatechange=()=>{  //当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
-      if(xhr2.readyState==2){//readystate等于2是请求发送的时刻，获取当前时间
+      if(xhr2.readyState==1){//readystate等于1是请求发送的时刻，获取当前时间
         const t1=new Date().valueOf();
         value2.begin=t1;
       }
@@ -265,9 +260,16 @@ export default class home extends Component{
         nowTime2s=new Date().valueOf();//获取当前时间戟
         if(nowTime2s<beginTime+reqTime*60*1000&&this.state.isPing){
           xhr2.abort();
-          xhr2.open('GET',this.state.url2,true);
-          xhr2.send();
+          setTimeout(()=>{
+            if(this.state.isPing){
+            xhr2.open('GET',this.state.url2,true);
+            xhr2.send();
+            }
+          },1000)
+          // xhr2.open('GET',this.state.url2,true);
+          // xhr2.send();
         }else{
+          Orientation.lockToPortrait();//竖屏
           let sum=0;//存储每个数减去平均数的平方的和
           this.sumReqTime2.forEach((num)=>{
             const bzc=num-this.avgTime2;
@@ -290,12 +292,12 @@ export default class home extends Component{
     }
     //这是xhr1
     xhr.onreadystatechange=()=>{  //当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
-      if(xhr.readyState==2){//readystate等于2是请求发送的时刻，获取当前时间
+      if(xhr.readyState==1){//readystate等于1是请求发送的时刻，获取当前时间
         const t1=new Date().valueOf();
         value.begin=t1;
       }
       if(xhr.readyState==4){//readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
-        
+        if(xhr.status!=0){
         this.status1=xhr.status;
         const t2=new Date().valueOf();
         value.end=t2;
@@ -324,9 +326,16 @@ export default class home extends Component{
         nowTime=new Date().valueOf();//获取当前时间戟
         if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
           xhr.abort();
-          xhr.open('GET',this.state.url,true);
+          setTimeout(()=>{
+            if(this.state.isPing){
+            xhr.open('GET',this.state.url,true);
           xhr.send();
+            }
+          },1000)
+          // xhr.open('GET',this.state.url,true);
+          // xhr.send();
         }else{
+          Orientation.lockToPortrait();
           let sum=0;//存储每个数减去平均数的平方的和
           this.sumReqTime.forEach((num)=>{
             const bzc=num-this.avgTime;
@@ -346,6 +355,9 @@ export default class home extends Component{
           }
           return;
         }
+      }else{
+        Toast.message('服务器错误!');//************************************* */
+      }
       }
     }
     if(this.state.url!=''){
@@ -372,7 +384,7 @@ export default class home extends Component{
        this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
           <View style={{flexDirection:'row'}}>
          <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
-         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});}} >About</Text>
+         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});Orientation.lockToLandscape()}} >About</Text>
          </View>
         <Overlay 
          
@@ -443,10 +455,12 @@ export default class home extends Component{
               >PING</Text>
           </View>
           {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}}>返回图表</Text>:<View></View>}
-        </TouchableOpacity> : <View style={{top:50,left:0}}>         
+        </TouchableOpacity> : <View>     
+        <ScrollView  >
+          {this.state.url?
        <VictoryChart
-          width={550}
-          height={300}
+          width={700}
+          // height={100}
           scale={{x: "time"}}
        /*   containerComponent={
             <VictoryZoomContainer responsive={false}
@@ -465,7 +479,14 @@ export default class home extends Component{
             data={this.linechartDates}
            // labels={({ datum }) => datum.y}
           />
-           <VictoryLine
+          
+        </VictoryChart>:<View></View>}
+        {this.state.url2?
+        <VictoryChart
+         width={700}
+     
+         scale={{x: "time"}}>
+            <VictoryLine
           minDomain={{y:0}}
             style={{
               data: {stroke: "#1E90FF"},
@@ -474,31 +495,32 @@ export default class home extends Component{
             data={this.linechartDates2}
            // labels={({ datum }) => datum.y}
           />
-        </VictoryChart>
+         </VictoryChart>:<View></View>}
         {this.state.url ?
         <View>
         <Text style={{color:'pink',left:20,fontSize:20}}>{`${this.state.url} :`}</Text>
         <Text style={{color:'pink',fontSize:20,top:15,left:18}}>{`status:${this.status1}`}</Text>
         <TouchableOpacity style={{flexDirection:'column'}} activeOpacity={1.0}>
             <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MIN:{this.minTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:2,left:20}}>MIN:{this.minTime}ms</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{flexDirection:'column',top:6}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>AVG:{this.avgTime}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n95?`${this.n95}ms`:''}</Text>
+        <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>AVG:{this.avgTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n95?`${this.n95}ms`:''}</Text>
         </TouchableOpacity></View> : <View></View>}
         {this.state.url2 ? <View>
-        <Text style={{color:'pink',left:20,fontSize:20,top:35}}>{`${this.state.url2} :`}</Text>
-        <Text style={{color:'pink',fontSize:20,top:33,left:16}}>{`status:${this.status2}`}</Text>
-        <TouchableOpacity style={{flexDirection:'column',top:20}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:10,left:20}}>MAX:{this.maxTime2}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:8,left:20}}>MIN:{this.minTime2}ms</Text>
+        <Text style={{color:'pink',left:20,fontSize:20,top:20}}>{`${this.state.url2} :`}</Text>
+        <Text style={{color:'pink',fontSize:20,top:18,left:16}}>{`status:${this.status2}`}</Text>
+        <TouchableOpacity style={{flexDirection:'column',top:12}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>MAX:{this.maxTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,bottom:2,left:20}}>MIN:{this.minTime2}ms</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{flexDirection:'column',top:15}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>AVG:{this.avgTime2}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>95%:{this.n952?`${this.n952}ms`:''}</Text>
+        <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
+            <Text style={{color:'pink',fontSize:20,left:20,top:2}}>AVG:{this.avgTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n952?`${this.n952}ms`:''}</Text>
         </TouchableOpacity>
         </View> : <View></View>}
+        </ScrollView>  
         </View>
       );
     }
@@ -542,6 +564,8 @@ const styles=StyleSheet.create({
       fontSize:20,
       top:10,
       left:5
-    }
+    },
+    
+
 });
 
