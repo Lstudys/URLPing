@@ -62,7 +62,7 @@ export const reqTimeChange=function(newTime){
     this.state.url2=newText;
   }
 
-
+//验证输入的请求时间
   export const confirmRqTime=function(){
     const t=this.state.newReqTime;//先获取输入的请求时长
     if(t==0){//没有输入或输入为0时提示
@@ -75,7 +75,7 @@ export const reqTimeChange=function(newTime){
     Toast.message('设置成功！')
 }
 
-
+//验证URL
 export const testURL=function(url){
     let match=/http|https/;
     // /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
