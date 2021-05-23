@@ -26,7 +26,14 @@ import { BackHandler } from 'react-native';
 import NetInfo from '@react-native-community/netinfo'
 import Orientation from 'react-native-orientation';
 
-
+import {backAction,
+    setReqTime,
+    reqTimeChange,
+    textInputChange1,
+    textInputChange2,
+    confirmRqTime,
+    testURL
+  } from '../controller/function';
 
 
 
@@ -52,7 +59,8 @@ export default class home extends Component{
           [
             {y:0,x:0}
           ]
-      };
+      }
+      testURL.bind(this);
    
     };
 
@@ -83,87 +91,20 @@ export default class home extends Component{
 
    
     componentDidMount(){
-      BackHandler.addEventListener('hardwareBackPress',this.backAction);
+      BackHandler.addEventListener('hardwareBackPress',backAction.bind(this));
     }
     componentWillUnmount(){
-      BackHandler.removeEventListener('hardwareBackPress',this.backAction);
+      BackHandler.removeEventListener('hardwareBackPress',backAction.bind(this));
     }
 
 
 
-   
-      backAction=()=>{
-        if(!this.state.linechart){
-        if(this.state.isPing){
-          this.pressnum++;
-        if(this.pressnum==1){
-          this.firstpress=new Date().valueOf();
-          Toast.message('再按一次取消Ping');
-          return true;
-        }else {
-           if(this.firstpress+2000>new Date().valueOf()){
-             this.pressnum=0;
-             this.firstpress=0;
-            this.setState({linechart:true});
-            this.setState({isPing:false});
-            this.setState({url:''});
-            this.setState({url2:''});
-            Orientation.lockToPortrait();
-            return true;
-          }else{
-            this.pressnum=1;
-            this.firstpress=new Date().valueOf();
-            Toast.message('再按一次取消Ping');
-            return true;
-          }
-        }
-       
-      }else{
-        Orientation.lockToPortrait();
-        this.setState({linechart:true});
-        return true;
-      }
-    }else{
-      BackHandler.exitApp();
-    }
-        
-      }
 
-
-
-
-
-//setReqTime控制浮层(设置时间)的显示
-    setReqTime=()=>{
-      if(this.state.ifOverlayAble){
-      this.setState({OverlayAble:true});
-    return;  
-    }
-      Toast.message('请稍后设置!');
-    }
-
-    reqTimeChange=(newTime)=>{
-      this.setState({newReqTime:newTime});
-    }
-
-    textInputChange1=(newText)=>{
-      this.state.url=newText;
-    }
-    textInputChange2=(newText)=>{
-      this.state.url2=newText;
-    }
-
-    testURL=(url)=>{
-      let match=/http|https/;
-      // /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
-     // /^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
-      return match.test(url);
-    }
     /*
     下面是发送请求获取所需数据的函数,变量中有2的表明是第二个图表的数据
     */
    getReq=()=>{
-     if((this.testURL(this.state.url)||this.testURL(this.state.url2))){
+     if((testURL(this.state.url)||testURL(this.state.url2))){
       let myNetInfo;
       NetInfo.fetch().then(state => {
         myNetInfo=state.isConnected;
@@ -385,7 +326,7 @@ export default class home extends Component{
        
        this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
           <View style={{flexDirection:'row'}}>
-         <Text style={styles.settingbtnstyle} onPress={this.setReqTime}>Set Time</Text>
+         <Text style={styles.settingbtnstyle} onPress={setReqTime.bind(this)}>Set Time</Text>
          <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});Orientation.lockToLandscape()}} >About</Text>
          </View>
         <Overlay 
@@ -400,19 +341,10 @@ export default class home extends Component{
            placeholder='输入请求时长'
            placeholderTextColor='#ccc'
            color='#000000'
-           onChangeText={this.reqTimeChange}
+           onChangeText={reqTimeChange.bind(this)}
            style={{width:200,top:6,marginBottom:10}}
            />
-           <Button title='确定' onPress={()=>{
-             const t=this.state.newReqTime;//先获取输入的请求时长
-             if(t==0){//没有输入或输入为0时提示
-               Toast.message('请输入请求时间!');
-               return;
-             }
-             this.setState({reqTime:t});//设置新的reqTime
-             this.setState({OverlayAble:false});//关闭悬浮框
-             this.setState({newReqTime:0})//把newReqTime设置为0，否则会影响下一次设置
-             Toast.message('设置成功！')}} />
+           <Button title='确定' onPress={confirmRqTime.bind(this)} />
            </View>
            </View>
          </Overlay> 
@@ -426,7 +358,7 @@ export default class home extends Component{
             placeholderTextColor='#ccc'//设置占位符颜色
             keyboardType='url'//设置键盘类型，url只在iOS端可用
             color='#ffffff'//设置输入文字的颜色
-            onChangeText={this.textInputChange1}
+            onChangeText={textInputChange1.bind(this)}
             style={{borderBottomColor:'#ffffff',borderBottomWidth:1,width:280,left:12,}}
             />
              <TextInput
@@ -436,7 +368,7 @@ export default class home extends Component{
             placeholderTextColor='#ccc'//设置占位符颜色
             keyboardType='url'//设置键盘类型，url只在iOS端可用
             color='#ffffff'//设置输入文字的颜色
-            onChangeText={this.textInputChange2}
+            onChangeText={textInputChange2.bind(this)}
             style={{borderBottomColor:'#ffffff',borderBottomWidth:1,width:280,left:12,}}
             />
             </View>
