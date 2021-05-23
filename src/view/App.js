@@ -26,7 +26,8 @@ import { BackHandler } from 'react-native';
 import NetInfo from '@react-native-community/netinfo'
 import Orientation from 'react-native-orientation';
 
-import {backAction,
+import {
+    backAction,
     setReqTime,
     reqTimeChange,
     textInputChange1,
@@ -61,7 +62,9 @@ export default class home extends Component{
           ]
       }
       testURL.bind(this);
-   
+      reqTimeChange.bind(this);
+     
+      
     };
 
     pressnum=0;//表示安卓手机返回键按压次数，以控制返回上一界面

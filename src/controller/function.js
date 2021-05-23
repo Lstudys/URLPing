@@ -5,7 +5,7 @@ import {Toast} from 'teaset';
 
 
 //控制安卓设备的返回键
-export  const backAction=function(){
+export  const  backAction=function(){
     if(!this.state.linechart){
     if(this.state.isPing){
       this.pressnum++;
