@@ -452,7 +452,7 @@ export default class home extends Component{
               onPress={this.getReq}
               >PING</Text>
           </View>
-          {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}}>返回图表</Text>:<View></View>}
+          {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}} onPress={()=>{this.setState({linechart:false})}} >返回图表</Text>:<View></View>}
         </TouchableOpacity> : <View>     
         <ScrollView  >
           {this.state.url?
