@@ -34,7 +34,7 @@ import {
     textInputChange2,
     confirmRqTime,
     testURL
-  } from '../controller/function';
+  } from '../controller/AppPageFunction';
 import {sendRequest} from '../controller/request';
 
 

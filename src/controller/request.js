@@ -5,7 +5,7 @@ import Orientation from 'react-native-orientation';
 
 import {
     testURL
-} from './function';
+} from './AppPageFunction';
 
 
 
