@@ -11,10 +11,10 @@ import {
 
 
 const num=2;
-//控制安卓设备的返回键，缩进，if嵌套换为函数实现，嵌套多时写注释，使用常量或枚举
+//控制安卓设备的返回键
 export const backAction = function () {
-  if (!this.state.linechart) {
-    if (this.state.isPing) {
+  if (!this.state.linechart) {//false则当前显示图表
+    if (this.state.isPing) {//显示图表有两种情况：ping结束和正在ping
       this.pressnum++;
       if (this.pressnum == 1) {
         this.firstpress = new Date().valueOf();
@@ -36,6 +36,7 @@ export const backAction = function () {
           this.setState({
             url2: ''
           });
+          this.setState({ifOverlayAble:true})
           Orientation.lockToPortrait();
           return true;
         } else {
@@ -55,7 +56,7 @@ export const backAction = function () {
     }
   } else {
     BackHandler.exitApp();
-    console.log(num);
+    // console.log(num);
   }
 }
 
