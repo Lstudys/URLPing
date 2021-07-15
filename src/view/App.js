@@ -17,14 +17,15 @@ import {
   Alert,
   Button,
   TouchableOpacity, 
-  ScrollView
+  ScrollView,
+  FlatList
 } from 'react-native';
 import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay, withTheme} from 'react-native-elements';
 import { BackHandler } from 'react-native';
 import {sendRequest} from '../controller/request';
-import {setReqTime,reqTimeChange,confirmRqTime,textInputChange1,textInputChange2,backAction} from '../controller/AppPageFunction';
+import {setReqTime,reqTimeChange,confirmRqTime,textInputChange1,textInputChange2,overtextInputChange1,backAction} from '../controller/AppPageFunction';
 import NetInfo from '@react-native-community/netinfo'
 
 
@@ -48,6 +49,9 @@ export default class home extends Component{
         defaultvalue2:'',
         backChart:false,//ping过之后，点击返回图表
         chartToData:false,
+        overlay1:false,
+        overlay2:false,//控制两个overlay显示的state
+        urlArr:['https://','http://'],
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -90,7 +94,32 @@ export default class home extends Component{
       BackHandler.removeEventListener('hardwareBackPress',backAction.bind(this));
     }
 
-   
+    _renderRow(item,index){//已完成任务列表渲染函数   /**非常重要的函数 */
+      return(
+          <TouchableOpacity
+          onPress={()=>{
+            if(this.state.overlay1){
+              this.setState({defaultvalue1:item});
+            }
+            if(this.state.overlay2){
+              this.setState({defaultvalue2:item});
+            }
+          }}
+              style={{
+                flexDirection:'row',
+                  // height:20,
+                  borderBottomColor:'red',
+                  justifyItems:'flex-start',
+                 margin:0,
+                 //设置下边框，以便分隔不同的列表元素
+                //  borderBottomWidth:1,
+                //  borderBottomColor:'#ccc',   
+              }}
+          >
+              <Text style={{left:0,color:'#000000',fontSize:20,}}>{item}</Text>    
+          </TouchableOpacity>
+      )
+  }
 
               
     render(){
@@ -101,6 +130,56 @@ export default class home extends Component{
          <Text style={styles.settingbtnstyle} onPress={setReqTime.bind(this)}>Set Time</Text>
          <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});Orientation.lockToLandscape()}} >About</Text>
          </View>
+         <Overlay
+         isVisible={this.state.overlay1}
+         onBackdropPress={()=>{this.setState({overlay1:false});this.refs.input1.blur()}}
+         >
+           <View style={{flexDirection:'row'}}>
+           <TextInput
+            defaultValue={this.state.defaultvalue1}
+            placeholderTextColor='#ccc'//设置占位符颜色
+            color='#000000'//设置输入文字的颜色
+            placeholder='输入网址1'
+            onChangeText={(newText)=>{this.state.url=newText;this.state.defaultvalue1=newText;}}
+            style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
+           />
+           <TouchableOpacity style={{color:'#000000',top:28}}
+           onPress={()=>{this.setState({chartDate:[]});this.refs.input1.blur();this.setState({overlay1:false})}}
+           ><Text>Enter</Text></TouchableOpacity>
+           </View>
+            <FlatList
+            style={{maxHeight:200}}
+        data={this.state.urlArr}
+        renderItem={({item,index})=>this._renderRow(item,index)}
+               keyExtractor={(item,index)=>item+index}
+        />
+         </Overlay>
+         {/* start */}
+         <Overlay
+         isVisible={this.state.overlay2}
+         onBackdropPress={()=>{this.setState({overlay2:false});this.refs.input2.blur()}}
+         >
+           <View style={{flexDirection:'row'}}>
+           <TextInput
+            defaultValue={this.state.defaultvalue2}
+            placeholderTextColor='#ccc'//设置占位符颜色
+            color='#000000'//设置输入文字的颜色
+            placeholder='输入网址1'
+            onChangeText={(newText)=>{this.state.url2=newText;this.state.defaultvalue2=newText;}}
+            style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
+           />
+           <TouchableOpacity style={{color:'#000000',top:28}}
+           onPress={()=>{this.setState({chartDate:[]});this.refs.input2.blur();this.setState({overlay2:false})}}
+           ><Text>Enter</Text></TouchableOpacity>
+           </View>
+            <FlatList
+            style={{maxHeight:200}}
+        data={this.state.urlArr}
+        renderItem={({item,index})=>this._renderRow(item,index)}
+               keyExtractor={(item,index)=>item+index}
+        />
+         </Overlay>
+         {/* end */}
         <Overlay 
          isVisible={this.state.OverlayAble}
          onBackdropPress={()=>{this.setState({OverlayAble:false})}}
@@ -130,6 +209,7 @@ export default class home extends Component{
             keyboardType='url'//设置键盘类型，url只在iOS端可用
             color='#ffffff'//设置输入文字的颜色
             onChangeText={textInputChange1.bind(this)}
+            onFocus={()=>{this.setState({overlay1:true})}}
             style={{borderBottomColor:'#ffffff',borderBottomWidth:1,width:280,left:12,}}
             />
              <TextInput
@@ -140,6 +220,7 @@ export default class home extends Component{
             keyboardType='url'//设置键盘类型，url只在iOS端可用
             color='#ffffff'//设置输入文字的颜色
             onChangeText={textInputChange2.bind(this)}
+            onFocus={()=>{this.setState({overlay2:true})}}
             style={{borderBottomColor:'#ffffff',borderBottomWidth:1,width:280,left:12,}}
             />
             </View>

@@ -81,6 +81,7 @@ export const reqTimeChange = function (newTime) {
 export const textInputChange1 = function (newText) {
   this.state.url = newText;
 }
+
 export const textInputChange2 = function (newText) {
   this.state.url2 = newText;
 }
