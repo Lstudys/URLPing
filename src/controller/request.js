@@ -12,13 +12,13 @@ import {
 
 export const sendRequest=function(){
     if((testURL(this.state.url)||testURL(this.state.url2))){
-     let myNetInfo;
-     NetInfo.fetch().then(state => {
-       myNetInfo=state.isConnected;
-     if(!myNetInfo){
-       Toast.message('网络未连接!');
-     }else{
-       Orientation.lockToLandscape();//横屏
+      let myNetInfo;
+      NetInfo.fetch().then(state => {
+      myNetInfo=state.isConnected;
+    if(!myNetInfo){
+        Toast.message('网络未连接!');
+    }else{
+        Orientation.lockToLandscape();//横屏
     this.setState({isPing:true});
     this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
     this.refs.input1.blur();//输入框失去焦点

@@ -5,8 +5,8 @@ import Orientation from 'react-native-orientation';
 import {
   Toast
 } from 'teaset';
-
-
+import store from 'react-native-simple-store';
+import data from '../modal/data';
 
 
 
@@ -111,4 +111,9 @@ export const testURL = function (url) {
   // /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
   // /^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
   return match.test(url);
+}
+
+export const saveValue = function (url) {
+  data.local.unshift(url);
+  store.save('local',data.local);
 }
