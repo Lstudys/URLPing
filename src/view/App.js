@@ -223,7 +223,7 @@ export default class home extends Component{
             style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
           />
           <TouchableOpacity style={{color:'#000000',top:28}}
-          onPress={()=>{this.setState({chartDate:[]});this.refs.input2.blur();this.setState({overlay2:false})}}
+          onPress={()=>{this.setState({chartDate:[]});this.refs.input2.blur();this.setState({overlay2:false});saveValue(this.state.url2)}}
           ><Text style={{fontSize: 16}}>Enter</Text></TouchableOpacity>
           </View>
           <View>
@@ -449,7 +449,7 @@ const styles=StyleSheet.create({
       height: 40,
       justifyContent: 'center',
       borderRadius:10,
-      backgroundColor:'pink',
+      backgroundColor:'#F0F8FF',
     },
     HistoryText: {
       fontSize: 20,

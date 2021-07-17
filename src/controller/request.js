@@ -84,9 +84,9 @@ export const sendRequest=function(){
        value2.end=t2;
        value2.time=value2.end-value2.begin;
        if(value2.time!=0){
-         let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
-       const data={y:value2.time,x:xtime};
-       if(this.linechartDates2.length>4){
+        //  let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
+       const data={y:value2.time,x:x2};
+       if(this.linechartDates2.length>100){
          this.linechartDates2.shift();
        }
        this.linechartDates2.push(data);
@@ -107,14 +107,14 @@ export const sendRequest=function(){
        nowTime2s=new Date().valueOf();//获取当前时间戟
        if(nowTime2s<beginTime+reqTime*60*1000&&this.state.isPing){
          xhr2.abort();
-         setTimeout(()=>{
-           if(this.state.isPing){
-           xhr2.open('GET',this.state.url2,true);
-           xhr2.send();
-           }
-         },1000)
-         // xhr2.open('GET',this.state.url2,true);
-         // xhr2.send();
+        //  setTimeout(()=>{
+        //    if(this.state.isPing){
+        //    xhr2.open('GET',this.state.url2,true);
+        //    xhr2.send();
+        //    }
+        //  },1000)
+         xhr2.open('GET',this.state.url2,true);
+         xhr2.send();
        }else{
          Orientation.lockToPortrait();//竖屏
          let sum=0;//存储每个数减去平均数的平方的和
@@ -151,9 +151,9 @@ export const sendRequest=function(){
        value.end=t2;
        value.time=value.end-value.begin;
        if(value.time!=0){
-       let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
-       const data={y:value.time,x:xtime};
-       if(this.linechartDates.length>4){
+      //  let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
+       const data={y:value.time,x:x};
+       if(this.linechartDates.length>100){
          this.linechartDates.shift();
        }
        this.linechartDates.push(data);
@@ -174,14 +174,14 @@ export const sendRequest=function(){
        nowTime=new Date().valueOf();//获取当前时间戟
        if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
          xhr.abort();
-         setTimeout(()=>{
-           if(this.state.isPing){
-           xhr.open('GET',this.state.url,true);
+        //  setTimeout(()=>{
+        //    if(this.state.isPing){
+        //    xhr.open('GET',this.state.url,true);
+        //  xhr.send();
+        //    }
+        //  },1000)
+         xhr.open('GET',this.state.url,true);
          xhr.send();
-           }
-         },1000)
-         // xhr.open('GET',this.state.url,true);
-         // xhr.send();
        }else{
          Orientation.lockToPortrait();
          let sum=0;//存储每个数减去平均数的平方的和
