@@ -1,0 +1,18 @@
+export default {
+    title: 'GraphUrlPing',
+    setTime:'Set Time',
+    about:'About',
+    chooselanguage:'Choose Language',
+    currenttime:'Current request duration',
+    timeinput:'Input request duration',
+    sure:'Sure',
+    inputone:'Enter URL 1',
+    inputtwo:'Enter URL 2',
+    enter:'Enter',
+    ping:'PING',
+    status:'Status',
+    return:'Return to chart',
+    max:'MAX',
+    min:'MIN',
+    avg:'AVG',
+};
