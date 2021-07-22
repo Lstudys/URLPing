@@ -25,14 +25,21 @@ import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrush
 import {Overlay, withTheme} from 'react-native-elements';
 import { BackHandler } from 'react-native';
 import {sendRequest} from '../controller/request';
-import {setReqTime,reqTimeChange,confirmRqTime,textInputChange1,textInputChange2,overtextInputChange1,backAction} from '../controller/AppPageFunction';
-import NetInfo from '@react-native-community/netinfo'
+import {setReqTime,reqTimeChange,confirmRqTime,textInputChange1,textInputChange2,overtextInputChange1,backAction, saveValue} from '../controller/AppPageFunction';
+import NetInfo from '@react-native-community/netinfo';
+import data from '../modal/data';
+import store from 'react-native-simple-store';
+import I18n from 'i18n-js';
+import * as RNLocalize from 'react-native-localize';
+import zh from '../modal/Langguage/zh_CN';
+import tw from '../modal/Langguage/zh_TW';
+import en from '../modal/Langguage/en_US';
+import ko from '../modal/Langguage/ko_KR';
 
-
-
-
-
+const locales = RNLocalize.getLocales();// 获取手机本地国际化信息
+const systemLanguage = locales[0]?.languageCode; // 用户系统偏好语言
 const height=Dimensions.get('window').height;
+const width=Dimensions.get('window').width;
 export default class home extends Component{
     constructor(props){
       super(props);
@@ -41,7 +48,7 @@ export default class home extends Component{
         newReqTime:0,
         url:'',//用户输入的url
         url2:'',
-        OverlayAble:false,//控制Overlay组件的显示
+        OverlayAble: false, //控制Overlay组件的显示
         linechart:true,//用来控制图表的显示,true表示显示输入框，不显示图表
         ifOverlayAble:true,//用来控制是否可以设置请求时间，当正在Ping时不能设置
         isPing:false,//控制是否正在ping
@@ -51,14 +58,42 @@ export default class home extends Component{
         chartToData:false,
         overlay1:false,
         overlay2:false,//控制两个overlay显示的state
-        urlArr:['https://','http://'],
+        urlArr:['https://','   ','http://'],
+        visible:false,//删除后刷新历史记录
+        langvis:false,//选择语言后刷新页面
+        selectedDomain:'',
+        zoomDomain:'',
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
           ]
       }
- 
 
+      {/* 选择合适语言 */}
+      store.get("Language").then(
+        res => {
+            data.userChoose=res;
+        }).finally(()=>{
+          if (data.userChoose.length!==0) {//首选用户设置记录
+              I18n.locale = data.userChoose;
+          }
+          else if(systemLanguage) {//获取系统语言
+              I18n.locale = systemLanguage;
+          }else{
+              I18n.locale = 'en'; // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+          }
+          this.setState({
+            langvis: false
+          })
+      });
+
+      {/* 获取历史记录数据 */}
+      store.get("local").then(
+        res => data.local=res.slice()
+      );
+      I18n.fallbacks = true;
+      // 加载语言包
+      I18n.translations = {zh,en,tw,ko,};
 };
 
     pressnum=0;//表示安卓手机返回键按压次数，以控制返回上一界面
@@ -73,7 +108,7 @@ export default class home extends Component{
     /**
      * 下面是第二个图表的数据
      */
-     maxTime2=0;//最大时间
+    maxTime2=0;//最大时间
     minTime2='';//最小时间
     avgTime2=0;//平均时间
     n952='';//95%的数据
@@ -86,7 +121,6 @@ export default class home extends Component{
       x:1
     }];
 
-
     componentDidMount(){
       BackHandler.addEventListener('hardwareBackPress',backAction.bind(this));
     }
@@ -94,23 +128,40 @@ export default class home extends Component{
       BackHandler.removeEventListener('hardwareBackPress',backAction.bind(this));
     }
 
+    setDefaultValue=(item)=>{
+      if(this.state.overlay1){
+        if(this.state.defaultvalue1=='')
+        this.setState({defaultvalue1:item});
+        else{
+          let str=this.state.defaultvalue1+item;
+          this.setState({defaultvalue1:str});
+        }
+        this.state.url=item;
+      }
+      if(this.state.overlay2){
+        if(this.state.defaultvalue2=='')
+        this.setState({defaultvalue2:item});
+        else{
+          let str=this.state.defaultvalue2+item;
+          this.setState({defaultvalue2:str});
+        }
+        this.state.url2=item;
+      }
+    }
+
+
+
+
     _renderRow(item,index){//已完成任务列表渲染函数   /**非常重要的函数 */
       return(
           <TouchableOpacity
-          onPress={()=>{
-            if(this.state.overlay1){
-              this.setState({defaultvalue1:item});
-            }
-            if(this.state.overlay2){
-              this.setState({defaultvalue2:item});
-            }
-          }}
+          onPress={  ()=>{this.setDefaultValue(item)}}
               style={{
                 flexDirection:'row',
                   // height:20,
                   borderBottomColor:'red',
                   justifyItems:'flex-start',
-                 margin:0,
+                  margin:0,
                  //设置下边框，以便分隔不同的列表元素
                 //  borderBottomWidth:1,
                 //  borderBottomColor:'#ccc',   
@@ -120,90 +171,222 @@ export default class home extends Component{
           </TouchableOpacity>
       )
   }
+  handleZoom(domain) {
+    this.setState({selectedDomain: domain});
+  }
+  
+  handleBrush(domain) {
+    this.setState({zoomDomain: domain});
+  }
+  
 
-              
+
     render(){
-
       return(     
-       this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
-          <View style={{flexDirection:'row'}}>
-         <Text style={styles.settingbtnstyle} onPress={setReqTime.bind(this)}>Set Time</Text>
-         <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});Orientation.lockToLandscape()}} >About</Text>
-         </View>
-         <Overlay
-         isVisible={this.state.overlay1}
-         onBackdropPress={()=>{this.setState({overlay1:false});this.refs.input1.blur()}}
-         >
-           <View style={{flexDirection:'row'}}>
-           <TextInput
-            defaultValue={this.state.defaultvalue1}
-            placeholderTextColor='#ccc'//设置占位符颜色
-            color='#000000'//设置输入文字的颜色
-            placeholder='输入网址1'
-            onChangeText={(newText)=>{this.state.url=newText;this.state.defaultvalue1=newText;}}
-            style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
-           />
-           <TouchableOpacity style={{color:'#000000',top:28}}
-           onPress={()=>{this.setState({chartDate:[]});this.refs.input1.blur();this.setState({overlay1:false})}}
-           ><Text>Enter</Text></TouchableOpacity>
-           </View>
-            <FlatList
-            style={{maxHeight:200}}
-        data={this.state.urlArr}
-        renderItem={({item,index})=>this._renderRow(item,index)}
-               keyExtractor={(item,index)=>item+index}
-        />
-         </Overlay>
+        this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
+        <View style={{flexDirection:'row'}}>
+        <Text style={styles.settingbtnstyle} onPress={setReqTime.bind(this)}>{I18n.t('setTime')}</Text>
+        <Text style={{color:'#FFB6C1',fontSize:20,left:215,top:10}} onPress={()=>{this.setState({linechart:false});Orientation.lockToLandscape()}} >{I18n.t('about')}</Text>
+        </View>
+        <TouchableOpacity 
+          onPress={() => {this.setState({langvis:true})}}>
+          <Text style={styles.settingbtnstyle}>{I18n.t('chooselanguage')}</Text>
+        </TouchableOpacity>
+        {/* 用户语言选择列表 start */}
+        {<Overlay isVisible={this.state.langvis} onBackdropPress={()=>{this.setState({langvis:false})}}>
+            <View style={styles.History}>
+              <ScrollView
+                  ref={(scroll)=>this._scroll = scroll}
+                  onScroll={(e)=>{}}>
+                  {data.languageshow.map((item, index) => {
+                    return (
+                    <View >
+                        <TouchableOpacity
+                            key={index}
+                            style={styles.HistoryTextBox}
+                            onPress={
+                                () => {I18n.locale = data.language[data.languageshow.indexOf(item)];
+                                    data.userChoose=I18n.locale;
+                                    store.save('Language',data.userChoose);
+                                    this.setState({langvis:false});
+                                }
+                            }
+                        >
+                        <Text numberOfLines={index} style={styles.HistoryText}>{item}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    )
+                  })}
+              </ScrollView>    
+            </View>
+        </Overlay>}
+        {/* 用户语言选择列表 end */}
+        <View >
+            <Overlay
+          style={styles.overlay}
+          isVisible={this.state.overlay1}
+          onBackdropPress={()=>{this.setState({overlay1:false});this.refs.input1.blur()}}
+          >
+            <View style={{flexDirection:'row'}}>
+              <TextInput
+              defaultValue={this.state.defaultvalue1}
+              placeholderTextColor='#ccc'//设置占位符颜色
+              color='#000000'//设置输入文字的颜色
+              placeholder={I18n.t('inputone')}
+              onChangeText={(newText)=>{
+                this.state.url=newText;
+                this.state.defaultvalue1=newText;
+              }}
+              style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
+              />
+              <TouchableOpacity style={{color:'#000000',top:28}}
+              onPress={()=>{this.setState({
+                chartDate:[]});
+                this.refs.input1.blur();
+                this.setState({overlay1:false});
+                saveValue(this.state.url)
+              }}
+              ><Text style={{fontSize: 16}}>{I18n.t('enter')}</Text></TouchableOpacity>
+            </View>
+            <View>
+              <FlatList
+              style={{maxHeight: 30,}}
+              horizontal={true}
+              data={this.state.urlArr}
+              renderItem={({item, index}) => this._renderRow(item, index)}
+              keyExtractor={(item, index) => item + index}
+              />
+            </View>
+            <View style={styles.History}>
+              <ScrollView
+                  ref={(scroll)=>this._scroll = scroll}
+                  onScroll={(e)=>{}}>
+                  {
+                    data.local.map((item, index) => {
+                        return (
+                          <View style={styles.HistoryList}>
+                              <TouchableOpacity
+                                key={index}
+                                style={styles.HistoryTextBox}
+                                onPress={
+                                  ()=>{this.setDefaultValue(item)}
+                                }
+                              >
+                              <Text numberOfLines={index} style={styles.HistoryText}>{item}</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                              style={styles.Delete}
+                              onPress={
+                                  () => {
+                                      data.local.splice(data.local.indexOf(item),1);
+                                      store.save('local',data.local);
+                                      this.setState({
+                                          visible:true,
+                                      })
+                                  }
+                              }
+                              >
+                              <Text style={styles.DeleteText}>X</Text>
+                              </TouchableOpacity>
+                          </View>
+                        )
+                    })
+                  }
+              </ScrollView>    
+            </View>
+          </Overlay>
+        </View>
+        
          {/* start */}
-         <Overlay
-         isVisible={this.state.overlay2}
-         onBackdropPress={()=>{this.setState({overlay2:false});this.refs.input2.blur()}}
-         >
-           <View style={{flexDirection:'row'}}>
-           <TextInput
+        <Overlay
+        isVisible={this.state.overlay2}
+        onBackdropPress={()=>{this.setState({overlay2:false});this.refs.input2.blur()}}
+        >
+          <View style={{flexDirection:'row'}}>
+          <TextInput
             defaultValue={this.state.defaultvalue2}
             placeholderTextColor='#ccc'//设置占位符颜色
             color='#000000'//设置输入文字的颜色
-            placeholder='输入网址1'
+            placeholder={I18n.t('inputtwo')}
             onChangeText={(newText)=>{this.state.url2=newText;this.state.defaultvalue2=newText;}}
             style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
-           />
-           <TouchableOpacity style={{color:'#000000',top:28}}
-           onPress={()=>{this.setState({chartDate:[]});this.refs.input2.blur();this.setState({overlay2:false})}}
-           ><Text>Enter</Text></TouchableOpacity>
-           </View>
-            <FlatList
-            style={{maxHeight:200}}
-        data={this.state.urlArr}
-        renderItem={({item,index})=>this._renderRow(item,index)}
-               keyExtractor={(item,index)=>item+index}
-        />
-         </Overlay>
+          />
+          <TouchableOpacity style={{color:'#000000',top:28}}
+          onPress={()=>{this.setState({chartDate:[]});this.refs.input2.blur();this.setState({overlay2:false});saveValue(this.state.url2)}}
+          ><Text style={{fontSize: 16}}>{I18n.t('enter')}</Text></TouchableOpacity>
+          </View>
+          <View>
+              <FlatList
+              style={{maxHeight: 30,}}
+              horizontal={true}
+              data={this.state.urlArr}
+              renderItem={({item, index}) => this._renderRow(item, index)}
+              keyExtractor={(item, index) => item + index}
+              />
+            </View>
+            <View style={styles.History}>
+              <ScrollView
+                  ref={(scroll)=>this._scroll = scroll}
+                  onScroll={(e)=>{}}>
+                  {
+                    data.local.map((item, index) => {
+                        return (
+                          <View style={styles.HistoryList}>
+                              <TouchableOpacity
+                                key={index}
+                                style={styles.HistoryTextBox}
+                                onPress={
+                                  ()=>{this.setDefaultValue(item)}
+                                }
+                              >
+                              <Text numberOfLines={index} style={styles.HistoryText}>{item}</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                              style={styles.Delete}
+                              onPress={
+                                  () => {
+                                      data.local.splice(data.local.indexOf(item),1);
+                                      store.save('local',data.local);
+                                      this.setState({
+                                          visible:true,
+                                      })
+                                  }
+                              }
+                              >
+                              <Text style={styles.DeleteText}>X</Text>
+                              </TouchableOpacity>
+                          </View>
+                        )
+                    })
+                  }
+              </ScrollView>    
+            </View>
+        </Overlay>
          {/* end */}
         <Overlay 
          isVisible={this.state.OverlayAble}
          onBackdropPress={()=>{this.setState({OverlayAble:false})}}
          >
            <View style={{height:150}}>
-           <Text style={{color:'#000000',fontSize:18}} >当前请求时长:{this.state.reqTime}</Text>
+           <Text style={{color:'#000000',fontSize:18}} >{I18n.t('currenttime')}:{this.state.reqTime}</Text>
            <View>
            <TextInput
-           placeholder='输入请求时长'
+           placeholder={I18n.t('timeinput')}
            placeholderTextColor='#ccc'
            color='#000000'
            onChangeText={reqTimeChange.bind(this)}
            style={{width:200,top:6,marginBottom:10}}
            />
-           <Button title='确定' onPress={confirmRqTime.bind(this)} />
+           <Button title={I18n.t('sure')} onPress={confirmRqTime.bind(this)} />
            </View>
            </View>
          </Overlay> 
-            <Text style={{color:'pink',fontSize:40,fontWeight:'bold',marginLeft:65,marginTop:180}}>Graphurlping</Text>
+            <Text style={{color:'pink',fontSize:40,fontWeight:'bold',marginLeft:65,marginTop:180}}>{I18n.t('title')}</Text>
             <View style={styles.serch}>
               <View style={styles.textinput}>
             <TextInput
             ref={'input1'}
-            placeholder='输入网址1...'//占位符
+            placeholder={I18n.t('inputone')}//占位符
             defaultValue={this.state.defaultvalue1}
             placeholderTextColor='#ccc'//设置占位符颜色
             keyboardType='url'//设置键盘类型，url只在iOS端可用
@@ -214,7 +397,7 @@ export default class home extends Component{
             />
              <TextInput
             ref={'input2'}
-            placeholder='输入网址2...'//占位符
+            placeholder={I18n.t('inputtwo')}//占位符
             defaultValue={this.state.defaultvalue2}
             placeholderTextColor='#ccc'//设置占位符颜色
             keyboardType='url'//设置键盘类型，url只在iOS端可用
@@ -238,26 +421,36 @@ export default class home extends Component{
               borderRadius:5
               }}
               onPress={sendRequest.bind(this)}
-              >PING</Text>
+              >{I18n.t('ping')}</Text>
           </View>
-          {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}} onPress={()=>{this.setState({linechart:false})}} >返回图表</Text>:<View></View>}
+          {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}} onPress={()=>{this.setState({linechart:false})}} >{I18n.t('return')}</Text>:<View></View>}
         </TouchableOpacity> : <View>     
         <ScrollView  >
           {this.state.url?
-       <VictoryChart
-          width={700}
-          scale={{x: "time"}}
-        >
-          <VictoryLine
-          minDomain={{y:0}}
-            style={{
-              data: {stroke: "tomato"},
-              
-            }}
-            data={this.linechartDates}
-          />
-          
-        </VictoryChart>:<View></View>}
+      <VictoryChart
+      //  singleQuadrantDomainPadding={{ x: false }}
+       width={550}
+       height={300}
+      //  scale={{x: "time"}}
+       containerComponent={
+         <VictoryZoomContainer responsive={false}
+           zoomDimension="x"
+           zoomDimension='y'
+           zoomDomain={this.state.zoomDomain}
+           onZoomDomainChange={this.handleZoom.bind(this)}
+         />
+       }
+     >
+       <VictoryLine
+      //  domain={{y:[0,100]}}
+         style={{
+           data: {stroke: "tomato"}
+         }}
+         data={this.linechartDates}
+       
+       />
+
+     </VictoryChart>:<View></View>}
         {this.state.url2?
         <VictoryChart
          width={700}
@@ -277,22 +470,22 @@ export default class home extends Component{
         <Text style={{color:'pink',left:20,fontSize:20}}>{`${this.state.url} :`}</Text>
         <Text style={{color:'pink',fontSize:20,top:15,left:18}}>{`status:${this.status1}`}</Text>
         <TouchableOpacity style={{flexDirection:'column'}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>MAX:{this.maxTime}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:2,left:20}}>MIN:{this.minTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:12,left:20}}>{I18n.t('max')}:{this.maxTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:2,left:20}}>{I18n.t('min')}:{this.minTime}ms</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>AVG:{this.avgTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>{I18n.t('avg')}:{this.avgTime}ms</Text>
             <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n95?`${this.n95}ms`:''}</Text>
         </TouchableOpacity></View> : <View></View>}
         {this.state.url2 ? <View>
         <Text style={{color:'pink',left:20,fontSize:20,top:20}}>{`${this.state.url2} :`}</Text>
         <Text style={{color:'pink',fontSize:20,top:18,left:16}}>{`status:${this.status2}`}</Text>
         <TouchableOpacity style={{flexDirection:'column',top:12}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>MAX:{this.maxTime2}ms</Text>
-            <Text style={{color:'pink',fontSize:20,bottom:2,left:20}}>MIN:{this.minTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>{I18n.t('max')}:{this.maxTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,bottom:2,left:20}}>{I18n.t('min')}:{this.minTime2}ms</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,left:20,top:2}}>AVG:{this.avgTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,left:20,top:2}}>{I18n.t('avg')}:{this.avgTime2}ms</Text>
             <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n952?`${this.n952}ms`:''}</Text>
         </TouchableOpacity>
         </View> : <View></View>}
@@ -341,7 +534,46 @@ const styles=StyleSheet.create({
       top:10,
       left:5
     },
-    
-
+    History:{
+      position:'relative',
+      height:300,
+      width:300,
+    },
+    HistoryList:{
+      width:310,
+      height: 43,
+      backgroundColor: 'white',
+    },
+    HistoryTextBox: {
+      height: 40,
+      justifyContent: 'center',
+      borderRadius:10,
+      backgroundColor:'#F0F8FF',
+    },
+    HistoryText: {
+      fontSize: 20,
+      color: 'black',
+    },
+    Delete:{
+      width: 40,
+      height: 40,
+      position:'relative',
+      top: -50,
+      left: 270,
+    },
+    DeleteText:{
+      position:'relative',
+      top: 5,
+      fontSize:35,
+    },
+    overlay:{
+      position:'absolute',
+      width:400,
+    },
+    language:{
+      width:width,
+      height:height,
+      position:'absolute',
+    }
 });
 

@@ -1,0 +1,18 @@
+export default {
+    title: 'GraphUrlPing1',
+    setTime:'设置时间',
+    about:'关于',
+    chooselanguage:'语言',
+    currenttime:'当前请求时长',
+    timeinput:'输入请求时长',
+    sure:'确定',
+    inputone:'输入网址1',
+    inputtwo:'输入网址2',
+    enter:'enter',
+    ping:'PING',
+    status:'状态',
+    return:'返回图表',
+    max:'MAX',
+    min:'MIN',
+    avg:'AVG',
+};
