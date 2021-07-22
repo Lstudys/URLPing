@@ -18,7 +18,7 @@ export const sendRequest=function(){
     if(!myNetInfo){
         Toast.message('网络未连接!');
     }else{
-        Orientation.lockToLandscape();//横屏
+        // Orientation.lockToLandscape();//横屏
     this.setState({isPing:true});
     this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
     this.refs.input1.blur();//输入框失去焦点
@@ -84,8 +84,8 @@ export const sendRequest=function(){
        value2.end=t2;
        value2.time=value2.end-value2.begin;
        if(value2.time!=0){
-        //  let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
-       const data={y:value2.time,x:x2};
+         let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
+       const data={y:value2.time,x:xtime};
        if(this.linechartDates2.length>100){
          this.linechartDates2.shift();
        }
@@ -151,12 +151,14 @@ export const sendRequest=function(){
        value.end=t2;
        value.time=value.end-value.begin;
        if(value.time!=0){
-      //  let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
-       const data={y:value.time,x:x};
-       if(this.linechartDates.length>100){
-         this.linechartDates.shift();
-       }
-       this.linechartDates.push(data);
+       var xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
+       var ytime={y:value.time};
+      //  if(this.linechartDates.length>4){
+      //    this.linechartDates.shift();
+      //    this.ydata.shift();
+      //  }
+       this.linechartDates.push(ytime);
+       this.setState({chartDate:[]});
        this.sumReqTime.push(value.time);
        value.sumtime+=value.time;//求和，算出总时间
        this.avgTime=value.sumtime/x;
@@ -174,14 +176,14 @@ export const sendRequest=function(){
        nowTime=new Date().valueOf();//获取当前时间戟
        if(nowTime<beginTime+reqTime*60*1000&&this.state.isPing){
          xhr.abort();
-        //  setTimeout(()=>{
-        //    if(this.state.isPing){
-        //    xhr.open('GET',this.state.url,true);
-        //  xhr.send();
-        //    }
-        //  },1000)
-         xhr.open('GET',this.state.url,true);
+         setTimeout(()=>{
+           if(this.state.isPing){
+           xhr.open('GET',this.state.url,true);
          xhr.send();
+           }
+         },1000)
+        //  xhr.open('GET',this.state.url,true);
+        //  xhr.send();
        }else{
          Orientation.lockToPortrait();
          let sum=0;//存储每个数减去平均数的平方的和

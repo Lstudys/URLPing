@@ -58,9 +58,11 @@ export default class home extends Component{
         chartToData:false,
         overlay1:false,
         overlay2:false,//控制两个overlay显示的state
-        urlArr:['https://','   ','http://','   ','www.','   ','.cn'],
+        urlArr:['https://','   ','http://'],
         visible:false,//删除后刷新历史记录
         langvis:false,//选择语言后刷新页面
+        selectedDomain:'',
+        zoomDomain:'',
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -126,27 +128,34 @@ export default class home extends Component{
       BackHandler.removeEventListener('hardwareBackPress',backAction.bind(this));
     }
 
+    setDefaultValue=(item)=>{
+      if(this.state.overlay1){
+        if(this.state.defaultvalue1=='')
+        this.setState({defaultvalue1:item});
+        else{
+          let str=this.state.defaultvalue1+item;
+          this.setState({defaultvalue1:str});
+        }
+        this.state.url=item;
+      }
+      if(this.state.overlay2){
+        if(this.state.defaultvalue2=='')
+        this.setState({defaultvalue2:item});
+        else{
+          let str=this.state.defaultvalue2+item;
+          this.setState({defaultvalue2:str});
+        }
+        this.state.url2=item;
+      }
+    }
+
+
+
+
     _renderRow(item,index){//已完成任务列表渲染函数   /**非常重要的函数 */
       return(
           <TouchableOpacity
-          onPress={()=>{
-            if(this.state.overlay1){
-              if(this.state.defaultvalue1=='')
-              this.setState({defaultvalue1:item});
-              else{
-                let str=this.state.defaultvalue1+item;
-                this.setState({defaultvalue1:str});
-              }
-            }
-            if(this.state.overlay2){
-              if(this.state.defaultvalue2=='')
-              this.setState({defaultvalue2:item});
-              else{
-                let str=this.state.defaultvalue2+item;
-                this.setState({defaultvalue2:str});
-              }
-            }
-          }}
+          onPress={  ()=>{this.setDefaultValue(item)}}
               style={{
                 flexDirection:'row',
                   // height:20,
@@ -162,6 +171,15 @@ export default class home extends Component{
           </TouchableOpacity>
       )
   }
+  handleZoom(domain) {
+    this.setState({selectedDomain: domain});
+  }
+  
+  handleBrush(domain) {
+    this.setState({zoomDomain: domain});
+  }
+  
+
 
     render(){
       return(     
@@ -251,7 +269,7 @@ export default class home extends Component{
                                 key={index}
                                 style={styles.HistoryTextBox}
                                 onPress={
-                                    () => console.log('+++++++++++++++++')
+                                  ()=>{this.setDefaultValue(item)}
                                 }
                               >
                               <Text numberOfLines={index} style={styles.HistoryText}>{item}</Text>
@@ -318,7 +336,7 @@ export default class home extends Component{
                                 key={index}
                                 style={styles.HistoryTextBox}
                                 onPress={
-                                    () => console.log('+++++++++++++++++')
+                                  ()=>{this.setDefaultValue(item)}
                                 }
                               >
                               <Text numberOfLines={index} style={styles.HistoryText}>{item}</Text>
@@ -409,20 +427,30 @@ export default class home extends Component{
         </TouchableOpacity> : <View>     
         <ScrollView  >
           {this.state.url?
-       <VictoryChart
-          width={700}
-          scale={{x: "time"}}
-        >
-          <VictoryLine
-          minDomain={{y:0}}
-            style={{
-              data: {stroke: "tomato"},
-              
-            }}
-            data={this.linechartDates}
-          />
-          
-        </VictoryChart>:<View></View>}
+      <VictoryChart
+      //  singleQuadrantDomainPadding={{ x: false }}
+       width={550}
+       height={300}
+      //  scale={{x: "time"}}
+       containerComponent={
+         <VictoryZoomContainer responsive={false}
+           zoomDimension="x"
+           zoomDimension='y'
+           zoomDomain={this.state.zoomDomain}
+           onZoomDomainChange={this.handleZoom.bind(this)}
+         />
+       }
+     >
+       <VictoryLine
+      //  domain={{y:[0,100]}}
+         style={{
+           data: {stroke: "tomato"}
+         }}
+         data={this.linechartDates}
+       
+       />
+
+     </VictoryChart>:<View></View>}
         {this.state.url2?
         <VictoryChart
          width={700}
