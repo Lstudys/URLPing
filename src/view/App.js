@@ -130,21 +130,11 @@ export default class home extends Component{
 
     setDefaultValue=(item)=>{
       if(this.state.overlay1){
-        if(this.state.defaultvalue1=='')
         this.setState({defaultvalue1:item});
-        else{
-          let str=this.state.defaultvalue1+item;
-          this.setState({defaultvalue1:str});
-        }
         this.state.url=item;
       }
       if(this.state.overlay2){
-        if(this.state.defaultvalue2=='')
         this.setState({defaultvalue2:item});
-        else{
-          let str=this.state.defaultvalue2+item;
-          this.setState({defaultvalue2:str});
-        }
         this.state.url2=item;
       }
     }
