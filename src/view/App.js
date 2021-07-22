@@ -239,14 +239,22 @@ export default class home extends Component{
               }}
               style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
               />
-              <TouchableOpacity style={{color:'#000000',top:28}}
+              <View>
+              <TouchableOpacity style={{color:'#000000',top:0}}
+              onPress={()=>{this.setState({
+                chartDate:[]});
+               this.state.defaultvalue1='';
+              }}
+              ><Text style={{fontSize: 16}}>清除</Text></TouchableOpacity>
+               <TouchableOpacity style={{color:'#000000',top:12}}
               onPress={()=>{this.setState({
                 chartDate:[]});
                 this.refs.input1.blur();
                 this.setState({overlay1:false});
                 saveValue(this.state.url)
               }}
-              ><Text style={{fontSize: 16}}>{I18n.t('enter')}</Text></TouchableOpacity>
+              ><Text style={{fontSize: 20,fontWeight:'bold',left:5}}>{I18n.t('enter')}</Text></TouchableOpacity>
+              </View>
             </View>
             <View>
               <FlatList
@@ -311,9 +319,22 @@ export default class home extends Component{
             onChangeText={(newText)=>{this.state.url2=newText;this.state.defaultvalue2=newText;}}
             style={{borderBottomColor:'#000000',borderBottomWidth:1,width:280,left:0,}}
           />
-          <TouchableOpacity style={{color:'#000000',top:28}}
-          onPress={()=>{this.setState({chartDate:[]});this.refs.input2.blur();this.setState({overlay2:false});saveValue(this.state.url2)}}
-          ><Text style={{fontSize: 16}}>{I18n.t('enter')}</Text></TouchableOpacity>
+          <View>
+              <TouchableOpacity style={{color:'#000000',top:0}}
+              onPress={()=>{this.setState({
+                chartDate:[]});
+               this.state.defaultvalue2='';
+              }}
+              ><Text style={{fontSize: 16}}>清除</Text></TouchableOpacity>
+               <TouchableOpacity style={{color:'#000000',top:12}}
+              onPress={()=>{this.setState({
+                chartDate:[]});
+                this.refs.input2.blur();
+                this.setState({overlay2:false});
+                saveValue(this.state.url2)
+              }}
+              ><Text style={{fontSize: 20,fontWeight:'bold',left:5}}>{I18n.t('enter')}</Text></TouchableOpacity>
+              </View>
           </View>
           <View>
               <FlatList
