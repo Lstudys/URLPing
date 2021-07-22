@@ -241,6 +241,7 @@ export default class home extends Component{
                 chartDate:[]});
                 this.refs.input1.blur();
                 this.setState({overlay1:false});
+                if(this.state.defaultvalue1!='')
                 saveValue(this.state.url)
               }}
               ><Text style={{fontSize: 20,fontWeight:'bold',left:5}}>{I18n.t('enter')}</Text></TouchableOpacity>
@@ -321,6 +322,7 @@ export default class home extends Component{
                 chartDate:[]});
                 this.refs.input2.blur();
                 this.setState({overlay2:false});
+                if(this.state.defaultvalue2!='')
                 saveValue(this.state.url2)
               }}
               ><Text style={{fontSize: 20,fontWeight:'bold',left:5}}>{I18n.t('enter')}</Text></TouchableOpacity>
