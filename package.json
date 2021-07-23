@@ -15,6 +15,7 @@
     "i18n-js": "^3.8.0",
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-charts-wrapper": "^0.5.7",
     "react-native-elements": "^3.2.0",
     "react-native-localize": "^2.1.1",
     "react-native-orientation": "^3.1.3",

@@ -17,12 +17,14 @@ import {
   Button,
   TouchableOpacity, 
   ScrollView,
-  FlatList
+  FlatList,
+  processColor
 } from 'react-native';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
 import {Overlay} from 'react-native-elements';
 import { BackHandler } from 'react-native';
 import {sendRequest} from '../controller/Request';
+import {LineChart} from 'react-native-charts-wrapper';
 import {setReqTime,reqTimeChange,confirmRqTime,textInputChange1,textInputChange2,backAction, saveValue} from '../controller/AppPageFunction';
 import NetInfo from '@react-native-community/netinfo';
 import data from '../modal/data';
@@ -38,6 +40,7 @@ const locales = RNLocalize.getLocales();// 获取手机本地国际化信息
 const systemLanguage = locales[0]?.languageCode; // 用户系统偏好语言
 const height=Dimensions.get('window').height;
 const width=Dimensions.get('window').width;
+const colors = [processColor('red'), processColor('blue'), processColor('green'), processColor('yellow'), processColor('purple'), processColor('pink')];
 export default class home extends Component{
     constructor(props){
       super(props);
@@ -61,6 +64,19 @@ export default class home extends Component{
         langvis:false,//选择语言后刷新页面
         selectedDomain:'',
         zoomDomain:'',
+        values: [0],
+        colorIndex: 0,
+        chartLabels:[],
+        values2: [0],
+        colorIndex2: 0,
+        chartLabels2:[],
+        marker: {
+          enabled: true,
+          digits: 2,
+          backgroundTint: processColor('teal'),
+          markerColor: processColor('#F0C0FF8C'),
+          textColor: processColor('white'),
+        },
         chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
           [
             {y:0,x:0}
@@ -102,7 +118,6 @@ export default class home extends Component{
     n95='';//95%的数据
     status1='';
     sumReqTime=[];//所有请求时间的数组，用来计算标准差
-    linechartDates=[];//折线图1的数据源
     /**
      * 下面是第二个图表的数据
      */
@@ -112,7 +127,6 @@ export default class home extends Component{
     n952='';//95%的数据
     status2='';
     sumReqTime2=[];//所有请求时间的数组，用来计算标准差
-    linechartDates2=[];//折线图2的数据源
 
     chartDate=[{//用于setState以便刷新页面，并无实际意义
       y:1,
@@ -159,17 +173,47 @@ export default class home extends Component{
           </TouchableOpacity>
       )
   }
-  handleZoom(domain) {
-    this.setState({selectedDomain: domain});
-  }
+  // handleZoom(domain) {
+  //   this.setState({selectedDomain: domain});
+  // }
   
-  handleBrush(domain) {
-    this.setState({zoomDomain: domain});
+  // handleBrush(domain) {
+  //   this.setState({zoomDomain: domain});
+  // }
+  next(values, colorIndex,chartLabels) {
+    return {
+      data: {
+        dataSets: [{
+          values: values,
+          label: 'Sine function',
+
+          config: {
+            drawValues: false,
+            color: colors[colorIndex],
+            mode: "CUBIC_BEZIER",
+            drawCircles: false,
+            lineWidth: 2
+          }
+        }]
+      },
+      xAxis: {
+        valueFormatter:chartLabels,
+        axisLineWidth: 0,
+        drawLabels: true,
+        position: 'BOTTOM',
+        drawGridLines: false
+      }
+    }
+
   }
   
 
 
     render(){
+      const {values, colorIndex,chartLabels} = this.state;
+      const config = this.next(values, colorIndex,chartLabels);
+      const {values2, colorIndex2,chartLabels2} = this.state;
+      const config2 = this.next(values2, colorIndex2,chartLabels2);
       return(     
         this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
         <View style={{flexDirection:'row'}}>
@@ -437,47 +481,26 @@ export default class home extends Component{
               >{I18n.t('ping')}</Text>
           </View>
           {this.state.backChart?<Text style={{color:'pink',top:200,left:130,fontSize:20,}} onPress={()=>{this.setState({linechart:false})}} >{I18n.t('return')}</Text>:<View></View>}
-        </TouchableOpacity> : <View>     
+        </TouchableOpacity> : <View style={styles.bottomStyle}>      
         <ScrollView  >
           {this.state.url?
-      <VictoryChart
-      //  singleQuadrantDomainPadding={{ x: false }}
-       width={550}
-       height={300}
-      //  scale={{x: "time"}}
-       containerComponent={
-         <VictoryZoomContainer responsive={false}
-           zoomDimension="x"
-           zoomDimension='y'
-           zoomDomain={this.state.zoomDomain}
-           onZoomDomainChange={this.handleZoom.bind(this)}
-         />
-       }
-     >
-       <VictoryLine
-      //  domain={{y:[0,100]}}
-         style={{
-           data: {stroke: "tomato"}
-         }}
-         data={this.linechartDates}
-       
-       />
-
-     </VictoryChart>:<View></View>}
+     <LineChart 
+     width={width}
+     height={600}
+     data={config.data} 
+     xAxis={config.xAxis} 
+     style={styles.container} 
+     marker={this.state.marker} 
+     ref="chart"/>:<View></View>}
         {this.state.url2?
-        <VictoryChart
-         width={700}
-     
-         scale={{x: "time"}}>
-            <VictoryLine
-          minDomain={{y:0}}
-            style={{
-              data: {stroke: "#1E90FF"},
-              
-            }}
-            data={this.linechartDates2}
-          />
-         </VictoryChart>:<View></View>}
+         <LineChart 
+         width={width}
+         height={600}
+         data={config2.data} 
+         xAxis={config2.xAxis} 
+         style={styles.container} 
+         marker={this.state.marker} 
+         ref="chart2"/>:<View></View>}
         {this.state.url ?
         <View>
         <Text style={{color:'pink',left:20,fontSize:20}}>{`${this.state.url} :`}</Text>
@@ -509,6 +532,15 @@ export default class home extends Component{
 }
 
 const styles=StyleSheet.create({
+  bottomStyle:{
+    backgroundColor:'#ffffff'
+  },
+  container: {
+    
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    backgroundColor: 'transparent'
+  },
     serch:{
       flexDirection:'column',
       top:20,
