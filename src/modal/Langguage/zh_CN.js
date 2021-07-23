@@ -1,5 +1,5 @@
 export default {
-    title: 'GraphUrlPing1',
+    title: 'GraphUrlPing',
     setTime:'设置时间',
     about:'关于',
     chooselanguage:'语言',

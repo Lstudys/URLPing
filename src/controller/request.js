@@ -1,3 +1,9 @@
+/**
+ * 发送HTTP请求用的函数
+ * created by LYH on 2021/7/23
+ */
+
+
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
 import Orientation from 'react-native-orientation';
@@ -9,7 +15,7 @@ import {
 
 
 
-
+//向URL发送请求的函数
 export const sendRequest=function(){
     if((testURL(this.state.url)||testURL(this.state.url2))){
       let myNetInfo;
@@ -18,25 +24,23 @@ export const sendRequest=function(){
     if(!myNetInfo){
         Toast.message('网络未连接!');
     }else{
-        // Orientation.lockToLandscape();//横屏
-    this.setState({isPing:true});
-    this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
-    this.refs.input1.blur();//输入框失去焦点
-    this.refs.input2.blur();
-    this.setState({linechart:false})//设置状态以显示图表
-    this.linechartDates=[];//清空折线图的数据源数组
-    this.linechartDates2=[];
-    this.sumReqTime=[];//清空请求时间的数组
-    this.sumReqTime2=[];
-    this.maxTime=0;
-    this.maxTime2=0;
-    this.minTime='';
-    this.minTime2=0;
-    this.avgTime=0;
-    this.avgTime2=0;
-    this.n95='';
-    this.n952='';
-    //以上代码都是把数据清空
+      this.setState({isPing:true});
+      this.setState({ifOverlayAble:false});//设置发送请求时不能设置请求时长
+      this.refs.input1.blur();//输入框失去焦点
+      this.refs.input2.blur();
+      this.setState({linechart:false})//设置状态以显示图表
+      this.linechartDates=[];//清空折线图的数据源数组
+      this.linechartDates2=[];
+      this.sumReqTime=[];//清空请求时间的数组
+      this.sumReqTime2=[];
+      this.maxTime=0;
+      this.maxTime2=0;
+      this.minTime='';
+      this.minTime2=0;
+      this.avgTime=0;
+      this.avgTime2=0;
+      this.n95='';
+      this.n952='';
    const reqTime=this.state.reqTime;//获取发送请求的持续时间
    const beginTime=new Date().valueOf();//点击PING后获取当前时间（分钟），用来控制循环
    var x=1;//图表1的横坐标
@@ -227,3 +231,5 @@ export const sendRequest=function(){
    Toast.message('URL格式不正确!');
  }  
 }  
+
+//ping之前把用到的数据清空和设置一些相关属性
