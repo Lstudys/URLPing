@@ -20,12 +20,11 @@ import {
   ScrollView,
   FlatList
 } from 'react-native';
-import {Toast} from 'teaset';
 import {VictoryChart,VictoryTheme,VictoryLine, VictoryZoomContainer,VictoryBrushContainer,VictoryAxis,VictoryPie} from 'victory-native';
-import {Overlay, withTheme} from 'react-native-elements';
+import {Overlay} from 'react-native-elements';
 import { BackHandler } from 'react-native';
-import {sendRequest} from '../controller/request';
-import {setReqTime,reqTimeChange,confirmRqTime,textInputChange1,textInputChange2,overtextInputChange1,backAction, saveValue} from '../controller/AppPageFunction';
+import {sendRequest} from '../controller/Request';
+import {setReqTime,reqTimeChange,confirmRqTime,textInputChange1,textInputChange2,backAction, saveValue} from '../controller/AppPageFunction';
 import NetInfo from '@react-native-community/netinfo';
 import data from '../modal/data';
 import store from 'react-native-simple-store';
@@ -234,6 +233,7 @@ export default class home extends Component{
               onPress={()=>{this.setState({
                 chartDate:[]});
                this.state.defaultvalue1='';
+               this.state.url='';
               }}
               ><Text style={{fontSize: 16}}>清除</Text></TouchableOpacity>
                <TouchableOpacity style={{color:'#000000',top:12}}
@@ -315,6 +315,7 @@ export default class home extends Component{
               onPress={()=>{this.setState({
                 chartDate:[]});
                this.state.defaultvalue2='';
+               this.state.url2='';
               }}
               ><Text style={{fontSize: 16}}>清除</Text></TouchableOpacity>
                <TouchableOpacity style={{color:'#000000',top:12}}
