@@ -36,6 +36,12 @@ export const backAction = function () {
           this.setState({
             url2: ''
           });
+          this.setState({
+            defaultvalue1: ''
+          });
+          this.setState({
+            defaultvalue2:''
+          })
           this.setState({ifOverlayAble:true})
           Orientation.lockToPortrait();
           return true;
