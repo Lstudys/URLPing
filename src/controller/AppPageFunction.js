@@ -1,3 +1,8 @@
+/**
+ * 主页面用到的函数
+ * created by LYH on 2021/7/23
+ */
+
 import {
   BackHandler
 } from 'react-native';

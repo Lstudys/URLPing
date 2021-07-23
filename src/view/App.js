@@ -1,7 +1,6 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
+ * 页面代码
+ *created by LYH on 2021/7/23
  * @format
  * @flow strict-local
  */
