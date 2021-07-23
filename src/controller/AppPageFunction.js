@@ -125,6 +125,14 @@ export const testURL = function (url) {
 }
 
 export const saveValue = function (url) {
-  data.local.unshift(url);
-  store.save('local',data.local);
+  store.get("local").then(
+    res => data.local=res.slice()
+  );
+  /*禁止重复存储，已有存储的话不存储*/
+  if(data.local.indexOf(url)==-1){
+    data.local.unshift(url);
+    store.save('local',data.local);
+  }else{
+    return;
+  }
 }
