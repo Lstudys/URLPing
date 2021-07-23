@@ -46,6 +46,18 @@ export const backAction = function () {
           });
           this.setState({
             defaultvalue2:''
+          });
+          this.setState({
+            values:[0]
+          });
+          this.setState({
+            chartLabels:[]
+          })
+          this.setState({
+            values2:[0]
+          });
+          this.setState({
+            chartLabels2:[]
           })
           this.setState({ifOverlayAble:true})
           Orientation.lockToPortrait();

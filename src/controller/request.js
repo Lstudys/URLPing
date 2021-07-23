@@ -88,12 +88,13 @@ export const sendRequest=function(){
        value2.end=t2;
        value2.time=value2.end-value2.begin;
        if(value2.time!=0){
-         let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
-       const data={y:value2.time,x:xtime};
-       if(this.linechartDates2.length>100){
-         this.linechartDates2.shift();
-       }
-       this.linechartDates2.push(data);
+         let xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`;
+       const ydata=value2.time;
+       this.setState({
+        values2: this.state.values2.concat([ydata]),
+        chartLabels2:this.state.chartLabels2.concat([xtime])
+        // colorIndex: (this.state.colorIndex + 1) % colors.length
+      });
        this.sumReqTime2.push(value2.time);
        value2.sumtime+=value2.time;//求和，算出总时间
        this.avgTime2=value2.sumtime/x2;
@@ -111,14 +112,14 @@ export const sendRequest=function(){
        nowTime2s=new Date().valueOf();//获取当前时间戟
        if(nowTime2s<beginTime+reqTime*60*1000&&this.state.isPing){
          xhr2.abort();
-        //  setTimeout(()=>{
-        //    if(this.state.isPing){
-        //    xhr2.open('GET',this.state.url2,true);
-        //    xhr2.send();
-        //    }
-        //  },1000)
-         xhr2.open('GET',this.state.url2,true);
-         xhr2.send();
+         setTimeout(()=>{
+           if(this.state.isPing){
+           xhr2.open('GET',this.state.url2,true);
+           xhr2.send();
+           }
+         },1000)
+        //  xhr2.open('GET',this.state.url2,true);
+        //  xhr2.send();
        }else{
          Orientation.lockToPortrait();//竖屏
          let sum=0;//存储每个数减去平均数的平方的和
@@ -156,14 +157,14 @@ export const sendRequest=function(){
        value.end=t2;
        value.time=value.end-value.begin;
        if(value.time!=0){
-       var xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`+`${new Date().getMilliseconds()}`
-       var ytime={y:value.time};
-      //  if(this.linechartDates.length>4){
-      //    this.linechartDates.shift();
-      //    this.ydata.shift();
-      //  }
-       this.linechartDates.push(ytime);
-       this.setState({chartDate:[]});
+       var xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`;
+       var ytime=value.time;
+    this.setState({
+      values: this.state.values.concat([ytime]),
+      chartLabels:this.state.chartLabels.concat([xtime])
+      // colorIndex: (this.state.colorIndex + 1) % colors.length
+    });
+
        this.sumReqTime.push(value.time);
        value.sumtime+=value.time;//求和，算出总时间
        this.avgTime=value.sumtime/x;
