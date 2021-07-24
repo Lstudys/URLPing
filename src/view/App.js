@@ -61,7 +61,7 @@ export default class home extends Component{
         overlay2:false,//控制两个overlay显示的state
         urlArr:['https://','   ','http://'],
         visible:false,//删除后刷新历史记录
-        langvis:false,//选择语言后刷新页面
+        langvis:false,//选择语言后刷新页面(控制语言选择overlay显示的state)
         selectedDomain:'',
         zoomDomain:'',
         values: [0],
@@ -139,7 +139,7 @@ export default class home extends Component{
     componentWillUnmount(){
       BackHandler.removeEventListener('hardwareBackPress',backAction.bind(this));
     }
-
+    //设置url和输入框默认值为item
     setDefaultValue=(item)=>{
       if(this.state.overlay1){
         this.setState({defaultvalue1:item});
@@ -153,39 +153,29 @@ export default class home extends Component{
 
 
 
-
-    _renderRow(item,index){//已完成任务列表渲染函数   /**非常重要的函数 */
+      //flatlist的渲染函数
+    _renderRow(item,index){
       return(
           <TouchableOpacity
           onPress={  ()=>{this.setDefaultValue(item)}}
               style={{
                 flexDirection:'row',
-                  // height:20,
                   borderBottomColor:'red',
                   justifyItems:'flex-start',
                   margin:0,
-                 //设置下边框，以便分隔不同的列表元素
-                //  borderBottomWidth:1,
-                //  borderBottomColor:'#ccc',   
               }}
           >
               <Text style={{left:0,color:'#000000',fontSize:20,}}>{item}</Text>    
           </TouchableOpacity>
       )
   }
-  // handleZoom(domain) {
-  //   this.setState({selectedDomain: domain});
-  // }
-  
-  // handleBrush(domain) {
-  //   this.setState({zoomDomain: domain});
-  // }
-  next(values, colorIndex,chartLabels) {
+    //获取图表属性值的函数
+  next(values, colorIndex,chartLabels,url) {
     return {
       data: {
         dataSets: [{
           values: values,
-          label: 'Sine function',
+          label: url,
 
           config: {
             drawValues: false,
@@ -201,7 +191,7 @@ export default class home extends Component{
         axisLineWidth: 0,
         drawLabels: true,
         position: 'BOTTOM',
-        drawGridLines: false
+        drawGridLines: false,
       }
     }
 
@@ -210,10 +200,11 @@ export default class home extends Component{
 
 
     render(){
-      const {values, colorIndex,chartLabels} = this.state;
-      const config = this.next(values, colorIndex,chartLabels);
-      const {values2, colorIndex2,chartLabels2} = this.state;
-      const config2 = this.next(values2, colorIndex2,chartLabels2);
+      //两个图表的属性值对象
+      const {values, colorIndex,chartLabels,url} = this.state;
+      const config = this.next(values, colorIndex,chartLabels,url);
+      const {values2, colorIndex2,chartLabels2,url2} = this.state;
+      const config2 = this.next(values2, colorIndex2,chartLabels2,url2);
       return(     
         this.state.linechart? <TouchableOpacity  style={{backgroundColor:'#1F2342',height:height}} activeOpacity={1.0} onPress={()=>{this.refs.input1.blur();this.refs.input2.blur();}} >
         <View style={{flexDirection:'row'}}>
@@ -285,7 +276,10 @@ export default class home extends Component{
                 this.refs.input1.blur();
                 this.setState({overlay1:false});
                 if(this.state.defaultvalue1!='')
-                saveValue(this.state.url)
+                saveValue(this.state.url);
+                store.get("local").then(
+                  res => data.local=res.slice()
+                );
               }}
               ><Text style={{fontSize: 20,fontWeight:'bold',left:5}}>{I18n.t('enter')}</Text></TouchableOpacity>
               </View>
@@ -367,7 +361,10 @@ export default class home extends Component{
                 this.refs.input2.blur();
                 this.setState({overlay2:false});
                 if(this.state.defaultvalue2!='')
-                saveValue(this.state.url2)
+                saveValue(this.state.url2);
+                store.get("local").then(
+                  res => data.local=res.slice()
+                );
               }}
               ><Text style={{fontSize: 20,fontWeight:'bold',left:5}}>{I18n.t('enter')}</Text></TouchableOpacity>
               </View>
@@ -503,26 +500,26 @@ export default class home extends Component{
          ref="chart2"/>:<View></View>}
         {this.state.url ?
         <View>
-        <Text style={{color:'pink',left:20,fontSize:20}}>{`${this.state.url} :`}</Text>
-        <Text style={{color:'pink',fontSize:20,top:15,left:18}}>{`status:${this.status1}`}</Text>
+        <Text style={{color:'pink',left:20,fontSize:20,top:10}}>{`${this.state.url} :`}</Text>
+        <Text style={{color:'pink',fontSize:20,top:15,left:20}}>{`status:${this.status1}`}</Text>
         <TouchableOpacity style={{flexDirection:'column'}} activeOpacity={1.0}>
             <Text style={{color:'pink',fontSize:20,top:12,left:20}}>{I18n.t('max')}:{this.maxTime}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:2,left:20}}>{I18n.t('min')}:{this.minTime}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:6,left:20}}>{I18n.t('min')}:{this.minTime}ms</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>{I18n.t('avg')}:{this.avgTime}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n95?`${this.n95}ms`:''}</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>{I18n.t('avg')}:{this.avgTime.toFixed(2)}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n95?`${this.n95.toFixed(2)}ms`:''}</Text>
         </TouchableOpacity></View> : <View></View>}
         {this.state.url2 ? <View>
-        <Text style={{color:'pink',left:20,fontSize:20,top:20}}>{`${this.state.url2} :`}</Text>
-        <Text style={{color:'pink',fontSize:20,top:18,left:16}}>{`status:${this.status2}`}</Text>
+        <Text style={{color:'pink',left:20,fontSize:20,top:16}}>{`${this.state.url2} :`}</Text>
+        <Text style={{color:'pink',fontSize:20,top:18,left:20}}>{`status:${this.status2}`}</Text>
         <TouchableOpacity style={{flexDirection:'column',top:12}} activeOpacity={1.0}>
             <Text style={{color:'pink',fontSize:20,top:0,left:20}}>{I18n.t('max')}:{this.maxTime2}ms</Text>
-            <Text style={{color:'pink',fontSize:20,bottom:2,left:20}}>{I18n.t('min')}:{this.minTime2}ms</Text>
+            <Text style={{color:'pink',fontSize:20,bottom:5,left:20}}>{I18n.t('min')}:{this.minTime2}ms</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flexDirection:'column',top:0}} activeOpacity={1.0}>
-            <Text style={{color:'pink',fontSize:20,left:20,top:2}}>{I18n.t('avg')}:{this.avgTime2}ms</Text>
-            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n952?`${this.n952}ms`:''}</Text>
+            <Text style={{color:'pink',fontSize:20,left:20,top:2}}>{I18n.t('avg')}:{this.avgTime2.toFixed(2)}ms</Text>
+            <Text style={{color:'pink',fontSize:20,top:0,left:20}}>95%:{this.n952?`${this.n952.toFixed(2)}ms`:''}</Text>
         </TouchableOpacity>
         </View> : <View></View>}
         </ScrollView>  
