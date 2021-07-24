@@ -157,7 +157,11 @@ export const sendRequest=function(){
        value.end=t2;
        value.time=value.end-value.begin;
        if(value.time!=0){
-       var xtime=`${new Date().getHours()}:`+`${new Date().getMinutes()}:`+`${new Date().getSeconds()}:`;
+         let minute=new Date().getMinutes();
+         if(minute<10){
+           minute='0'+minute;
+         }
+       var xtime=`${new Date().getHours()}:`+minute+':'+`${new Date().getSeconds()}:`;
        var ytime=value.time;
     this.setState({
       values: this.state.values.concat([ytime]),

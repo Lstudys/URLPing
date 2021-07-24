@@ -77,10 +77,7 @@ export default class home extends Component{
           markerColor: processColor('#F0C0FF8C'),
           textColor: processColor('white'),
         },
-        chartDate://只作为刷新页面用的state，原本是用来作为数据源的，现在不用了所以用来刷新页面
-          [
-            {y:0,x:0}
-          ]
+        chartDate: [{y:0,x:0} ],//只作为刷新页面用的state
       }
 
       {/* 选择合适语言 */}
@@ -128,10 +125,7 @@ export default class home extends Component{
     status2='';
     sumReqTime2=[];//所有请求时间的数组，用来计算标准差
 
-    chartDate=[{//用于setState以便刷新页面，并无实际意义
-      y:1,
-      x:1
-    }];
+  
 
     componentDidMount(){
       BackHandler.addEventListener('hardwareBackPress',backAction.bind(this));
@@ -153,7 +147,7 @@ export default class home extends Component{
 
 
 
-      //flatlist的渲染函数
+      //flatlist的渲染函数,item是数据，index是序列号
     _renderRow(item,index){
       return(
           <TouchableOpacity
@@ -169,7 +163,7 @@ export default class home extends Component{
           </TouchableOpacity>
       )
   }
-    //获取图表属性值的函数
+    //获取图表属性值的函数，参数意义分别为图表数据源、颜色名称索引、图表横坐标数据源、图表下方显示的label
   next(values, colorIndex,chartLabels,url) {
     return {
       data: {
