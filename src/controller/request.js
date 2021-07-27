@@ -90,7 +90,15 @@ export const sendRequest = function(){
                         value2.end = t2;
                         value2.time = value2.end - value2.begin;
                         if (value2.time != 0) {
-                            let xtime = `${new Date().getHours()}:` + `${new Date().getMinutes()}:` + `${new Date().getSeconds()}:`;
+                            let minute = new Date().getMinutes();
+                            let second = new Date().getSeconds();
+                            if (minute < 10) {
+                                minute = '0' + minute;
+                            }
+                            if (second < 10) {
+                                second = '0' + second;
+                            }
+                            var xtime = `${new Date().getHours()}:` + minute + ':' + second;
                             const ydata = value2.time;
                             this.setState({
                                 values2: this.state.values2.concat([ydata]),
@@ -146,7 +154,7 @@ export const sendRequest = function(){
                         }
                     }
                 };
-                // 这是xhr1
+                // 这是xhr1的回调
                 xhr.onreadystatechange = () => {
                     // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
                     if (xhr.readyState == 1) {
@@ -163,10 +171,14 @@ export const sendRequest = function(){
                             value.time = value.end - value.begin;
                             if (value.time != 0) {
                                 let minute = new Date().getMinutes();
+                                let second = new Date().getSeconds();
                                 if (minute < 10) {
                                     minute = '0' + minute;
                                 }
-                                var xtime = `${new Date().getHours()}:` + minute + ':' + `${new Date().getSeconds()}:`;
+                                if (second < 10) {
+                                    second = '0' + second;
+                                }
+                                var xtime = `${new Date().getHours()}:` + minute + ':' + second;
                                 var ytime = value.time;
                                 this.setState({
                                     values: this.state.values.concat([ytime]),
