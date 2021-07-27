@@ -17,11 +17,9 @@ export const sendRequest = function(){
             if (!myNetInfo) {
                 Toast.message('网络未连接!');
             } else  {
+                const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+                this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
                 this.setState({isPing: true});
-                this.setState({value: []});
-                this.setState({value2: []});
-                this.setState({chartLabels: []});
-                this.setState({chartLabels2: []});
                 this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
                 this.refs.input1.blur(); // 输入框失去焦点
                 this.refs.input2.blur();
@@ -92,14 +90,10 @@ export const sendRequest = function(){
                         value2.end = t2;
                         value2.time = value2.end - value2.begin;
                         if (value2.time != 0) {
-                            let minute = new Date().getMinutes();
-                            if (minute < 10) {
-                                minute = '0' + minute;
-                            }
-                            var xtime = `${new Date().getHours()}:` + minute + ':' + `${new Date().getSeconds()}:`;
-                            var ytime = value.time;
+                            let xtime = `${new Date().getHours()}:` + `${new Date().getMinutes()}:` + `${new Date().getSeconds()}:`;
+                            const ydata = value2.time;
                             this.setState({
-                                values2: this.state.values2.concat([ytime]),
+                                values2: this.state.values2.concat([ydata]),
                                 chartLabels2: this.state.chartLabels2.concat([xtime]),
                                 // colorIndex: (this.state.colorIndex + 1) % colors.length
                             });
@@ -247,5 +241,3 @@ export const sendRequest = function(){
         Toast.message('URL格式不正确!');
     }
 };
-
-// ping之前把用到的数据清空和设置一些相关属性

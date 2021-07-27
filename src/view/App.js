@@ -109,6 +109,8 @@ export default class home extends Component {
     status2 = ''
     sumReqTime2 = [] // 所有请求时间的数组，用来计算标准差
 
+    config = {};
+
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', backAction.bind(this));
     }
@@ -144,52 +146,109 @@ export default class home extends Component {
             </TouchableOpacity>
         );
     }
-    // 获取图表属性值的函数，参数意义分别为图表数据源、颜色名称索引、图表横坐标数据源、图表下方显示的label
-    next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2) {
-        return {
-            data: {
-                dataSets: [
-                    {
-                        values: values,
-                        label: url,
+    next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2) {
+        if (this.state.url != '' && this.state.url2 != ''){
+            return {
+                data: {
+                    dataSets: [
+                        {
+                            values: values,
+                            label: url,
 
-                        config: {
-                            drawValues: false,
-                            color: colors[colorIndex],
-                            mode: 'CUBIC_BEZIER',
-                            drawCircles: false,
-                            lineWidth: 2,
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
                         },
-                    },
-                    {
-                        values: values2,
-                        label: url2,
+                        {
+                            values: values2,
+                            label: url2,
 
-                        config: {
-                            drawValues: false,
-                            color: colors[colorIndex2],
-                            mode: 'CUBIC_BEZIER',
-                            drawCircles: false,
-                            lineWidth: 2,
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex2],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
                         },
-                    },
-                ],
-            },
-            xAxis: {
-                valueFormatter: chartLabels,
-                axisLineWidth: 0,
-                drawLabels: true,
-                position: 'BOTTOM',
-                drawGridLines: false,
-            },
-        };
+                    ],
+                },
+                xAxis: {
+                    valueFormatter: chartLabels,
+                    axisLineWidth: 0,
+                    drawLabels: true,
+                    position: 'BOTTOM',
+                    drawGridLines: false,
+                },
+            };
+        }
+        if (this.state.url != ''){
+            return {
+                data: {
+                    dataSets: [
+                        {
+                            values: values,
+                            label: url,
+
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
+                        },
+                    ],
+                },
+                xAxis: {
+                    valueFormatter: chartLabels,
+                    axisLineWidth: 0,
+                    drawLabels: true,
+                    position: 'BOTTOM',
+                    drawGridLines: false,
+                },
+            };
+        }
+        if (this.state.url2 != ''){
+            return {
+                data: {
+                    dataSets: [
+                        {
+                            values: values2,
+                            label: url2,
+
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex2],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
+                        },
+                    ],
+                },
+                xAxis: {
+                    valueFormatter: chartLabels2,
+                    axisLineWidth: 0,
+                    drawLabels: true,
+                    position: 'BOTTOM',
+                    drawGridLines: false,
+                },
+            };
+        }
     }
 
     render() {
+        const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+        this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
         // 两个图表的属性值对象
         //  config
-        const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
-        const config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2);
+        // const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2} = this.state;
+        // const config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2);
         // const {values2, colorIndex2, chartLabels2, url2} = this.state;
         // const config2 = this.next(values2, colorIndex2, chartLabels2, url2);
         return this.state.linechart ? (
@@ -520,7 +579,8 @@ export default class home extends Component {
             <View style={styles.bottomStyle}>
                 <ScrollView>
                     {this.state.url || this.state.url2 ? (
-                        <LineChart width={width} height={600} data={config.data} xAxis={config.xAxis} style={styles.container} marker={this.state.marker} chartDescription={{text:''}} ref="chart" />
+                        <LineChart width={width} height={600} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
+                            chartDescription={{text:''}} ref="chart" />
                     ) : (
                         <View />
                     )}
