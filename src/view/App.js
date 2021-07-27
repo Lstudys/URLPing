@@ -584,12 +584,27 @@ export default class home extends Component {
                     ) : (
                         <View />
                     )}
-                    {/* {this.state.url2 ? (
-                        <LineChart width={width} height={600} data={config2.data} xAxis={config2.xAxis} style={styles.container} marker={this.state.marker} ref="chart2" />
-                    ) : (
-                        <View />
-                    )} */}
-                    {this.state.url ? (
+                    <View style = {styles.bottomChartData}>
+                        <View style = {styles.bottomChartDataItem}>
+                            <Text style={{color:'pink', fontSize:20, left:50}}>MAX</Text>
+                            <Text style={{color:'pink', fontSize:20, left:80}}>MIN</Text>
+                            <Text style={{color:'pink', fontSize:20, left:110}}>AVG</Text>
+                            <Text style={{color:'pink', fontSize:20, left:140}}>N95</Text>
+                        </View>
+                        <View style={styles.bottomChartDataItem}>
+                            <Text style={{color:'red', fontSize:15, left:60}}>{this.maxTime}</Text>
+                            <Text style={{color:'red', fontSize:15, left:110}}>{this.minTime}</Text>
+                            <Text style={{color:'red', fontSize:15, left:150}}>{this.avgTime.toFixed(2)}</Text>
+                            <Text style={{color:'red', fontSize:15, left:150}}>{this.n95 ? `${this.n95.toFixed(2)}` : ''}</Text>
+                        </View>
+                        <View style={styles.bottomChartDataItem}>
+                            <Text style={{color:'green', fontSize:15, left:60}}>{this.maxTime2}</Text>
+                            <Text style={{color:'green', fontSize:15, left:110}}>{this.minTime2}</Text>
+                            <Text style={{color:'green', fontSize:15, left:150}}>{this.avgTime2.toFixed(2)}</Text>
+                            <Text style={{color:'green', fontSize:15, left:150}}>{this.n952 ? `${this.n952.toFixed(2)}` : ''}</Text>
+                        </View>
+                    </View>
+                    {/* {this.state.url ? (
                         <View>
                             <Text style={{color: 'pink', left: 20, fontSize: 20, top: 10}}>{`${this.state.url} :`}</Text>
                             <Text style={{color: 'pink', fontSize: 20, top: 15, left: 20}}>{`status:${this.status1}`}</Text>
@@ -632,7 +647,7 @@ export default class home extends Component {
                         </View>
                     ) : (
                         <View />
-                    )}
+                    )} */}
                 </ScrollView>
             </View>
         );
@@ -640,7 +655,14 @@ export default class home extends Component {
 }
 
 const styles = StyleSheet.create({
+    bottomChartDataItem: {
+        flexDirection: 'row',
+    },
+    bottomChartData: {
+        flexDirection: 'column',
+    },
     bottomStyle: {
+        height:height,
         backgroundColor: '#ffffff',
     },
     container: {

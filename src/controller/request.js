@@ -148,6 +148,7 @@ export const sendRequest = function(){
                             this.setState({isPing: false});
                             this.setState({ifOverlayAble: true});
                             this.setState({defaultvalue2: ''});
+                            this.setState({backChart: true});
                             if (nowTime > beginTime + reqTime * 60 * 1000) {
                                 this.setState({backChart: true});
                             }
@@ -229,6 +230,7 @@ export const sendRequest = function(){
                                 this.setState({isPing: false});
                                 this.setState({ifOverlayAble: true});
                                 this.setState({defaultvalue1: ''});
+                                this.setState({backChart: true});
                                 if (nowTime > beginTime + reqTime * 60 * 1000) {
                                     this.setState({backChart: true});
                                 }
