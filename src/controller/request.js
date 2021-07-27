@@ -17,6 +17,8 @@ export const sendRequest = function(){
             if (!myNetInfo) {
                 Toast.message('网络未连接!');
             } else  {
+                const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+                this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
                 this.setState({isPing: true});
                 this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
                 this.refs.input1.blur(); // 输入框失去焦点
@@ -88,7 +90,15 @@ export const sendRequest = function(){
                         value2.end = t2;
                         value2.time = value2.end - value2.begin;
                         if (value2.time != 0) {
-                            let xtime = `${new Date().getHours()}:` + `${new Date().getMinutes()}:` + `${new Date().getSeconds()}:`;
+                            let minute = new Date().getMinutes();
+                            let second = new Date().getSeconds();
+                            if (minute < 10) {
+                                minute = '0' + minute;
+                            }
+                            if (second < 10) {
+                                second = '0' + second;
+                            }
+                            var xtime = `${new Date().getHours()}:` + minute + ':' + second;
                             const ydata = value2.time;
                             this.setState({
                                 values2: this.state.values2.concat([ydata]),
@@ -138,13 +148,14 @@ export const sendRequest = function(){
                             this.setState({isPing: false});
                             this.setState({ifOverlayAble: true});
                             this.setState({defaultvalue2: ''});
+                            this.setState({backChart: true});
                             if (nowTime > beginTime + reqTime * 60 * 1000) {
                                 this.setState({backChart: true});
                             }
                         }
                     }
                 };
-                // 这是xhr1
+                // 这是xhr1的回调
                 xhr.onreadystatechange = () => {
                     // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
                     if (xhr.readyState == 1) {
@@ -161,10 +172,14 @@ export const sendRequest = function(){
                             value.time = value.end - value.begin;
                             if (value.time != 0) {
                                 let minute = new Date().getMinutes();
+                                let second = new Date().getSeconds();
                                 if (minute < 10) {
                                     minute = '0' + minute;
                                 }
-                                var xtime = `${new Date().getHours()}:` + minute + ':' + `${new Date().getSeconds()}:`;
+                                if (second < 10) {
+                                    second = '0' + second;
+                                }
+                                var xtime = `${new Date().getHours()}:` + minute + ':' + second;
                                 var ytime = value.time;
                                 this.setState({
                                     values: this.state.values.concat([ytime]),
@@ -215,6 +230,7 @@ export const sendRequest = function(){
                                 this.setState({isPing: false});
                                 this.setState({ifOverlayAble: true});
                                 this.setState({defaultvalue1: ''});
+                                this.setState({backChart: true});
                                 if (nowTime > beginTime + reqTime * 60 * 1000) {
                                     this.setState({backChart: true});
                                 }
@@ -239,5 +255,3 @@ export const sendRequest = function(){
         Toast.message('URL格式不正确!');
     }
 };
-
-// ping之前把用到的数据清空和设置一些相关属性

@@ -10,7 +10,7 @@ import {Component} from 'react';
 import {Dimensions, StyleSheet, TextInput, View, Text, Button, TouchableOpacity, ScrollView, FlatList, processColor} from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {BackHandler} from 'react-native';
-import {sendRequest} from '../controller/Request';
+import {sendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {setReqTime, reqTimeChange, confirmRqTime, textInputChange1, textInputChange2, backAction, saveValue} from '../controller/AppPageFunction';
 import data from '../modal/data';
@@ -52,7 +52,7 @@ export default class home extends Component {
             colorIndex: 0,
             chartLabels: [],
             values2: [0],
-            colorIndex2: 0,
+            colorIndex2: 2,
             chartLabels2: [],
             marker: {
                 enabled: true,
@@ -109,6 +109,8 @@ export default class home extends Component {
     status2 = ''
     sumReqTime2 = [] // 所有请求时间的数组，用来计算标准差
 
+    config = {};
+
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', backAction.bind(this));
     }
@@ -144,41 +146,111 @@ export default class home extends Component {
             </TouchableOpacity>
         );
     }
-    // 获取图表属性值的函数，参数意义分别为图表数据源、颜色名称索引、图表横坐标数据源、图表下方显示的label
-    next(values, colorIndex, chartLabels, url) {
-        return {
-            data: {
-                dataSets: [
-                    {
-                        values: values,
-                        label: url,
+    next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2) {
+        if (this.state.url != '' && this.state.url2 != ''){
+            return {
+                data: {
+                    dataSets: [
+                        {
+                            values: values,
+                            label: url,
 
-                        config: {
-                            drawValues: false,
-                            color: colors[colorIndex],
-                            mode: 'CUBIC_BEZIER',
-                            drawCircles: false,
-                            lineWidth: 2,
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
                         },
-                    },
-                ],
-            },
-            xAxis: {
-                valueFormatter: chartLabels,
-                axisLineWidth: 0,
-                drawLabels: true,
-                position: 'BOTTOM',
-                drawGridLines: false,
-            },
-        };
+                        {
+                            values: values2,
+                            label: url2,
+
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex2],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
+                        },
+                    ],
+                },
+                xAxis: {
+                    valueFormatter: chartLabels,
+                    axisLineWidth: 0,
+                    drawLabels: true,
+                    position: 'BOTTOM',
+                    drawGridLines: false,
+                },
+            };
+        }
+        if (this.state.url != ''){
+            return {
+                data: {
+                    dataSets: [
+                        {
+                            values: values,
+                            label: url,
+
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
+                        },
+                    ],
+                },
+                xAxis: {
+                    valueFormatter: chartLabels,
+                    axisLineWidth: 0,
+                    drawLabels: true,
+                    position: 'BOTTOM',
+                    drawGridLines: false,
+                },
+            };
+        }
+        if (this.state.url2 != ''){
+            return {
+                data: {
+                    dataSets: [
+                        {
+                            values: values2,
+                            label: url2,
+
+                            config: {
+                                drawValues: false,
+                                color: colors[colorIndex2],
+                                mode: 'CUBIC_BEZIER',
+                                drawCircles: false,
+                                lineWidth: 2,
+                            },
+                        },
+                    ],
+                },
+                xAxis: {
+                    valueFormatter: chartLabels2,
+                    axisLineWidth: 0,
+                    drawLabels: true,
+                    position: 'BOTTOM',
+                    drawGridLines: false,
+                },
+            };
+        }
     }
 
     render() {
+        const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+        this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
         // 两个图表的属性值对象
-        const {values, colorIndex, chartLabels, url} = this.state;
-        const config = this.next(values, colorIndex, chartLabels, url);
-        const {values2, colorIndex2, chartLabels2, url2} = this.state;
-        const config2 = this.next(values2, colorIndex2, chartLabels2, url2);
+        //  config
+        // const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2} = this.state;
+        // const config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2);
+        // const {values2, colorIndex2, chartLabels2, url2} = this.state;
+        // const config2 = this.next(values2, colorIndex2, chartLabels2, url2);
         return this.state.linechart ? (
             <TouchableOpacity
                 style={{backgroundColor: '#1F2342', height: height}}
@@ -506,17 +578,33 @@ export default class home extends Component {
         ) : (
             <View style={styles.bottomStyle}>
                 <ScrollView>
-                    {this.state.url ? (
-                        <LineChart width={width} height={600} data={config.data} xAxis={config.xAxis} style={styles.container} marker={this.state.marker} ref="chart" />
+                    {this.state.url || this.state.url2 ? (
+                        <LineChart width={width} height={600} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
+                            chartDescription={{text:''}} ref="chart" />
                     ) : (
                         <View />
                     )}
-                    {this.state.url2 ? (
-                        <LineChart width={width} height={600} data={config2.data} xAxis={config2.xAxis} style={styles.container} marker={this.state.marker} ref="chart2" />
-                    ) : (
-                        <View />
-                    )}
-                    {this.state.url ? (
+                    <View style = {styles.bottomChartData}>
+                        <View style = {styles.bottomChartDataItem}>
+                            <Text style={{color:'pink', fontSize:20, left:50}}>MAX</Text>
+                            <Text style={{color:'pink', fontSize:20, left:80}}>MIN</Text>
+                            <Text style={{color:'pink', fontSize:20, left:110}}>AVG</Text>
+                            <Text style={{color:'pink', fontSize:20, left:140}}>N95</Text>
+                        </View>
+                        <View style={styles.bottomChartDataItem}>
+                            <Text style={{color:'red', fontSize:15, left:60}}>{this.maxTime}</Text>
+                            <Text style={{color:'red', fontSize:15, left:110}}>{this.minTime}</Text>
+                            <Text style={{color:'red', fontSize:15, left:150}}>{this.avgTime.toFixed(2)}</Text>
+                            <Text style={{color:'red', fontSize:15, left:180}}>{this.n95 ? `${this.n95.toFixed(2)}` : ''}</Text>
+                        </View>
+                        <View style={styles.bottomChartDataItem}>
+                            <Text style={{color:'green', fontSize:15, left:60}}>{this.maxTime2}</Text>
+                            <Text style={{color:'green', fontSize:15, left:110}}>{this.minTime2}</Text>
+                            <Text style={{color:'green', fontSize:15, left:150}}>{this.avgTime2.toFixed(2)}</Text>
+                            <Text style={{color:'green', fontSize:15, left:180}}>{this.n952 ? `${this.n952.toFixed(2)}` : ''}</Text>
+                        </View>
+                    </View>
+                    {/* {this.state.url ? (
                         <View>
                             <Text style={{color: 'pink', left: 20, fontSize: 20, top: 10}}>{`${this.state.url} :`}</Text>
                             <Text style={{color: 'pink', fontSize: 20, top: 15, left: 20}}>{`status:${this.status1}`}</Text>
@@ -559,7 +647,7 @@ export default class home extends Component {
                         </View>
                     ) : (
                         <View />
-                    )}
+                    )} */}
                 </ScrollView>
             </View>
         );
@@ -567,7 +655,14 @@ export default class home extends Component {
 }
 
 const styles = StyleSheet.create({
+    bottomChartDataItem: {
+        flexDirection: 'row',
+    },
+    bottomChartData: {
+        flexDirection: 'column',
+    },
     bottomStyle: {
+        height:height,
         backgroundColor: '#ffffff',
     },
     container: {
