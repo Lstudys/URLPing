@@ -10,7 +10,7 @@ import {Component} from 'react';
 import {Dimensions, StyleSheet, TextInput, View, Text, Button, TouchableOpacity, ScrollView, FlatList, processColor} from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {BackHandler} from 'react-native';
-import {sendRequest} from '../controller/Request';
+import {sendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {setReqTime, reqTimeChange, confirmRqTime, textInputChange1, textInputChange2, backAction, saveValue} from '../controller/AppPageFunction';
 import data from '../modal/data';
@@ -52,7 +52,7 @@ export default class home extends Component {
             colorIndex: 0,
             chartLabels: [],
             values2: [0],
-            colorIndex2: 0,
+            colorIndex2: 2,
             chartLabels2: [],
             marker: {
                 enabled: true,
@@ -145,7 +145,7 @@ export default class home extends Component {
         );
     }
     // 获取图表属性值的函数，参数意义分别为图表数据源、颜色名称索引、图表横坐标数据源、图表下方显示的label
-    next(values, colorIndex, chartLabels, url) {
+    next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2) {
         return {
             data: {
                 dataSets: [
@@ -156,6 +156,18 @@ export default class home extends Component {
                         config: {
                             drawValues: false,
                             color: colors[colorIndex],
+                            mode: 'CUBIC_BEZIER',
+                            drawCircles: false,
+                            lineWidth: 2,
+                        },
+                    },
+                    {
+                        values: values2,
+                        label: url2,
+
+                        config: {
+                            drawValues: false,
+                            color: colors[colorIndex2],
                             mode: 'CUBIC_BEZIER',
                             drawCircles: false,
                             lineWidth: 2,
@@ -175,10 +187,11 @@ export default class home extends Component {
 
     render() {
         // 两个图表的属性值对象
-        const {values, colorIndex, chartLabels, url} = this.state;
-        const config = this.next(values, colorIndex, chartLabels, url);
-        const {values2, colorIndex2, chartLabels2, url2} = this.state;
-        const config2 = this.next(values2, colorIndex2, chartLabels2, url2);
+        //  config
+        const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+        const config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2);
+        // const {values2, colorIndex2, chartLabels2, url2} = this.state;
+        // const config2 = this.next(values2, colorIndex2, chartLabels2, url2);
         return this.state.linechart ? (
             <TouchableOpacity
                 style={{backgroundColor: '#1F2342', height: height}}
@@ -506,16 +519,16 @@ export default class home extends Component {
         ) : (
             <View style={styles.bottomStyle}>
                 <ScrollView>
-                    {this.state.url ? (
-                        <LineChart width={width} height={600} data={config.data} xAxis={config.xAxis} style={styles.container} marker={this.state.marker} ref="chart" />
+                    {this.state.url || this.state.url2 ? (
+                        <LineChart width={width} height={600} data={config.data} xAxis={config.xAxis} style={styles.container} marker={this.state.marker} chartDescription={{text:''}} ref="chart" />
                     ) : (
                         <View />
                     )}
-                    {this.state.url2 ? (
+                    {/* {this.state.url2 ? (
                         <LineChart width={width} height={600} data={config2.data} xAxis={config2.xAxis} style={styles.container} marker={this.state.marker} ref="chart2" />
                     ) : (
                         <View />
-                    )}
+                    )} */}
                     {this.state.url ? (
                         <View>
                             <Text style={{color: 'pink', left: 20, fontSize: 20, top: 10}}>{`${this.state.url} :`}</Text>
