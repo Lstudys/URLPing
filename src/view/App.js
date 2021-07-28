@@ -43,7 +43,7 @@ export default class home extends Component {
             chartToData: false,
             overlay1: false,
             overlay2: false, // 控制两个overlay显示的state
-            urlArr: ['https://', '   ', 'http://'],
+            urlArr: ['https://', 'http://', 'www', '.cn', '.com'],
             visible: false, // 删除后刷新历史记录
             langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
             selectedDomain: '',
@@ -62,6 +62,7 @@ export default class home extends Component {
                 textColor: processColor('white'),
             },
             chartDate: [{y: 0, x: 0}], // 只作为刷新页面用的state
+            setting:false,
         };
 
         /* 选择合适语言 */
@@ -140,7 +141,7 @@ export default class home extends Component {
                     flexDirection: 'row',
                     borderBottomColor: 'red',
                     justifyItems: 'flex-start',
-                    margin: 0,
+                    marginRight:8,
                 }}>
                 <Text style={{left: 0, color: '#000000', fontSize: 20}}>{item}</Text>
             </TouchableOpacity>
@@ -258,83 +259,64 @@ export default class home extends Component {
                 onPress={() => {
                     this.refs.input1.blur();
                     this.refs.input2.blur();
+                    this.setState({setting: false});
                 }}>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.settingbtnstyle} onPress={setReqTime.bind(this)}>
-                        {I18n.t('setTime')}
+                {/* 设置 */}
+                <Text style={styles.iconStyle}
+                    onPress={() => {
+                        this.setState({setting: true});
+                    }}
+                >{'\ue6c1'}</Text>
+                {this.state.setting ? (<View style={styles.Settingarea}>
+                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: 30, left: 10, top:5 }} onPress={() => {
+                        if (I18n.locale === 'zh'){
+                            I18n.locale = 'en';
+                            data.userChoose = I18n.locale;
+                            store.save('Language', data.userChoose);
+                            this.setState({langvis: false});
+                        } else {
+                            I18n.locale = 'zh';
+                            data.userChoose = I18n.locale;
+                            store.save('Language', data.userChoose);
+                            this.setState({langvis: false});
+                        }
+                    }}>{'\ue645'}</Text>
+                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: 30,  left: 15, top:5 }} onPress={setReqTime.bind(this)}>
+                        {'\ue602'}
                     </Text>
-                    <Text
-                        style={{color: '#FFB6C1', fontSize: 20, left: 215, top: 10}}
+                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: 35, left: 20, top:2}}
                         onPress={() => {
                             this.setState({linechart: false});
                             // eslint-disable-next-line no-undef
                             Orientation.lockToLandscape();
                         }}>
-                        {I18n.t('about')}
+                        {'\ue629'}
                     </Text>
-                </View>
-                <TouchableOpacity
-                    onPress={() => {
-                        this.setState({langvis: true});
+                </View>) : (<View />)}
+                <Overlay
+                    style={styles.overlay}
+                    isVisible={this.state.overlay1}
+                    onBackdropPress={() => {
+                        this.setState({overlay1: false});
+                        this.refs.input1.blur();
                     }}>
-                    <Text style={styles.settingbtnstyle}>{I18n.t('chooselanguage')}</Text>
-                </TouchableOpacity>
-                {/* 用户语言选择列表 start */}
-                {
-                    <Overlay
-                        isVisible={this.state.langvis}
-                        onBackdropPress={() => {
-                            this.setState({langvis: false});
-                        }}>
-                        <View style={styles.History}>
-                            <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
-                                {data.languageshow.map((item, index) => {
-                                    return (
-                                        <View>
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={styles.HistoryTextBox}
-                                                onPress={() => {
-                                                    I18n.locale = data.language[data.languageshow.indexOf(item)];
-                                                    data.userChoose = I18n.locale;
-                                                    store.save('Language', data.userChoose);
-                                                    this.setState({langvis: false});
-                                                }}>
-                                                <Text numberOfLines={index} style={styles.HistoryText}>
-                                                    {item}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    );
-                                })}
-                            </ScrollView>
-                        </View>
-                    </Overlay>
-                }
-                {/* 用户语言选择列表 end */}
-                <View>
-                    <Overlay
-                        style={styles.overlay}
-                        isVisible={this.state.overlay1}
-                        onBackdropPress={() => {
-                            this.setState({overlay1: false});
-                            this.refs.input1.blur();
-                        }}>
+                    <View >
                         <View style={{flexDirection: 'row'}}>
-                            <TextInput
-                                defaultValue={this.state.defaultvalue1}
-                                placeholderTextColor="#ccc" // 设置占位符颜色
-                                color="#000000" // 设置输入文字的颜色
-                                placeholder={I18n.t('inputone')}
-                                onChangeText={(newText) => {
-                                    this.state.url = newText;
-                                    this.state.defaultvalue1 = newText;
-                                }}
-                                style={{borderBottomColor: '#000000', borderBottomWidth: 1, width: 280, left: 0}}
-                            />
-                            <View>
+                            <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
+                                <TextInput
+                                    defaultValue={this.state.defaultvalue1}
+                                    placeholderTextColor="#ccc" // 设置占位符颜色
+                                    color="#000000" // 设置输入文字的颜色
+                                    autoFocus={true}
+                                    placeholder={I18n.t('inputone')}
+                                    onChangeText={(newText) => {
+                                        this.state.url = newText;
+                                        this.state.defaultvalue1 = newText;
+                                    }}
+                                    style={{width: width / 1.3}}
+                                />
                                 <TouchableOpacity
-                                    style={{color: '#000000', top: 0}}
+                                    style={{color: '#000000'}}
                                     onPress={() => {
                                         this.setState({
                                             chartDate: [],
@@ -342,113 +324,24 @@ export default class home extends Component {
                                         this.state.defaultvalue1 = '';
                                         this.state.url = '';
                                     }}>
-                                    <Text style={{fontSize: 16}}>清除</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{color: '#000000', top: 12}}
-                                    onPress={() => {
-                                        this.setState({
-                                            chartDate: [],
-                                        });
-                                        this.refs.input1.blur();
-                                        this.setState({overlay1: false});
-                                        if (this.state.defaultvalue1 != '') {
-                                            saveValue(this.state.url);
-                                        }
-                                        store.get('local').then((res) => (data.local = res.slice()));
-                                    }}>
-                                    <Text style={{fontSize: 20, fontWeight: 'bold', left: 5}}>{I18n.t('enter')}</Text>
+                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
                                 </TouchableOpacity>
                             </View>
-                        </View>
-                        <View>
-                            <FlatList
-                                style={{maxHeight: 30}}
-                                horizontal={true}
-                                data={this.state.urlArr}
-                                renderItem={({item, index}) => this._renderRow(item, index)}
-                                keyExtractor={(item, index) => item + index}
-                            />
-                        </View>
-                        <View style={styles.History}>
-                            <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
-                                {data.local.map((item, index) => {
-                                    return (
-                                        <View style={styles.HistoryList}>
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={styles.HistoryTextBox}
-                                                onPress={() => {
-                                                    this.setDefaultValue(item);
-                                                }}>
-                                                <Text numberOfLines={index} style={styles.HistoryText}>
-                                                    {item}
-                                                </Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={styles.Delete}
-                                                onPress={() => {
-                                                    data.local.splice(data.local.indexOf(item), 1);
-                                                    store.save('local', data.local);
-                                                    this.setState({
-                                                        visible: true,
-                                                    });
-                                                }}>
-                                                <Text style={styles.DeleteText}>X</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    );
-                                })}
-                            </ScrollView>
-                        </View>
-                    </Overlay>
-                </View>
 
-                {/* start */}
-                <Overlay
-                    isVisible={this.state.overlay2}
-                    onBackdropPress={() => {
-                        this.setState({overlay2: false});
-                        this.refs.input2.blur();
-                    }}>
-                    <View style={{flexDirection: 'row'}}>
-                        <TextInput
-                            defaultValue={this.state.defaultvalue2}
-                            placeholderTextColor="#ccc" // 设置占位符颜色
-                            color="#000000" // 设置输入文字的颜色
-                            placeholder={I18n.t('inputtwo')}
-                            onChangeText={(newText) => {
-                                this.state.url2 = newText;
-                                this.state.defaultvalue2 = newText;
-                            }}
-                            style={{borderBottomColor: '#000000', borderBottomWidth: 1, width: 280, left: 0}}
-                        />
-                        <View>
                             <TouchableOpacity
-                                style={{color: '#000000', top: 0}}
+                                style={{color: '#000000'}}
                                 onPress={() => {
                                     this.setState({
                                         chartDate: [],
                                     });
-                                    this.state.defaultvalue2 = '';
-                                    this.state.url2 = '';
-                                }}>
-                                <Text style={{fontSize: 16}}>清除</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{color: '#000000', top: 12}}
-                                onPress={() => {
-                                    this.setState({
-                                        chartDate: [],
-                                    });
-                                    this.refs.input2.blur();
-                                    this.setState({overlay2: false});
-                                    if (this.state.defaultvalue2 != '') {
-                                        saveValue(this.state.url2);
+                                    this.refs.input1.blur();
+                                    this.setState({overlay1: false});
+                                    if (this.state.defaultvalue1 != '') {
+                                        saveValue(this.state.url);
                                     }
                                     store.get('local').then((res) => (data.local = res.slice()));
                                 }}>
-                                <Text style={{fontSize: 20, fontWeight: 'bold', left: 5}}>{I18n.t('enter')}</Text>
+                                <Text style={{fontFamily: 'iconfont', fontSize: 20, left: 15, top:20 }}>{'\ue6d2'}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -485,7 +378,100 @@ export default class home extends Component {
                                                     visible: true,
                                                 });
                                             }}>
-                                            <Text style={styles.DeleteText}>X</Text>
+                                            <Text style={styles.DeleteText}>{'\ue60f'}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                );
+                            })}
+                        </ScrollView>
+                    </View>
+                </Overlay>
+                {/* start */}
+                <Overlay
+                    style={styles.overlay}
+                    isVisible={this.state.overlay2}
+                    onBackdropPress={() => {
+                        this.setState({overlay2: false});
+                        this.refs.input2.blur();
+                    }}>
+                    <View>
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
+                                <TextInput
+                                    defaultValue={this.state.defaultvalue2}
+                                    placeholderTextColor="#ccc" // 设置占位符颜色
+                                    color="#000000" // 设置输入文字的颜色
+                                    autoFocus={true}
+                                    placeholder={I18n.t('inputtwo')}
+                                    onChangeText={(newText) => {
+                                        this.state.url2 = newText;
+                                        this.state.defaultvalue2 = newText;
+                                    }}
+                                    style={{width: width / 1.3}}
+                                />
+                                <TouchableOpacity
+                                    style={{color: '#000000'}}
+                                    onPress={() => {
+                                        this.setState({
+                                            chartDate: [],
+                                        });
+                                        this.state.defaultvalue2 = '';
+                                        this.state.url2 = '';
+                                    }}>
+                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity
+                                style={{color: '#000000'}}
+                                onPress={() => {
+                                    this.setState({
+                                        chartDate: [],
+                                    });
+                                    this.refs.input2.blur();
+                                    this.setState({overlay2: false});
+                                    if (this.state.defaultvalue2 != '') {
+                                        saveValue(this.state.url2);
+                                    }
+                                    store.get('local').then((res) => (data.local = res.slice()));
+                                }}>
+                                <Text style={{fontFamily: 'iconfont', fontSize: 20, left: 5, top:20 }}>{'\ue6d2'}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View>
+                        <FlatList
+                            style={{maxHeight: 30}}
+                            horizontal={true}
+                            data={this.state.urlArr}
+                            renderItem={({item, index}) => this._renderRow(item, index)}
+                            keyExtractor={(item, index) => item + index}
+                        />
+                    </View>
+                    <View style={styles.History}>
+                        <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
+                            {data.local.map((item, index) => {
+                                return (
+                                    <View style={styles.HistoryList}>
+                                        <TouchableOpacity
+                                            key={index}
+                                            style={styles.HistoryTextBox}
+                                            onPress={() => {
+                                                this.setDefaultValue(item);
+                                            }}>
+                                            <Text numberOfLines={index} style={styles.HistoryText}>
+                                                {item}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.Delete}
+                                            onPress={() => {
+                                                data.local.splice(data.local.indexOf(item), 1);
+                                                store.save('local', data.local);
+                                                this.setState({
+                                                    visible: true,
+                                                });
+                                            }}>
+                                            <Text style={styles.DeleteText}>{'\ue60f'}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 );
@@ -515,7 +501,7 @@ export default class home extends Component {
                         </View>
                     </View>
                 </Overlay>
-                <Text style={{color: 'pink', fontSize: 40, fontWeight: 'bold', marginLeft: 65, marginTop: 180}}>{I18n.t('title')}</Text>
+                <Text style={{color: 'pink', fontSize: 40, fontWeight: 'bold', textAlign:'center', marginTop: height / 5, marginBottom:height / 15 }}>{I18n.t('title')}</Text>
                 <View style={styles.serch}>
                     <View style={styles.textinput}>
                         <TextInput
@@ -524,12 +510,12 @@ export default class home extends Component {
                             defaultValue={this.state.defaultvalue1}
                             placeholderTextColor="#ccc" // 设置占位符颜色
                             keyboardType="url" // 设置键盘类型，url只在iOS端可用
-                            color="#ffffff" // 设置输入文字的颜色
+                            color="black" // 设置输入文字的颜色
                             onChangeText={textInputChange1.bind(this)}
                             onFocus={() => {
                                 this.setState({overlay1: true});
                             }}
-                            style={{borderBottomColor: '#ffffff', borderBottomWidth: 1, width: 280, left: 12}}
+                            style={{borderBottomColor: '#ffffff', borderRadius: 15, width: width, height:height / 12.5, bottom:5, backgroundColor:'white'}}
                         />
                         <TextInput
                             ref={'input2'}
@@ -537,27 +523,26 @@ export default class home extends Component {
                             defaultValue={this.state.defaultvalue2}
                             placeholderTextColor="#ccc" // 设置占位符颜色
                             keyboardType="url" // 设置键盘类型，url只在iOS端可用
-                            color="#ffffff" // 设置输入文字的颜色
+                            color="black" // 设置输入文字的颜色
                             onChangeText={textInputChange2.bind(this)}
                             onFocus={() => {
                                 this.setState({overlay2: true});
                             }}
-                            style={{borderBottomColor: '#ffffff', borderBottomWidth: 1, width: 280, left: 12}}
+                            style={{borderBottomColor: '#ffffff', borderRadius: 15, width: width, height:height / 12.5, backgroundColor:'white'}}
                         />
                     </View>
                     <Text
                         style={{
                             color: '#ffffff',
                             fontSize: 25,
-                            paddingTop: 8,
+                            paddingTop: 5,
                             backgroundColor: 'pink',
                             alignSelf: 'center',
                             textAlign: 'center',
-                            height: 50,
-                            width: 220,
-                            top: 28,
-                            left: -8,
-                            borderRadius: 5,
+                            height: height / 12,
+                            width: width / 2,
+                            top: height / 14,
+                            borderRadius: 15,
                         }}
                         onPress={sendRequest.bind(this)}>
                         {I18n.t('ping')}
@@ -676,7 +661,6 @@ const styles = StyleSheet.create({
     },
     textinput: {
         flexDirection: 'column',
-        left: 28,
     },
     TextStyle: {
         margin: 10,
@@ -703,18 +687,19 @@ const styles = StyleSheet.create({
         marginTop: -3,
     },
     settingbtnstyle: {
+        fontFamily: 'iconfont',
         color: '#FFB6C1',
-        fontSize: 20,
-        top: 10,
+        fontSize: 30,
+        top: 40,
         left: 5,
     },
     History: {
         position: 'relative',
-        height: 300,
-        width: 300,
+        height: height / 2.4,
+        width: width,
     },
     HistoryList: {
-        width: 310,
+        width: width,
         height: 43,
         backgroundColor: 'white',
     },
@@ -736,17 +721,31 @@ const styles = StyleSheet.create({
         left: 270,
     },
     DeleteText: {
+        fontFamily: 'iconfont',
         position: 'relative',
-        top: 5,
-        fontSize: 35,
+        top: 15,
+        right:-13,
+        fontSize: 25,
     },
     overlay: {
         position: 'absolute',
-        width: 400,
     },
     language: {
         width: width,
         height: height,
         position: 'absolute',
+    },
+    iconStyle: {
+        fontFamily: 'iconfont',
+        fontSize: 35,
+        top: height / 1.1,
+        left: 10,
+        width:40,
+    },
+    Settingarea:{
+        position:'absolute',
+        top:height / 1.1,
+        left: 60,
+        flexDirection: 'row',
     },
 });
