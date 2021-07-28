@@ -23,6 +23,7 @@ export const sendRequest = function(){
                 this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
                 this.refs.input1.blur(); // 输入框失去焦点
                 this.refs.input2.blur();
+                this.setState({backChart: true});
                 this.setState({linechart: false});// 设置状态以显示图表
                 this.linechartDates = []; // 清空折线图的数据源数组
                 this.linechartDates2 = [];
@@ -145,6 +146,9 @@ export const sendRequest = function(){
                             }
                             this.setState({isPing: false});
                             this.setState({ifOverlayAble: true});
+                            this.setState({url2: ''});
+                            this.setState({values: []});
+                            this.setState({chartLabels2: []});
                             this.setState({defaultvalue2: ''});
                             this.setState({backChart: true});
                             if (nowTime > beginTime + reqTime * 60 * 1000) {
@@ -226,6 +230,9 @@ export const sendRequest = function(){
                                 this.setState({isPing: false});
                                 this.setState({ifOverlayAble: true});
                                 this.setState({defaultvalue1: ''});
+                                this.setState({url: ''});
+                                this.setState({values: []});
+                                this.setState({chartLabels: []});
                                 this.setState({backChart: true});
                                 if (nowTime > beginTime + reqTime * 60 * 1000) {
                                     this.setState({backChart: true});
