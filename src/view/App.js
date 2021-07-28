@@ -329,7 +329,7 @@ export default class home extends Component {
                             </View>
 
                             <TouchableOpacity
-                                style={{color: '#000000'}}
+                                style={{color: '#000000', left: 20}}
                                 onPress={() => {
                                     this.setState({
                                         chartDate: [],
@@ -341,7 +341,7 @@ export default class home extends Component {
                                     }
                                     store.get('local').then((res) => (data.local = res.slice()));
                                 }}>
-                                <Text style={{fontFamily: 'iconfont', fontSize: 20, left: 15, top:20 }}>{'\ue6d2'}</Text>
+                                <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -422,7 +422,7 @@ export default class home extends Component {
                                 </TouchableOpacity>
                             </View>
                             <TouchableOpacity
-                                style={{color: '#000000'}}
+                                style={{color: '#000000', left: 20}}
                                 onPress={() => {
                                     this.setState({
                                         chartDate: [],
@@ -434,7 +434,7 @@ export default class home extends Component {
                                     }
                                     store.get('local').then((res) => (data.local = res.slice()));
                                 }}>
-                                <Text style={{fontFamily: 'iconfont', fontSize: 20, left: 5, top:20 }}>{'\ue6d2'}</Text>
+                                <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -576,63 +576,21 @@ export default class home extends Component {
                             <Text style={{color:'pink', fontSize:20, left:110}}>AVG</Text>
                             <Text style={{color:'pink', fontSize:20, left:140}}>N95</Text>
                         </View>
-                        <View style={styles.bottomChartDataItem}>
+                        {   this.state.url ?   <View style={styles.bottomChartDataItem}>
                             <Text style={{color:'red', fontSize:15, left:60}}>{this.maxTime}</Text>
                             <Text style={{color:'red', fontSize:15, left:110}}>{this.minTime}</Text>
                             <Text style={{color:'red', fontSize:15, left:150}}>{this.avgTime.toFixed(2)}</Text>
                             <Text style={{color:'red', fontSize:15, left:180}}>{this.n95 ? `${this.n95.toFixed(2)}` : ''}</Text>
                         </View>
-                        <View style={styles.bottomChartDataItem}>
+                            : <View/>  }
+                        {   this.state.url2 ?        <View style={styles.bottomChartDataItem}>
                             <Text style={{color:'green', fontSize:15, left:60}}>{this.maxTime2}</Text>
                             <Text style={{color:'green', fontSize:15, left:110}}>{this.minTime2}</Text>
                             <Text style={{color:'green', fontSize:15, left:150}}>{this.avgTime2.toFixed(2)}</Text>
                             <Text style={{color:'green', fontSize:15, left:180}}>{this.n952 ? `${this.n952.toFixed(2)}` : ''}</Text>
                         </View>
+                            : <View/>  }
                     </View>
-                    {/* {this.state.url ? (
-                        <View>
-                            <Text style={{color: 'pink', left: 20, fontSize: 20, top: 10}}>{`${this.state.url} :`}</Text>
-                            <Text style={{color: 'pink', fontSize: 20, top: 15, left: 20}}>{`status:${this.status1}`}</Text>
-                            <TouchableOpacity style={{flexDirection: 'column'}} activeOpacity={1.0}>
-                                <Text style={{color: 'pink', fontSize: 20, top: 12, left: 20}}>
-                                    {I18n.t('max')}:{this.maxTime}ms
-                                </Text>
-                                <Text style={{color: 'pink', fontSize: 20, top: 6, left: 20}}>
-                                    {I18n.t('min')}:{this.minTime}ms
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{flexDirection: 'column', top: 0}} activeOpacity={1.0}>
-                                <Text style={{color: 'pink', fontSize: 20, top: 0, left: 20}}>
-                                    {I18n.t('avg')}:{this.avgTime.toFixed(2)}ms
-                                </Text>
-                                <Text style={{color: 'pink', fontSize: 20, top: 0, left: 20}}>95%:{this.n95 ? `${this.n95.toFixed(2)}ms` : ''}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    ) : (
-                        <View />
-                    )}
-                    {this.state.url2 ? (
-                        <View>
-                            <Text style={{color: 'pink', left: 20, fontSize: 20, top: 16}}>{`${this.state.url2} :`}</Text>
-                            <Text style={{color: 'pink', fontSize: 20, top: 18, left: 20}}>{`status:${this.status2}`}</Text>
-                            <TouchableOpacity style={{flexDirection: 'column', top: 12}} activeOpacity={1.0}>
-                                <Text style={{color: 'pink', fontSize: 20, top: 0, left: 20}}>
-                                    {I18n.t('max')}:{this.maxTime2}ms
-                                </Text>
-                                <Text style={{color: 'pink', fontSize: 20, bottom: 5, left: 20}}>
-                                    {I18n.t('min')}:{this.minTime2}ms
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{flexDirection: 'column', top: 0}} activeOpacity={1.0}>
-                                <Text style={{color: 'pink', fontSize: 20, left: 20, top: 2}}>
-                                    {I18n.t('avg')}:{this.avgTime2.toFixed(2)}ms
-                                </Text>
-                                <Text style={{color: 'pink', fontSize: 20, top: 0, left: 20}}>95%:{this.n952 ? `${this.n952.toFixed(2)}ms` : ''}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    ) : (
-                        <View />
-                    )} */}
                 </ScrollView>
             </View>
         );
