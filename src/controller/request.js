@@ -128,8 +128,6 @@ export const sendRequest = function(){
                                     xhr2.send();
                                 }
                             }, 1000);
-                            //  xhr2.open('GET',this.state.url2,true);
-                            //  xhr2.send();
                         } else  {
                             Orientation.lockToPortrait(); // 竖屏
                             let sum = 0; // 存储每个数减去平均数的平方的和
@@ -143,7 +141,7 @@ export const sendRequest = function(){
                                 this.n952 = num2 - this.avgTime2;
                             } else  {
                                 this.n952 = this.avgTime2 - num2;
-                                this.n952 = Math.floor(this.n952 * 100) / 100;
+                                // this.n952 = Math.floor(this.n952 * 100) / 100;
                             }
                             this.setState({isPing: false});
                             this.setState({ifOverlayAble: true});
@@ -210,8 +208,6 @@ export const sendRequest = function(){
                                         xhr.send();
                                     }
                                 }, 1000);
-                                //  xhr.open('GET',this.state.url,true);
-                                //  xhr.send();
                             } else  {
                                 Orientation.lockToPortrait();
                                 let sum = 0; // 存储每个数减去平均数的平方的和
@@ -223,7 +219,7 @@ export const sendRequest = function(){
                                 let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
                                 if (num2 > this.avgTime) {
                                     this.n95 = num2 - this.avgTime;
-                                    this.n95 = Math.floor(this.n95 * 100) / 100;
+                                    // this.n95 = Math.floor(this.n95 * 100) / 100;
                                 } else  {
                                     this.n95 = this.avgTime - num2;
                                 }

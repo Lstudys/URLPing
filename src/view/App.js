@@ -48,10 +48,10 @@ export default class home extends Component {
             langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
             selectedDomain: '',
             zoomDomain: '',
-            values: [0],
+            values: [],
             colorIndex: 0,
             chartLabels: [],
-            values2: [0],
+            values2: [],
             colorIndex2: 2,
             chartLabels2: [],
             marker: {
@@ -135,7 +135,24 @@ export default class home extends Component {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    this.setDefaultValue(item);
+                    if (this.state.overlay1) {
+                        if (this.state.url == '') {
+                            this.setState({url: item});
+                            this.setState({defaultvalue1: item});
+                        } else {
+                            this.setState({url: this.state.url + item});
+                            this.setState({defaultvalue1: this.state.defaultvalue1 + item});
+                        }
+                    }
+                    if (this.state.overlay2) {
+                        if (this.state.url2 == '') {
+                            this.setState({url2: item});
+                            this.setState({defaultvalue2: item});
+                        } else {
+                            this.setState({url2: this.state.url2 + item});
+                            this.setState({defaultvalue2: this.state.defaultvalue2 + item});
+                        }
+                    }
                 }}
                 style={{
                     flexDirection: 'row',
@@ -246,12 +263,6 @@ export default class home extends Component {
     render() {
         const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
         this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
-        // 两个图表的属性值对象
-        //  config
-        // const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2} = this.state;
-        // const config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2);
-        // const {values2, colorIndex2, chartLabels2, url2} = this.state;
-        // const config2 = this.next(values2, colorIndex2, chartLabels2, url2);
         return this.state.linechart ? (
             <TouchableOpacity
                 style={{backgroundColor: '#1F2342', height: height}}
@@ -579,14 +590,14 @@ export default class home extends Component {
                         {   this.state.url ?   <View style={styles.bottomChartDataItem}>
                             <Text style={{color:'red', fontSize:15, left:60}}>{this.maxTime}</Text>
                             <Text style={{color:'red', fontSize:15, left:110}}>{this.minTime}</Text>
-                            <Text style={{color:'red', fontSize:15, left:150}}>{this.avgTime.toFixed(2)}</Text>
+                            <Text style={{color:'red', fontSize:15, left:160}}>{this.avgTime.toFixed(2)}</Text>
                             <Text style={{color:'red', fontSize:15, left:180}}>{this.n95 ? `${this.n95.toFixed(2)}` : ''}</Text>
                         </View>
                             : <View/>  }
                         {   this.state.url2 ?        <View style={styles.bottomChartDataItem}>
                             <Text style={{color:'green', fontSize:15, left:60}}>{this.maxTime2}</Text>
                             <Text style={{color:'green', fontSize:15, left:110}}>{this.minTime2}</Text>
-                            <Text style={{color:'green', fontSize:15, left:150}}>{this.avgTime2.toFixed(2)}</Text>
+                            <Text style={{color:'green', fontSize:15, left:160}}>{this.avgTime2.toFixed(2)}</Text>
                             <Text style={{color:'green', fontSize:15, left:180}}>{this.n952 ? `${this.n952.toFixed(2)}` : ''}</Text>
                         </View>
                             : <View/>  }
