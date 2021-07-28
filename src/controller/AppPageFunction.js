@@ -43,13 +43,13 @@ export const backAction = function () {
                         defaultvalue2: '',
                     });
                     this.setState({
-                        values: [0],
+                        values: [],
                     });
                     this.setState({
                         chartLabels: [],
                     });
                     this.setState({
-                        values2: [0],
+                        values2: [],
                     });
                     this.setState({
                         chartLabels2: [],

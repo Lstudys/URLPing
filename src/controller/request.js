@@ -23,6 +23,7 @@ export const sendRequest = function(){
                 this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
                 this.refs.input1.blur(); // 输入框失去焦点
                 this.refs.input2.blur();
+                this.setState({backChart: true});
                 this.setState({linechart: false});// 设置状态以显示图表
                 this.linechartDates = []; // 清空折线图的数据源数组
                 this.linechartDates2 = [];
@@ -128,8 +129,6 @@ export const sendRequest = function(){
                                     xhr2.send();
                                 }
                             }, 1000);
-                            //  xhr2.open('GET',this.state.url2,true);
-                            //  xhr2.send();
                         } else  {
                             Orientation.lockToPortrait(); // 竖屏
                             let sum = 0; // 存储每个数减去平均数的平方的和
@@ -143,10 +142,13 @@ export const sendRequest = function(){
                                 this.n952 = num2 - this.avgTime2;
                             } else  {
                                 this.n952 = this.avgTime2 - num2;
-                                this.n952 = Math.floor(this.n952 * 100) / 100;
+                                // this.n952 = Math.floor(this.n952 * 100) / 100;
                             }
                             this.setState({isPing: false});
                             this.setState({ifOverlayAble: true});
+                            this.setState({url2: ''});
+                            this.setState({values: []});
+                            this.setState({chartLabels2: []});
                             this.setState({defaultvalue2: ''});
                             this.setState({backChart: true});
                             if (nowTime > beginTime + reqTime * 60 * 1000) {
@@ -210,8 +212,6 @@ export const sendRequest = function(){
                                         xhr.send();
                                     }
                                 }, 1000);
-                                //  xhr.open('GET',this.state.url,true);
-                                //  xhr.send();
                             } else  {
                                 Orientation.lockToPortrait();
                                 let sum = 0; // 存储每个数减去平均数的平方的和
@@ -223,13 +223,16 @@ export const sendRequest = function(){
                                 let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
                                 if (num2 > this.avgTime) {
                                     this.n95 = num2 - this.avgTime;
-                                    this.n95 = Math.floor(this.n95 * 100) / 100;
+                                    // this.n95 = Math.floor(this.n95 * 100) / 100;
                                 } else  {
                                     this.n95 = this.avgTime - num2;
                                 }
                                 this.setState({isPing: false});
                                 this.setState({ifOverlayAble: true});
                                 this.setState({defaultvalue1: ''});
+                                this.setState({url: ''});
+                                this.setState({values: []});
+                                this.setState({chartLabels: []});
                                 this.setState({backChart: true});
                                 if (nowTime > beginTime + reqTime * 60 * 1000) {
                                     this.setState({backChart: true});
