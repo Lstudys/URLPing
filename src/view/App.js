@@ -590,15 +590,15 @@ export default class home extends Component {
                         {   this.state.url ?   <View style={styles.bottomChartDataItem}>
                             <Text style={{color:'red', fontSize:15, left:60}}>{this.maxTime}</Text>
                             <Text style={{color:'red', fontSize:15, left:110}}>{this.minTime}</Text>
-                            <Text style={{color:'red', fontSize:15, left:160}}>{this.avgTime.toFixed(2)}</Text>
-                            <Text style={{color:'red', fontSize:15, left:180}}>{this.n95 ? `${this.n95.toFixed(2)}` : ''}</Text>
+                            <Text style={{color:'red', fontSize:15, left:160}}>{this.avgTime.toFixed(0)}</Text>
+                            <Text style={{color:'red', fontSize:15, left:180}}>{this.n95 ? `${this.n95.toFixed(0)}` : ''}</Text>
                         </View>
                             : <View/>  }
                         {   this.state.url2 ?        <View style={styles.bottomChartDataItem}>
                             <Text style={{color:'green', fontSize:15, left:60}}>{this.maxTime2}</Text>
                             <Text style={{color:'green', fontSize:15, left:110}}>{this.minTime2}</Text>
-                            <Text style={{color:'green', fontSize:15, left:160}}>{this.avgTime2.toFixed(2)}</Text>
-                            <Text style={{color:'green', fontSize:15, left:180}}>{this.n952 ? `${this.n952.toFixed(2)}` : ''}</Text>
+                            <Text style={{color:'green', fontSize:15, left:160}}>{this.avgTime2.toFixed(0)}</Text>
+                            <Text style={{color:'green', fontSize:15, left:180}}>{this.n952 ? `${this.n952.toFixed(0)}` : ''}</Text>
                         </View>
                             : <View/>  }
                     </View>
