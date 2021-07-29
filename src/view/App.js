@@ -264,7 +264,7 @@ export default class home extends Component {
         if (this.state.url == '') {
             this.state.secondDataHeight = 140;
         } else {
-            this.state.secondDataHeight = 200;
+            this.state.secondDataHeight = 220;
         }
     }
 
@@ -583,13 +583,7 @@ export default class home extends Component {
         ) : (
             <View style={styles.bottomStyle}>
                 <ScrollView>
-                    {this.state.url || this.state.url2 ? (
-                        <LineChart width={width} height={600} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
-                            chartDescription={{text:''}} ref="chart" />
-                    ) : (
-                        <View />
-                    )}
-                    <View style = {styles.bottomChartData}>
+                    <View style = {[styles.bottomChartData, {marginBottom: 0}]}>
                         <View style = {styles.bottomChartDataItem}>
                             <Text style={{color:'pink', fontSize:20, left:50, position: 'absolute'}}>MAX</Text>
                             <Text style={{color:'pink', fontSize:20, left:130, position: 'absolute'}}>MIN</Text>
@@ -612,6 +606,12 @@ export default class home extends Component {
                         </View>
                             : <View/>  }
                     </View>
+                    {this.state.url || this.state.url2 ? (
+                        <LineChart width={width} height={560} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
+                            chartDescription={{text:''}} ref="chart" />
+                    ) : (
+                        <View />
+                    )}
                 </ScrollView>
             </View>
         );
@@ -624,11 +624,11 @@ const styles = StyleSheet.create({
         position: 'relative',
         height: 100,
         width: width,
-        // backgroundColor: 'black',
     },
     bottomChartData: {
         flexDirection: 'column',
         position: 'relative',
+        height: 100,
     },
     bottomStyle: {
         height:height,
