@@ -62,7 +62,10 @@ export default class home extends Component {
                 textColor: processColor('white'),
             },
             chartDate: [{y: 0, x: 0}], // 只作为刷新页面用的state
-            setting:false,
+            setting: false,
+            secondDataHeight: 120, // 第二个图表数据style属性的bottom值
+            chart1: false,
+            chart2: false,
         };
 
         /* 选择合适语言 */
@@ -259,10 +262,20 @@ export default class home extends Component {
             };
         }
     }
+    ifSecondPing= () => {
+        if (this.state.url == '') {
+            this.state.secondDataHeight = 140;
+        } else {
+            this.state.secondDataHeight = 220;
+        }
+    }
 
     render() {
-        const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
-        this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
+        if (this.state.url != '' || this.state.url2 != '') {
+            const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+            this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
+        }
+        this.ifSecondPing();
         return this.state.linechart ? (
             <TouchableOpacity
                 style={{backgroundColor: '#1F2342', height: height}}
@@ -574,34 +587,35 @@ export default class home extends Component {
         ) : (
             <View style={styles.bottomStyle}>
                 <ScrollView>
-                    {this.state.url || this.state.url2 ? (
-                        <LineChart width={width} height={600} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
+                    <View style = {[styles.bottomChartData, {marginBottom: 0}]}>
+                        <View style = {styles.bottomChartDataItem}>
+                            <Text style={{color:'pink', fontSize:20, left:50, position: 'absolute'}}>MAX</Text>
+                            <Text style={{color:'pink', fontSize:20, left:130, position: 'absolute'}}>MIN</Text>
+                            <Text style={{color:'pink', fontSize:20, left:210, position: 'absolute'}}>AVG</Text>
+                            <Text style={{color:'pink', fontSize:20, left:290, position: 'absolute'}}>N95</Text>
+                        </View>
+                        {   this.state.chart1 ?   <View style={styles.bottomChartDataItem}>
+                            <Text style={{color:'red', fontSize:15, left:55, bottom: 150, height: 20, position: 'absolute'}}>{this.maxTime}</Text>
+                            <Text style={{color:'red', fontSize:15, left:130, bottom: 150, height: 20, position: 'absolute'}}>{this.minTime}</Text>
+                            <Text style={{color:'red', fontSize:15, left:210, bottom: 150, height: 20, position: 'absolute'}}>{this.avgTime.toFixed(0)}</Text>
+                            <Text style={{color:'red', fontSize:15, left:287, bottom: 150, height: 20, position: 'absolute'}}>{this.n95 ? `${this.n95.toFixed(0)}` : ''}</Text>
+                        </View>
+                            : <View/>  }
+                        {   this.state.chart2 ?        <View style={styles.bottomChartDataItem}>
+                            <Text style={{color:'green', fontSize:15, left:55, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>{this.maxTime2}</Text>
+                            <Text style={{color:'green', fontSize:15, left:130, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>{this.minTime2}</Text>
+                            <Text style={{color:'green', fontSize:15, left:210, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>{this.avgTime2.toFixed(0)}</Text>
+                            <Text style={{color:'green', fontSize:15, left:287, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>
+                                {this.n952 ? `${this.n952.toFixed(0)}` : ''}</Text>
+                        </View>
+                            : <View/>  }
+                    </View>
+                    {true ? (
+                        <LineChart width={width} height={560} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
                             chartDescription={{text:''}} ref="chart" />
                     ) : (
                         <View />
                     )}
-                    <View style = {styles.bottomChartData}>
-                        <View style = {styles.bottomChartDataItem}>
-                            <Text style={{color:'pink', fontSize:20, left:50}}>MAX</Text>
-                            <Text style={{color:'pink', fontSize:20, left:80}}>MIN</Text>
-                            <Text style={{color:'pink', fontSize:20, left:110}}>AVG</Text>
-                            <Text style={{color:'pink', fontSize:20, left:140}}>N95</Text>
-                        </View>
-                        {   this.state.url ?   <View style={styles.bottomChartDataItem}>
-                            <Text style={{color:'red', fontSize:15, left:60}}>{this.maxTime}</Text>
-                            <Text style={{color:'red', fontSize:15, left:110}}>{this.minTime}</Text>
-                            <Text style={{color:'red', fontSize:15, left:160}}>{this.avgTime.toFixed(2)}</Text>
-                            <Text style={{color:'red', fontSize:15, left:180}}>{this.n95 ? `${this.n95.toFixed(2)}` : ''}</Text>
-                        </View>
-                            : <View/>  }
-                        {   this.state.url2 ?        <View style={styles.bottomChartDataItem}>
-                            <Text style={{color:'green', fontSize:15, left:60}}>{this.maxTime2}</Text>
-                            <Text style={{color:'green', fontSize:15, left:110}}>{this.minTime2}</Text>
-                            <Text style={{color:'green', fontSize:15, left:160}}>{this.avgTime2.toFixed(2)}</Text>
-                            <Text style={{color:'green', fontSize:15, left:180}}>{this.n952 ? `${this.n952.toFixed(2)}` : ''}</Text>
-                        </View>
-                            : <View/>  }
-                    </View>
                 </ScrollView>
             </View>
         );
@@ -611,9 +625,14 @@ export default class home extends Component {
 const styles = StyleSheet.create({
     bottomChartDataItem: {
         flexDirection: 'row',
+        position: 'relative',
+        height: 100,
+        width: width,
     },
     bottomChartData: {
         flexDirection: 'column',
+        position: 'relative',
+        height: 100,
     },
     bottomStyle: {
         height:height,
