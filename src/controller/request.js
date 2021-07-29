@@ -17,8 +17,12 @@ export const sendRequest = function(){
             if (!myNetInfo) {
                 Toast.message('网络未连接!');
             } else  {
+                this.state.chart1 = false;
+                this.state.chart2 = false;
                 const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
                 this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
+                this.state.chart1 = this.state.url ? true : false;
+                this.state.chart2 = this.state.url2 ? true : false;
                 this.setState({isPing: true});
                 this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
                 this.refs.input1.blur(); // 输入框失去焦点
@@ -144,19 +148,6 @@ export const sendRequest = function(){
                                 }
                             }, 1000);
                         } else  {
-                            // let sum = 0; // 存储每个数减去平均数的平方的和
-                            // this.sumReqTime2.forEach((num) => {
-                            //     const bzc = num - this.avgTime2;
-                            //     sum += bzc * bzc;
-                            // });
-                            // let num1 = sum / x2;
-                            // let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-                            // if (num2 > this.avgTime2) {
-                            //     this.n952 = num2 - this.avgTime2;
-                            // } else  {
-                            //     this.n952 = this.avgTime2 - num2;
-                            //     // this.n952 = Math.floor(this.n952 * 100) / 100;
-                            // }
                             this.setState({isPing: false});
                             this.setState({ifOverlayAble: true});
                             this.setState({url2: ''});
@@ -239,18 +230,6 @@ export const sendRequest = function(){
                                     }
                                 }, 1000);
                             } else  {
-                                // let sum = 0; // 存储每个数减去平均数的平方的和
-                                // this.sumReqTime.forEach((num) => {
-                                //     const bzc = num - this.avgTime;
-                                //     sum += bzc * bzc;
-                                // });
-                                // let num1 = sum / x;
-                                // let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-                                // if (num2 > this.avgTime) {
-                                //     this.n95 = num2 - this.avgTime;
-                                // } else  {
-                                //     this.n95 = this.avgTime - num2;
-                                // }
                                 this.setState({isPing: false});
                                 this.setState({ifOverlayAble: true});
                                 this.setState({defaultvalue1: ''});
