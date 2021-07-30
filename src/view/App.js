@@ -324,90 +324,92 @@ export default class home extends Component {
                         this.setState({overlay1: false});
                         this.refs.input1.blur();
                     }}>
-                    <View >
-                        <View style={{flexDirection: 'row'}}>
-                            <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
-                                <TextInput
-                                    defaultValue={this.state.defaultvalue1}
-                                    placeholderTextColor="#ccc" // 设置占位符颜色
-                                    color="#000000" // 设置输入文字的颜色
-                                    autoFocus={true}
-                                    placeholder={I18n.t('inputone')}
-                                    onChangeText={(newText) => {
-                                        this.state.url = newText;
-                                        this.state.defaultvalue1 = newText;
-                                    }}
-                                    style={{width: width / 1.3}}
-                                />
+                    <View>
+                        <View >
+                            <View style={{flexDirection: 'row'}}>
+                                <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
+                                    <TextInput
+                                        defaultValue={this.state.defaultvalue1}
+                                        placeholderTextColor="#ccc" // 设置占位符颜色
+                                        color="#000000" // 设置输入文字的颜色
+                                        autoFocus={true}
+                                        placeholder={I18n.t('inputone')}
+                                        onChangeText={(newText) => {
+                                            this.state.url = newText;
+                                            this.state.defaultvalue1 = newText;
+                                        }}
+                                        style={{width: width / 1.3}}
+                                    />
+                                    <TouchableOpacity
+                                        style={{color: '#000000'}}
+                                        onPress={() => {
+                                            this.setState({
+                                                chartDate: [],
+                                            });
+                                            this.state.defaultvalue1 = '';
+                                            this.state.url = '';
+                                        }}>
+                                        <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
+                                    </TouchableOpacity>
+                                </View>
+
                                 <TouchableOpacity
-                                    style={{color: '#000000'}}
+                                    style={{color: '#000000', left: 20}}
                                     onPress={() => {
                                         this.setState({
                                             chartDate: [],
                                         });
-                                        this.state.defaultvalue1 = '';
-                                        this.state.url = '';
+                                        this.refs.input1.blur();
+                                        this.setState({overlay1: false});
+                                        if (this.state.defaultvalue1 != '') {
+                                            saveValue(this.state.url);
+                                        }
+                                        store.get('local').then((res) => (data.local = res.slice()));
                                     }}>
-                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
+                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
                                 </TouchableOpacity>
                             </View>
-
-                            <TouchableOpacity
-                                style={{color: '#000000', left: 20}}
-                                onPress={() => {
-                                    this.setState({
-                                        chartDate: [],
-                                    });
-                                    this.refs.input1.blur();
-                                    this.setState({overlay1: false});
-                                    if (this.state.defaultvalue1 != '') {
-                                        saveValue(this.state.url);
-                                    }
-                                    store.get('local').then((res) => (data.local = res.slice()));
-                                }}>
-                                <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
-                            </TouchableOpacity>
                         </View>
-                    </View>
-                    <View>
-                        <FlatList
-                            style={{maxHeight: 30}}
-                            horizontal={true}
-                            data={this.state.urlArr}
-                            renderItem={({item, index}) => this._renderRow(item, index)}
-                            keyExtractor={(item, index) => item + index}
-                        />
-                    </View>
-                    <View style={styles.History}>
-                        <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
-                            {data.local.map((item, index) => {
-                                return (
-                                    <View style={styles.HistoryList}>
-                                        <TouchableOpacity
-                                            key={index}
-                                            style={styles.HistoryTextBox}
-                                            onPress={() => {
-                                                this.setDefaultValue(item);
-                                            }}>
-                                            <Text numberOfLines={index} style={styles.HistoryText}>
-                                                {item}
-                                            </Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={styles.Delete}
-                                            onPress={() => {
-                                                data.local.splice(data.local.indexOf(item), 1);
-                                                store.save('local', data.local);
-                                                this.setState({
-                                                    visible: true,
-                                                });
-                                            }}>
-                                            <Text style={styles.DeleteText}>{'\ue60f'}</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                );
-                            })}
-                        </ScrollView>
+                        <View>
+                            <FlatList
+                                style={{maxHeight: 30}}
+                                horizontal={true}
+                                data={this.state.urlArr}
+                                renderItem={({item, index}) => this._renderRow(item, index)}
+                                keyExtractor={(item, index) => item + index}
+                            />
+                        </View>
+                        <View style={styles.History}>
+                            <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
+                                {data.local.map((item, index) => {
+                                    return (
+                                        <View style={styles.HistoryList} key={index}>
+                                            <TouchableOpacity
+                                                // key={index}
+                                                style={styles.HistoryTextBox}
+                                                onPress={() => {
+                                                    this.setDefaultValue(item);
+                                                }}>
+                                                <Text numberOfLines={index} style={styles.HistoryText}>
+                                                    {item}
+                                                </Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.Delete}
+                                                onPress={() => {
+                                                    data.local.splice(data.local.indexOf(item), 1);
+                                                    store.save('local', data.local);
+                                                    this.setState({
+                                                        visible: true,
+                                                    });
+                                                }}>
+                                                <Text style={styles.DeleteText}>{'\ue60f'}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                })}
+                            </ScrollView>
+                        </View>
                     </View>
                 </Overlay>
                 {/* start */}
@@ -419,88 +421,90 @@ export default class home extends Component {
                         this.refs.input2.blur();
                     }}>
                     <View>
-                        <View style={{flexDirection: 'row'}}>
-                            <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
-                                <TextInput
-                                    defaultValue={this.state.defaultvalue2}
-                                    placeholderTextColor="#ccc" // 设置占位符颜色
-                                    color="#000000" // 设置输入文字的颜色
-                                    autoFocus={true}
-                                    placeholder={I18n.t('inputtwo')}
-                                    onChangeText={(newText) => {
-                                        this.state.url2 = newText;
-                                        this.state.defaultvalue2 = newText;
-                                    }}
-                                    style={{width: width / 1.3}}
-                                />
+                        <View>
+                            <View style={{flexDirection: 'row'}}>
+                                <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
+                                    <TextInput
+                                        defaultValue={this.state.defaultvalue2}
+                                        placeholderTextColor="#ccc" // 设置占位符颜色
+                                        color="#000000" // 设置输入文字的颜色
+                                        autoFocus={true}
+                                        placeholder={I18n.t('inputtwo')}
+                                        onChangeText={(newText) => {
+                                            this.state.url2 = newText;
+                                            this.state.defaultvalue2 = newText;
+                                        }}
+                                        style={{width: width / 1.3}}
+                                    />
+                                    <TouchableOpacity
+                                        style={{color: '#000000'}}
+                                        onPress={() => {
+                                            this.setState({
+                                                chartDate: [],
+                                            });
+                                            this.state.defaultvalue2 = '';
+                                            this.state.url2 = '';
+                                        }}>
+                                        <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
+                                    </TouchableOpacity>
+                                </View>
                                 <TouchableOpacity
-                                    style={{color: '#000000'}}
+                                    style={{color: '#000000', left: 20}}
                                     onPress={() => {
                                         this.setState({
                                             chartDate: [],
                                         });
-                                        this.state.defaultvalue2 = '';
-                                        this.state.url2 = '';
+                                        this.refs.input2.blur();
+                                        this.setState({overlay2: false});
+                                        if (this.state.defaultvalue2 != '') {
+                                            saveValue(this.state.url2);
+                                        }
+                                        store.get('local').then((res) => (data.local = res.slice()));
                                     }}>
-                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
+                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
                                 </TouchableOpacity>
                             </View>
-                            <TouchableOpacity
-                                style={{color: '#000000', left: 20}}
-                                onPress={() => {
-                                    this.setState({
-                                        chartDate: [],
-                                    });
-                                    this.refs.input2.blur();
-                                    this.setState({overlay2: false});
-                                    if (this.state.defaultvalue2 != '') {
-                                        saveValue(this.state.url2);
-                                    }
-                                    store.get('local').then((res) => (data.local = res.slice()));
-                                }}>
-                                <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
-                            </TouchableOpacity>
                         </View>
-                    </View>
-                    <View>
-                        <FlatList
-                            style={{maxHeight: 30}}
-                            horizontal={true}
-                            data={this.state.urlArr}
-                            renderItem={({item, index}) => this._renderRow(item, index)}
-                            keyExtractor={(item, index) => item + index}
-                        />
-                    </View>
-                    <View style={styles.History}>
-                        <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
-                            {data.local.map((item, index) => {
-                                return (
-                                    <View style={styles.HistoryList}>
-                                        <TouchableOpacity
-                                            key={index}
-                                            style={styles.HistoryTextBox}
-                                            onPress={() => {
-                                                this.setDefaultValue(item);
-                                            }}>
-                                            <Text numberOfLines={index} style={styles.HistoryText}>
-                                                {item}
-                                            </Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={styles.Delete}
-                                            onPress={() => {
-                                                data.local.splice(data.local.indexOf(item), 1);
-                                                store.save('local', data.local);
-                                                this.setState({
-                                                    visible: true,
-                                                });
-                                            }}>
-                                            <Text style={styles.DeleteText}>{'\ue60f'}</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                );
-                            })}
-                        </ScrollView>
+                        <View>
+                            <FlatList
+                                style={{maxHeight: 30}}
+                                horizontal={true}
+                                data={this.state.urlArr}
+                                renderItem={({item, index}) => this._renderRow(item, index)}
+                                keyExtractor={(item, index) => item + index}
+                            />
+                        </View>
+                        <View style={styles.History}>
+                            <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
+                                {data.local.map((item, index) => {
+                                    return (
+                                        <View style={styles.HistoryList} key={index}>
+                                            <TouchableOpacity
+                                                // key={index}
+                                                style={styles.HistoryTextBox}
+                                                onPress={() => {
+                                                    this.setDefaultValue(item);
+                                                }}>
+                                                <Text numberOfLines={index} style={styles.HistoryText}>
+                                                    {item}
+                                                </Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.Delete}
+                                                onPress={() => {
+                                                    data.local.splice(data.local.indexOf(item), 1);
+                                                    store.save('local', data.local);
+                                                    this.setState({
+                                                        visible: true,
+                                                    });
+                                                }}>
+                                                <Text style={styles.DeleteText}>{'\ue60f'}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                })}
+                            </ScrollView>
+                        </View>
                     </View>
                 </Overlay>
                 {/* end */}
