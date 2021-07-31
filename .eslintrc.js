@@ -22,7 +22,7 @@ module.exports = {
         'no-lone-blocks': 2, // 禁用不必要的嵌套块
         'no-empty': 2, // 禁止空块语句
         'react-native/no-inline-styles': 0, // 允许行内样式
-        'max-len' : ['error', {code : 200}],
+        'max-len' : ['error', {code : 210}],
         'eqeqeq': 0, // == ===
         'react/no-string-refs':0,
         'array-bracket-newline': [2, 'consistent'], // 在数组开括号后和闭括号前强制换行

@@ -10,7 +10,7 @@ import {Component} from 'react';
 import {Dimensions, StyleSheet, TextInput, View, Text, Button, TouchableOpacity, ScrollView, FlatList, processColor} from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {BackHandler} from 'react-native';
-import {sendRequest} from '../controller/request';
+import {sendRequest} from '../controller/Request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {setReqTime, reqTimeChange, confirmRqTime, textInputChange1, textInputChange2, backAction, saveValue} from '../controller/AppPageFunction';
 import data from '../modal/data';
@@ -19,6 +19,7 @@ import I18n from 'i18n-js';
 import * as RNLocalize from 'react-native-localize';
 import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
+import {setSpText, scaleSizeH, scaleSizeW} from '../controller/Adaptation';
 
 const locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
 const systemLanguage = locales[0]?.languageCode; // 用户系统偏好语言
@@ -43,7 +44,7 @@ export default class home extends Component {
             chartToData: false,
             overlay1: false,
             overlay2: false, // 控制两个overlay显示的state
-            urlArr: ['https://', 'http://', 'www', '.cn', '.com'],
+            urlArr: ['https://', 'http://', 'www.', '.cn', '.com'],
             visible: false, // 删除后刷新历史记录
             langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
             selectedDomain: '',
@@ -163,7 +164,7 @@ export default class home extends Component {
                     justifyItems: 'flex-start',
                     marginRight:8,
                 }}>
-                <Text style={{left: 0, color: '#000000', fontSize: 20}}>{item}</Text>
+                <Text style={{backgroundColor:'#e9f1f6', borderRadius:scaleSizeH(12), fontSize: setSpText(40),  margin:scaleSizeH(5)}}>{item}</Text>
             </TouchableOpacity>
         );
     }
@@ -285,14 +286,9 @@ export default class home extends Component {
                     this.refs.input2.blur();
                     this.setState({setting: false});
                 }}>
-                {/* 设置 */}
-                <Text style={styles.iconStyle}
-                    onPress={() => {
-                        this.setState({setting: true});
-                    }}
-                >{'\ue6c1'}</Text>
-                {this.state.setting ? (<View style={styles.Settingarea}>
-                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: 30, left: 10, top:5 }} onPress={() => {
+                <View style={{flexDirection: 'row'}}>
+                    {/* 中英文 */}
+                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: setSpText(80), left: scaleSizeW(10)}} onPress={() => {
                         if (I18n.locale === 'zh'){
                             I18n.locale = 'en';
                             data.userChoose = I18n.locale;
@@ -305,18 +301,20 @@ export default class home extends Component {
                             this.setState({langvis: false});
                         }
                     }}>{'\ue645'}</Text>
-                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: 30,  left: 15, top:5 }} onPress={setReqTime.bind(this)}>
+                    {/* 时间设置 */}
+                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: setSpText(80), left:width / 1.3}} onPress={setReqTime.bind(this)}>
                         {'\ue602'}
                     </Text>
-                    <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: 35, left: 20, top:2}}
+                    {/* 关于 */}
+                    {/* <Text style={{fontFamily: 'iconfont', color: '#FFB6C1', fontSize: 35, left: 20, top:2}}
                         onPress={() => {
                             this.setState({linechart: false});
                             // eslint-disable-next-line no-undef
                             Orientation.lockToLandscape();
                         }}>
                         {'\ue629'}
-                    </Text>
-                </View>) : (<View />)}
+                    </Text> */}
+                </View>
                 <Overlay
                     style={styles.overlay}
                     isVisible={this.state.overlay1}
@@ -325,54 +323,52 @@ export default class home extends Component {
                         this.refs.input1.blur();
                     }}>
                     <View>
-                        <View >
-                            <View style={{flexDirection: 'row'}}>
-                                <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
-                                    <TextInput
-                                        defaultValue={this.state.defaultvalue1}
-                                        placeholderTextColor="#ccc" // 设置占位符颜色
-                                        color="#000000" // 设置输入文字的颜色
-                                        autoFocus={true}
-                                        placeholder={I18n.t('inputone')}
-                                        onChangeText={(newText) => {
-                                            this.state.url = newText;
-                                            this.state.defaultvalue1 = newText;
-                                        }}
-                                        style={{width: width / 1.3}}
-                                    />
-                                    <TouchableOpacity
-                                        style={{color: '#000000'}}
-                                        onPress={() => {
-                                            this.setState({
-                                                chartDate: [],
-                                            });
-                                            this.state.defaultvalue1 = '';
-                                            this.state.url = '';
-                                        }}>
-                                        <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
-                                    </TouchableOpacity>
-                                </View>
-
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
+                                <TextInput
+                                    defaultValue={this.state.defaultvalue1}
+                                    placeholderTextColor="#ccc" // 设置占位符颜色
+                                    color="#000000" // 设置输入文字的颜色
+                                    autoFocus={true}
+                                    placeholder={I18n.t('inputone')}
+                                    onChangeText={(newText) => {
+                                        this.state.url = newText;
+                                        this.state.defaultvalue1 = newText;
+                                    }}
+                                    style={{width: width / 1.25, fontSize: setSpText(45)}}
+                                />
                                 <TouchableOpacity
-                                    style={{color: '#000000', left: 20}}
+                                    style={{color: '#000000'}}
                                     onPress={() => {
                                         this.setState({
                                             chartDate: [],
                                         });
-                                        this.refs.input1.blur();
-                                        this.setState({overlay1: false});
-                                        if (this.state.defaultvalue1 != '') {
-                                            saveValue(this.state.url);
-                                        }
-                                        store.get('local').then((res) => (data.local = res.slice()));
+                                        this.state.defaultvalue1 = '';
+                                        this.state.url = '';
                                     }}>
-                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
+                                    <Text style={{fontFamily: 'iconfont', fontSize: setSpText(55), top: scaleSizeH(35) }}>{'\ue60f'}</Text>
                                 </TouchableOpacity>
                             </View>
+
+                            <TouchableOpacity
+                                style={{color: '#000000', left: scaleSizeW(20)}}
+                                onPress={() => {
+                                    this.setState({
+                                        chartDate: [],
+                                    });
+                                    this.refs.input1.blur();
+                                    this.setState({overlay1: false});
+                                    if (this.state.defaultvalue1 != '') {
+                                        saveValue(this.state.url);
+                                    }
+                                    store.get('local').then((res) => (data.local = res.slice()));
+                                }}>
+                                <Text style={{fontFamily: 'iconfont', fontSize:  setSpText(45), top:20 }}>{'\ue6d2'}</Text>
+                            </TouchableOpacity>
                         </View>
                         <View>
                             <FlatList
-                                style={{maxHeight: 30}}
+                                style={{maxHeight: scaleSizeH(60)}}
                                 horizontal={true}
                                 data={this.state.urlArr}
                                 renderItem={({item, index}) => this._renderRow(item, index)}
@@ -434,7 +430,7 @@ export default class home extends Component {
                                             this.state.url2 = newText;
                                             this.state.defaultvalue2 = newText;
                                         }}
-                                        style={{width: width / 1.3}}
+                                        style={{width: width / 1.25, fontSize: setSpText(45)}}
                                     />
                                     <TouchableOpacity
                                         style={{color: '#000000'}}
@@ -445,11 +441,11 @@ export default class home extends Component {
                                             this.state.defaultvalue2 = '';
                                             this.state.url2 = '';
                                         }}>
-                                        <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue60f'}</Text>
+                                        <Text style={{fontFamily: 'iconfont', fontSize: setSpText(55), top: scaleSizeH(35) }}>{'\ue60f'}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <TouchableOpacity
-                                    style={{color: '#000000', left: 20}}
+                                    style={{color: '#000000', left: scaleSizeW(20)}}
                                     onPress={() => {
                                         this.setState({
                                             chartDate: [],
@@ -461,13 +457,13 @@ export default class home extends Component {
                                         }
                                         store.get('local').then((res) => (data.local = res.slice()));
                                     }}>
-                                    <Text style={{fontFamily: 'iconfont', fontSize: 20, top:20 }}>{'\ue6d2'}</Text>
+                                    <Text style={{fontFamily: 'iconfont', fontSize:  setSpText(45), top:20 }}>{'\ue6d2'}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                         <View>
                             <FlatList
-                                style={{maxHeight: 30}}
+                                style={{maxHeight: scaleSizeH(60)}}
                                 horizontal={true}
                                 data={this.state.urlArr}
                                 renderItem={({item, index}) => this._renderRow(item, index)}
@@ -513,8 +509,8 @@ export default class home extends Component {
                     onBackdropPress={() => {
                         this.setState({OverlayAble: false});
                     }}>
-                    <View style={{height: 150}}>
-                        <Text style={{color: '#000000', fontSize: 18}}>
+                    <View style={{height: scaleSizeH(250)}}>
+                        <Text style={{color: '#000000', fontSize: setSpText(40)}}>
                             {I18n.t('currenttime')}:{this.state.reqTime}
                         </Text>
                         <View>
@@ -523,13 +519,13 @@ export default class home extends Component {
                                 placeholderTextColor="#ccc"
                                 color="#000000"
                                 onChangeText={reqTimeChange.bind(this)}
-                                style={{width: 200, top: 6, marginBottom: 10}}
+                                style={{width: scaleSizeW(500), top: scaleSizeH(6)}}
                             />
-                            <Button title={I18n.t('sure')} onPress={confirmRqTime.bind(this)} />
+                            <Button title={I18n.t('sure') } onPress={confirmRqTime.bind(this)} />
                         </View>
                     </View>
                 </Overlay>
-                <Text style={{color: 'pink', fontSize: 40, fontWeight: 'bold', textAlign:'center', marginTop: height / 5, marginBottom:height / 15 }}>{I18n.t('title')}</Text>
+                <Text style={{color: 'pink', fontSize: setSpText(112), fontWeight: 'bold', textAlign:'center', marginTop: scaleSizeH(280), marginBottom: scaleSizeH(100)}}>{I18n.t('title')}</Text>
                 <View style={styles.serch}>
                     <View style={styles.textinput}>
                         <TextInput
@@ -543,7 +539,7 @@ export default class home extends Component {
                             onFocus={() => {
                                 this.setState({overlay1: true});
                             }}
-                            style={{borderBottomColor: '#ffffff', borderRadius: 15, width: width, height:height / 12.5, bottom:5, backgroundColor:'white'}}
+                            style={{borderBottomColor: '#ffffff', borderRadius: 15, width: width, height: scaleSizeH(110), bottom: scaleSizeH(10), backgroundColor:'white', fontSize:scaleSizeW(45)}}
                         />
                         <TextInput
                             ref={'input2'}
@@ -556,20 +552,20 @@ export default class home extends Component {
                             onFocus={() => {
                                 this.setState({overlay2: true});
                             }}
-                            style={{borderBottomColor: '#ffffff', borderRadius: 15, width: width, height:height / 12.5, backgroundColor:'white'}}
+                            style={{borderBottomColor: '#ffffff', borderRadius: 15, width: width, height: scaleSizeH(110), backgroundColor:'white', fontSize:scaleSizeW(45)}}
                         />
                     </View>
                     <Text
                         style={{
                             color: '#ffffff',
-                            fontSize: 25,
+                            fontSize: setSpText(65),
                             paddingTop: 5,
                             backgroundColor: 'pink',
                             alignSelf: 'center',
                             textAlign: 'center',
-                            height: height / 12,
-                            width: width / 2,
-                            top: height / 14,
+                            height:  scaleSizeH(100),
+                            width: scaleSizeW(400),
+                            top: scaleSizeH(90),
                             borderRadius: 15,
                         }}
                         onPress={sendRequest.bind(this)}>
@@ -578,7 +574,7 @@ export default class home extends Component {
                 </View>
                 {this.state.backChart ? (
                     <Text
-                        style={{color: 'pink', top: 200, left: 130, fontSize: 20}}
+                        style={{color: 'pink', top: scaleSizeH(280), fontSize: setSpText(50), textAlign:'right'}}
                         onPress={() => {
                             this.setState({linechart: false});
                         }}>
@@ -593,29 +589,31 @@ export default class home extends Component {
                 <ScrollView>
                     <View style = {[styles.bottomChartData, {marginBottom: 0}]}>
                         <View style = {styles.bottomChartDataItem}>
-                            <Text style={{color:'pink', fontSize:20, left:50, position: 'absolute'}}>MAX</Text>
-                            <Text style={{color:'pink', fontSize:20, left:130, position: 'absolute'}}>MIN</Text>
-                            <Text style={{color:'pink', fontSize:20, left:210, position: 'absolute'}}>AVG</Text>
-                            <Text style={{color:'pink', fontSize:20, left:290, position: 'absolute'}}>N95</Text>
+                            <Text style={{color:'pink', fontSize:setSpText(40), left:scaleSizeW(40), position: 'absolute'}}>MAX</Text>
+                            <Text style={{color:'pink', fontSize:setSpText(40), left:scaleSizeW(220), position: 'absolute'}}>MIN</Text>
+                            <Text style={{color:'pink', fontSize:setSpText(40), left:scaleSizeW(400), position: 'absolute'}}>AVG</Text>
+                            <Text style={{color:'pink', fontSize:setSpText(40), left:scaleSizeW(580), position: 'absolute'}}>N95</Text>
                         </View>
-                        {   this.state.chart1 ?   <View style={styles.bottomChartDataItem}>
-                            <Text style={{color:'red', fontSize:15, left:55, bottom: 150, height: 20, position: 'absolute'}}>{this.maxTime}</Text>
-                            <Text style={{color:'red', fontSize:15, left:130, bottom: 150, height: 20, position: 'absolute'}}>{this.minTime}</Text>
-                            <Text style={{color:'red', fontSize:15, left:210, bottom: 150, height: 20, position: 'absolute'}}>{this.avgTime.toFixed(0)}</Text>
-                            <Text style={{color:'red', fontSize:15, left:287, bottom: 150, height: 20, position: 'absolute'}}>{this.n95 ? `${this.n95.toFixed(0)}` : ''}</Text>
+                        {   this.state.chart1 ?   <View style={styles.bottomChartDataOne}>
+                            <Text style={{color:'red', fontSize:setSpText(35), left:scaleSizeW(40),  position: 'absolute'}}>{this.maxTime}</Text>
+                            <Text style={{color:'red', fontSize:setSpText(35), left:scaleSizeW(220), position: 'absolute'}}>{this.minTime}</Text>
+                            <Text style={{color:'red', fontSize:setSpText(35), left:scaleSizeW(400), position: 'absolute'}}>{this.avgTime.toFixed(0)}</Text>
+                            <Text style={{color:'red', fontSize:setSpText(35), left:scaleSizeW(580), position: 'absolute'}}>
+                                {this.n95 ? `${this.n95.toFixed(0)}` : ''}</Text>
                         </View>
                             : <View/>  }
-                        {   this.state.chart2 ?        <View style={styles.bottomChartDataItem}>
-                            <Text style={{color:'green', fontSize:15, left:55, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>{this.maxTime2}</Text>
-                            <Text style={{color:'green', fontSize:15, left:130, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>{this.minTime2}</Text>
-                            <Text style={{color:'green', fontSize:15, left:210, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>{this.avgTime2.toFixed(0)}</Text>
-                            <Text style={{color:'green', fontSize:15, left:287, bottom: this.state.secondDataHeight, height: 20, position: 'absolute'}}>
+                        {   this.state.chart2 ?        <View style={styles.bottomChartDataTwo}>
+                            <Text style={{color:'green', fontSize:setSpText(35), left:scaleSizeW(40), position: 'absolute'}}>{this.maxTime2}</Text>
+                            <Text style={{color:'green', fontSize:setSpText(35), left:scaleSizeW(220), position: 'absolute'}}>{this.minTime2}</Text>
+                            <Text style={{color:'green', fontSize:setSpText(35), left:scaleSizeW(400), position: 'absolute'}}>
+                                {this.avgTime2.toFixed(0)}</Text>
+                            <Text style={{color:'green', fontSize:setSpText(35), left:scaleSizeW(580), position: 'absolute'}}>
                                 {this.n952 ? `${this.n952.toFixed(0)}` : ''}</Text>
                         </View>
                             : <View/>  }
                     </View>
                     {true ? (
-                        <LineChart width={width} height={560} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
+                        <LineChart width={width} height={height * 0.9}  bottom={0} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
                             chartDescription={{text:''}} ref="chart" />
                     ) : (
                         <View />
@@ -627,16 +625,28 @@ export default class home extends Component {
 }
 
 const styles = StyleSheet.create({
+    bottomChartDataTwo:{
+        width: width,
+        height:scaleSizeH(50),
+        position:'absolute',
+        top:scaleSizeH(100),
+    },
+    bottomChartDataOne:{
+        width: width,
+        height:scaleSizeH(50),
+        position:'absolute',
+        top:scaleSizeH(50),
+    },
     bottomChartDataItem: {
         flexDirection: 'row',
         position: 'relative',
-        height: 100,
+        height: scaleSizeH(200),
         width: width,
     },
     bottomChartData: {
         flexDirection: 'column',
         position: 'relative',
-        height: 100,
+        height: height * 0.1,
     },
     bottomStyle: {
         height:height,
@@ -687,37 +697,38 @@ const styles = StyleSheet.create({
     },
     History: {
         position: 'relative',
-        height: height / 2.4,
+        height: height / 2,
         width: width,
     },
     HistoryList: {
-        width: width,
-        height: 43,
+        width: scaleSizeW(730),
+        height: scaleSizeH(80),
         backgroundColor: 'white',
     },
     HistoryTextBox: {
-        height: 40,
+        height: scaleSizeH(70),
         justifyContent: 'center',
         borderRadius: 10,
         backgroundColor: '#F0F8FF',
+        left:5,
     },
     HistoryText: {
-        fontSize: 20,
+        fontSize: setSpText(40),
         color: 'black',
     },
     Delete: {
-        width: 40,
-        height: 40,
+        width: scaleSizeW(90),
+        height: scaleSizeH(70),
         position: 'relative',
-        top: -50,
-        left: 270,
+        top: scaleSizeH(-70),
+        left: scaleSizeW(650),
     },
     DeleteText: {
         fontFamily: 'iconfont',
         position: 'relative',
-        top: 15,
-        right:-13,
-        fontSize: 25,
+        top:scaleSizeH(10),
+        right:scaleSizeW(-13),
+        fontSize: setSpText(60),
     },
     overlay: {
         position: 'absolute',
@@ -729,10 +740,10 @@ const styles = StyleSheet.create({
     },
     iconStyle: {
         fontFamily: 'iconfont',
-        fontSize: 35,
-        top: height / 1.1,
-        left: 10,
-        width:40,
+        fontSize: setSpText(85),
+        top: scaleSizeH(1250),
+        left: scaleSizeW(20),
+        width:scaleSizeW(80),
     },
     Settingarea:{
         position:'absolute',
@@ -741,3 +752,4 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 });
+
