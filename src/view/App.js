@@ -10,7 +10,7 @@ import {Component} from 'react';
 import {Dimensions, StyleSheet, TextInput, View, Text, Button, TouchableOpacity, ScrollView, FlatList, processColor} from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {BackHandler} from 'react-native';
-import {sendRequest} from '../controller/Request';
+import {sendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {setReqTime, reqTimeChange, confirmRqTime, textInputChange1, textInputChange2, backAction, saveValue} from '../controller/AppPageFunction';
 import data from '../modal/data';
@@ -67,6 +67,7 @@ export default class home extends Component {
             secondDataHeight: 120, // 第二个图表数据style属性的bottom值
             chart1: false,
             chart2: false,
+            ifTwoChartShow: true
         };
 
         /* 选择合适语言 */
@@ -273,10 +274,14 @@ export default class home extends Component {
 
     render() {
         if (this.state.url != '' || this.state.url2 != '') {
+            if (this.state.ifTwoChartShow) {
             const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
             this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
         }
-        this.ifSecondPing();
+    }
+        if (this.state.ifTwoChartShow) {
+            this.ifSecondPing();
+        }
         return this.state.linechart ? (
             <TouchableOpacity
                 style={{backgroundColor: '#1F2342', height: height}}
