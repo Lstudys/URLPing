@@ -150,6 +150,7 @@ export const sendRequest = function(){
                         } else  {
                             this.setState({isPing: false});
                             this.setState({ifOverlayAble: true});
+                            this.setState({ifTwoChartShow: false});// ifTwoChartShow要放在url2和values2之前设置
                             this.setState({url2: ''});
                             this.setState({values: []});
                             this.setState({chartLabels2: []});
@@ -233,6 +234,7 @@ export const sendRequest = function(){
                                 this.setState({isPing: false});
                                 this.setState({ifOverlayAble: true});
                                 this.setState({defaultvalue1: ''});
+                                this.setState({ifTwoChartShow: false});// ifTwoChartShow要放在url和values之前设置
                                 this.setState({url: ''});
                                 this.setState({values: []});
                                 this.setState({chartLabels: []});
