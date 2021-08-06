@@ -51,21 +51,21 @@ stages:
 check:
     stage: check
     script:
-        -echo: 'find 0 err'
+        -echo: "find 0 err"
     tags:
-        -azure vm ci
+        -azurevmci
 test:
     stage: test
     script:
-        -echo 'test successful!'
+        -echo "test successful"
     tags:
-        -azure vm ci
+        -azurevmci
 build:
     stage: build
     script:
-        -echo 'build the app'
+        -echo "build the app"
     tags:
-        -azure vm ci
+        -azurevmci
 
 
 
