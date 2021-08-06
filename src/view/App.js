@@ -67,7 +67,7 @@ export default class home extends Component {
             secondDataHeight: 120, // 第二个图表数据style属性的bottom值
             chart1: false,
             chart2: false,
-            ifTwoChartShow: true
+            ifTwoChartShow: true,
         };
 
         /* 选择合适语言 */
@@ -275,10 +275,10 @@ export default class home extends Component {
     render() {
         if (this.state.url != '' || this.state.url2 != '') {
             if (this.state.ifTwoChartShow) {
-            const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
-            this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
+                const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+                this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
+            }
         }
-    }
         if (this.state.ifTwoChartShow) {
             this.ifSecondPing();
         }
