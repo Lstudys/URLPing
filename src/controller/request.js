@@ -108,7 +108,6 @@ export const sendRequest = function(){
                             this.setState({
                                 values2: this.state.values2.concat([ydata]),
                                 chartLabels2: this.state.chartLabels2.concat([xtime]),
-                                // colorIndex: (this.state.colorIndex + 1) % colors.length
                             });
                             this.sumReqTime2.push(value2.time);
                             value2.sumtime += value2.time; // 求和，算出总时间
