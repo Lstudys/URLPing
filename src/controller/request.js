@@ -239,9 +239,6 @@ export const sendRequest = function(){
                                 this.setState({values: []});
                                 this.setState({chartLabels: []});
                                 this.setState({backChart: true});
-                                // if (nowTime > beginTime + reqTime * 60 * 1000) {
-                                //     this.setState({backChart: true});
-                                // }
                                 return;
                             }
                         } else  {
