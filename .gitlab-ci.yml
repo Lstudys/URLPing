@@ -45,27 +45,27 @@
 
 
 stages:
-    -check
-    -test
-    -build
+     -check
+     -test
+     -build
 check:
-    stage: check
-    script:
-        -echo: "find 0 err"
-    tags:
-        -azurevmci
+   stage: check
+   script:
+      -echo "find 0 err"
+   tags:
+      -azurevmci
 test:
-    stage: test
-    script:
-        -echo "test successful"
-    tags:
-        -azurevmci
+   stage: test
+   script:
+      -echo "test successful"
+   tags:
+      -azurevmci
 build:
-    stage: build
-    script:
-        -echo "build the app"
-    tags:
-        -azurevmci
+   stage: build
+   script:
+      -echo "build the app"
+   tags:
+      -azurevmci
 
 
 
