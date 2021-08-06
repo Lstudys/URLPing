@@ -8,16 +8,16 @@ check:
    script:
       -echo "find 0 err"
    tags:
-      ["-azurevmci"]
+      ["azurevmci"]
 test:
    stage: -"test"
    script:
       -echo "test successful"
    tags:
-      ["-azurevmci"]
+      ["azurevmci"]
 build:
    stage: -"build"
    script:
       -echo "build the app"
    tags:
-      ["-azurevmci"]
+      ["azurevmci"]
