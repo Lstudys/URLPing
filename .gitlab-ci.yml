@@ -53,19 +53,19 @@ check:
     script:
         -echo: 'find 0 err'
     tags:
-        -rnRunner
+        -azure vm ci
 test:
     stage: test
     script:
         -echo 'test successful!'
     tags:
-        -rnRunner
+        -azure vm ci
 build:
     stage: build
     script:
         -echo 'build the app'
     tags:
-        -rnRunner
+        -azure vm ci
 
 
 
