@@ -191,7 +191,6 @@ export const sendRequest = function(){
                                 this.setState({
                                     values: this.state.values.concat([ytime]),
                                     chartLabels: this.state.chartLabels.concat([xtime]),
-                                    // colorIndex: (this.state.colorIndex + 1) % colors.length
                                 });
 
                                 this.sumReqTime.push(value.time);
