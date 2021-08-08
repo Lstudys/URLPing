@@ -7,12 +7,12 @@ import {BackHandler} from 'react-native';
 import Orientation from 'react-native-orientation';
 import {Toast} from 'teaset';
 import store from 'react-native-simple-store';
-import Data from '../modal/data';
+import data from '../modal/data';
 
 // 控制安卓设备的返回键
-export const BackAction = function () {
+export const backAction = function () {
     if (!this.state.linechart) {
-    // false则当前显示图表
+        // false则当前显示图表
         if (this.state.isPing) {
             // 显示图表有两种情况：ping结束和正在ping
             this.pressnum++;
@@ -73,12 +73,12 @@ export const BackAction = function () {
         }
     } else {
         BackHandler.exitApp();
-    // console.log(num);
+        // console.log(num);
     }
 };
 
 // 设置时间的点击事件
-export const SetReqTime = function () {
+export const setReqTime = function () {
     if (this.state.ifOverlayAble) {
         this.setState({
             OverlayAble: true,
@@ -88,25 +88,25 @@ export const SetReqTime = function () {
     Toast.message('请稍后设置!');
 };
 
-export const ReqTimeChange = function (newTime) {
+export const reqTimeChange = function (newTime) {
     this.setState({
         newReqTime: newTime,
     });
 };
 
-export const TextInputChangeOne = function (newText) {
+export const textInputChange1 = function (newText) {
     this.state.url = newText;
 };
 
-export const TextInputChangeTwo = function (newText) {
+export const textInputChange2 = function (newText) {
     this.state.url2 = newText;
 };
 
 // 验证输入的请求时间
-export const ConfirmRqTime = function () {
+export const confirmRqTime = function () {
     const t = this.state.newReqTime; // 先获取输入的请求时长
     if (t == 0) {
-    // 没有输入或输入为0时提示
+        // 没有输入或输入为0时提示
         Toast.message('请输入请求时间!');
         return;
     }
@@ -123,20 +123,21 @@ export const ConfirmRqTime = function () {
 };
 
 // 验证URL
-export const TestURL = function (url) {
+export const testURL = function (url) {
     let match = /http|https/;
     // /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
     // /^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
     return match.test(url);
 };
 
-export const SaveValue = function (url) {
-    store.get('local').then((res) => (Data.local = res.slice()));
+export const saveValue = function (url) {
+    store.get('local').then((res) => (data.local = res.slice()));
     /* 禁止重复存储，已有存储的话不存储*/
-    if (Data.local.indexOf(url) == -1) {
-        Data.local.unshift(url);
-        store.save('local', Data.local);
+    if (data.local.indexOf(url) == -1) {
+        data.local.unshift(url);
+        store.save('local', data.local);
     } else {
         return;
     }
 };
+

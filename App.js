@@ -1,21 +1,13 @@
 import React from 'react';
-import {View, Button, Text} from 'react-native';
+import {View, Button, Text, TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/view/Home';
-import {SetSpText, ScaleSizeH, ScaleSizeW} from './src/controller/Adaptation';
+import Setting from './src/view/Setting';
+import {setSpText} from './src/controller/Adaptation';
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
-
-
-function Setting() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Food Screen</Text>
-        </View>
-    );
-}
 
 function MyDrawer() {
     return (
@@ -26,14 +18,15 @@ function MyDrawer() {
                     backgroundColor: 'pink',
                     width: 240,
                 },
+                // 侧滑栏页面的图标
                 drawerIcon: ({ focused, color, size }) => {
                     if (route.name === 'Home') {
                         return (
-                            <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(52)}}>{'\ue50e'}</Text>
+                            <Text style={{fontFamily: 'iconfont', fontSize: setSpText(52)}}>{'\ue50e'}</Text>
                         );
                     } else if (route.name === 'Setting ') {
                         return (
-                            <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(62)}}>{'\ue6c1'}</Text>
+                            <Text style={{fontFamily: 'iconfont', fontSize: setSpText(62)}}>{'\ue6c1'}</Text>
                         );
                     }
                 },

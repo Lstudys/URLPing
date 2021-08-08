@@ -5,8 +5,8 @@ let screenH = Dimensions.get('window').height;
 let fontScale = PixelRatio.getFontScale();
 let pixelRatio = PixelRatio.get();
 // 高保真的宽度和高度
-const DesignWidth = 750.0;
-const DesignHeight = 1334.0;
+const designWidth = 750.0;
+const designHeight = 1334.0;
 
 // 根据dp获取屏幕的px
 let screenPxW = PixelRatio.getPixelSizeForLayoutSize(screenW);
@@ -17,9 +17,9 @@ let screenPxH = PixelRatio.getPixelSizeForLayoutSize(screenH);
   * @param size  px
   * @returns {Number} dp
   */
-export function SetSpText(size) {
-    var scaleWidth = screenW / DesignWidth;
-    var scaleHeight = screenH / DesignHeight;
+export function setSpText(size) {
+    var scaleWidth = screenW / designWidth;
+    var scaleHeight = screenH / designHeight;
     var scale = Math.min(scaleWidth, scaleHeight);
     size = Math.round(size * scale / fontScale + 0.5);
     return size;
@@ -30,8 +30,8 @@ export function SetSpText(size) {
   * @param size  px
   * @returns {Number} dp
   */
-export function ScaleSizeH(size) {
-    var scaleHeight = size * screenPxH / DesignHeight;
+export function scaleSizeH(size) {
+    var scaleHeight = size * screenPxH / designHeight;
     size = Math.round((scaleHeight / pixelRatio + 0.5));
     return size;
 }
@@ -41,8 +41,8 @@ export function ScaleSizeH(size) {
   * @param size  px
   * @returns {Number} dp
   */
-export function ScaleSizeW(size) {
-    var scaleWidth = size * screenPxW / DesignWidth;
+export function scaleSizeW(size) {
+    var scaleWidth = size * screenPxW / designWidth;
     size = Math.round((scaleWidth / pixelRatio + 0.5));
     return size;
 }
