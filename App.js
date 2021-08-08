@@ -3,7 +3,6 @@ import {View, Button, Text} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Ionicons } from 'react-native-vector-icons';
 import Home from './src/view/Home';
 import {SetSpText, ScaleSizeH, ScaleSizeW} from './src/controller/Adaptation';
 const Drawer = createDrawerNavigator();
@@ -38,12 +37,24 @@ function MyDrawer() {
                         );
                     }
                 },
-                tabBarInactiveTintColor: 'gray',
-                tabBarActiveTintColor: 'red',
             })}
         >
-            <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="Setting " component={StackDrawer} />
+            <Drawer.Screen name="Home" component={Home}
+                options={{
+                    drawerItemStyle: {
+                        top: 10,
+                        height: 50,
+                    },
+                }}
+            />
+            <Drawer.Screen name="Setting " component={StackDrawer}
+                options={{
+                    drawerItemStyle: {
+                        height:580,
+                        top: 535,
+                    },
+                }}
+            />
         </Drawer.Navigator>
     );
 }
