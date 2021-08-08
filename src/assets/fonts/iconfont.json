@@ -13,6 +13,13 @@
       "unicode_decimal": 59073
     },
     {
+      "icon_id": "14065884",
+      "name": "home",
+      "font_class": "xuanzhongshangcheng",
+      "unicode": "e50e",
+      "unicode_decimal": 58638
+    },
+    {
       "icon_id": "17701253",
       "name": "中英",
       "font_class": "zhongying",
@@ -32,6 +39,13 @@
       "font_class": "shijianshezhi",
       "unicode": "e602",
       "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "21073807",
+      "name": "菜单栏",
+      "font_class": "caidanlan",
+      "unicode": "e633",
+      "unicode_decimal": 58931
     },
     {
       "icon_id": "21192283",

@@ -6,18 +6,18 @@ stages:
 check:
    stage: -"check"
    script:
-      -echo "find 0 err"
+      echo "find 0 err"
    tags:
-      ["azurevmci"]
+      ["urlpingRunner"]
 test:
    stage: -"test"
    script:
-      -echo "test successful"
+      echo "test successful"
    tags:
-      ["azurevmci"]
+      ["urlpingRunner"]
 build:
    stage: -"build"
    script:
-      -echo "build the app"
+      echo "build the app"
    tags:
-      ["azurevmci"]
+      ["urlpingRunner"]

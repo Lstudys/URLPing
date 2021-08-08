@@ -7,10 +7,10 @@ import {BackHandler} from 'react-native';
 import Orientation from 'react-native-orientation';
 import {Toast} from 'teaset';
 import store from 'react-native-simple-store';
-import data from '../modal/data';
+import Data from '../modal/data';
 
 // 控制安卓设备的返回键
-export const backAction = function () {
+export const BackAction = function () {
     if (!this.state.linechart) {
     // false则当前显示图表
         if (this.state.isPing) {
@@ -78,7 +78,7 @@ export const backAction = function () {
 };
 
 // 设置时间的点击事件
-export const setReqTime = function () {
+export const SetReqTime = function () {
     if (this.state.ifOverlayAble) {
         this.setState({
             OverlayAble: true,
@@ -88,22 +88,22 @@ export const setReqTime = function () {
     Toast.message('请稍后设置!');
 };
 
-export const reqTimeChange = function (newTime) {
+export const ReqTimeChange = function (newTime) {
     this.setState({
         newReqTime: newTime,
     });
 };
 
-export const textInputChange1 = function (newText) {
+export const TextInputChangeOne = function (newText) {
     this.state.url = newText;
 };
 
-export const textInputChange2 = function (newText) {
+export const TextInputChangeTwo = function (newText) {
     this.state.url2 = newText;
 };
 
 // 验证输入的请求时间
-export const confirmRqTime = function () {
+export const ConfirmRqTime = function () {
     const t = this.state.newReqTime; // 先获取输入的请求时长
     if (t == 0) {
     // 没有输入或输入为0时提示
@@ -123,19 +123,19 @@ export const confirmRqTime = function () {
 };
 
 // 验证URL
-export const testURL = function (url) {
+export const TestURL = function (url) {
     let match = /http|https/;
     // /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
     // /^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
     return match.test(url);
 };
 
-export const saveValue = function (url) {
-    store.get('local').then((res) => (data.local = res.slice()));
+export const SaveValue = function (url) {
+    store.get('local').then((res) => (Data.local = res.slice()));
     /* 禁止重复存储，已有存储的话不存储*/
-    if (data.local.indexOf(url) == -1) {
-        data.local.unshift(url);
-        store.save('local', data.local);
+    if (Data.local.indexOf(url) == -1) {
+        Data.local.unshift(url);
+        store.save('local', Data.local);
     } else {
         return;
     }

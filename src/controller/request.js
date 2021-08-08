@@ -6,11 +6,11 @@
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
 // import Orientation from 'react-native-orientation';
-import {testURL} from './AppPageFunction';
+import {TestURL} from './AppPageFunction';
 
 // 向URL发送请求的函数
 export const sendRequest = function(){
-    if (testURL(this.state.url) || testURL(this.state.url2)) {
+    if (TestURL(this.state.url) || TestURL(this.state.url2)) {
         let myNetInfo;
         NetInfo.fetch().then((state) => {
             myNetInfo = state.isConnected;
