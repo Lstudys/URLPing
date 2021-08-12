@@ -10,7 +10,7 @@ import {Component} from 'react';
 import {Dimensions, StyleSheet, TextInput, View, Text, Button, TouchableOpacity, ScrollView, FlatList, processColor} from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {BackHandler} from 'react-native';
-import {SendRequest} from '../controller/Request';
+import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {ReqTimeChange, ConfirmRqTime, TextInputChange1, TextInputChange2, BackAction, SaveValue} from '../controller/AppPageFunction';
 import data from '../modal/data';
@@ -165,10 +165,11 @@ export default class home extends Component {
                     justifyItems: 'flex-start',
                     marginRight:8,
                 }}>
-                <Text style={{backgroundColor:'#e9f1f6', borderRadius:ScaleSizeH(12), fontSize: SetSpText(40),  margin:ScaleSizeH(5)}}>{item}</Text>
+                <Text style={{backgroundColor:'#e9f1f6', color:"#666", borderRadius:ScaleSizeH(12), fontSize: SetSpText(40),  margin:ScaleSizeH(5)}}>{item}</Text>
             </TouchableOpacity>
         );
     }
+
     next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2) {
         if (this.state.url != '' && this.state.url2 != ''){
             return {
@@ -264,6 +265,8 @@ export default class home extends Component {
             };
         }
     }
+
+    
     ifSecondPing= () => {
         if (this.state.url == '') {
             this.state.secondDataHeight = 140;
@@ -284,8 +287,8 @@ export default class home extends Component {
         }
         return this.state.linechart ? (
             <TouchableOpacity
-                style={{backgroundColor: '#1F2342', height: Height}}
-                activeOpacity={1.0}
+                style={{backgroundColor: '#f1f3f0', height: Height}}
+                activeOpacity={.9}
                 onPress={() => {
                     this.refs.input1.blur();
                     this.refs.input2.blur();
@@ -303,7 +306,7 @@ export default class home extends Component {
                     }}>
                     <View>
                         <View style={{flexDirection: 'row'}}>
-                            <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
+                            <View style={{flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 2}}>
                                 <TextInput
                                     defaultValue={this.state.defaultvalueOne}
                                     placeholderTextColor="#ccc" // 设置占位符颜色
@@ -314,7 +317,7 @@ export default class home extends Component {
                                         this.state.url = newText;
                                         this.state.defaultvalueOne = newText;
                                     }}
-                                    style={{width: Width / 1.25, fontSize: SetSpText(45)}}
+                                    style={{width: Width / 1.25, fontSize: SetSpText(35)}}
                                 />
                                 <TouchableOpacity
                                     style={{color: '#000000'}}
@@ -325,7 +328,7 @@ export default class home extends Component {
                                         this.state.defaultvalueOne = '';
                                         this.state.url = '';
                                     }}>
-                                    <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(55), top: ScaleSizeH(35) }}>{'\ue60f'}</Text>
+                                    <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(55), top: ScaleSizeH(20) }}>{'\ue60f'}</Text>
                                 </TouchableOpacity>
                             </View>
 
@@ -354,6 +357,7 @@ export default class home extends Component {
                                 keyExtractor={(item, index) => item + index}
                             />
                         </View>
+
                         <View style={styles.History}>
                             <ScrollView ref={(scroll) => (this._scroll = scroll)} onScroll={(e) => {}}>
                                 {data.local.map((item, index) => {
@@ -378,7 +382,7 @@ export default class home extends Component {
                                                         visible: true,
                                                     });
                                                 }}>
-                                                <Text style={styles.DeleteText}>{'\ue60f'}</Text>
+                                                <Text style={styles.DeleteText}>×</Text>
                                             </TouchableOpacity>
                                         </View>
                                     );
@@ -420,7 +424,7 @@ export default class home extends Component {
                                             this.state.defaultvalueTwo = '';
                                             this.state.url2 = '';
                                         }}>
-                                        <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(55), top: ScaleSizeH(35) }}>{'\ue60f'}</Text>
+                                        <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(55), top: ScaleSizeH(25) }}>{'\ue60f'}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <TouchableOpacity
@@ -436,7 +440,7 @@ export default class home extends Component {
                                         }
                                         store.get('local').then((res) => (data.local = res.slice()));
                                     }}>
-                                    <Text style={{fontFamily: 'iconfont', fontSize:  SetSpText(45), top:20 }}>{'\ue6d2'}</Text>
+                                    <Text style={{fontFamily: 'iconfont', fontSize:  SetSpText(45), top:10 }}>{'\ue6d2'}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -688,20 +692,22 @@ const styles = StyleSheet.create({
     HistoryTextBox: {
         height: ScaleSizeH(70),
         justifyContent: 'center',
-        borderRadius: 10,
+        borderRadius: 20,
         backgroundColor: '#F0F8FF',
         left:5,
+        paddingLeft:10,
+        marginTop:10
     },
     HistoryText: {
         fontSize: SetSpText(40),
-        color: 'black',
+        color: "#666",
     },
     Delete: {
         width: ScaleSizeW(90),
         height: ScaleSizeH(70),
         position: 'relative',
-        top: ScaleSizeH(-70),
-        left: ScaleSizeW(650),
+        top: ScaleSizeH(-85),
+        left: ScaleSizeW(640),
     },
     DeleteText: {
         fontFamily: 'iconfont',
