@@ -13,6 +13,20 @@
       "unicode_decimal": 59073
     },
     {
+      "icon_id": "13329793",
+      "name": "三明治 菜单",
+      "font_class": "sanmingzhicaidan",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "14065884",
+      "name": "home",
+      "font_class": "xuanzhongshangcheng",
+      "unicode": "e50e",
+      "unicode_decimal": 58638
+    },
+    {
       "icon_id": "17701253",
       "name": "中英",
       "font_class": "zhongying",
@@ -44,8 +58,8 @@
       "icon_id": "21611800",
       "name": "关于",
       "font_class": "guanyu",
-      "unicode": "e629",
-      "unicode_decimal": 58921
+      "unicode": "e62a",
+      "unicode_decimal": 58922
     }
   ]
 }
