@@ -1,32 +1,39 @@
 import React from 'react';
-import {View, Button, Text, TouchableOpacity} from 'react-native';
+import {Text} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/view/Home';
 import Setting from './src/view/Setting';
-import {setSpText} from './src/controller/Adaptation';
+import {SetSpText} from './src/controller/Adaptation';
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
+function About({ navigation }){
+    return (alert('hello'));
+}
 function MyDrawer() {
     return (
         <Drawer.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
                 drawerStyle: {
-                    backgroundColor: 'pink',
+                    backgroundColor: 'white',
                     width: 240,
                 },
                 // 侧滑栏页面的图标
                 drawerIcon: ({ focused, color, size }) => {
                     if (route.name === 'Home') {
                         return (
-                            <Text style={{fontFamily: 'iconfont', fontSize: setSpText(52)}}>{'\ue50e'}</Text>
+                            <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(52)}}>{'\ue50e'}</Text>
                         );
                     } else if (route.name === 'Setting ') {
                         return (
-                            <Text style={{fontFamily: 'iconfont', fontSize: setSpText(62)}}>{'\ue6c1'}</Text>
+                            <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(62)}}>{'\ue6c1'}</Text>
+                        );
+                    } else if (route.name === 'About') {
+                        return (
+                            <Text style={{fontFamily: 'iconfont', fontSize: SetSpText(62)}}>{'\ue62a'}</Text>
                         );
                     }
                 },
@@ -40,11 +47,21 @@ function MyDrawer() {
                     },
                 }}
             />
+            <Drawer.Screen name="About" component={About}
+                options={{
+                    drawerItemStyle: {
+                        top: 540,
+                        height:590,
+                    },
+                }}
+            />
             <Drawer.Screen name="Setting " component={StackDrawer}
                 options={{
                     drawerItemStyle: {
-                        height:580,
-                        top: 535,
+                        position:'absolute',
+                        height:50,
+                        width:220,
+                        top: 550,
                     },
                 }}
             />
@@ -58,8 +75,10 @@ function StackDrawer() {
         <Stack.Navigator
             screenOptions={{
                 headerShown: true,
+                headerTintColor: 'white',
+                headerStyle: { backgroundColor: '#232323' },
             }}>
-            <Stack.Screen name="Setting" component={Setting} />
+            <Stack.Screen name="Settings" component={Setting} />
         </Stack.Navigator>
     );
 }
