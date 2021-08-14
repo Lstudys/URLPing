@@ -1175,6 +1175,11 @@
   resolved "https://registry.npm.taobao.org/@react-native-community/eslint-plugin/download/@react-native-community/eslint-plugin-1.1.0.tgz"
   integrity sha1-5Csb7xLSQVQRUZ/VKOZLWTsTY9w=
 
+"@react-native-community/masked-view@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.nlark.com/@react-native-community/masked-view/download/@react-native-community/masked-view-0.1.11.tgz#2f4c6e10bee0786abff4604e39a37ded6f3980ce"
+  integrity sha1-L0xuEL7geGq/9GBOOaN97W85gM4=
+
 "@react-native-community/netinfo@^6.0.0":
   version "6.0.0"
   resolved "https://mirrors.huaweicloud.com/repository/npm/@react-native-community/netinfo/-/netinfo-6.0.0.tgz#2a4d7190b508dd0c2293656c9c1aa068f6f60a71"
@@ -1200,12 +1205,12 @@
     query-string "^7.0.0"
     react-is "^16.13.0"
 
-"@react-navigation/drawer@^6.0.1":
-  version "6.0.1"
-  resolved "https://mirrors.huaweicloud.com/repository/npm/@react-navigation/drawer/-/drawer-6.0.1.tgz#e01482c23262428d17a462faaca0d68651b24616"
-  integrity sha512-EDvIdj5xi2y0/yFe1oyT4vYlYHD6XaSqVqRBdxfwSt8fleJP1k6yXI7G6LsSIlGWHn92+VWjR3vZ4TUdlck+UA==
+"@react-navigation/drawer@^6.1.0":
+  version "6.1.3"
+  resolved "https://registry.nlark.com/@react-navigation/drawer/download/@react-navigation/drawer-6.1.3.tgz?cache=0&sync_timestamp=1628725551413&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40react-navigation%2Fdrawer%2Fdownload%2F%40react-navigation%2Fdrawer-6.1.3.tgz#02952c7cb7fc6d0dba2e86fba3a80f25baedba6a"
+  integrity sha1-ApUsfLf8bQ26Lob7o6gPJbrtumo=
   dependencies:
-    "@react-navigation/elements" "^1.0.1"
+    "@react-navigation/elements" "^1.0.4"
     color "^3.1.3"
     warn-once "^0.1.0"
 
@@ -1213,6 +1218,11 @@
   version "1.0.1"
   resolved "https://mirrors.huaweicloud.com/repository/npm/@react-navigation/elements/-/elements-1.0.1.tgz#effcdb59aa5cf64445ff2ca7f50ee35df484fa72"
   integrity sha512-KU6DPqmFmD4E+AwXOBzrqVBYG1Gd8HzPfbCk1PGzUjIiQOg6xv1pyfJ/d2x6aEOzxX5jtuNVCx6S553ZLkJP9Q==
+
+"@react-navigation/elements@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.nlark.com/@react-navigation/elements/download/@react-navigation/elements-1.0.4.tgz?cache=0&sync_timestamp=1628725633471&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40react-navigation%2Felements%2Fdownload%2F%40react-navigation%2Felements-1.0.4.tgz#7694473716ebb8b5d69523bc75924d81955e19a8"
+  integrity sha1-dpRHNxbruLXWlSO8dZJNgZVeGag=
 
 "@react-navigation/native-stack@^6.0.2":
   version "6.0.2"
@@ -1222,10 +1232,10 @@
     "@react-navigation/elements" "^1.0.1"
     warn-once "^0.1.0"
 
-"@react-navigation/native@^6.0.1":
-  version "6.0.1"
-  resolved "https://mirrors.huaweicloud.com/repository/npm/@react-navigation/native/-/native-6.0.1.tgz#1d8047b2b91b5adadb7f1d9b4f3499d9e16d36b3"
-  integrity sha512-hzp+c21hCrHWcvV78cTBWlabsZSgtaSkdzNc0GWum94MtjBEUTcgewxjEDKPwXyUwouEX/319jzrCusJ2Bzxog==
+"@react-navigation/native@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.nlark.com/@react-navigation/native/download/@react-navigation/native-6.0.2.tgz#6bdb3cfafb6a9cfb603c1555dd61faafca35b7c2"
+  integrity sha1-a9s8+vtqnPtgPBVV3WH6r8o1t8I=
   dependencies:
     "@react-navigation/core" "^6.0.1"
     escape-string-regexp "^4.0.0"
@@ -1237,6 +1247,15 @@
   integrity sha512-5ctB49rmtTRQuTSBVgqMsEzBUjPP2ByUzBjNivA7jmvk+PDCl4oZsiR8KAm/twhxe215GYThfi2vUWXKAg6EEQ==
   dependencies:
     nanoid "^3.1.23"
+
+"@react-navigation/stack@^6.0.6":
+  version "6.0.6"
+  resolved "https://registry.nlark.com/@react-navigation/stack/download/@react-navigation/stack-6.0.6.tgz#6dabf0e6a318b3b07a9d2b41490cf38319e32a20"
+  integrity sha1-bavw5qMYs7B6nStBSQzzgxnjKiA=
+  dependencies:
+    "@react-navigation/elements" "^1.0.4"
+    color "^3.1.3"
+    warn-once "^0.1.0"
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.2"
@@ -6330,8 +6349,8 @@ react-native-elements@^3.2.0:
 
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"
-  resolved "https://mirrors.huaweicloud.com/repository/npm/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"
-  integrity sha512-cBGMi1IEsIVMgoox4RvMx7V2r6bNKw0uR1Mu1o7NbuHS6BRSVLq0dP34l2ecnPlC+jpWd3le6Yg1nrdCjby2Mw==
+  resolved "https://registry.nlark.com/react-native-gesture-handler/download/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"
+  integrity sha1-lCu/KWO79J+nlZNgDunXtdqzz8A=
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     fbjs "^3.0.0"
@@ -6351,6 +6370,11 @@ react-native-legacy-components@^0.1.3:
     react-timer-mixin "^0.13.2"
     rebound "^0.0.13"
 
+react-native-linear-gradient@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.nlark.com/react-native-linear-gradient/download/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
+  integrity sha1-liFcvF7HoBJHogiQiIqnW4NNRKA=
+
 react-native-localize@^2.1.1:
   version "2.1.1"
   resolved "https://mirrors.huaweicloud.com/repository/npm/react-native-localize/-/react-native-localize-2.1.1.tgz#da8f8776991d2b748708c408db05152602cefb38"
@@ -6360,6 +6384,11 @@ react-native-orientation@^3.1.3:
   version "3.1.3"
   resolved "https://mirrors.huaweicloud.com/repository/npm/react-native-orientation/-/react-native-orientation-3.1.3.tgz#d45803841fe94b6cce9acbe904fd5ca191a3711e"
   integrity sha512-A0h0E+2f95X4avmhaBG1ZT8WDxBACA/q//JN2eF1E7kq8AJVxt5XDiavv+aSBkBlqFsfF3bIS+T/DB5mXmnxuA==
+
+react-native-radio-buttons@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/react-native-radio-buttons/download/react-native-radio-buttons-1.0.0.tgz#be828b85897f80ca66ad66ad7adedb6b1890ab9d"
+  integrity sha1-voKLhYl/gMpmrWatet7baxiQq50=
 
 react-native-ratings@^7.3.0:
   version "7.4.0"
@@ -6371,8 +6400,8 @@ react-native-ratings@^7.3.0:
 
 react-native-reanimated@^2.2.0:
   version "2.2.0"
-  resolved "https://mirrors.huaweicloud.com/repository/npm/react-native-reanimated/-/react-native-reanimated-2.2.0.tgz#a6412c56b4e591d1f00fac949f62d0c72c357c78"
-  integrity sha512-lOJDd+5w1gY6DHGXG2jD1dsjzQmXQ2699HUc3IztvI2WP4zUT+UAA+zSG+5JiBS5DUnTL8YhhkmUQmr1KNGO5w==
+  resolved "https://registry.nlark.com/react-native-reanimated/download/react-native-reanimated-2.2.0.tgz#a6412c56b4e591d1f00fac949f62d0c72c357c78"
+  integrity sha1-pkEsVrTlkdHwD6yUn2LQxyw1fHg=
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.10.4"
     fbjs "^3.0.0"
@@ -6381,13 +6410,13 @@ react-native-reanimated@^2.2.0:
 
 react-native-safe-area-context@^3.3.0:
   version "3.3.0"
-  resolved "https://mirrors.huaweicloud.com/repository/npm/react-native-safe-area-context/-/react-native-safe-area-context-3.3.0.tgz#6e0b45baa031589ec9c54f8359ace166a36aa5e5"
-  integrity sha512-IrCNx56LO9RJ75yCf2CSSO1ceLj3mvxTAF+HWnehaeRIfF4pIcIn3WEUlXulFiha641OKS5X0+1XZCbbQ7pITA==
+  resolved "https://registry.nlark.com/react-native-safe-area-context/download/react-native-safe-area-context-3.3.0.tgz#6e0b45baa031589ec9c54f8359ace166a36aa5e5"
+  integrity sha1-bgtFuqAxWJ7JxU+DWazhZqNqpeU=
 
 react-native-screens@^3.5.0:
   version "3.5.0"
-  resolved "https://mirrors.huaweicloud.com/repository/npm/react-native-screens/-/react-native-screens-3.5.0.tgz#c40be78dff8e2dff1b00ba8fa670b2e429e632d2"
-  integrity sha512-xew4x0YX0RaDduNYM4gZXkphPwGZIbbu9fTU85xOtT1tOUPm3OU4pFMiN6PF54haMCsaMQRvdOXvLicUVRiptA==
+  resolved "https://registry.nlark.com/react-native-screens/download/react-native-screens-3.5.0.tgz#c40be78dff8e2dff1b00ba8fa670b2e429e632d2"
+  integrity sha1-xAvnjf+OLf8bALqPpnCy5CnmMtI=
   dependencies:
     warn-once "^0.1.0"
 

@@ -11,23 +11,31 @@ import {TestURL} from './AppPageFunction';
 export const SendRequest = function(){
     if (TestURL(this.state.url) || TestURL(this.state.url2)) {
         let myNetInfo;
+        // alert("no")
         NetInfo.fetch().then((state) => {
             myNetInfo = state.isConnected;
+            // alert("r")
             if (!myNetInfo) {
                 Toast.message('网络未连接!');
+                alert("yes")
             } else  {
                 this.state.chart1 = false;
                 this.state.chart2 = false;
                 const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
+                
                 this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
                 this.state.chart1 = this.state.url ? true : false;
+
                 this.state.chart2 = this.state.url2 ? true : false;
+
                 this.setState({isPing: true});
+
                 this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
-                this.refs.input1.blur(); // 输入框失去焦点
-                this.refs.input2.blur();
+
+                
                 this.setState({backChart: false});
                 this.setState({linechart: false});// 设置状态以显示图表
+                // alert(this.state.linechart);
                 this.linechartDates = []; // 清空折线图的数据源数组
                 this.linechartDates2 = [];
                 this.sumReqTime = []; // 清空请求时间的数组

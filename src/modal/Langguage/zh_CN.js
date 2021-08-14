@@ -10,9 +10,13 @@ export default {
     inputtwo:'输入网址2',
     enter:'enter',
     ping:'PING',
+    settings:'设置',
+    about:'关于我们',
     status:'状态',
     return:'返回图表',
     max:'MAX',
     min:'MIN',
     avg:'AVG',
+    add:'新建',
+    start:'开始'
 };

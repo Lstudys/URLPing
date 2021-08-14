@@ -10,9 +10,13 @@ export default {
     inputtwo:'Enter URL 2',
     enter:'Enter',
     ping:'PING',
+    settings:'Settings',
+    about:'About',
     status:'Status',
     return:'Return to chart',
     max:'MAX',
     min:'MIN',
     avg:'AVG',
+    add:'Add',
+    start:'Start',
 };

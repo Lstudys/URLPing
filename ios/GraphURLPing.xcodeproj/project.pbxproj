@@ -33,6 +33,7 @@
 		4258856CF277415AB934CFFB /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38C0C1D57CE34E0EAB878BE6 /* SimpleLineIcons.ttf */; };
 		21901656757A4A98A8D5E654 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E52C606687E44C969DF60CC3 /* Zocial.ttf */; };
 		8B6C0626F7A34E6187288594 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8109307EC7334D5097F50B21 /* iconfont.ttf */; };
+		77C306AA2BC2415EAA9D1D23 /* iconfont1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C20D17E25DC43C79AB35E06 /* iconfont1.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		38C0C1D57CE34E0EAB878BE6 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		E52C606687E44C969DF60CC3 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		8109307EC7334D5097F50B21 /* iconfont.ttf */ = {isa = PBXFileReference; name = "iconfont.ttf"; path = "../src/assets/fonts/iconfont.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1C20D17E25DC43C79AB35E06 /* iconfont1.ttf */ = {isa = PBXFileReference; name = "iconfont1.ttf"; path = "../src/assets/fonts/iconfont1.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 				38C0C1D57CE34E0EAB878BE6 /* SimpleLineIcons.ttf */,
 				E52C606687E44C969DF60CC3 /* Zocial.ttf */,
 				8109307EC7334D5097F50B21 /* iconfont.ttf */,
+				1C20D17E25DC43C79AB35E06 /* iconfont1.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				4258856CF277415AB934CFFB /* SimpleLineIcons.ttf in Resources */,
 				21901656757A4A98A8D5E654 /* Zocial.ttf in Resources */,
 				8B6C0626F7A34E6187288594 /* iconfont.ttf in Resources */,
+				77C306AA2BC2415EAA9D1D23 /* iconfont1.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
