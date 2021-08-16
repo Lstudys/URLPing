@@ -93,9 +93,8 @@ class Index extends Component {
       FlatListIsRefreshing: false,
       checked: true,
       chartDisplay: false,
-      urlsWitch:true,
+      urlsWitch: true,
     };
-
   }
 
   pressnum = 0; // 表示安卓手机返回键按压次数，以控制返回上一界面
@@ -120,62 +119,76 @@ class Index extends Component {
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
-        /* 选择合适语言 */
-        store
-        .get('Language')
-        .then((res) => {
-          Data.userChoose = res;
-        })
-        .finally(() => {
-          if (Data.userChoose.length !== 0) {
-            // 首选用户设置记录
-            I18n.locale = Data.userChoose;
-          } else if (SystemLanguage) {
-            // 获取系统语言
-            I18n.locale = SystemLanguage;
-          } else {
-            I18n.locale = 'en'; // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
-          }
-          this.setState({
-            langvis: false,
-          });
-        });
-  
-      /* 获取历史记录数据 */
-      store.get('local').then((res) => (Data.local = res.slice()));
-      I18n.fallbacks = true;
-      // 加载语言包
-      I18n.translations = {zh, en};
-
-      for (let i = 0; i < Data.indexArr.length; i++) {
-        store.get(Data.indexArr[i]).then((res) => {
-          if (res == null) {
-            store.push(Data.indexArr[i], '');
-          }
-        });
-      }
-  
-      store.get(Data.indexIndex).then(
-        (res)=>{
-          if(res==null)
-          store.push(Data.indexIndex,1)
-        }
-      )
-
-      store
-      .get(Data.indexIndex)
+    /* 选择合适语言 */
+    store
+      .get('Language')
       .then((res) => {
-        Data.index = res
+        Data.userChoose = res;
+      })
+      .finally(() => {
+        if (Data.userChoose.length !== 0) {
+          // 首选用户设置记录
+          I18n.locale = Data.userChoose;
+        } else if (SystemLanguage) {
+          // 获取系统语言
+          I18n.locale = SystemLanguage;
+        } else {
+          I18n.locale = 'en'; // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+        }
+        this.setState({
+          langvis: false,
+        });
       });
 
-    store.get(Data.indexArr[Data.index - 1]).then((res) => {
-      const {urlsWitch}=this.state
-      Data.urls=res
-      this.setState({
-        urlsWitch:!urlsWitch
-      })
+    /* 获取历史记录数据 */
+    store.get('local').then((res) => (Data.local = res.slice()));
+    I18n.fallbacks = true;
+    // 加载语言包
+    I18n.translations = {zh, en};
+{
+    // for (let i = 0; i < Data.indexArr.length; i++) {
+    //   store.get(Data.indexArr[i]).then((res) => {
+    //     if (res == null) {
+    //       store.push(Data.indexArr[i], '');
+    //     }
+    //   });
+    // }
+}
+    store.get(Data.indexIndex).then((res) => {
+      if (res == null) store.save(Data.indexIndex, 0);
     });
 
+    store.get(Data.indexIndex).then((res) => {
+      Data.index = res;
+    });
+
+    store.get(Data.urlsIndex).then((res) => {
+      if (res == null) store.save(Data.urlsIndex, []);
+    });
+
+    store.get(Data.urlsIndex).then((res) => {
+      console.log(res);
+      const {urlsWitch} = this.state;
+      Data.urls = res;
+      this.setState({
+        urlsWitch: !urlsWitch
+      });
+    });
+
+    
+
+    
+    
+  
+{
+    // store.get(Data.indexArr[Data.index - 1]).then((res) => {
+    //   const {urlsWitch} = this.state;
+    //   Data.urls = res;
+    //   this.setState({
+    //     urlsWitch: !urlsWitch,
+    //   });
+    // });
+    }
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
@@ -308,7 +321,11 @@ class Index extends Component {
   // flatlist的渲染函数,item是数据，index是序列号
   // 渲染列表项
 
-  _renderItem = ({item, id, value}) => {
+  onChangeitemurl=(item)=>{
+
+  }
+
+  _renderItem = ({item}) => {
     return (
       <View style={styles.mainLine}>
         <View style={styles.lineId}>
@@ -319,17 +336,44 @@ class Index extends Component {
             }}>
             <Checkbox
               size="lg"
-              checked={this.state.checked}
-              onChange={(checked) => this.setState({checked})}
-            />
-            URL:
+              checked={Data.urls[parseInt(item.key)].mark}
+              onChange={(checked) => {
+                const {urlsWitch}=this.state;
+                Data.urls[parseInt(item.key)].mark=checked;
+                this.setState({
+                  urlsWitch:!urlsWitch
+                })
+                store.save(Data.urlsIndex,Data.urls);
+              }}
+            /> URL:
           </Text>
-          <TextInput style={{flex: 1, fontSize: 20}}></TextInput>
+          {/* Data.urls[item.id].url */}
+          <TextInput 
+          style={{flex: 1, fontSize: 20}} 
+          placeholder="请输入需要ping的网址"
+          value={Data.urls[parseInt(item.key)].url?Data.urls[parseInt(item.key)].url:''}
+          onChangeText={(value)=>{
+            // alert(parseInt(item.key))
+            Data.urls[parseInt(item.key)].url=value
+            const {urlsWitch}=this.state;
+            store.save(Data.urlsIndex,Data.urls);
+            this.setState({
+              urlsWitch:!urlsWitch
+            })
+            store.get(Data.urlsIndex).then(
+              res=>{
+                console.log(res);
+              }
+            )
+          }} // 文本变化事件 
+          ></TextInput>
         </View>
       </View>
     );
   };
-  // onChangeText={this.}
+
+   
+
   render() {
     if (this.state.url != '' || this.state.url2 != '') {
       const {
@@ -446,13 +490,14 @@ class Index extends Component {
             style={styles.HomeInputs}
             onPress={() => {
               const {urlsWitch} = this.state;
-              Data.urls=[{id: Data.index, url: 'https://'},...Data.urls]
-              
-              store.save(Data.indexArr[Data.index], Data.urls);
+              Data.urls = [...Data.urls,{key: Data.index.toString(), url: '', mark:false}];
+              console.log(Data.urls);
+              store.save(Data.urlsIndex,Data.urls);
+             // store.save(Data.indexArr[Data.index], Data.urls);
               Data.index++;
               store.save(Data.indexIndex, Data.index);
               this.setState({
-                urlsWitch:!urlsWitch
+                urlsWitch: !urlsWitch,
               });
             }}>
             {I18n.t('add')}
