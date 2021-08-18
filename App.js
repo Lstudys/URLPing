@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/view/Home';
 import Select from "./src/view/Select";
 import Setting from './src/view/Setting';
+import About from './src/view/About';
+
 
 
 
@@ -36,6 +38,8 @@ function Nav() {
       <Stack.Navigator headerMode="none" initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Select" component={Select} />
+        <Stack.Screen name="Setting" component={Setting} />
+        <Stack.Screen name="About" component={About} />
       </Stack.Navigator>
     </NavigationContainer>
   );

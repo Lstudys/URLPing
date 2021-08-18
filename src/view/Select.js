@@ -13,8 +13,8 @@ import {
   RefreshControl,
   TouchableHighlight,
   FlatList,
+  Image,
 } from 'react-native';
-import {Overlay} from 'react-native-elements';
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
@@ -54,8 +54,8 @@ class Index extends Component {
     this.state = {
       reqTime: 5, // 控制请求发送持续时间的state
       newReqTime: 0,
-      url: 'https://blog.csdn.net', // 用户输入的url
-      url2: 'https://bilibili.com',
+      url: '', // 用户输入的url
+      url2: '',
       OverlayAble: false, // 控制Overlay组件的显示
       linechart: true, // 用来控制图表的显示,true表示显示输入框，不显示图表
       ifOverlayAble: true, // 用来控制是否可以设置请求时间，当正在Ping时不能设置
@@ -95,31 +95,6 @@ class Index extends Component {
       chartDisplay: false,
       urlsWitch: true,
     };
-  }
-
-  pressnum = 0; // 表示安卓手机返回键按压次数，以控制返回上一界面
-  firstpress = 0; // 第一次按返回键的时间戟
-  maxTime = 0; // 最大时间
-  minTime = ''; // 最小时间
-  avgTime = 0; // 平均时间
-  n95 = ''; // 95%的数据
-  status1 = '';
-  sumReqTime = []; // 所有请求时间的数组，用来计算标准差
-  /**
-   * 下面是第二个图表的数据
-   */
-  maxTime2 = 0; // 最大时间
-  minTime2 = ''; // 最小时间
-  avgTime2 = 0; // 平均时间
-  n952 = ''; // 95%的数据
-  status2 = '';
-  sumReqTime2 = []; // 所有请求时间的数组，用来计算标准差
-
-  config = {};
-
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
-    /* 选择合适语言 */
     store
       .get('Language')
       .then((res) => {
@@ -145,15 +120,16 @@ class Index extends Component {
     I18n.fallbacks = true;
     // 加载语言包
     I18n.translations = {zh, en};
-{
-    // for (let i = 0; i < Data.indexArr.length; i++) {
-    //   store.get(Data.indexArr[i]).then((res) => {
-    //     if (res == null) {
-    //       store.push(Data.indexArr[i], '');
-    //     }
-    //   });
-    // }
-}
+    {
+      // for (let i = 0; i < Data.indexArr.length; i++) {
+      //   store.get(Data.indexArr[i]).then((res) => {
+      //     if (res == null) {
+      //       store.push(Data.indexArr[i], '');
+      //     }
+      //   });
+      // }
+    }
+
     store.get(Data.indexIndex).then((res) => {
       if (res == null) store.save(Data.indexIndex, 0);
     });
@@ -171,24 +147,83 @@ class Index extends Component {
       const {urlsWitch} = this.state;
       Data.urls = res;
       this.setState({
-        urlsWitch: !urlsWitch
+        urlsWitch: !urlsWitch,
       });
     });
 
-    
+    // for(let i=0;i<Data.urls.length;i++){
+    //   if(Data.urls[i].mark&&this.state.url==''){
+    //     this.state.url=Data.urls[i].url
+    //   }
+    // }
 
-    
-    
-  
-{
-    // store.get(Data.indexArr[Data.index - 1]).then((res) => {
-    //   const {urlsWitch} = this.state;
-    //   Data.urls = res;
-    //   this.setState({
-    //     urlsWitch: !urlsWitch,
-    //   });
-    // });
+    // for(let i=0;i<Data.urls.length;i++){
+    //   if(Data.urls[i].mark&&this.state.url2==''){
+    //     this.state.ur2=Data.urls[i].url
+    //   }
+    // }
+
+    let amount = 0,
+      urlsArr2 = ['', ''];
+    for (let i = 0; i < Data.urls.length; i++) {
+      if (Data.urls[i].mark == true) {
+        amount++;
+        if (amount == 1) urlsArr2[0] = Data.urls[i].url;
+        if (amount == 2) urlsArr2[1] = Data.urls[i].url;
+      }
     }
+
+    if (amount == 1) {
+      this.state.url = urlsArr2[0];
+      this.state.url2 = '';
+    }
+    if (amount == 2) {
+      this.state.url = urlsArr2[0];
+      this.state.url2 = urlsArr2[1];
+    }
+    if (amount == 0) {
+      this.state.url = '';
+      this.state.url2 = '';
+    }
+
+    console.log('232');
+    console.log(this.state.url);
+    console.log(this.state.url2);
+
+    {
+      // store.get(Data.indexArr[Data.index - 1]).then((res) => {
+      //   const {urlsWitch} = this.state;
+      //   Data.urls = res;
+      //   this.setState({
+      //     urlsWitch: !urlsWitch,
+      //   });
+      // });
+    }
+  }
+
+  pressnum = 0; // 表示安卓手机返回键按压次数，以控制返回上一界面
+  firstpress = 0; // 第一次按返回键的时间戟
+  maxTime = 0; // 最大时间
+  minTime = ''; // 最小时间
+  avgTime = 0; // 平均时间
+  n95 = ''; // 95%的数据
+  status1 = '';
+  sumReqTime = []; // 所有请求时间的数组，用来计算标准差
+  /**
+   * 下面是第二个图表的数据
+   */
+  maxTime2 = 0; // 最大时间
+  minTime2 = ''; // 最小时间
+  avgTime2 = 0; // 平均时间
+  n952 = ''; // 95%的数据
+  status2 = '';
+  sumReqTime2 = []; // 所有请求时间的数组，用来计算标准差
+
+  config = {};
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
+    /* 选择合适语言 */
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
@@ -321,9 +356,7 @@ class Index extends Component {
   // flatlist的渲染函数,item是数据，index是序列号
   // 渲染列表项
 
-  onChangeitemurl=(item)=>{
-
-  }
+  onChangeitemurl = (item) => {};
 
   _renderItem = ({item}) => {
     return (
@@ -336,43 +369,145 @@ class Index extends Component {
             }}>
             <Checkbox
               size="lg"
-              checked={Data.urls[parseInt(item.key)].mark}
+              checked={
+                Data.urls[parseInt(item.key)].mark
+                  ? Data.urls[parseInt(item.key)].mark
+                  : false
+              }
               onChange={(checked) => {
-                const {urlsWitch}=this.state;
-                Data.urls[parseInt(item.key)].mark=checked;
-                this.setState({
-                  urlsWitch:!urlsWitch
-                })
-                store.save(Data.urlsIndex,Data.urls);
+                console.log('循环之前');
+                console.log(this.state.url);
+                console.log(this.state.url2);
+                let amount = 0;
+                for (let i = 0; i < Data.urls.length; i++) {
+                  if (Data.urls[i].mark == true) {
+                    amount++;
+                    // if(amount==1) urlArr3[0]=Data.urls[i].url
+                    // if(amount==2) urlArr3[1]=Data.urls[i].url
+                  }
+                }
+
+                if (amount < 3) {
+                  if (
+                    Data.urls[parseInt(item.key)].mark == false &&
+                    amount == 0 &&
+                    checked == true
+                  ) {
+                    if (this.state.url == '')
+                      this.state.url = Data.urls[parseInt(item.key)].url;
+                    else if (this.state.url2 == '')
+                      this.state.url2 = Data.urls[parseInt(item.key)].url;
+                  } else if (
+                    Data.urls[parseInt(item.key)].mark == false &&
+                    amount == 1 &&
+                    checked == true
+                  ) {
+                    if (
+                      this.state.url == '' &&
+                      this.state.url2 != Data.urls[parseInt(item.key)].url
+                    )
+                      this.state.url = Data.urls[parseInt(item.key)].url;
+                    else if (
+                      this.state.url2 == '' &&
+                      this.state.url1 != Data.urls[parseInt(item.key)].url
+                    )
+                      this.state.url2 = Data.urls[parseInt(item.key)].url;
+                  } else if (
+                    Data.urls[parseInt(item.key)].mark == true &&
+                    amount == 2 &&
+                    checked == false
+                  ) {
+                    if (Data.urls[parseInt(item.key)].url == this.state.url)
+                      this.state.url = '';
+                    if (Data.urls[parseInt(item.key)].url == this.state.url2)
+                      this.state.url2 = '';
+                  } else if (
+                    Data.urls[parseInt(item.key)].mark == true &&
+                    amount == 1 &&
+                    checked == false
+                  ) {
+                    if (this.state.url == '') this.state.url2 = '';
+                    if (this.state.url2 == '') this.state.url = '';
+                  }
+
+                  console.log('循环之后');
+                  console.log(this.state.url);
+                  console.log(this.state.url2);
+
+                  Data.urls[parseInt(item.key)].mark = checked;
+                  store.save(Data.urlsIndex, Data.urls);
+
+                  const {urlsWitch} = this.state;
+                  this.setState({
+                    urlsWitch: !urlsWitch,
+                  });
+                } else {
+                  alert('暂时只能ping最多两个URL哦');
+                  Data.urls[parseInt(item.key)].mark = checked;
+                  store.save(Data.urlsIndex, Data.urls);
+                  const {urlsWitch} = this.state;
+                  this.setState({
+                    urlsWitch: !urlsWitch,
+                  });
+                }
               }}
-            /> URL:
+            />
+            URL:
           </Text>
           {/* Data.urls[item.id].url */}
-          <TextInput 
-          style={{flex: 1, fontSize: 20}} 
-          placeholder="请输入需要ping的网址"
-          value={Data.urls[parseInt(item.key)].url?Data.urls[parseInt(item.key)].url:''}
-          onChangeText={(value)=>{
-            // alert(parseInt(item.key))
-            Data.urls[parseInt(item.key)].url=value
-            const {urlsWitch}=this.state;
-            store.save(Data.urlsIndex,Data.urls);
-            this.setState({
-              urlsWitch:!urlsWitch
-            })
-            store.get(Data.urlsIndex).then(
-              res=>{
+          <TextInput
+            style={{flex: 1, fontSize: 20}}
+            placeholder="请输入需要ping的网址"
+            value={
+              Data.urls[parseInt(item.key)].url
+                ? Data.urls[parseInt(item.key)].url
+                : ''
+            }
+            onChangeText={(value) => {
+              // alert(parseInt(item.key))
+              if (value.substring(0, 7).toLowerCase() != 'http://')
+                value = 'http://' + value;
+              Data.urls[parseInt(item.key)].url = value;
+
+              const {urlsWitch} = this.state;
+              store.save(Data.urlsIndex, Data.urls);
+              this.setState({
+                urlsWitch: !urlsWitch,
+              });
+              store.get(Data.urlsIndex).then((res) => {
                 console.log(res);
-              }
-            )
-          }} // 文本变化事件 
+              });
+            }} // 文本变化事件
           ></TextInput>
+          <TouchableOpacity
+            onPress={() => {
+              Data.urls.splice(parseInt(item.key), 1);
+              console.log(Data.urls);
+              for (let i = 0; i < Data.urls.length; i++) {
+                if (Data.urls[i].key != i.toString()) {
+                  Data.urls[i].key = i.toString();
+                  item.key = i.toString();
+                }
+              }
+              Data.index = Data.urls.length;
+              store.save(Data.indexIndex, Data.index);
+              console.log('调序之后');
+              console.log(Data.urls);
+              store.save(Data.urlsIndex, Data.urls);
+              const {urlsWitch} = this.state;
+              this.setState({
+                urlsWitch: !urlsWitch,
+              });
+            }}>
+            <Image
+              style={styles.Delete}
+              source={require('../imgs/delete2.png')}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     );
   };
-
-   
 
   render() {
     if (this.state.url != '' || this.state.url2 != '') {
@@ -478,7 +613,7 @@ class Index extends Component {
         </View>
         <View
           style={{
-            backgroundColor: '#fff',
+            backgroundColor: '#f1f4ee',
             flexDirection: 'column-reverse',
             height: Height * 0.2,
           }}>
@@ -490,10 +625,13 @@ class Index extends Component {
             style={styles.HomeInputs}
             onPress={() => {
               const {urlsWitch} = this.state;
-              Data.urls = [...Data.urls,{key: Data.index.toString(), url: '', mark:false}];
+              Data.urls = [
+                ...Data.urls,
+                {key: Data.index.toString(), url: '', mark: false},
+              ];
               console.log(Data.urls);
-              store.save(Data.urlsIndex,Data.urls);
-             // store.save(Data.indexArr[Data.index], Data.urls);
+              store.save(Data.urlsIndex, Data.urls);
+              // store.save(Data.indexArr[Data.index], Data.urls);
               Data.index++;
               store.save(Data.indexIndex, Data.index);
               this.setState({
@@ -506,146 +644,244 @@ class Index extends Component {
       </View>
     ) : (
       <View style={styles.bottomStyle}>
-        <ScrollView>
-          <View style={[styles.bottomChartData, {marginBottom: 0}]}>
-            <View style={styles.bottomChartDataItem}>
-              <Text
+        <View style={styles.headerViewStyle}>
+          <NavigationBar
+            style={{backgroundColor: '#fffef4'}}
+            type="ios"
+            tintColor="#333"
+            title={
+              <View
                 style={{
-                  color: 'pink',
-                  fontSize: SetSpText(40),
-                  left: ScaleSizeW(40),
-                  position: 'absolute',
+                  flex: 1,
+                  paddingLeft: 4,
+                  paddingRight: 4,
+                  borderRadius: 60,
+                  alignItems: 'center',
                 }}>
-                MAX
-              </Text>
-              <Text
+                <Label
+                  style={{color: '#333333', fontSize: 20}}
+                  text=""
+                  style={styles.headerTextStyle}
+                />
+              </View>
+            }
+            leftView={
+              <View
                 style={{
-                  color: 'pink',
-                  fontSize: SetSpText(40),
-                  left: ScaleSizeW(220),
-                  position: 'absolute',
+                  flexDirection: 'row',
+                  marginTop: 10,
+                  marginLeft: 10,
                 }}>
-                MIN
-              </Text>
-              <Text
-                style={{
-                  color: 'pink',
-                  fontSize: SetSpText(40),
-                  left: ScaleSizeW(400),
-                  position: 'absolute',
-                }}>
-                AVG
-              </Text>
-              <Text
-                style={{
-                  color: 'pink',
-                  fontSize: SetSpText(40),
-                  left: ScaleSizeW(580),
-                  position: 'absolute',
-                }}>
-                N95
-              </Text>
+                <NavigationBar.IconButton
+                  icon={require('../imgs/back.png')}
+                  onPress={() => {
+                    let amount = 0,
+                      urlsArr2 = ['', ''];
+                    for (let i = 0; i < Data.urls.length; i++) {
+                      if (Data.urls[i].mark == true) {
+                        amount++;
+                        if (amount == 1) urlsArr2[0] = Data.urls[i].url;
+                        if (amount == 2) urlsArr2[1] = Data.urls[i].url;
+                      }
+                    }
+
+                    if (amount == 1) {
+                      this.state.url = urlsArr2[0];
+                      this.state.url2 = '';
+                    }
+                    if (amount == 2) {
+                      this.state.url = urlsArr2[0];
+                      this.state.url2 = urlsArr2[1];
+                    }
+                    if (amount == 0) {
+                      this.state.url = '';
+                      this.state.url2 = '';
+                    }
+
+                    console.log('232');
+                    console.log(this.state.url);
+                    console.log(this.state.url2);
+
+                    this.setState({
+                      linechart: true,
+                      isPing: false,
+                    });
+                    const {urlsWitch} = this.state;
+                    this.setState({
+                      urlsWitch: !urlsWitch,
+                    });
+                  }}
+                />
+              </View>
+            }
+            // rightView={
+            //   <View
+            //     style={{flexDirection: 'row', marginTop: 10, marginRight: 10}}>
+            //     <NavigationBar.IconButton
+            //       icon={require('../imgs/caozuo-quanbuxuan.png')}
+            //       onPress={this.deletitems}
+            //     />
+            //     <NavigationBar.IconButton
+            //       icon={require('../imgs/total_selection.png')}
+            //       onPress={this.addhandle}
+            //     />
+            //   </View>
+            // }
+          />
+        </View>
+        <ScrollView style={{height: Height}}>
+          <LineChart
+            width={Width}
+            height={Height * 0.7}
+            bottom={0}
+            data={this.config.data}
+            xAxis={this.config.xAxis}
+            style={styles.container}
+            marker={this.state.marker}
+            chartDescription={{text: ''}}
+            ref="chart"
+          />
+
+          <ScrollView>
+            <View
+              style={[
+                styles.bottomChartData,
+                {
+                  marginBottom: 30,
+                  marginTop: 15,
+                  borderTopWidth: 0.5,
+                  borderColor: '#666',
+                },
+              ]}>
+              <View style={styles.bottomChartDataItem}>
+                <Text
+                  style={{
+                    color: 'pink',
+                    fontSize: SetSpText(40),
+                    left: ScaleSizeW(40),
+                    position: 'absolute',
+                  }}>
+                  MAX
+                </Text>
+                <Text
+                  style={{
+                    color: 'pink',
+                    fontSize: SetSpText(40),
+                    left: ScaleSizeW(220),
+                    position: 'absolute',
+                  }}>
+                  MIN
+                </Text>
+                <Text
+                  style={{
+                    color: 'pink',
+                    fontSize: SetSpText(40),
+                    left: ScaleSizeW(400),
+                    position: 'absolute',
+                  }}>
+                  AVG
+                </Text>
+                <Text
+                  style={{
+                    color: 'pink',
+                    fontSize: SetSpText(40),
+                    left: ScaleSizeW(580),
+                    position: 'absolute',
+                  }}>
+                  N95
+                </Text>
+              </View>
+              {this.state.chart1 ? (
+                <View style={styles.bottomChartDataOne}>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(40),
+                      position: 'absolute',
+                    }}>
+                    {this.maxTime}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(220),
+                      position: 'absolute',
+                    }}>
+                    {this.minTime}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(400),
+                      position: 'absolute',
+                    }}>
+                    {this.avgTime.toFixed(0)}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(580),
+                      position: 'absolute',
+                    }}>
+                    {this.n95 ? `${this.n95.toFixed(0)}` : ''}
+                  </Text>
+                </View>
+              ) : (
+                <View />
+              )}
+              {this.state.chart2 ? (
+                <View style={styles.bottomChartDataTwo}>
+                  <Text
+                    style={{
+                      color: 'green',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(40),
+                      position: 'absolute',
+                    }}>
+                    {this.maxTime2}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'green',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(220),
+                      position: 'absolute',
+                    }}>
+                    {this.minTime2}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'green',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(400),
+                      position: 'absolute',
+                    }}>
+                    {this.avgTime2.toFixed(0)}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'green',
+                      fontSize: SetSpText(35),
+                      left: ScaleSizeW(580),
+                      position: 'absolute',
+                    }}>
+                    {this.n952 ? `${this.n952.toFixed(0)}` : ''}
+                  </Text>
+                </View>
+              ) : (
+                <View />
+              )}
             </View>
-            {this.state.chart1 ? (
-              <View style={styles.bottomChartDataOne}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(40),
-                    position: 'absolute',
-                  }}>
-                  {this.maxTime}
-                </Text>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(220),
-                    position: 'absolute',
-                  }}>
-                  {this.minTime}
-                </Text>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(400),
-                    position: 'absolute',
-                  }}>
-                  {this.avgTime.toFixed(0)}
-                </Text>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(580),
-                    position: 'absolute',
-                  }}>
-                  {this.n95 ? `${this.n95.toFixed(0)}` : ''}
-                </Text>
-              </View>
-            ) : (
-              <View />
-            )}
-            {this.state.chart2 ? (
-              <View style={styles.bottomChartDataTwo}>
-                <Text
-                  style={{
-                    color: 'green',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(40),
-                    position: 'absolute',
-                  }}>
-                  {this.maxTime2}
-                </Text>
-                <Text
-                  style={{
-                    color: 'green',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(220),
-                    position: 'absolute',
-                  }}>
-                  {this.minTime2}
-                </Text>
-                <Text
-                  style={{
-                    color: 'green',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(400),
-                    position: 'absolute',
-                  }}>
-                  {this.avgTime2.toFixed(0)}
-                </Text>
-                <Text
-                  style={{
-                    color: 'green',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(580),
-                    position: 'absolute',
-                  }}>
-                  {this.n952 ? `${this.n952.toFixed(0)}` : ''}
-                </Text>
-              </View>
-            ) : (
-              <View />
-            )}
-          </View>
-          {true ? (
-            <LineChart
-              width={Width}
-              height={Height * 0.9}
-              bottom={0}
-              data={this.config.data}
-              xAxis={this.config.xAxis}
-              style={styles.container}
-              marker={this.state.marker}
-              chartDescription={{text: ''}}
-              ref="chart"
-            />
-          ) : (
-            <View />
-          )}
+          </ScrollView>
+          <ScrollView
+            style={{
+              backgroundColor: '#f1f3f0',
+              height: Height * 0.4,
+            }}></ScrollView>
         </ScrollView>
       </View>
     );
@@ -657,7 +893,7 @@ export default Index;
 const styles = StyleSheet.create({
   bottomChartDataTwo: {
     width: Width,
-    height: ScaleSizeH(50),
+    height: ScaleSizeH(70),
     position: 'absolute',
     top: ScaleSizeH(100),
   },
@@ -679,7 +915,7 @@ const styles = StyleSheet.create({
     height: Height * 0.1,
   },
   bottomStyle: {
-    height: Height,
+    height: Height * 1.2,
     backgroundColor: '#ffffff',
   },
   container: {
@@ -749,11 +985,10 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   Delete: {
-    width: ScaleSizeW(90),
-    height: ScaleSizeH(70),
-    position: 'relative',
-    top: ScaleSizeH(-85),
-    left: ScaleSizeW(640),
+    width: ScaleSizeW(40),
+    height: ScaleSizeH(40),
+    top: ScaleSizeH(47),
+    left: ScaleSizeW(-5),
   },
   DeleteText: {
     fontFamily: 'iconfont',
@@ -848,11 +1083,11 @@ const styles = StyleSheet.create({
     fontSize: SetSpText(65),
     paddingTop: 5,
     marginTop: 10,
-    backgroundColor: '#fdc1ca',
+    backgroundColor: '#a4d1bb',
     alignSelf: 'center',
     textAlign: 'center',
     height: ScaleSizeH(100),
-    width: Width,
+    width: Width * 0.9,
     top: ScaleSizeH(90),
     borderRadius: 15,
   },
