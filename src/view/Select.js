@@ -985,10 +985,13 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   Delete: {
-    width: ScaleSizeW(40),
+    width: ScaleSizeW(46),
     height: ScaleSizeH(40),
-    top: ScaleSizeH(47),
-    left: ScaleSizeW(-5),
+    top: ScaleSizeH(42),
+    left: ScaleSizeW(-10),
+    borderRadius: Math.sqrt(
+      Math.pow(ScaleSizeW(46), 2) + Math.pow(ScaleSizeH(40), 2),
+    ),
   },
   DeleteText: {
     fontFamily: 'iconfont',
