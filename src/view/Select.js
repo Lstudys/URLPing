@@ -33,7 +33,12 @@ import {NavigationBar, Label, Checkbox} from 'teaset';
 import * as RNLocalize from 'react-native-localize';
 import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
-import {SetSpText, ScaleSizeH, ScaleSizeW} from '../controller/Adaptation';
+import {
+  SetSpText,
+  ScaleSizeH,
+  ScaleSizeW,
+  ScaleSizeR,
+} from '../controller/Adaptation';
 import {color} from 'react-native-reanimated';
 
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
@@ -93,7 +98,7 @@ class Index extends Component {
       FlatListIsRefreshing: false,
       checked: true,
       chartDisplay: false,
-      urlsWitch: true,
+      urlsWitch: true, //刷新页面
     };
     store
       .get('Language')
@@ -389,6 +394,7 @@ class Index extends Component {
 
                 if (amount < 3) {
                   if (
+                    //起初数据被勾选的数量为0 现在该项从未勾选到被勾选
                     Data.urls[parseInt(item.key)].mark == false &&
                     amount == 0 &&
                     checked == true
@@ -398,6 +404,7 @@ class Index extends Component {
                     else if (this.state.url2 == '')
                       this.state.url2 = Data.urls[parseInt(item.key)].url;
                   } else if (
+                    //起初数据被勾选的数量为1 现在该项从未勾选到被勾选
                     Data.urls[parseInt(item.key)].mark == false &&
                     amount == 1 &&
                     checked == true
@@ -413,6 +420,7 @@ class Index extends Component {
                     )
                       this.state.url2 = Data.urls[parseInt(item.key)].url;
                   } else if (
+                    //数据被勾选的数量为2 现在该项从勾选到未勾选
                     Data.urls[parseInt(item.key)].mark == true &&
                     amount == 2 &&
                     checked == false
@@ -422,6 +430,7 @@ class Index extends Component {
                     if (Data.urls[parseInt(item.key)].url == this.state.url2)
                       this.state.url2 = '';
                   } else if (
+                    //起初数据被勾选的数量为1 现在该项从勾选到未勾选
                     Data.urls[parseInt(item.key)].mark == true &&
                     amount == 1 &&
                     checked == false
@@ -436,7 +445,7 @@ class Index extends Component {
 
                   Data.urls[parseInt(item.key)].mark = checked;
                   store.save(Data.urlsIndex, Data.urls);
-
+                  //刷新页面
                   const {urlsWitch} = this.state;
                   this.setState({
                     urlsWitch: !urlsWitch,
@@ -465,8 +474,10 @@ class Index extends Component {
             }
             onChangeText={(value) => {
               // alert(parseInt(item.key))
-              if (value.substring(0, 7).toLowerCase() != 'http://')
-                value = 'http://' + value;
+              // if (value.substring(0, 7).toLowerCase() != 'http://') {}
+
+              //自动补全前缀
+              if (value.length <= 1) value = 'http://';
               Data.urls[parseInt(item.key)].url = value;
 
               const {urlsWitch} = this.state;
@@ -594,6 +605,7 @@ class Index extends Component {
               />
             </View>
             <FlatList
+              extraData={this.state}
               style={styles.scrollViewStyle}
               ref={(view) => {
                 this.myFlatList = view;
@@ -985,10 +997,14 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   Delete: {
-    width: ScaleSizeW(40),
+    width: ScaleSizeW(46),
     height: ScaleSizeH(40),
-    top: ScaleSizeH(47),
-    left: ScaleSizeW(-5),
+    top: ScaleSizeH(42),
+    left: ScaleSizeW(-10),
+    borderRadius: ScaleSizeR(ScaleSizeW(46), ScaleSizeH(40)),
+    // borderRadius: Math.sqrt(
+    //   Math.pow(ScaleSizeW(46), 2) + Math.pow(ScaleSizeH(40), 2),
+    // ),
   },
   DeleteText: {
     fontFamily: 'iconfont',

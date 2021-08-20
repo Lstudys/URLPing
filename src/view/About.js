@@ -25,7 +25,12 @@ import {NavigationBar, Label, Checkbox} from 'teaset';
 import * as RNLocalize from 'react-native-localize';
 import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
-import {SetSpText, ScaleSizeH, ScaleSizeW} from '../controller/Adaptation';
+import {
+  SetSpText,
+  ScaleSizeH,
+  ScaleSizeW,
+  ScaleSizeR,
+} from '../controller/Adaptation';
 import {color} from 'react-native-reanimated';
 
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
@@ -75,7 +80,7 @@ class Index extends Component {
       <View>
         <View
           style={{
-            height: 700,
+            height: ScaleSizeH(1200),
             backgroundColor: '#f1f3f0',
             alignItems: 'center',
             position: 'relative',
@@ -83,37 +88,79 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: 100,
+              top: ScaleSizeH(125),
               fontSize: 25,
               color: '#666',
               fontWeight: 'bold',
             }}>
+            开发单位:
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(200),
+              fontSize: 25,
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+<<<<<<< HEAD
             {I18n.t('developmentunit')}：{I18n.t('hDDevteam')}
+=======
+            河南大学网络中心实验室
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 200,
+              top: ScaleSizeH(350),
               fontSize: 20,
               color: '#666',
               fontWeight: 'bold',
             }}>
+            开发人员:
+>>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(400),
+              fontSize: 20,
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+<<<<<<< HEAD
             {I18n.t('developer')}
+=======
+            19级RN组、20级RN组部分人员
+>>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 300,
+              top: ScaleSizeH(500),
               fontSize: 20,
               color: '#666',
               fontWeight: 'bold',
             }}>
+<<<<<<< HEAD
             {I18n.t('versionupdatetime')}：2021/8/18
+=======
+            版本更新时间:
+>>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 400,
+              top: ScaleSizeH(550),
+              fontSize: 20,
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+            2021/8/18
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(700),
               fontSize: 20,
               color: '#666',
               fontWeight: 'bold',
@@ -123,22 +170,36 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: 500,
+              top: ScaleSizeH(800),
               fontSize: 20,
               color: '#666',
               fontWeight: 'bold',
             }}>
-            {I18n.t('pleasecontact')}
+            请联系:
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 600,
+              top: ScaleSizeH(1000),
               fontSize: 20,
               color: '#666',
               fontWeight: 'bold',
             }}>
-            QQ：×××××××××××
+<<<<<<< HEAD
+            {I18n.t('pleasecontact')}
+=======
+            QQ:×××××××××××
+>>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(1050),
+              fontSize: 20,
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+            QQ:×××××××××××
           </Text>
           {/* <View style={{position:"absolute",top:700}}> */}
         </View>
