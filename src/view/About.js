@@ -1,12 +1,6 @@
 import React from 'react';
 import {Component} from 'react';
-import {
-  Dimensions,
-  View,
-  Text,
-  Button,
-  processColor,
-} from 'react-native';
+import {Dimensions, View, Text, Button, processColor} from 'react-native';
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
@@ -89,69 +83,57 @@ class Index extends Component {
             style={{
               position: 'absolute',
               top: ScaleSizeH(125),
-              fontSize: 25,
+              fontSize: SetSpText(50),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            开发单位:
+            {I18n.t('developmentunit')}:
           </Text>
           <Text
             style={{
               position: 'absolute',
               top: ScaleSizeH(200),
-              fontSize: 25,
+              fontSize: SetSpText(50),
               color: '#666',
               fontWeight: 'bold',
             }}>
-<<<<<<< HEAD
-            {I18n.t('developmentunit')}：{I18n.t('hDDevteam')}
-=======
-            河南大学网络中心实验室
+            {I18n.t('hDDevteam')}
           </Text>
           <Text
             style={{
               position: 'absolute',
               top: ScaleSizeH(350),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            开发人员:
->>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
+            {I18n.t('developer')}:
           </Text>
           <Text
             style={{
               position: 'absolute',
               top: ScaleSizeH(400),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-<<<<<<< HEAD
-            {I18n.t('developer')}
-=======
-            19级RN组、20级RN组部分人员
->>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
+            {I18n.t('members')}
           </Text>
           <Text
             style={{
               position: 'absolute',
               top: ScaleSizeH(500),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-<<<<<<< HEAD
-            {I18n.t('versionupdatetime')}：2021/8/18
-=======
-            版本更新时间:
->>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
+            {I18n.t('versionupdatetime')}:
           </Text>
           <Text
             style={{
               position: 'absolute',
               top: ScaleSizeH(550),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
@@ -161,7 +143,7 @@ class Index extends Component {
             style={{
               position: 'absolute',
               top: ScaleSizeH(700),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
@@ -171,31 +153,27 @@ class Index extends Component {
             style={{
               position: 'absolute',
               top: ScaleSizeH(800),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            请联系:
+            {I18n.t('pleasecontact')}:
           </Text>
           <Text
             style={{
               position: 'absolute',
               top: ScaleSizeH(1000),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-<<<<<<< HEAD
-            {I18n.t('pleasecontact')}
-=======
             QQ:×××××××××××
->>>>>>> f11015428c408dc199c6f8131642d840dd8acfbc
           </Text>
           <Text
             style={{
               position: 'absolute',
               top: ScaleSizeH(1050),
-              fontSize: 20,
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>

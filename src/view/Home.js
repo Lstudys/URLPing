@@ -201,7 +201,6 @@ export default class home extends Component {
     }
   }
 
-
   render() {
     // if (this.state.url != '' || this.state.url2 != '') {
     //     if (this.state.ifTwoChartShow) {
@@ -212,7 +211,7 @@ export default class home extends Component {
     // if (this.state.ifTwoChartShow) {
     //     this.ifSecondPing();
     // }
-    
+
     return (
       <View>
         <StatusBar backgroundColor="transparent" translucent={true} />
@@ -227,7 +226,7 @@ export default class home extends Component {
           }}>
           {I18n.t('title')}
         </Text>
-        <View style={{marginTop: -20}}>
+        <View style={{marginTop: ScaleSizeH(-70)}}>
           {/* SendRequest.bind(this) */}
           {/* <TouchableOpacity
            activeOpacity='.2'
@@ -258,8 +257,8 @@ export default class home extends Component {
           <Text
             style={styles.HomeInputs}
             onPress={() => {
-              this.props.navigation.navigate('Setting',{
-                homeThis:this,
+              this.props.navigation.navigate('Setting', {
+                homeThis: this,
               });
             }}>
             {I18n.t('settings')}

@@ -62,13 +62,11 @@ export default class Setting extends Component {
     // LogBox.ignoreLogs([
     //   'Non-serializable values were found in the navigation state',
     //  ]);
-
   }
 
   setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
   };
-
 
   render() {
     const {modalVisible} = this.state;
@@ -175,7 +173,7 @@ export default class Setting extends Component {
             <Text
               style={{
                 fontSize: SetSpText(40),
-                top: ScaleSizeH(50),
+                top: ScaleSizeH(30),
                 left: ScaleSizeW(40),
                 color: '#666',
               }}>
@@ -183,8 +181,14 @@ export default class Setting extends Component {
             </Text>
           </TouchableOpacity>
           <Text
-            style={{color: '#666', top: ScaleSizeH(1), left: ScaleSizeW(40), marginBottom: 5}}>
-            {I18n.t('currentlanguage')} : {I18n.locale === 'zh'? '中文':'English' }
+            style={{
+              color: '#666',
+              top: ScaleSizeH(1),
+              left: ScaleSizeW(40),
+              marginBottom: 5,
+            }}>
+            {I18n.t('currentlanguage')} :{' '}
+            {I18n.locale === 'zh' ? '中文' : 'English'}
           </Text>
         </View>
         <View
@@ -197,7 +201,6 @@ export default class Setting extends Component {
             borderBottomWidth: 1,
             borderBottomColor: '#666',
           }}>
-
           <Modal
             animationType="fade"
             transparent={true}
@@ -205,50 +208,49 @@ export default class Setting extends Component {
             onRequestClose={() => {
               this.setModalVisible(!modalVisible);
             }}>
-            <TouchableWithoutFeedback 
-              style={{flex:1}}
+            <TouchableWithoutFeedback
+              style={{flex: 1}}
               onPress={() => {
                 this.setModalVisible(!modalVisible);
-                }}
-              >  
+              }}>
               <View style={{...styles.centeredView}}>
-                <TouchableWithoutFeedback 
-                  style={{flex:1}}
+                <TouchableWithoutFeedback
+                  style={{flex: 1}}
                   onPress={() => {
                     this.setModalVisible(modalVisible);
-                    }}
-                >
+                  }}>
                   <View style={styles.modalView}>
-                    <Text style={styles.modalTitle}>{I18n.t('requestinterval')}</Text>
-                    <View style={styles.flatlistContainer} >
+                    <Text style={styles.modalTitle}>
+                      {I18n.t('requestinterval')}
+                    </Text>
+                    <View style={styles.flatlistContainer}>
                       <FlatList
-                        data={[
-                          {key: '2'},
-                          {key: '5'},
-                          {key: '10'},
-                        ]}
-                        renderItem={({item}) => 
+                        data={[{key: '2'}, {key: '5'}, {key: '10'}]}
+                        renderItem={({item}) => (
                           <TouchableOpacity
                             style={styles.textcontainer}
                             onPress={() => {
                               this.setModalVisible(!modalVisible);
                               this.setState({reqTime: item.key});
-                              }}>
-                            <Text style={styles.textStyle}>{item.key + ' ms'}</Text>
-                          </TouchableOpacity>}
-                       />
-                      </View>                                     
+                            }}>
+                            <Text style={styles.textStyle}>
+                              {item.key + ' ms'}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      />
+                    </View>
                     <Text
-                    style={styles.modalCancel}
-                    onPress={() => {
-                      this.setModalVisible(!modalVisible);
-                    }}>
-                    {I18n.t('cancel')}
+                      style={styles.modalCancel}
+                      onPress={() => {
+                        this.setModalVisible(!modalVisible);
+                      }}>
+                      {I18n.t('cancel')}
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>
-              </View>   
-            </TouchableWithoutFeedback>   
+              </View>
+            </TouchableWithoutFeedback>
           </Modal>
 
           <Text
@@ -267,8 +269,8 @@ export default class Setting extends Component {
             }}>
             <Text
               style={{
-                fontSize: 20,
-                top: ScaleSizeH(-35),
+                fontSize: SetSpText(40),
+                top: ScaleSizeH(-34),
                 left: ScaleSizeW(20),
                 color: '#666',
               }}>
@@ -286,21 +288,21 @@ export default class Setting extends Component {
 }
 
 const styles = StyleSheet.create({
-//模态框样式代码
+  //模态框样式代码
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
     height: 200,
-    width:300,
+    width: 300,
     backgroundColor: '#666',
     shadowColor: '#666',
     shadowOffset: {
-        width: 0,
-        height: 2,
+      width: 0,
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -308,22 +310,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    top:-100,
+    top: -100,
   },
   modalTitle: {
     textAlign: 'center',
     fontSize: SetSpText(45),
     top: -20,
-    paddingLeft:20,
+    paddingLeft: 20,
     color: 'white',
   },
-  flatlistContainer:{
-    height:65,
-    width:260,
-    marginLeft:20,
+  flatlistContainer: {
+    height: 65,
+    width: 260,
+    marginLeft: 20,
   },
-  textcontainer:{
-    flex:1
+  textcontainer: {
+    flex: 1,
   },
   textStyle: {
     textAlign: 'center',
@@ -332,13 +334,13 @@ const styles = StyleSheet.create({
     color: 'white',
     left: -100,
   },
-  modalCancel:{
-    fontSize: 15, 
-    left: 230, 
-    top: 20, 
+  modalCancel: {
+    fontSize: 15,
+    left: 230,
+    top: 20,
     color: '#88b3ad',
   },
-//
+  //
 
   headerTextStyle: {
     paddingTop: 10,

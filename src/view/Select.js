@@ -369,7 +369,7 @@ class Index extends Component {
         <View style={styles.lineId}>
           <Text
             style={{
-              fontSize: 25,
+              fontSize: SetSpText(45),
               lineHeight: Height * 0.1,
             }}>
             <Checkbox
@@ -465,7 +465,7 @@ class Index extends Component {
           </Text>
           {/* Data.urls[item.id].url */}
           <TextInput
-            style={{flex: 1, fontSize: 20}}
+            style={{flex: 1, fontSize: SetSpText(40)}}
             placeholder="请输入需要ping的网址"
             value={
               Data.urls[parseInt(item.key)].url
