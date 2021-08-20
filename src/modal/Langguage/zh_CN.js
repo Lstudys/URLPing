@@ -2,8 +2,11 @@ export default {
     title: 'GraphUrlPing',
     setTime:'设置时间',
     about:'关于',
-    chooselanguage:'语言',
+    switchlanguage:'转换语言',
+    requestinterval:'请求间隔',
     currenttime:'当前请求时长',
+    currentlanguage:'当前语言',
+    cancel:'取消',
     timeinput:'输入请求时长',
     sure:'确定',
     inputone:'输入网址1',
@@ -18,5 +21,12 @@ export default {
     min:'MIN',
     avg:'AVG',
     add:'新建',
-    start:'开始'
+    start:'开始',
+    //About页面的中文显示
+    developmentunit:'开发单位',
+    hDDevteam:'河南大学网络中心实验室',
+    developer:'开发人员：19级、20级RN组部分人员',
+    versionupdatetime:'版本更新时间',
+    iftherearebugsduringuse:'使用过程中，如果出现bugs',
+    pleasecontact:'请联系',
 };

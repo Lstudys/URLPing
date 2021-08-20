@@ -2,18 +2,10 @@ import React from 'react';
 import {Component} from 'react';
 import {
   Dimensions,
-  StyleSheet,
-  TextInput,
   View,
   Text,
   Button,
-  TouchableOpacity,
-  ScrollView,
   processColor,
-  RefreshControl,
-  TouchableHighlight,
-  FlatList,
-  Image,
 } from 'react-native';
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
@@ -49,6 +41,35 @@ const Colors = [
   processColor('pink'),
 ];
 class Index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
+    };
+    store
+      .get('Language')
+      .then((res) => {
+        Data.userChoose = res;
+      })
+      .finally(() => {
+        if (Data.userChoose.length !== 0) {
+          // 首选用户设置记录
+          I18n.locale = Data.userChoose;
+        } else if (SystemLanguage) {
+          // 获取系统语言
+          I18n.locale = SystemLanguage;
+        } else {
+          I18n.locale = 'en'; // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+        }
+        this.setState({
+          langvis: false,
+        });
+      });
+    I18n.fallbacks = true;
+    // 加载语言包
+    I18n.translations = {zh, en};
+  }
+
   render() {
     return (
       <View>
@@ -67,7 +88,7 @@ class Index extends Component {
               color: '#666',
               fontWeight: 'bold',
             }}>
-            开发单位：河南大学网络中心实验室
+            {I18n.t('developmentunit')}：{I18n.t('hDDevteam')}
           </Text>
           <Text
             style={{
@@ -77,7 +98,7 @@ class Index extends Component {
               color: '#666',
               fontWeight: 'bold',
             }}>
-            开发人员：19级RN组、20级RN组部分人员
+            {I18n.t('developer')}
           </Text>
           <Text
             style={{
@@ -87,7 +108,7 @@ class Index extends Component {
               color: '#666',
               fontWeight: 'bold',
             }}>
-            版本更新时间：2021/8/18
+            {I18n.t('versionupdatetime')}：2021/8/18
           </Text>
           <Text
             style={{
@@ -97,7 +118,7 @@ class Index extends Component {
               color: '#666',
               fontWeight: 'bold',
             }}>
-            使用过程中，如果出现bugs
+            {I18n.t('iftherearebugsduringuse')}
           </Text>
           <Text
             style={{
@@ -107,7 +128,7 @@ class Index extends Component {
               color: '#666',
               fontWeight: 'bold',
             }}>
-            请联系：
+            {I18n.t('pleasecontact')}
           </Text>
           <Text
             style={{

@@ -201,6 +201,7 @@ export default class home extends Component {
     }
   }
 
+
   render() {
     // if (this.state.url != '' || this.state.url2 != '') {
     //     if (this.state.ifTwoChartShow) {
@@ -211,6 +212,7 @@ export default class home extends Component {
     // if (this.state.ifTwoChartShow) {
     //     this.ifSecondPing();
     // }
+    
     return (
       <View>
         <StatusBar backgroundColor="transparent" translucent={true} />
@@ -256,7 +258,9 @@ export default class home extends Component {
           <Text
             style={styles.HomeInputs}
             onPress={() => {
-              this.props.navigation.navigate('Setting');
+              this.props.navigation.navigate('Setting',{
+                homeThis:this,
+              });
             }}>
             {I18n.t('settings')}
           </Text>

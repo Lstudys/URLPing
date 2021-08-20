@@ -4,11 +4,13 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Alert,
   Modal,
   TouchableHighlight,
   StyleSheet,
   Dimensions,
+  FlatList,
+  TouchableWithoutFeedback,
+  LogBox,
 } from 'react-native';
 import Data from '../modal/data';
 import store from 'react-native-simple-store';
@@ -55,10 +57,19 @@ export default class Setting extends Component {
     I18n.fallbacks = true;
     // 加载语言包
     I18n.translations = {zh, en};
+
+    //设置可以忽略setting造成的WARN，
+    // LogBox.ignoreLogs([
+    //   'Non-serializable values were found in the navigation state',
+    //  ]);
+
   }
+
   setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
   };
+
+
   render() {
     const {modalVisible} = this.state;
     return (
@@ -125,7 +136,7 @@ export default class Setting extends Component {
         <View
           style={{
             width: 320,
-            height: 90,
+            height: 100,
             position: 'absolute',
             backgroundColor: '#f1f4ee',
             flex: 0,
@@ -157,6 +168,9 @@ export default class Setting extends Component {
                 store.save('Language', Data.userChoose);
                 this.setState({langvis: false});
               }
+              // 获得home页面的this并进行刷新，在这里写变换快，在componentWillUnmount中写会有一点延迟。
+              const homeThis = this.props.route.params.homeThis;
+              homeThis.setState({langvis: false});
             }}>
             <Text
               style={{
@@ -165,9 +179,13 @@ export default class Setting extends Component {
                 left: ScaleSizeW(40),
                 color: '#666',
               }}>
-              Switch language
+              {I18n.t('switchlanguage')}
             </Text>
           </TouchableOpacity>
+          <Text
+            style={{color: '#666', top: ScaleSizeH(1), left: ScaleSizeW(40), marginBottom: 5}}>
+            {I18n.t('currentlanguage')} : {I18n.locale === 'zh'? '中文':'English' }
+          </Text>
         </View>
         <View
           style={{
@@ -179,50 +197,60 @@ export default class Setting extends Component {
             borderBottomWidth: 1,
             borderBottomColor: '#666',
           }}>
+
           <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
               this.setModalVisible(!modalVisible);
             }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Request interval</Text>
-                <TouchableHighlight
-                  style={{...styles.openButton}}
+            <TouchableWithoutFeedback 
+              style={{flex:1}}
+              onPress={() => {
+                this.setModalVisible(!modalVisible);
+                }}
+              >  
+              <View style={{...styles.centeredView}}>
+                <TouchableWithoutFeedback 
+                  style={{flex:1}}
                   onPress={() => {
-                    this.setModalVisible(!modalVisible);
-                    this.setState({reqTime: 2});
-                  }}>
-                  <Text style={styles.textStyle}>2 ms</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  style={{...styles.openButton}}
-                  onPress={() => {
-                    this.setModalVisible(!modalVisible);
-                    this.setState({reqTime: 5});
-                  }}>
-                  <Text style={styles.textStyle}>5 ms</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  style={{...styles.openButton}}
-                  onPress={() => {
-                    this.setModalVisible(!modalVisible);
-                    this.setState({reqTime: 10});
-                  }}>
-                  <Text style={styles.textStyle}>10 ms</Text>
-                </TouchableHighlight>
-                <Text
-                  style={{fontSize: 15, left: 120, top: 20, color: '#88b3ad'}}
-                  onPress={() => {
-                    this.setModalVisible(!modalVisible);
-                  }}>
-                  CANCEL
-                </Text>
-              </View>
-            </View>
+                    this.setModalVisible(modalVisible);
+                    }}
+                >
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalTitle}>{I18n.t('requestinterval')}</Text>
+                    <View style={styles.flatlistContainer} >
+                      <FlatList
+                        data={[
+                          {key: '2'},
+                          {key: '5'},
+                          {key: '10'},
+                        ]}
+                        renderItem={({item}) => 
+                          <TouchableOpacity
+                            style={styles.textcontainer}
+                            onPress={() => {
+                              this.setModalVisible(!modalVisible);
+                              this.setState({reqTime: item.key});
+                              }}>
+                            <Text style={styles.textStyle}>{item.key + ' ms'}</Text>
+                          </TouchableOpacity>}
+                       />
+                      </View>                                     
+                    <Text
+                    style={styles.modalCancel}
+                    onPress={() => {
+                      this.setModalVisible(!modalVisible);
+                    }}>
+                    {I18n.t('cancel')}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>   
+            </TouchableWithoutFeedback>   
           </Modal>
+
           <Text
             style={{
               fontSize: SetSpText(35),
@@ -232,7 +260,7 @@ export default class Setting extends Component {
             }}>
             ADVANCED
           </Text>
-          <TouchableHighlight
+          <TouchableOpacity
             style={{padding: 10, width: 320, height: 40, top: 20}}
             onPress={() => {
               this.setModalVisible(true);
@@ -244,12 +272,12 @@ export default class Setting extends Component {
                 left: ScaleSizeW(20),
                 color: '#666',
               }}>
-              Request interval
+              {I18n.t('requestinterval')}
             </Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
           <Text
             style={{color: '#666', top: ScaleSizeH(10), left: ScaleSizeW(40)}}>
-            current time : {this.state.reqTime} ms
+            {I18n.t('currenttime')} : {this.state.reqTime} ms
           </Text>
         </View>
       </View>
@@ -258,47 +286,60 @@ export default class Setting extends Component {
 }
 
 const styles = StyleSheet.create({
+//模态框样式代码
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 12,
-    top: -100,
+    backgroundColor:'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
-    margin: 20,
+    height: 200,
+    width:300,
     backgroundColor: '#666',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
     shadowColor: '#666',
     shadowOffset: {
-      width: 0,
-      height: 2,
+        width: 0,
+        height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    top:-100,
   },
-  openButton: {
-    padding: 10,
-    width: 320,
-    height: 40,
+  modalTitle: {
+    textAlign: 'center',
+    fontSize: SetSpText(45),
     top: -20,
+    paddingLeft:20,
+    color: 'white',
+  },
+  flatlistContainer:{
+    height:65,
+    width:260,
+    marginLeft:20,
+  },
+  textcontainer:{
+    flex:1
   },
   textStyle: {
+    textAlign: 'center',
     fontSize: SetSpText(50),
-    color: 'white',
-    left: 50,
-  },
-  modalText: {
-    marginBottom: 15,
-    fontSize: SetSpText(45),
     position: 'relative',
-    top: -20,
-    left: -70,
     color: 'white',
+    left: -100,
   },
+  modalCancel:{
+    fontSize: 15, 
+    left: 230, 
+    top: 20, 
+    color: '#88b3ad',
+  },
+//
+
   headerTextStyle: {
     paddingTop: 10,
     fontWeight: 'bold',
