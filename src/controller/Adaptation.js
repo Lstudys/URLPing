@@ -13,36 +13,48 @@ let screenPxW = PixelRatio.getPixelSizeForLayoutSize(screenW);
 let screenPxH = PixelRatio.getPixelSizeForLayoutSize(screenH);
 
 /**
-  * 设置text
-  * @param size  px
-  * @returns {Number} dp
-  */
+ * 设置text
+ * @param size  px
+ * @returns {Number} dp
+ */
 export function SetSpText(size) {
-    var scaleWidth = screenW / DesignWidth;
-    var scaleHeight = screenH / DesignHeight;
-    var scale = Math.min(scaleWidth, scaleHeight);
-    size = Math.round(size * scale / fontScale + 0.5);
-    return size;
+  var scaleWidth = screenW / DesignWidth;
+  var scaleHeight = screenH / DesignHeight;
+  var scale = Math.min(scaleWidth, scaleHeight);
+  size = Math.round((size * scale) / fontScale + 0.5);
+  return size;
 }
 
 /**
-  * 设置高度
-  * @param size  px
-  * @returns {Number} dp
-  */
+ * 设置高度
+ * @param size  px
+ * @returns {Number} dp
+ */
 export function ScaleSizeH(size) {
-    var scaleHeight = size * screenPxH / DesignHeight;
-    size = Math.round((scaleHeight / pixelRatio + 0.5));
-    return size;
+  var scaleHeight = (size * screenPxH) / DesignHeight;
+  size = Math.round(scaleHeight / pixelRatio + 0.5);
+  return size;
 }
 
 /**
-  * 设置宽度
-  * @param size  px
-  * @returns {Number} dp
-  */
+ * 设置宽度
+ * @param size  px
+ * @returns {Number} dp
+ */
 export function ScaleSizeW(size) {
-    var scaleWidth = size * screenPxW / DesignWidth;
-    size = Math.round((scaleWidth / pixelRatio + 0.5));
-    return size;
+  var scaleWidth = (size * screenPxW) / DesignWidth;
+  size = Math.round(scaleWidth / pixelRatio + 0.5);
+  return size;
+}
+
+/**
+ * 设置图标圆角半径
+ * @param scaleWidth,scaleHeight
+ * @returns {Number} dp
+ */
+export function ScaleSizeR(scaleWidth, scaleHeight) {
+  var scaleR = Math.sqrt(
+    Math.pow(ScaleSizeW(scaleWidth), 2) + Math.pow(ScaleSizeH(scaleHeight), 2),
+  );
+  return scaleR;
 }

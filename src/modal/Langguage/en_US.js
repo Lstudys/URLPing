@@ -22,6 +22,17 @@ export default {
     input:'Please Enter URL',
     ok:"OK",
     delete:'Delete',
-    cancle:'Cancle',
+    cancel:'Cancel',
     toast1:'Input URL is null!',
+  switchlanguage: 'Switch Language',
+  requestinterval: 'Request Interval',
+  currentlanguage: 'current language',
+  //About页面的英文显示
+  developmentunit: 'Development Unit',
+  hDDevteam: 'HDDevTeam',
+  developer: 'Developer',
+  members: 'Some 19&20 RN Group Members',
+  versionupdatetime: 'Version Update Time',
+  iftherearebugsduringuse: 'If there are bugs during use',
+  pleasecontact: 'Please Contact',
 };

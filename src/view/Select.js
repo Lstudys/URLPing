@@ -35,7 +35,12 @@ import {NavigationBar, Label, Checkbox} from 'teaset';
 import * as RNLocalize from 'react-native-localize';
 import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
-import {SetSpText, ScaleSizeH, ScaleSizeW} from '../controller/Adaptation';
+import {
+  SetSpText,
+  ScaleSizeH,
+  ScaleSizeW,
+  ScaleSizeR,
+} from '../controller/Adaptation';
 import {color} from 'react-native-reanimated';
 import { ToastAndroid } from 'react-native';
 
@@ -97,7 +102,7 @@ class Index extends Component {
       FlatListIsRefreshing: false,
       checked: true,
       chartDisplay: false,
-      urlsWitch: true,
+      urlsWitch: true, //刷新页面
     };
     this.cancle_checked()
     store
@@ -387,9 +392,12 @@ class Index extends Component {
                 : ""
             }
             onChangeText={(value) => {
-              if (value.substring(0, 7).toLowerCase() != 'http://')
-                value = 'http://' + value;
+
+
+              //自动补全前缀
+              if (value.length <= 1) value = 'http://';
               Data.urls[parseInt(this.state.key)].url = value;
+
               const {urlsWitch} = this.state;
               store.save(Data.urlsIndex, Data.urls);
               this.setState({
@@ -424,7 +432,7 @@ class Index extends Component {
               this.overlay.close()
             }}></Button>
            </View>
-            <View style={{marginBottom:ScaleSizeW(40)}}><Button title={I18n.t('cancle')} color="#4D61B3" onPress={() => {
+            <View style={{marginBottom:ScaleSizeW(40)}}><Button title={I18n.t('cancel')} color="#4D61B3" onPress={() => {
             
               
               if(Data.urls[this.state.key].url=="http://"||Data.urls[this.state.key].url==""){
@@ -657,7 +665,9 @@ class Index extends Component {
                     urlsWitch: !urlsWitch,
                   });
                 }}>
-                      <Image source={require('../imgs/add.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45),marginLeft:ScaleSizeH(450)}}></Image>
+                  <View style={{width:ScaleSizeW(45),height:ScaleSizeH(45),marginLeft:ScaleSizeH(450)}}>
+                      <Image source={require('../imgs/add.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image>
+                      </View>
                     </TouchableOpacity>
                     
                   </View>
@@ -703,6 +713,7 @@ class Index extends Component {
               />
             </View>
             <FlatList
+              extraData={this.state}
               style={styles.scrollViewStyle}
               ref={(view) => {
                 this.myFlatList = view;
@@ -1110,10 +1121,14 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   Delete: {
-    width: ScaleSizeW(40),
+    width: ScaleSizeW(46),
     height: ScaleSizeH(40),
-    top: ScaleSizeH(47),
-    left: ScaleSizeW(-5),
+    top: ScaleSizeH(42),
+    left: ScaleSizeW(-10),
+    borderRadius: ScaleSizeR(ScaleSizeW(46), ScaleSizeH(40)),
+    // borderRadius: Math.sqrt(
+    //   Math.pow(ScaleSizeW(46), 2) + Math.pow(ScaleSizeH(40), 2),
+    // ),
   },
   DeleteText: {
     fontFamily: 'iconfont',

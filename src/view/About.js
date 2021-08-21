@@ -1,20 +1,6 @@
 import React from 'react';
 import {Component} from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  ScrollView,
-  processColor,
-  RefreshControl,
-  TouchableHighlight,
-  FlatList,
-  Image,
-} from 'react-native';
+import {Dimensions, View, Text, Button, processColor} from 'react-native';
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
@@ -33,7 +19,12 @@ import {NavigationBar, Label, Checkbox} from 'teaset';
 import * as RNLocalize from 'react-native-localize';
 import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
-import {SetSpText, ScaleSizeH, ScaleSizeW} from '../controller/Adaptation';
+import {
+  SetSpText,
+  ScaleSizeH,
+  ScaleSizeW,
+  ScaleSizeR,
+} from '../controller/Adaptation';
 import {color} from 'react-native-reanimated';
 
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
@@ -49,12 +40,41 @@ const Colors = [
   processColor('pink'),
 ];
 class Index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
+    };
+    store
+      .get('Language')
+      .then((res) => {
+        Data.userChoose = res;
+      })
+      .finally(() => {
+        if (Data.userChoose.length !== 0) {
+          // 首选用户设置记录
+          I18n.locale = Data.userChoose;
+        } else if (SystemLanguage) {
+          // 获取系统语言
+          I18n.locale = SystemLanguage;
+        } else {
+          I18n.locale = 'en'; // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+        }
+        this.setState({
+          langvis: false,
+        });
+      });
+    I18n.fallbacks = true;
+    // 加载语言包
+    I18n.translations = {zh, en};
+  }
+
   render() {
     return (
       <View>
         <View
           style={{
-            height: 700,
+            height: ScaleSizeH(1200),
             backgroundColor: '#f1f3f0',
             alignItems: 'center',
             position: 'relative',
@@ -62,62 +82,102 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: 100,
-              fontSize: 25,
+              top: ScaleSizeH(125),
+              fontSize: SetSpText(50),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            开发单位：河南大学网络中心实验室
+            {I18n.t('developmentunit')}:
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 200,
-              fontSize: 20,
+              top: ScaleSizeH(200),
+              fontSize: SetSpText(50),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            开发人员：19级RN组、20级RN组部分人员
+            {I18n.t('hDDevteam')}
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 300,
-              fontSize: 20,
+              top: ScaleSizeH(350),
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            版本更新时间：2021/8/18
+            {I18n.t('developer')}:
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 400,
-              fontSize: 20,
+              top: ScaleSizeH(400),
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            使用过程中，如果出现bugs
+            {I18n.t('members')}
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 500,
-              fontSize: 20,
+              top: ScaleSizeH(500),
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            请联系：
+            {I18n.t('versionupdatetime')}:
           </Text>
           <Text
             style={{
               position: 'absolute',
-              top: 600,
-              fontSize: 20,
+              top: ScaleSizeH(550),
+              fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
             }}>
-            QQ：×××××××××××
+            2021/8/18
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(700),
+              fontSize: SetSpText(40),
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+            {I18n.t('iftherearebugsduringuse')}
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(800),
+              fontSize: SetSpText(40),
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+            {I18n.t('pleasecontact')}:
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(1000),
+              fontSize: SetSpText(40),
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+            QQ:×××××××××××
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              top: ScaleSizeH(1050),
+              fontSize: SetSpText(40),
+              color: '#666',
+              fontWeight: 'bold',
+            }}>
+            QQ:×××××××××××
           </Text>
           {/* <View style={{position:"absolute",top:700}}> */}
         </View>

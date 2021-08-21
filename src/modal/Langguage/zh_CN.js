@@ -24,6 +24,17 @@ export default {
     input:'请输入URL',
     ok:"确定",
     delete:'删除',
-    cancle:'取消',
     toast1:'URL输入为空！',
+  switchlanguage: '转换语言',
+  requestinterval: '请求间隔',
+  currentlanguage: '当前语言',
+  cancel: '取消',
+  //About页面的中文显示
+  developmentunit: '开发单位',
+  hDDevteam: '河南大学网络中心实验室',
+  developer: '开发人员',
+  members: '19级、20级RN组部分人员',
+  versionupdatetime: '版本更新时间',
+  iftherearebugsduringuse: '使用过程中，如果出现bugs',
+  pleasecontact: '请联系',
 };
