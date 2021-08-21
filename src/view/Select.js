@@ -60,6 +60,7 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      judge:false,
       key:0,
       reqTime: 5, // 控制请求发送持续时间的state
       newReqTime: 0,
@@ -433,21 +434,15 @@ class Index extends Component {
             }}></Button>
            </View>
             <View style={{marginBottom:ScaleSizeW(40)}}><Button title={I18n.t('cancel')} color="#4D61B3" onPress={() => {
-            
-              
-              if(Data.urls[this.state.key].url=="http://"||Data.urls[this.state.key].url==""){
+            if(this.state.judge==true){
                 Data.urls[this.state.key].url=""
+                store.save(Data.urls[this.state.key].url,"")
                 this.setState((prevState) => ({FlatListIsRefreshing: true}));
                 setTimeout(() => {
                   this.setState((prevState) => ({FlatListIsRefreshing: false}));
-                }, 1000);}else{this.overlay.close()}
-              
-
-
-
-
-
-              this.overlay.close()
+                }, 1000);
+               this.overlay.close()
+              }else this.overlay.close()
             }}></Button></View>
                     </View>
             </Overlay>
@@ -566,10 +561,12 @@ class Index extends Component {
               urlsWitch: !urlsWitch,
             });
           }
-          //console.log(Data.urls)
+          console.log(Data.urls)
         }
       else Toast.message(I18n.t('toast1'));}}
           onLongPress={()=>{this.setState({key:item.key}) 
+          if(Data.urls[item.key].url){this.setState({judge:false})}
+          else{this.setState({judge:true})}
             //console.log(this.state.key) 
             this.overlay.show()}}>
             <Text style={{fontSize: SetSpText(50),lineHeight: Height * 0.1,marginLeft:ScaleSizeW(30)}} >{Data.urls[parseInt(item.key)].url?Data.urls[parseInt(item.key)].url:"URL为空"}</Text>
