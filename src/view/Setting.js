@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   StyleSheet,
   Dimensions,
+  BackHandler
 } from 'react-native';
 import Data from '../modal/data';
 import store from 'react-native-simple-store';
@@ -94,9 +95,11 @@ export default class Setting extends Component {
               leftView={
                 <View
                   style={{
+                    height:Height,
+                    width:Width,
                     flexDirection: 'row',
-                    marginTop: 10,
-                    marginLeft: 10,
+                    marginTop:50,
+                    marginLeft:0,
                   }}>
                   <NavigationBar.IconButton
                     icon={require('../imgs/back.png')}
@@ -125,7 +128,7 @@ export default class Setting extends Component {
         <View
           style={{
             width: 320,
-            height: 90,
+            height: 100,
             position: 'absolute',
             backgroundColor: '#f1f4ee',
             flex: 0,
@@ -168,6 +171,10 @@ export default class Setting extends Component {
               Switch language
             </Text>
           </TouchableOpacity>
+          <Text
+            style={{color: '#666', top: ScaleSizeH(0), left: ScaleSizeW(40)}}>
+            current language : {Data.userChoose}
+          </Text>
         </View>
         <View
           style={{
@@ -255,6 +262,8 @@ export default class Setting extends Component {
       </View>
     );
   }
+  
+
 }
 
 const styles = StyleSheet.create({

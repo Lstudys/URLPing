@@ -1,3 +1,5 @@
+import Input from "teaset/components/Input/Input";
+
 export default {
     title: 'GraphUrlPing',
     setTime:'设置时间',
@@ -18,5 +20,10 @@ export default {
     min:'MIN',
     avg:'AVG',
     add:'新建',
-    start:'开始'
+    start:'开始',
+    input:'请输入URL',
+    ok:"确定",
+    delete:'删除',
+    cancle:'取消',
+    toast1:'URL输入为空！',
 };

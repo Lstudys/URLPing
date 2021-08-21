@@ -19,4 +19,9 @@ export default {
     avg:'AVG',
     add:'Add',
     start:'Start',
+    input:'Please Enter URL',
+    ok:"OK",
+    delete:'Delete',
+    cancle:'Cancle',
+    toast1:'Input URL is null!',
 };

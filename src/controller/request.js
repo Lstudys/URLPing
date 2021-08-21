@@ -6,8 +6,8 @@
  import NetInfo from '@react-native-community/netinfo';
 import { registerCustomIconType } from 'react-native-elements';
  import {Toast} from 'teaset';
-import Data from '../modal/data';
  import {TestURL} from './AppPageFunction';
+
  // 向URL发送请求的函数
  export const SendRequest = function(){
     // console.log("循环之前");

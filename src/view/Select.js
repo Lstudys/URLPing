@@ -1,5 +1,6 @@
 import React from 'react';
 import {Component} from 'react';
+import {Toast} from 'teaset';
 import {
   Dimensions,
   StyleSheet,
@@ -14,6 +15,7 @@ import {
   TouchableHighlight,
   FlatList,
   Image,
+  Overlay,
 } from 'react-native';
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
@@ -35,6 +37,7 @@ import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
 import {SetSpText, ScaleSizeH, ScaleSizeW} from '../controller/Adaptation';
 import {color} from 'react-native-reanimated';
+import { ToastAndroid } from 'react-native';
 
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
 const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
@@ -52,6 +55,7 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      key:0,
       reqTime: 5, // 控制请求发送持续时间的state
       newReqTime: 0,
       url: '', // 用户输入的url
@@ -95,6 +99,7 @@ class Index extends Component {
       chartDisplay: false,
       urlsWitch: true,
     };
+    this.cancle_checked()
     store
       .get('Language')
       .then((res) => {
@@ -130,6 +135,8 @@ class Index extends Component {
       // }
     }
 
+
+
     store.get(Data.indexIndex).then((res) => {
       if (res == null) store.save(Data.indexIndex, 0);
     });
@@ -143,7 +150,7 @@ class Index extends Component {
     });
 
     store.get(Data.urlsIndex).then((res) => {
-      console.log(res);
+      //console.log(res);
       const {urlsWitch} = this.state;
       Data.urls = res;
       this.setState({
@@ -186,9 +193,9 @@ class Index extends Component {
       this.state.url2 = '';
     }
 
-    console.log('232');
-    console.log(this.state.url);
-    console.log(this.state.url2);
+    //console.log('232');
+    //console.log(this.state.url);
+    //console.log(this.state.url2);
 
     {
       // store.get(Data.indexArr[Data.index - 1]).then((res) => {
@@ -220,6 +227,7 @@ class Index extends Component {
   sumReqTime2 = []; // 所有请求时间的数组，用来计算标准差
 
   config = {};
+  
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
@@ -357,118 +365,31 @@ class Index extends Component {
   // 渲染列表项
 
   onChangeitemurl = (item) => {};
+  
 
-  _renderItem = ({item}) => {
+  _renderItem = ({item}) => {//console.log(item.key)
     return (
       <View style={styles.mainLine}>
-        <View style={styles.lineId}>
-          <Text
-            style={{
-              fontSize: 25,
-              lineHeight: Height * 0.1,
-            }}>
-            <Checkbox
-              size="lg"
-              checked={
-                Data.urls[parseInt(item.key)].mark
-                  ? Data.urls[parseInt(item.key)].mark
-                  : false
-              }
-              onChange={(checked) => {
-                console.log('循环之前');
-                console.log(this.state.url);
-                console.log(this.state.url2);
-                let amount = 0;
-                for (let i = 0; i < Data.urls.length; i++) {
-                  if (Data.urls[i].mark == true) {
-                    amount++;
-                    // if(amount==1) urlArr3[0]=Data.urls[i].url
-                    // if(amount==2) urlArr3[1]=Data.urls[i].url
-                  }
-                }
-
-                if (amount < 3) {
-                  if (
-                    Data.urls[parseInt(item.key)].mark == false &&
-                    amount == 0 &&
-                    checked == true
-                  ) {
-                    if (this.state.url == '')
-                      this.state.url = Data.urls[parseInt(item.key)].url;
-                    else if (this.state.url2 == '')
-                      this.state.url2 = Data.urls[parseInt(item.key)].url;
-                  } else if (
-                    Data.urls[parseInt(item.key)].mark == false &&
-                    amount == 1 &&
-                    checked == true
-                  ) {
-                    if (
-                      this.state.url == '' &&
-                      this.state.url2 != Data.urls[parseInt(item.key)].url
-                    )
-                      this.state.url = Data.urls[parseInt(item.key)].url;
-                    else if (
-                      this.state.url2 == '' &&
-                      this.state.url1 != Data.urls[parseInt(item.key)].url
-                    )
-                      this.state.url2 = Data.urls[parseInt(item.key)].url;
-                  } else if (
-                    Data.urls[parseInt(item.key)].mark == true &&
-                    amount == 2 &&
-                    checked == false
-                  ) {
-                    if (Data.urls[parseInt(item.key)].url == this.state.url)
-                      this.state.url = '';
-                    if (Data.urls[parseInt(item.key)].url == this.state.url2)
-                      this.state.url2 = '';
-                  } else if (
-                    Data.urls[parseInt(item.key)].mark == true &&
-                    amount == 1 &&
-                    checked == false
-                  ) {
-                    if (this.state.url == '') this.state.url2 = '';
-                    if (this.state.url2 == '') this.state.url = '';
-                  }
-
-                  console.log('循环之后');
-                  console.log(this.state.url);
-                  console.log(this.state.url2);
-
-                  Data.urls[parseInt(item.key)].mark = checked;
-                  store.save(Data.urlsIndex, Data.urls);
-
-                  const {urlsWitch} = this.state;
-                  this.setState({
-                    urlsWitch: !urlsWitch,
-                  });
-                } else {
-                  alert('暂时只能ping最多两个URL哦');
-                  Data.urls[parseInt(item.key)].mark = checked;
-                  store.save(Data.urlsIndex, Data.urls);
-                  const {urlsWitch} = this.state;
-                  this.setState({
-                    urlsWitch: !urlsWitch,
-                  });
-                }
-              }}
-            />
-            URL:
-          </Text>
-          {/* Data.urls[item.id].url */}
-          <TextInput
-            style={{flex: 1, fontSize: 20}}
-            placeholder="请输入需要ping的网址"
+        <View style={{paddingTop: ScaleSizeW(300)}}>
+            <Overlay
+                ref={ele => this.overlay = ele}
+                onShow={this.onOverlayShow}
+                onClose={this.onOverlayClose}
+                style={{justifyContent:"center"}}>
+                    <View style={{paddingTop:ScaleSizeH(50),backgroundColor:"white",paddingHorizontal:ScaleSizeW(20),borderRadius:20,marginHorizontal:ScaleSizeW(20),width:Width-ScaleSizeW(40),height:Height-ScaleSizeH(600),}}>
+                    <TouchableOpacity onPress={() => this.overlay.close()} style={{marginLeft:ScaleSizeH(500)}}><Image source={require('../imgs/delete.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image></TouchableOpacity>
+                    <TextInput
+            style={{flex: 1, fontSize: SetSpText(40)}}
+            placeholder={I18n.t('input')}
             value={
-              Data.urls[parseInt(item.key)].url
-                ? Data.urls[parseInt(item.key)].url
-                : ''
+              Data.urls[parseInt(this.state.key)].url
+                ? Data.urls[parseInt(this.state.key)].url
+                : ""
             }
             onChangeText={(value) => {
-              // alert(parseInt(item.key))
               if (value.substring(0, 7).toLowerCase() != 'http://')
                 value = 'http://' + value;
-              Data.urls[parseInt(item.key)].url = value;
-
+              Data.urls[parseInt(this.state.key)].url = value;
               const {urlsWitch} = this.state;
               store.save(Data.urlsIndex, Data.urls);
               this.setState({
@@ -479,37 +400,180 @@ class Index extends Component {
               });
             }} // 文本变化事件
           ></TextInput>
-          <TouchableOpacity
-            onPress={() => {
-              Data.urls.splice(parseInt(item.key), 1);
-              console.log(Data.urls);
+                        <View style={{marginBottom:ScaleSizeW(10)}}>
+            <Button title={I18n.t('ok')} color="#649758" style={{marginBottom:ScaleSizeW(10)}} onPress={() => {
+              this.overlay.close()
+            }}></Button>
+             </View>
+           <View style={{marginBottom:ScaleSizeW(10)}}><Button title={I18n.t('delete')} color="#BB445C" onPress={() => {
+              Data.urls.splice(parseInt(this.state.key), 1);
+              //console.log(Data.urls);
               for (let i = 0; i < Data.urls.length; i++) {
                 if (Data.urls[i].key != i.toString()) {
                   Data.urls[i].key = i.toString();
-                  item.key = i.toString();
+                  this.state.key = i.toString();
                 }
               }
               Data.index = Data.urls.length;
               store.save(Data.indexIndex, Data.index);
-              console.log('调序之后');
-              console.log(Data.urls);
               store.save(Data.urlsIndex, Data.urls);
               const {urlsWitch} = this.state;
               this.setState({
                 urlsWitch: !urlsWitch,
               });
-            }}>
-            <Image
-              style={styles.Delete}
-              source={require('../imgs/delete2.png')}
-            />
-          </TouchableOpacity>
+              this.overlay.close()
+            }}></Button>
+           </View>
+            <View style={{marginBottom:ScaleSizeW(40)}}><Button title={I18n.t('cancle')} color="#4D61B3" onPress={() => {
+            
+              
+              if(Data.urls[this.state.key].url=="http://"||Data.urls[this.state.key].url==""){
+                Data.urls[this.state.key].url=""
+                this.setState((prevState) => ({FlatListIsRefreshing: true}));
+                setTimeout(() => {
+                  this.setState((prevState) => ({FlatListIsRefreshing: false}));
+                }, 1000);}else{this.overlay.close()}
+              
+
+
+
+
+
+              this.overlay.close()
+            }}></Button></View>
+                    </View>
+            </Overlay>
+        </View>
+        <View style={styles.lineId}>
+        <View backgroundColor={Data.urls[parseInt(item.key)].mark?"#FFC0CB":"#FFFFFF"} style={{borderRadius:10}}>
+          <TouchableHighlight style={{borderRadius:10,height: Height * 0.1,width: Width - ScaleSizeW(70),flexDirection: 'row',}} 
+          underlayColor="#FFC0CB" onPress={()=>{
+            if(Data.urls[parseInt(item.key)].url){
+
+            //两次计算mark数，Goingbe是即将要变成的状态，删除复选框后其作为代替
+            let amounts = 0;
+            for (let i = 0; i < Data.urls.length; i++) {
+              if (Data.urls[i].mark == true) {
+                amounts++;
+                // if(amount==1) urlArr3[0]=Data.urls[i].url
+                // if(amount==2) urlArr3[1]=Data.urls[i].url
+              }
+            }
+          let GoingBe=!Data.urls[parseInt(item.key)].mark 
+          if(amounts<3){
+
+          
+
+            if (
+              Data.urls[parseInt(item.key)].mark == false &&
+              amounts == 0&&
+              GoingBe==true
+            ) {
+              if (this.state.url == '')
+                this.state.url = Data.urls[parseInt(item.key)].url;
+              else if (this.state.url2 == '')
+                this.state.url2 = Data.urls[parseInt(item.key)].url;
+                //console.log("1")
+            } 
+            
+            
+            
+            
+            else if (
+              Data.urls[parseInt(item.key)].mark == false &&
+              amounts == 1 &&
+              GoingBe==true
+              
+            ) {
+              if (
+                this.state.url == '' &&
+                this.state.url2 != Data.urls[parseInt(item.key)].url
+              )
+                this.state.url = Data.urls[parseInt(item.key)].url;
+              else if (
+                this.state.url2 == '' &&
+                this.state.url != Data.urls[parseInt(item.key)].url
+              )
+                this.state.url2 = Data.urls[parseInt(item.key)].url;
+                //console.log("2")
+            } 
+            
+            
+            
+            else if (
+              Data.urls[parseInt(item.key)].mark == true &&
+              amounts == 2 &&
+              GoingBe==false
+            
+            ) {
+              if (Data.urls[parseInt(item.key)].url == this.state.url)
+                this.state.url = '';
+              if (Data.urls[parseInt(item.key)].url == this.state.url2)
+                this.state.url2 = '';
+                //console.log("3")
+            } 
+            
+            
+            else if (
+              Data.urls[parseInt(item.key)].mark == true &&
+              amounts == 1 &&
+              GoingBe==false
+             
+            ) {
+              if (this.state.url == '') this.state.url2 = '';
+              if (this.state.url2 == '') this.state.url = '';
+              //console.log("4")
+            } 
+            
+            //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;
+            //console.log("hhh"+Data.urls[parseInt(item.key)].mark)
+            store.save(Data.urlsIndex, Data.urls);
+
+            const {urlsWitch} = this.state;
+            this.setState({
+              urlsWitch: !urlsWitch,
+            });}
+   
+           
+          Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
+        
+        
+      
+          let amount = 0;
+            for (let i = 0; i < Data.urls.length; i++) {
+              if (Data.urls[i].mark == true) {
+                amount++;
+                // if(amount==1) urlArr3[0]=Data.urls[i].url
+                // if(amount==2) urlArr3[1]=Data.urls[i].url
+              }
+            }
+          
+          if(amount>=3) {
+            alert('暂时只能ping最多两个URL哦');
+            Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
+            //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;//22222
+            store.save(Data.urlsIndex, Data.urls);
+            const {urlsWitch} = this.state;
+            this.setState({
+              urlsWitch: !urlsWitch,
+            });
+          }
+          //console.log(Data.urls)
+        }
+      else Toast.message(I18n.t('toast1'));}}
+          onLongPress={()=>{this.setState({key:item.key}) 
+            //console.log(this.state.key) 
+            this.overlay.show()}}>
+            <Text style={{fontSize: SetSpText(50),lineHeight: Height * 0.1,marginLeft:ScaleSizeW(30)}} >{Data.urls[parseInt(item.key)].url?Data.urls[parseInt(item.key)].url:"URL为空"}</Text>
+          </TouchableHighlight>
+          </View>
         </View>
       </View>
     );
   };
 
   render() {
+    //this.cancle_checked()
     if (this.state.url != '' || this.state.url2 != '') {
       const {
         values,
@@ -567,16 +631,37 @@ class Index extends Component {
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginTop: 10,
-                      marginLeft: 10,
+                      marginTop:ScaleSizeH(0),
+                      marginLeft: ScaleSizeW(15),
                     }}>
                     <NavigationBar.IconButton
                       icon={require('../imgs/back.png')}
                       onPress={() => {
                         this.props.navigation.navigate('Home');
+                        
                       }}
                     />
+                    
+                    <TouchableOpacity onPress={() => {
+                  const {urlsWitch} = this.state;
+                  Data.urls = [
+                    ...Data.urls,
+                    {key: Data.index.toString(), url: '', mark: false},
+                  ];
+                  //console.log(Data.urls);
+                  store.save(Data.urlsIndex, Data.urls);
+                  // store.save(Data.indexArr[Data.index], Data.urls);
+                  Data.index++;
+                  store.save(Data.indexIndex, Data.index);
+                  this.setState({
+                    urlsWitch: !urlsWitch,
+                  });
+                }}>
+                      <Image source={require('../imgs/add.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45),marginLeft:ScaleSizeH(450)}}></Image>
+                    </TouchableOpacity>
+                    
                   </View>
+                  
                 }
                 // rightView={
                 //   <View
@@ -591,6 +676,30 @@ class Index extends Component {
                 //     />
                 //   </View>
                 // }
+
+
+                /*<Text
+                style={{flexDirection: 'row',
+                marginTop: 5,
+                marginLeft:280}}
+                onPress={() => {
+                  const {urlsWitch} = this.state;
+                  Data.urls = [
+                    ...Data.urls,
+                    {key: Data.index.toString(), url: '', mark: false},
+                  ];
+                  console.log(Data.urls);
+                  store.save(Data.urlsIndex, Data.urls);
+                  // store.save(Data.indexArr[Data.index], Data.urls);
+                  Data.index++;
+                  store.save(Data.indexIndex, Data.index);
+                  this.setState({
+                    urlsWitch: !urlsWitch,
+                  });
+                }}>
+                {I18n.t('add')}
+              </Text>*/
+
               />
             </View>
             <FlatList
@@ -621,26 +730,26 @@ class Index extends Component {
             {I18n.t('start')}
           </Text>
 
-          <Text
-            style={styles.HomeInputs}
-            onPress={() => {
-              const {urlsWitch} = this.state;
-              Data.urls = [
-                ...Data.urls,
-                {key: Data.index.toString(), url: '', mark: false},
-              ];
-              console.log(Data.urls);
-              store.save(Data.urlsIndex, Data.urls);
-              // store.save(Data.indexArr[Data.index], Data.urls);
-              Data.index++;
-              store.save(Data.indexIndex, Data.index);
-              this.setState({
-                urlsWitch: !urlsWitch,
-              });
-            }}>
-            {I18n.t('add')}
-          </Text>
         </View>
+
+        
+        {/*<View style={{paddingTop: 200}}>
+            <Overlay
+                // ref for the overlay
+                ref={ele => this.overlay = ele}
+                // callback function when the Overlay shown
+                onShow={this.onOverlayShow}
+                // callback function when the Overlay closed
+                onClose={this.onOverlayClose}
+                // style of the Overlay, same as View component
+                style={{justifyContent:"center"}}>
+                    <View style={{paddingTop:20,backgroundColor:"white",paddingHorizontal:10,borderRadius:20,marginHorizontal:10,width:Width-20,height:Height-350,}}>
+                    <TouchableOpacity onPress={() => this.overlay.close()} style={{marginLeft:320}}><Image source={require('../imgs/delete.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image></TouchableOpacity>
+                        <TextInput placeholder="请输入URL" style={{borderStyle:"solid",borderWidth:1,borderRadius:10,marginTop:150}}></TextInput>
+                        <View><Button title='删除' color="#FF0033" onPress={()=>{let tkey=this.state.key}}></Button></View>
+                    </View>
+            </Overlay>
+        </View>*/}
       </View>
     ) : (
       <View style={styles.bottomStyle}>
@@ -675,6 +784,7 @@ class Index extends Component {
                 <NavigationBar.IconButton
                   icon={require('../imgs/back.png')}
                   onPress={() => {
+                    this.cancle_checked()
                     let amount = 0,
                       urlsArr2 = ['', ''];
                     for (let i = 0; i < Data.urls.length; i++) {
@@ -698,9 +808,9 @@ class Index extends Component {
                       this.state.url2 = '';
                     }
 
-                    console.log('232');
-                    console.log(this.state.url);
-                    console.log(this.state.url2);
+                    //console.log('232');
+                    //console.log(this.state.url);
+                    //console.log(this.state.url2);
 
                     this.setState({
                       linechart: true,
@@ -886,6 +996,21 @@ class Index extends Component {
       </View>
     );
   }
+ cancle_checked (){
+   let i=0
+  for(i;i<Data.urls.length;i++){
+    if(Data.urls[i].mark==true){
+      Data.urls[i].mark=false
+      store.save(Data.urlsIndex, Data.urls);
+
+     /*const {urlsWitch} = this.state;
+      this.setState({
+      urlsWitch: !urlsWitch,
+      })*/
+    }
+  }
+}
+
 }
 
 export default Index;
@@ -1019,12 +1144,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   headerViewStyle: {
-    height: 80,
+    height: ScaleSizeH(125),
     width: Width * 0.99,
     backgroundColor: '#fffef4',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 40,
+    backgroundColor:"black"
   },
   headerTextStyle: {
     paddingTop: 10,
@@ -1075,7 +1201,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     lineHeight: Height * 0.1,
     alignSelf: 'center',
-    paddingLeft: 20,
+    //paddingLeft: 20,
     flexDirection: 'row',
   },
   HomeInputs: {

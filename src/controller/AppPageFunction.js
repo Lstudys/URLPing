@@ -6,19 +6,27 @@
  import {BackHandler} from 'react-native';
  import Orientation from 'react-native-orientation';
  import {Toast} from 'teaset';
+ import {navigation} from '@react-navigation/stack'
  import store from 'react-native-simple-store';
  import data from '../modal/data';
+
  
  // 控制安卓设备的返回键
  export const BackAction = function () {
      if (!this.state.linechart) {
+        
          // false则当前显示图表
          if (this.state.isPing) {
              // 显示图表有两种情况：ping结束和正在ping
              this.pressnum++;
              if (this.pressnum == 1) {
                  this.firstpress = new Date().valueOf();
-                 Toast.message('再按一次取消Ping');
+                 //data.urls[0].mark=false
+                 //Toast.message("时阿大撒大撒"+data.urls[0].mark);
+                 for(let i=0;i<data.urls.length;i++){
+                    data.urls[i].mark=false
+                }
+                Toast.message('再按一次取消Ping');
                  return true;
              } else {
                  if (this.firstpress + 2000 > new Date().valueOf()) {
@@ -60,19 +68,25 @@
                  } else {
                      this.pressnum = 1;
                      this.firstpress = new Date().valueOf();
+                     for(let i=0;i<data.urls.length;i++){
+                        data.urls[i].mark=false
+                    }
                      Toast.message('再按一次取消Ping');
+                     //Toast.message("时阿大撒大撒"+data.urls[0].mark);
                      return true;
                  }
              }
-         } else {
+            } else {
              Orientation.lockToPortrait();
              this.setState({
                  linechart: true,
              });
+        
              return true;
          }
      } else {
-         BackHandler.exitApp();
+         if(this.state.linechart){}
+         else{BackHandler.exitApp();}
          // console.log(num);
      }
  };
