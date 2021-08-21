@@ -378,211 +378,187 @@ class Index extends Component {
     return (
       <View style={styles.mainLine}>
         <View style={{paddingTop: ScaleSizeW(300)}}>
-            <Overlay
-                ref={ele => this.overlay = ele}
-                onShow={this.onOverlayShow}
-                onClose={this.onOverlayClose}
-                style={{justifyContent:"center"}}>
-                    <View style={{paddingTop:ScaleSizeH(50),backgroundColor:"white",paddingHorizontal:ScaleSizeW(20),borderRadius:20,marginHorizontal:ScaleSizeW(20),width:Width-ScaleSizeW(40),height:Height-ScaleSizeH(600),}}>
-                    <TouchableOpacity onPress={() => this.overlay.close()} style={{marginLeft:ScaleSizeH(500)}}><Image source={require('../imgs/delete.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image></TouchableOpacity>
-                    <TextInput
-            style={{flex: 1, fontSize: SetSpText(40)}}
-            placeholder={I18n.t('input')}
-            value={
-              Data.urls[parseInt(this.state.key)].url
-                ? Data.urls[parseInt(this.state.key)].url
-                : ""
-            }
-            onChangeText={(value) => {
+          <Overlay
+            ref={ele => this.overlay = ele}
+            onShow={this.onOverlayShow}
+            onClose={this.onOverlayClose}
+            style={{justifyContent:"center"}}>
+            <View
+              style={{paddingTop:ScaleSizeH(50),backgroundColor:"white",paddingHorizontal:ScaleSizeW(20),borderRadius:20,marginHorizontal:ScaleSizeW(20),width:Width-ScaleSizeW(40),height:Height-ScaleSizeH(600),}}>
+              <TouchableOpacity onPress={() => this.overlay.close()} style={{marginLeft:ScaleSizeH(500)}}>
+                <Image source={require('../imgs/delete.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image>
+              </TouchableOpacity>
+              <TextInput
+                style={{flex: 1, fontSize: SetSpText(40)}}
+                placeholder={I18n.t('input')}
+                value={Data.urls[parseInt(this.state.key)].url? Data.urls[parseInt(this.state.key)].url: ""}
+                onChangeText={
+                  (value) => {
+                    //自动补全前缀
+                    if (value.length <= 1) value = 'http://';
+                    Data.urls[parseInt(this.state.key)].url = value;
 
+                    const {urlsWitch} = this.state;
+                    store.save(Data.urlsIndex, Data.urls);
+                    this.setState({
+                      urlsWitch: !urlsWitch,
+                    });
+                    store.get(Data.urlsIndex).then((res) => {
+                      console.log(res);
+                    });
+                    }} // 文本变化事件
+                > 
+              </TextInput>
+                <View style={{marginBottom:ScaleSizeW(10)}}>
+                  <Button
+                  title={I18n.t('ok')}
+                    color="#649758" 
+                    style={{marginBottom:ScaleSizeW(10)}} 
+                    onPress={() => {
+                    this.overlay.close()
+                    }}>
+                  </Button>
+                </View>
+                <View style={{marginBottom:ScaleSizeW(10)}}>
+                  <Button 
+                    title={I18n.t('delete')}
+                    color="#BB445C"
+                    onPress={() => {
+                      Data.urls.splice(parseInt(this.state.key), 1);
+                      //console.log(Data.urls);
+                      for (let i = 0; i < Data.urls.length; i++) {
+                        if (Data.urls[i].key != i.toString()) {
+                          Data.urls[i].key = i.toString();
+                          this.state.key = i.toString();
+                        }
+                      }
+                      Data.index = Data.urls.length;
+                      store.save(Data.indexIndex, Data.index);
+                      store.save(Data.urlsIndex, Data.urls);
+                      const {urlsWitch} = this.state;
+                      this.setState({
+                        urlsWitch: !urlsWitch,
+                      });
+                      this.overlay.close()
+                    }}>
+                    </Button>
+                </View>
+                <View style={{marginBottom:ScaleSizeW(40)}}>
+                  <Button
+                  title={I18n.t('cancel')} 
+                  color="#4D61B3" 
+                  onPress={() => {
+                    if(this.state.judge==true){
+                        Data.urls[this.state.key].url=""
+                        const {urlsWitch} = this.state;
+                      store.save(Data.urlsIndex, Data.urls);
+                      this.setState({
+                        urlsWitch: !urlsWitch,
+                      });
+                      store.get(Data.urlsIndex).then((res) => {
+                        console.log(res);
+                      });
+                        //store.update(Data.urls[this.state.key].url,"")
+                        this.setState((prevState) => ({FlatListIsRefreshing: true}));
+                        setTimeout(() => {
+                          this.setState((prevState) => ({FlatListIsRefreshing: false}));
+                        }, 1000);
+                        console.log(Data.urls)
+                        this.overlay.close()
+                      }else{ 
 
-              //自动补全前缀
-              if (value.length <= 1) value = 'http://';
-              Data.urls[parseInt(this.state.key)].url = value;
-
-              const {urlsWitch} = this.state;
-              store.save(Data.urlsIndex, Data.urls);
-              this.setState({
-                urlsWitch: !urlsWitch,
-              });
-              store.get(Data.urlsIndex).then((res) => {
-                console.log(res);
-              });
-            }} // 文本变化事件
-          ></TextInput>
-                        <View style={{marginBottom:ScaleSizeW(10)}}>
-            <Button title={I18n.t('ok')} color="#649758" style={{marginBottom:ScaleSizeW(10)}} onPress={() => {
-              this.overlay.close()
-            }}></Button>
-             </View>
-           <View style={{marginBottom:ScaleSizeW(10)}}><Button title={I18n.t('delete')} color="#BB445C" onPress={() => {
-              Data.urls.splice(parseInt(this.state.key), 1);
-              //console.log(Data.urls);
-              for (let i = 0; i < Data.urls.length; i++) {
-                if (Data.urls[i].key != i.toString()) {
-                  Data.urls[i].key = i.toString();
-                  this.state.key = i.toString();
-                }
-              }
-              Data.index = Data.urls.length;
-              store.save(Data.indexIndex, Data.index);
-              store.save(Data.urlsIndex, Data.urls);
-              const {urlsWitch} = this.state;
-              this.setState({
-                urlsWitch: !urlsWitch,
-              });
-              this.overlay.close()
-            }}></Button>
-           </View>
-            <View style={{marginBottom:ScaleSizeW(40)}}><Button title={I18n.t('cancel')} color="#4D61B3" onPress={() => {
-            if(this.state.judge==true){
-                Data.urls[this.state.key].url=""
-                const {urlsWitch} = this.state;
-              store.save(Data.urlsIndex, Data.urls);
-              this.setState({
-                urlsWitch: !urlsWitch,
-              });
-              store.get(Data.urlsIndex).then((res) => {
-                console.log(res);
-              });
-                //store.update(Data.urls[this.state.key].url,"")
-                this.setState((prevState) => ({FlatListIsRefreshing: true}));
-                setTimeout(() => {
-                  this.setState((prevState) => ({FlatListIsRefreshing: false}));
-                }, 1000);
-                console.log(Data.urls)
-               this.overlay.close()
-              }else{ 
-
-                this.overlay.close()}
-            }}></Button></View>
-                    </View>
-            </Overlay>
+                        this.overlay.close()}
+                    }}>
+                  </Button>
+                </View>
+            </View>
+          </Overlay>
         </View>
         <View style={styles.lineId}>
-        <View backgroundColor={Data.urls[parseInt(item.key)].mark?"#FFC0CB":"#FFFFFF"} style={{borderRadius:10}}>
-          <TouchableHighlight style={{borderRadius:10,height: Height * 0.1,width: Width - ScaleSizeW(70),flexDirection: 'row',}} 
-          underlayColor="#FFC0CB" onPress={()=>{
-            if(Data.urls[parseInt(item.key)].url){
-
-            //两次计算mark数，Goingbe是即将要变成的状态，删除复选框后其作为代替
-            let amounts = 0;
-            for (let i = 0; i < Data.urls.length; i++) {
-              if (Data.urls[i].mark == true) {
-                amounts++;
-                // if(amount==1) urlArr3[0]=Data.urls[i].url
-                // if(amount==2) urlArr3[1]=Data.urls[i].url
-              }
-            }
-          let GoingBe=!Data.urls[parseInt(item.key)].mark 
-          if(amounts<3){
-
-          
-
-            if (
-              Data.urls[parseInt(item.key)].mark == false &&
-              amounts == 0&&
-              GoingBe==true
-            ) {
-              if (this.state.url == '')
-                this.state.url = Data.urls[parseInt(item.key)].url;
-              else if (this.state.url2 == '')
-                this.state.url2 = Data.urls[parseInt(item.key)].url;
-                //console.log("1")
-            } 
-            
-            
-            
-            
-            else if (
-              Data.urls[parseInt(item.key)].mark == false &&
-              amounts == 1 &&
-              GoingBe==true
-              
-            ) {
-              if (
-                this.state.url == '' &&
-                this.state.url2 != Data.urls[parseInt(item.key)].url
-              )
-                this.state.url = Data.urls[parseInt(item.key)].url;
-              else if (
-                this.state.url2 == '' &&
-                this.state.url != Data.urls[parseInt(item.key)].url
-              )
-                this.state.url2 = Data.urls[parseInt(item.key)].url;
-                //console.log("2")
-            } 
-            
-            
-            
-            else if (
-              Data.urls[parseInt(item.key)].mark == true &&
-              amounts == 2 &&
-              GoingBe==false
-            
-            ) {
-              if (Data.urls[parseInt(item.key)].url == this.state.url)
-                this.state.url = '';
-              if (Data.urls[parseInt(item.key)].url == this.state.url2)
-                this.state.url2 = '';
-                //console.log("3")
-            } 
-            
-            
-            else if (
-              Data.urls[parseInt(item.key)].mark == true &&
-              amounts == 1 &&
-              GoingBe==false
-             
-            ) {
-              if (this.state.url == '') this.state.url2 = '';
-              if (this.state.url2 == '') this.state.url = '';
-              //console.log("4")
-            } 
-            
-            //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;
-            //console.log("hhh"+Data.urls[parseInt(item.key)].mark)
-            store.save(Data.urlsIndex, Data.urls);
-
-            const {urlsWitch} = this.state;
-            this.setState({
-              urlsWitch: !urlsWitch,
-            });}
-   
-           
-          Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
-        
-        
-      
-          let amount = 0;
-            for (let i = 0; i < Data.urls.length; i++) {
-              if (Data.urls[i].mark == true) {
-                amount++;
-                // if(amount==1) urlArr3[0]=Data.urls[i].url
-                // if(amount==2) urlArr3[1]=Data.urls[i].url
-              }
-            }
-          
-          if(amount>=3) {
-            alert('暂时只能ping最多两个URL哦');
-            Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
-            //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;//22222
-            store.save(Data.urlsIndex, Data.urls);
-            const {urlsWitch} = this.state;
-            this.setState({
-              urlsWitch: !urlsWitch,
-            });
-          }
-          console.log(Data.urls)
-        }
-      else Toast.message(I18n.t('toast1'));}}
-          onLongPress={()=>{this.setState({key:item.key}) 
-          if(Data.urls[item.key].url){this.setState({judge:false})}
-          else{this.setState({judge:true})}
-            //console.log(this.state.key) 
-            this.overlay.show()}}>
-            <Text style={{fontSize: SetSpText(50),lineHeight: Height * 0.1,marginLeft:ScaleSizeW(30)}} >{Data.urls[parseInt(item.key)].url?Data.urls[parseInt(item.key)].url:"URL为空"}</Text>
-          </TouchableHighlight>
+          <View backgroundColor={Data.urls[parseInt(item.key)].mark?"#FFC0CB":"#FFFFFF"} style={{borderRadius:10}}>
+            <TouchableHighlight 
+              style={{borderRadius:10,height: Height * 0.1,width: Width - ScaleSizeW(70),flexDirection: 'row',}} 
+              underlayColor="#FFC0CB"
+              onPress={()=>{
+                if(Data.urls[parseInt(item.key)].url){
+                  //两次计算mark数，Goingbe是即将要变成的状态，删除复选框后其作为代替
+                  let amounts = 0;
+                  for (let i = 0; i < Data.urls.length; i++) {
+                    if (Data.urls[i].mark == true) {
+                      amounts++;
+                      // if(amount==1) urlArr3[0]=Data.urls[i].url
+                      // if(amount==2) urlArr3[1]=Data.urls[i].url
+                    }
+                  }
+                  let GoingBe=!Data.urls[parseInt(item.key)].mark 
+                  if(amounts<3){
+                    if(Data.urls[parseInt(item.key)].mark == false && amounts == 0&& GoingBe==true)
+                      {
+                        if(this.state.url == '')
+                          this.state.url = Data.urls[parseInt(item.key)].url;
+                        else if(this.state.url2 == '')
+                          this.state.url2 = Data.urls[parseInt(item.key)].url;
+                          //console.log("1")
+                      }else if(Data.urls[parseInt(item.key)].mark == false && amounts == 1 && GoingBe==true)
+                      {
+                        if (this.state.url == '' && this.state.url2 != Data.urls[parseInt(item.key)].url)
+                          this.state.url = Data.urls[parseInt(item.key)].url;
+                        else if(this.state.url2 == '' && this.state.url != Data.urls[parseInt(item.key)].url)
+                          this.state.url2 = Data.urls[parseInt(item.key)].url;
+                          //console.log("2")
+                      }else if(Data.urls[parseInt(item.key)].mark == true && amounts == 2 && GoingBe==false)
+                      {
+                      if(Data.urls[parseInt(item.key)].url == this.state.url)
+                        this.state.url = '';
+                      if(Data.urls[parseInt(item.key)].url == this.state.url2)
+                        this.state.url2 = '';
+                        //console.log("3")
+                      }else if(Data.urls[parseInt(item.key)].mark == true && amounts == 1 && GoingBe==false) 
+                      {
+                        if(this.state.url == '') this.state.url2 = '';
+                        if(this.state.url2 == '') this.state.url = '';
+                        //console.log("4")
+                      } 
+                      //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;
+                      //console.log("hhh"+Data.urls[parseInt(item.key)].mark)
+                      store.save(Data.urlsIndex, Data.urls);
+                      const {urlsWitch} = this.state;
+                      this.setState({urlsWitch: !urlsWitch,});
+                  }
+                  Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
+                  let amount = 0;
+                  for(let i = 0; i < Data.urls.length; i++){
+                    if(Data.urls[i].mark == true){
+                      amount++;
+                      // if(amount==1) urlArr3[0]=Data.urls[i].url
+                      // if(amount==2) urlArr3[1]=Data.urls[i].url
+                    }
+                  }           
+                  if(amount>=3) {
+                    alert('暂时只能ping最多两个URL哦');
+                    Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
+                    //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;//22222
+                    store.save(Data.urlsIndex, Data.urls);
+                    const {urlsWitch} = this.state;
+                    this.setState({urlsWitch: !urlsWitch,});
+                  }
+                  console.log(Data.urls)
+                }else 
+                  Toast.message(I18n.t('toast1'));
+              }}
+              onLongPress={()=>{
+                this.setState({key:item.key}) 
+                if(Data.urls[item.key].url)
+                  {this.setState({judge:false})}
+                else
+                  {this.setState({judge:true})}
+                //console.log(this.state.key) 
+                this.overlay.show()}
+              }>
+              <Text style={{fontSize: SetSpText(50),lineHeight: Height * 0.1,marginLeft:ScaleSizeW(30)}} >
+                {Data.urls[parseInt(item.key)].url?Data.urls[parseInt(item.key)].url:"URL为空"}
+              </Text>
+            </TouchableHighlight>
           </View>
         </View>
       </View>

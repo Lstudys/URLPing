@@ -104,17 +104,18 @@ export default class home extends Component {
     store
       .get('Language')
       .then((res) => {
-        data.userChoose = res;
+        Data.userChoose = res;
       })
       .finally(() => {
-        if (data.userChoose.length !== 0) {
+        if (Data.userChoose.length !== 0) {
           // 首选用户设置记录
-          I18n.locale = data.userChoose;
+          I18n.locale = Data.userChoose;
         } else if (SystemLanguage) {
           // 获取系统语言
           I18n.locale = SystemLanguage;
         } else {
-          I18n.locale = 'en'; // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+          // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+          I18n.locale = 'en'; 
         }
         this.setState({
           langvis: false,
@@ -122,7 +123,7 @@ export default class home extends Component {
       });
 
     /* 获取历史记录数据 */
-    store.get('local').then((res) => (data.local = res.slice()));
+    store.get('local').then((res) => (Data.local = res.slice()));
     I18n.fallbacks = true;
     // 加载语言包
     I18n.translations = {zh, en};

@@ -48,7 +48,8 @@ export default class Setting extends Component {
           // 获取系统语言
           I18n.locale = SystemLanguage;
         } else {
-          I18n.locale = 'en'; // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+          // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+          I18n.locale = 'en'; 
         }
         this.setState({
           langvis: false,
