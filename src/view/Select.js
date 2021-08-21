@@ -60,6 +60,7 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      inputtext:"",
       judge:false,
       key:0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -436,13 +437,24 @@ class Index extends Component {
             <View style={{marginBottom:ScaleSizeW(40)}}><Button title={I18n.t('cancel')} color="#4D61B3" onPress={() => {
             if(this.state.judge==true){
                 Data.urls[this.state.key].url=""
-                store.save(Data.urls[this.state.key].url,"")
+                const {urlsWitch} = this.state;
+              store.save(Data.urlsIndex, Data.urls);
+              this.setState({
+                urlsWitch: !urlsWitch,
+              });
+              store.get(Data.urlsIndex).then((res) => {
+                console.log(res);
+              });
+                //store.update(Data.urls[this.state.key].url,"")
                 this.setState((prevState) => ({FlatListIsRefreshing: true}));
                 setTimeout(() => {
                   this.setState((prevState) => ({FlatListIsRefreshing: false}));
                 }, 1000);
+                console.log(Data.urls)
                this.overlay.close()
-              }else this.overlay.close()
+              }else{ 
+
+                this.overlay.close()}
             }}></Button></View>
                     </View>
             </Overlay>
