@@ -21,12 +21,7 @@ import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {
-  ReqTimeChange,
-  ConfirmRqTime,
-  TextInputChange1,
-  TextInputChange2,
   BackAction,
-  SaveValue,
 } from '../controller/AppPageFunction';
 import Data from '../modal/data';
 import store from 'react-native-simple-store';
@@ -41,9 +36,6 @@ import {
   ScaleSizeW,
   ScaleSizeR,
 } from '../controller/Adaptation';
-import {color} from 'react-native-reanimated';
-import { ToastAndroid } from 'react-native';
-
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
 const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
 const Height = Dimensions.get('window').height;
@@ -133,13 +125,6 @@ class Index extends Component {
     // 加载语言包
     I18n.translations = {zh, en};
     {
-      // for (let i = 0; i < Data.indexArr.length; i++) {
-      //   store.get(Data.indexArr[i]).then((res) => {
-      //     if (res == null) {
-      //       store.push(Data.indexArr[i], '');
-      //     }
-      //   });
-      // }
     }
 
 
@@ -165,18 +150,6 @@ class Index extends Component {
       });
     });
 
-    // for(let i=0;i<Data.urls.length;i++){
-    //   if(Data.urls[i].mark&&this.state.url==''){
-    //     this.state.url=Data.urls[i].url
-    //   }
-    // }
-
-    // for(let i=0;i<Data.urls.length;i++){
-    //   if(Data.urls[i].mark&&this.state.url2==''){
-    //     this.state.ur2=Data.urls[i].url
-    //   }
-    // }
-
     let amount = 0,
       urlsArr2 = ['', ''];
     for (let i = 0; i < Data.urls.length; i++) {
@@ -198,20 +171,6 @@ class Index extends Component {
     if (amount == 0) {
       this.state.url = '';
       this.state.url2 = '';
-    }
-
-    //console.log('232');
-    //console.log(this.state.url);
-    //console.log(this.state.url2);
-
-    {
-      // store.get(Data.indexArr[Data.index - 1]).then((res) => {
-      //   const {urlsWitch} = this.state;
-      //   Data.urls = res;
-      //   this.setState({
-      //     urlsWitch: !urlsWitch,
-      //   });
-      // });
     }
   }
 
@@ -375,194 +334,7 @@ class Index extends Component {
   
 
   _renderItem = ({item}) => {//console.log(item.key)
-    return (
-      <View style={styles.mainLine}>
-        <View style={{paddingTop: ScaleSizeW(300)}}>
-          <Overlay
-            ref={ele => this.overlay = ele}
-            onShow={this.onOverlayShow}
-            onClose={this.onOverlayClose}
-            style={{justifyContent:"center"}}>
-            <View
-              style={{paddingTop:ScaleSizeH(50),backgroundColor:"white",paddingHorizontal:ScaleSizeW(20),borderRadius:20,marginHorizontal:ScaleSizeW(20),width:Width-ScaleSizeW(40),height:Height-ScaleSizeH(600),}}>
-              <TouchableOpacity onPress={() => this.overlay.close()} style={{marginLeft:ScaleSizeH(500)}}>
-                <Image source={require('../imgs/delete.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image>
-              </TouchableOpacity>
-              <TextInput
-                style={{flex: 1, fontSize: SetSpText(40)}}
-                placeholder={I18n.t('input')}
-                value={Data.urls[parseInt(this.state.key)].url? Data.urls[parseInt(this.state.key)].url: ""}
-                onChangeText={
-                  (value) => {
-                    //自动补全前缀
-                    if (value.length <= 1) value = 'http://';
-                    Data.urls[parseInt(this.state.key)].url = value;
-
-                    const {urlsWitch} = this.state;
-                    store.save(Data.urlsIndex, Data.urls);
-                    this.setState({
-                      urlsWitch: !urlsWitch,
-                    });
-                    store.get(Data.urlsIndex).then((res) => {
-                      console.log(res);
-                    });
-                    }} // 文本变化事件
-                > 
-              </TextInput>
-                <View style={{marginBottom:ScaleSizeW(10)}}>
-                  <Button
-                  title={I18n.t('ok')}
-                    color="#649758" 
-                    style={{marginBottom:ScaleSizeW(10)}} 
-                    onPress={() => {
-                    this.overlay.close()
-                    }}>
-                  </Button>
-                </View>
-                <View style={{marginBottom:ScaleSizeW(10)}}>
-                  <Button 
-                    title={I18n.t('delete')}
-                    color="#BB445C"
-                    onPress={() => {
-                      Data.urls.splice(parseInt(this.state.key), 1);
-                      //console.log(Data.urls);
-                      for (let i = 0; i < Data.urls.length; i++) {
-                        if (Data.urls[i].key != i.toString()) {
-                          Data.urls[i].key = i.toString();
-                          this.state.key = i.toString();
-                        }
-                      }
-                      Data.index = Data.urls.length;
-                      store.save(Data.indexIndex, Data.index);
-                      store.save(Data.urlsIndex, Data.urls);
-                      const {urlsWitch} = this.state;
-                      this.setState({
-                        urlsWitch: !urlsWitch,
-                      });
-                      this.overlay.close()
-                    }}>
-                    </Button>
-                </View>
-                <View style={{marginBottom:ScaleSizeW(40)}}>
-                  <Button
-                  title={I18n.t('cancel')} 
-                  color="#4D61B3" 
-                  onPress={() => {
-                    if(this.state.judge==true){
-                        Data.urls[this.state.key].url=""
-                        const {urlsWitch} = this.state;
-                      store.save(Data.urlsIndex, Data.urls);
-                      this.setState({
-                        urlsWitch: !urlsWitch,
-                      });
-                      store.get(Data.urlsIndex).then((res) => {
-                        console.log(res);
-                      });
-                        //store.update(Data.urls[this.state.key].url,"")
-                        this.setState((prevState) => ({FlatListIsRefreshing: true}));
-                        setTimeout(() => {
-                          this.setState((prevState) => ({FlatListIsRefreshing: false}));
-                        }, 1000);
-                        console.log(Data.urls)
-                        this.overlay.close()
-                      }else{ 
-
-                        this.overlay.close()}
-                    }}>
-                  </Button>
-                </View>
-            </View>
-          </Overlay>
-        </View>
-        <View style={styles.lineId}>
-          <View backgroundColor={Data.urls[parseInt(item.key)].mark?"#FFC0CB":"#FFFFFF"} style={{borderRadius:10}}>
-            <TouchableHighlight 
-              style={{borderRadius:10,height: Height * 0.1,width: Width - ScaleSizeW(70),flexDirection: 'row',}} 
-              underlayColor="#FFC0CB"
-              onPress={()=>{
-                if(Data.urls[parseInt(item.key)].url){
-                  //两次计算mark数，Goingbe是即将要变成的状态，删除复选框后其作为代替
-                  let amounts = 0;
-                  for (let i = 0; i < Data.urls.length; i++) {
-                    if (Data.urls[i].mark == true) {
-                      amounts++;
-                      // if(amount==1) urlArr3[0]=Data.urls[i].url
-                      // if(amount==2) urlArr3[1]=Data.urls[i].url
-                    }
-                  }
-                  let GoingBe=!Data.urls[parseInt(item.key)].mark 
-                  if(amounts<3){
-                    if(Data.urls[parseInt(item.key)].mark == false && amounts == 0&& GoingBe==true)
-                      {
-                        if(this.state.url == '')
-                          this.state.url = Data.urls[parseInt(item.key)].url;
-                        else if(this.state.url2 == '')
-                          this.state.url2 = Data.urls[parseInt(item.key)].url;
-                          //console.log("1")
-                      }else if(Data.urls[parseInt(item.key)].mark == false && amounts == 1 && GoingBe==true)
-                      {
-                        if (this.state.url == '' && this.state.url2 != Data.urls[parseInt(item.key)].url)
-                          this.state.url = Data.urls[parseInt(item.key)].url;
-                        else if(this.state.url2 == '' && this.state.url != Data.urls[parseInt(item.key)].url)
-                          this.state.url2 = Data.urls[parseInt(item.key)].url;
-                          //console.log("2")
-                      }else if(Data.urls[parseInt(item.key)].mark == true && amounts == 2 && GoingBe==false)
-                      {
-                      if(Data.urls[parseInt(item.key)].url == this.state.url)
-                        this.state.url = '';
-                      if(Data.urls[parseInt(item.key)].url == this.state.url2)
-                        this.state.url2 = '';
-                        //console.log("3")
-                      }else if(Data.urls[parseInt(item.key)].mark == true && amounts == 1 && GoingBe==false) 
-                      {
-                        if(this.state.url == '') this.state.url2 = '';
-                        if(this.state.url2 == '') this.state.url = '';
-                        //console.log("4")
-                      } 
-                      //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;
-                      //console.log("hhh"+Data.urls[parseInt(item.key)].mark)
-                      store.save(Data.urlsIndex, Data.urls);
-                      const {urlsWitch} = this.state;
-                      this.setState({urlsWitch: !urlsWitch,});
-                  }
-                  Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
-                  let amount = 0;
-                  for(let i = 0; i < Data.urls.length; i++){
-                    if(Data.urls[i].mark == true){
-                      amount++;
-                      // if(amount==1) urlArr3[0]=Data.urls[i].url
-                      // if(amount==2) urlArr3[1]=Data.urls[i].url
-                    }
-                  }           
-                  if(amount>=3) {
-                    alert('暂时只能ping最多两个URL哦');
-                    Data.urls[parseInt(item.key)].mark=!Data.urls[parseInt(item.key)].mark
-                    //Data.urls[parseInt(item.key)].mark = Data.urls[parseInt(item.key)].mark;//22222
-                    store.save(Data.urlsIndex, Data.urls);
-                    const {urlsWitch} = this.state;
-                    this.setState({urlsWitch: !urlsWitch,});
-                  }
-                  console.log(Data.urls)
-                }else 
-                  Toast.message(I18n.t('toast1'));
-              }}
-              onLongPress={()=>{
-                this.setState({key:item.key}) 
-                if(Data.urls[item.key].url)
-                  {this.setState({judge:false})}
-                else
-                  {this.setState({judge:true})}
-                //console.log(this.state.key) 
-                this.overlay.show()}
-              }>
-              <Text style={{fontSize: SetSpText(50),lineHeight: Height * 0.1,marginLeft:ScaleSizeW(30)}} >
-                {Data.urls[parseInt(item.key)].url?Data.urls[parseInt(item.key)].url:"URL为空"}
-              </Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </View>
-    );
+    <View><Text>12345</Text></View>
   };
 
   render() {
@@ -589,164 +361,27 @@ class Index extends Component {
         chartLabels2,
       );
     }
+
+
     return this.state.linechart ? (
-      <View>
-        <View
-          style={{
-            height: Height * 0.89,
-            marginBottom: 0,
-            backgroundColor: '#f1f3f0',
-            alignItems: 'center',
-          }}>
-          <View style={{flex: 1}}>
-            <View style={styles.headerViewStyle}>
-              <NavigationBar
-                style={{backgroundColor: '#fffef4'}}
+      <View style={{flex: 1}}>
+        <NavigationBar
+                style={{backgroundColor: '#ffffff',height:0.085 * Height}}
                 type="ios"
                 tintColor="#333"
-                title={
-                  <View
-                    style={{
-                      flex: 1,
-                      paddingLeft: 4,
-                      paddingRight: 4,
-                      borderRadius: 60,
-                      alignItems: 'center',
-                    }}>
-                    <Label
-                      style={{color: '#333333', fontSize: 20}}
-                      text=""
-                      style={styles.headerTextStyle}
-                    />
-                  </View>
-                }
-                leftView={
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginTop:ScaleSizeH(0),
-                      marginLeft: ScaleSizeW(15),
-                    }}>
-                    <NavigationBar.IconButton
-                      icon={require('../imgs/back.png')}
-                      onPress={() => {
-                        this.props.navigation.navigate('Home');
-                        
-                      }}
-                    />
-                    
-                    <TouchableOpacity onPress={() => {
-                  const {urlsWitch} = this.state;
-                  Data.urls = [
-                    ...Data.urls,
-                    {key: Data.index.toString(), url: '', mark: false},
-                  ];
-                  //console.log(Data.urls);
-                  store.save(Data.urlsIndex, Data.urls);
-                  // store.save(Data.indexArr[Data.index], Data.urls);
-                  Data.index++;
-                  store.save(Data.indexIndex, Data.index);
-                  this.setState({
-                    urlsWitch: !urlsWitch,
-                  });
-                }}>
-                  <View style={{width:ScaleSizeW(45),height:ScaleSizeH(45),marginLeft:ScaleSizeH(450)}}>
-                      <Image source={require('../imgs/add.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image>
-                      </View>
-                    </TouchableOpacity>
-                    
-                  </View>
-                  
-                }
-                // rightView={
-                //   <View
-                //     style={{flexDirection: 'row', marginTop: 10, marginRight: 10}}>
-                //     <NavigationBar.IconButton
-                //       icon={require('../imgs/caozuo-quanbuxuan.png')}
-                //       onPress={this.deletitems}
-                //     />
-                //     <NavigationBar.IconButton
-                //       icon={require('../imgs/total_selection.png')}
-                //       onPress={this.addhandle}
-                //     />
-                //   </View>
-                // }
-
-
-                /*<Text
-                style={{flexDirection: 'row',
-                marginTop: 5,
-                marginLeft:280}}
-                onPress={() => {
-                  const {urlsWitch} = this.state;
-                  Data.urls = [
-                    ...Data.urls,
-                    {key: Data.index.toString(), url: '', mark: false},
-                  ];
-                  console.log(Data.urls);
-                  store.save(Data.urlsIndex, Data.urls);
-                  // store.save(Data.indexArr[Data.index], Data.urls);
-                  Data.index++;
-                  store.save(Data.indexIndex, Data.index);
-                  this.setState({
-                    urlsWitch: !urlsWitch,
-                  });
-                }}>
-                {I18n.t('add')}
-              </Text>*/
-
               />
-            </View>
-            <FlatList
-              extraData={this.state}
-              style={styles.scrollViewStyle}
-              ref={(view) => {
-                this.myFlatList = view;
-              }}
-              data={Data.urls} // 数据源
-              renderItem={this._renderItem} // 从数据源中挨个取出数据并渲染到列表中
-              refreshing={this.state.FlatListIsRefreshing}
-              onRefresh={() => {
-                //刷新的方法
-                this.setState((prevState) => ({FlatListIsRefreshing: true}));
-                setTimeout(() => {
-                  this.setState((prevState) => ({FlatListIsRefreshing: false}));
-                }, 1000);
-              }}
-            />
-          </View>
+        <View style={{marginTop:0.085 * Height+10,height : .35 * Height,backgroundColor:"#e5e5e5"}}>
         </View>
-        <View
-          style={{
-            backgroundColor: '#f1f4ee',
-            flexDirection: 'column-reverse',
-            height: Height * 0.2,
-          }}>
-          <Text style={styles.HomeInputs} onPress={SendRequest.bind(this)}>
-            {I18n.t('start')}
-          </Text>
+
+        <View style={{height: .25 * Height,backgroundColor:"#fefefe"}}>
 
         </View>
 
-        
-        {/*<View style={{paddingTop: 200}}>
-            <Overlay
-                // ref for the overlay
-                ref={ele => this.overlay = ele}
-                // callback function when the Overlay shown
-                onShow={this.onOverlayShow}
-                // callback function when the Overlay closed
-                onClose={this.onOverlayClose}
-                // style of the Overlay, same as View component
-                style={{justifyContent:"center"}}>
-                    <View style={{paddingTop:20,backgroundColor:"white",paddingHorizontal:10,borderRadius:20,marginHorizontal:10,width:Width-20,height:Height-350,}}>
-                    <TouchableOpacity onPress={() => this.overlay.close()} style={{marginLeft:320}}><Image source={require('../imgs/delete.png')} style={{width:ScaleSizeW(45),height:ScaleSizeH(45)}}></Image></TouchableOpacity>
-                        <TextInput placeholder="请输入URL" style={{borderStyle:"solid",borderWidth:1,borderRadius:10,marginTop:150}}></TextInput>
-                        <View><Button title='删除' color="#FF0033" onPress={()=>{let tkey=this.state.key}}></Button></View>
-                    </View>
-            </Overlay>
-        </View>*/}
+        <View>
+
+        </View>
       </View>
+      
     ) : (
       <View style={styles.bottomStyle}>
         <View style={styles.headerViewStyle}>

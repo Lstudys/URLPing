@@ -2,42 +2,19 @@ import React from 'react';
 import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './src/view/Home';
-import Select from "./src/view/Select";
+import Main from './src/view/Main';
+import History from './src/view/History';
 import Setting from './src/view/Setting';
 import About from './src/view/About';
-
-
-
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
-    </View>
-  );
-}
-
-function DetailsScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-    </View>
-  );
-}
 
 const Stack = createStackNavigator();
 
 function Nav() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode="none" initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Select" component={Select} />
+      <Stack.Navigator headerMode="none" initialRouteName="Main">
+        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="History" component={History} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="About" component={About} />
       </Stack.Navigator>

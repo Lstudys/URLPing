@@ -20,6 +20,7 @@ import {
   processColor,
   StatusBar,
 } from 'react-native';
+import {NavigationBar, Label, Checkbox} from 'teaset';
 import {Overlay} from 'react-native-elements';
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
@@ -203,74 +204,16 @@ export default class home extends Component {
   }
 
   render() {
-    // if (this.state.url != '' || this.state.url2 != '') {
-    //     if (this.state.ifTwoChartShow) {
-    //         const {values, colorIndex, chartLabels, url, values2, url2, colorIndex2, chartLabels2} = this.state;
-    //         this.config = this.next(values, colorIndex, chartLabels, url, url2, values2, colorIndex2, chartLabels2);
-    //     }
-    // }
-    // if (this.state.ifTwoChartShow) {
-    //     this.ifSecondPing();
-    // }
-
     return (
       <View>
-        <StatusBar backgroundColor="transparent" translucent={true} />
-        <Text
-          style={{
-            color: 'pink',
-            fontSize: SetSpText(100),
-            fontWeight: 'bold',
-            textAlign: 'center',
-            marginTop: ScaleSizeH(280),
-            marginBottom: ScaleSizeH(100),
-          }}>
-          {I18n.t('title')}
-        </Text>
-        <View style={{marginTop: ScaleSizeH(-70)}}>
-          {/* SendRequest.bind(this) */}
-          {/* <TouchableOpacity
-           activeOpacity='.2'
-              style={styles.HomeInputs}
-              onPress={() => {
-                this.props.navigation.navigate('Select');
-              }}
-           />
-           <TouchableOpacity
-              style={styles.HomeInputs}
-              onPress={() => {
-                this.props.navigation.navigate('Select');
-              }}
-           />
-           <TouchableOpacity
-              style={styles.HomeInputs}
-              onPress={() => {
-                this.props.navigation.navigate('Select');
-              }}
-           /> */}
-          <Text
-            style={styles.HomeInputs}
-            onPress={() => {
-              this.props.navigation.navigate('Select');
-            }}>
-            {I18n.t('ping')}
-          </Text>
-          <Text
-            style={styles.HomeInputs}
-            onPress={() => {
-              this.props.navigation.navigate('Setting', {
-                homeThis: this,
-              });
-            }}>
-            {I18n.t('settings')}
-          </Text>
-          <Text
-            style={styles.HomeInputs}
-            onPress={() => {
-              this.props.navigation.navigate('About');
-            }}>
-            {I18n.t('about')}
-          </Text>
+        <NavigationBar
+                style={{backgroundColor: '#ffffff',height:0.085 * Height}}
+                type="ios"
+                tintColor="#ffffff"
+              />
+        <View>
+          <FlatList/>
+          
         </View>
       </View>
     );
