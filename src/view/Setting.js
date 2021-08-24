@@ -114,7 +114,7 @@ export default class Setting extends Component {
                   <NavigationBar.IconButton
                     icon={require('../imgs/back.png')}
                     onPress={() => {
-                      this.props.navigation.navigate('Home');
+                      this.props.navigation.navigate('Main');
                     }}
                   />
                 </View>

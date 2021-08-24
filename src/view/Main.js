@@ -862,6 +862,7 @@ import store from 'react-native-simple-store';
 import TheData from '../modal/TheData';
 
 
+
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 //样式数据
@@ -879,7 +880,6 @@ class My extends Component{
       QuickSelectIndex:0,
       visible:false,
       FlatListIsRefreshing:false,
-      isPing:false,
       refresh:false,
     }
   }
@@ -928,8 +928,8 @@ class My extends Component{
       return(<View style={{backgroundColor:'white'}}>
         <View>
           <View style={{flexDirection:'row',width:Width,borderBottomWidth:1,borderColor:'#C4C4C4'}}>
-            <View style={{marginLeft:ScaleSizeW(10),fontSize:SetSpText(30)}}><Text>分享</Text></View>
-            <View style={{marginLeft:ScaleSizeW(560),fontSize:SetSpText(30)}}><Text>历史信息</Text></View>
+            <TouchableOpacity onPress={()=>{}}><View style={{marginLeft:ScaleSizeW(10),fontSize:SetSpText(30)}}><Text>分享</Text></View></TouchableOpacity>
+            <TouchableOpacity onPress={()=>{this.props.navigation.navigate('History')}}><View style={{marginLeft:ScaleSizeW(560),fontSize:SetSpText(30)}}><Text>历史信息</Text></View></TouchableOpacity>
           </View>
           <View style={{height:130,borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}><FlatList data={TheData.Ping} renderItem={this._renderItem1} refreshing={this.state.FlatListIsRefreshing}
               onRefresh={() => {
@@ -961,7 +961,9 @@ class My extends Component{
             }
             if(this.identify){
             if(TheData.Ping.length!=0){
-              if(TheData.historyPing.length!=0){TheData.historyPing=[]}
+              this.setState({isPing:true})
+              this.setState({refresh:!this.state.refresh})
+              //if(TheData.historyPing.length!=0){TheData.historyPing=[]}
               let Ping_length=TheData.Ping.length
               let History_length=TheData.historyPing.length
               for(let i=0,j=History_length;i<Ping_length;i++,j++){
@@ -1115,7 +1117,7 @@ class My extends Component{
             <View flexDirection='row' style={{marginLeft:ScaleSizeW(20),}}><Text style={{color:'gray'}}>历史记录</Text>
             <TouchableOpacity onPress={()=>{TheData.historyPing.splice(0,TheData.historyPing.length);this.setState({refresh:!this.state.refresh})}} style={{marginLeft:ScaleSizeW(525)}}><Text style={{color:'blue'}}>清空</Text></TouchableOpacity>
             </View>
-            <View style={{height:ScaleSizeH(500),borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}><FlatList onRefresh={() => {
+            <View style={{height:ScaleSizeH(450),borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}><FlatList onRefresh={() => {
                 this.setState((prevState) => ({FlatListIsRefreshing: true}));
                 setTimeout(() => {
                   this.setState((prevState) => ({FlatListIsRefreshing: false}));
@@ -1140,7 +1142,7 @@ class My extends Component{
     </View>
     </View>
       );
-    }
+   }
   }
 }
 export default My;
