@@ -59,7 +59,7 @@ class Index extends Component {
           I18n.locale = SystemLanguage;
         } else {
           // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
-          I18n.locale = 'en'; 
+          I18n.locale = 'en';
         }
         this.setState({
           langvis: false,
@@ -186,7 +186,7 @@ class Index extends Component {
           color="#666"
           title="Home"
           onPress={() => {
-            this.props.navigation.navigate('Home');
+            this.props.navigation.navigate('Main');
           }}
         />
       </View>

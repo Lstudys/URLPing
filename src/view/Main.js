@@ -1030,7 +1030,12 @@ class My extends Component {
                   marginTop: ScaleSizeH(8),
                   fontSize: SetSpText(30),
                 }}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('About', {
+                      mainThis: this,
+                    });
+                  }}>
                   <Image
                     source={require('../imgs/about.png')}
                     style={{
@@ -1047,7 +1052,10 @@ class My extends Component {
                   marginTop: ScaleSizeH(8),
                   fontSize: SetSpText(30),
                 }}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('History');
+                  }}>
                   <Image
                     source={require('../imgs/history.png')}
                     style={{
