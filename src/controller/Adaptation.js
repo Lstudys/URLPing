@@ -58,21 +58,3 @@ export function ScaleSizeR(scaleWidth, scaleHeight) {
   );
   return scaleR;
 }
-
-
-/*
-  屏幕适配
-  手机的逻辑像素 = 手机的屏幕分辨率/手机的倍率，而倍率一般等于2或者3 
-  WLR = 设备宽度逻辑像素/设计图宽度(也是逻辑像素)
-  在目标设备上要设置的尺寸计算公式就是：
-  size = 设置图上元素size * WLR
-*/
-
-export function ScaleSize(size) {
-  //设计图宽度即本人手机宽度逻辑像素为：360px
-  let myScreenW = 360;
-  //获取设备的宽度逻辑像素
-  let screenW = Dimensions.get('window').width;
-  WLR = screenW / myScreenW;
-  return size * WLR;
-}
