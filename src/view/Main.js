@@ -931,6 +931,7 @@ class My extends Component{
             <TouchableOpacity onPress={()=>{}}><View style={{marginLeft:ScaleSizeW(10),fontSize:SetSpText(30)}}><Text>分享</Text></View></TouchableOpacity>
             <TouchableOpacity onPress={()=>{this.props.navigation.navigate('History')}}><View style={{marginLeft:ScaleSizeW(560),fontSize:SetSpText(30)}}><Text>历史信息</Text></View></TouchableOpacity>
           </View>
+          
           <View style={{height:130,borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}><FlatList data={TheData.Ping} renderItem={this._renderItem1} refreshing={this.state.FlatListIsRefreshing}
               onRefresh={() => {
                 this.setState((prevState) => ({FlatListIsRefreshing: true}));

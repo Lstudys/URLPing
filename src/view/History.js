@@ -419,6 +419,7 @@ class History extends Component{
       FlatListIsRefreshing: false
     }
   }
+  
   renderitem=({item})=>{
     return(
       <View style={{width:Width,height:ScaleSizeH(150),borderBottomWidth:1,borderColor:'#C4C4C4',marginBottom:ScaleSizeH(10)}}>

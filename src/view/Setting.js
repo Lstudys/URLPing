@@ -70,6 +70,7 @@ export default class Setting extends Component {
     this.setState({modalVisible: visible});
   };
 
+  
   render() {
     const {modalVisible} = this.state;
     return (
