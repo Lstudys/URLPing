@@ -857,7 +857,7 @@ import { blue } from 'chalk';
 import React,{Component} from 'react'
 import {Toast} from 'teaset';
 import { Button,View,StyleSheet,TextInput,Text,Dimensions,FlatList,TouchableOpacity,Overlay } from 'react-native'
-import { ScaleSizeH,ScaleSizeR,ScaleSizeW,SetSpText } from '../controller/Adaptation';
+import { ScaleSizeH,ScaleSizeR,ScaleSizeW,SetSpText,ScaleSize } from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import TheData from '../modal/TheData';
 
@@ -887,36 +887,59 @@ class My extends Component{
  
 
   _renderItem1=({item})=>{
-    return(<View>
-      <TextInput defaultValue={TheData.Ping[parseInt(item.key)].url} onChangeText={(value)=>{TheData.Ping[parseInt(item.key)].url=value;this.setState({refresh:!this.state.refresh}) ;store.update(TheData.Ping[parseInt(item.key)].url,value);console.log(TheData.Ping)}} placeholder='请输入ping的地址'  style={{borderColor:'#C4C4C4',borderStyle:'solid',borderWidth:2,margin:ScaleSizeH(5),borderRadius:10,fontSize:SetSpText(35)}}></TextInput>
-      <View style={{position:'absolute',marginLeft:ScaleSizeW(650),marginTop:ScaleSizeH(30)}}><TouchableOpacity onPress={()=>{TheData.Ping.splice(parseInt(item.key),1)
-      for(let i=0;i<TheData.Ping.length;i++){
-        TheData.Ping[i].key=i
-      }
-      this.setState({refresh:!this.state.refresh})
-      console.log(TheData.Ping)
-      }}><Text style={{color:'blue'}}>删除</Text></TouchableOpacity></View>
+    return(
+      <View>
+        <TextInput 
+          defaultValue={TheData.Ping[parseInt(item.key)].url}
+          onChangeText={
+            (value)=>{TheData.Ping[parseInt(item.key)].url=value;
+            this.setState({refresh:!this.state.refresh});
+            store.update(TheData.Ping[parseInt(item.key)].url,value);
+            console.log(TheData.Ping)}} 
+          placeholder='请输入ping的地址'  
+          style={{borderColor:'#C4C4C4',borderStyle:'solid',borderWidth:2,margin:ScaleSize(5),borderRadius:10,fontSize:SetSpText(35)}}>
+        </TextInput>
+        <View 
+          style={{position:'absolute',left:ScaleSize(320),marginTop:ScaleSizeH(40)}}>
+          <TouchableOpacity 
+            onPress={()=>{           
+              TheData.Ping.splice(parseInt(item.key),1)
+              for(let i=0;i<TheData.Ping.length;i++){
+                TheData.Ping[i].key=i
+              }
+              this.setState({refresh:!this.state.refresh})
+              console.log(TheData.Ping)
+            }}>
+            <Text style={{color:'blue'}}>删除</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       //<Text>{this.Data}</Text>
     )
   }
 
   _renderitem2=({item})=>{
-    return(<View>
-      <TouchableOpacity><View style={{borderBottomColor:'#919191',borderBottomWidth:1,marginVertical:ScaleSizeH(20),alignItems:'center'}}><Text style={{color:'#919191',fontSize:SetSpText(35),}}>{item.url}</Text></View></TouchableOpacity>
-      <View style={{position:'absolute',marginLeft:ScaleSizeW(650),marginTop:ScaleSizeH(25)}}><TouchableOpacity onPress={()=>{TheData.historyPing.splice(parseInt(item.key),1)
-      
-
-
-      for(let i=0;i<TheData.historyPing.length;i++){
-        TheData.historyPing[i].key=i
-      }
-      this.setState({refresh:!this.state.refresh})
-      console.log(TheData.historyPing)
-
-
-
-    }}><Text style={{color:'blue'}}>删除</Text></TouchableOpacity></View></View>
+    return(
+    <View>
+      <TouchableOpacity>
+        <View style={{borderBottomColor:'#919191',borderBottomWidth:1,marginVertical:ScaleSize(20),alignItems:'center'}}>
+          <Text style={{color:'#919191',fontSize:SetSpText(35),}}>{item.url}</Text>
+        </View>
+      </TouchableOpacity>
+      <View style={{position:'absolute',left:ScaleSize(320),top:ScaleSize(20)}}>
+        <TouchableOpacity 
+          onPress={()=>{
+            TheData.historyPing.splice(parseInt(item.key),1)
+            for(let i=0;i<TheData.historyPing.length;i++){
+              TheData.historyPing[i].key=i
+            }
+            this.setState({refresh:!this.state.refresh})
+            console.log(TheData.historyPing)
+          }}>
+          <Text style={{color:'blue'}}>删除</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
     )
   }
 
@@ -925,40 +948,48 @@ class My extends Component{
       return
     }
     else{
-      return(<View style={{backgroundColor:'white'}}>
+      return(
+      <View style={{backgroundColor:'white'}}>
         <View>
-          <View style={{flexDirection:'row',width:Width,borderBottomWidth:1,borderColor:'#C4C4C4'}}>
-            <View style={{marginLeft:ScaleSizeW(10),fontSize:SetSpText(30)}}><Text>分享</Text></View>
-            <View style={{marginLeft:ScaleSizeW(560),fontSize:SetSpText(30)}}><Text>历史信息</Text></View>
+          <View style={{flexDirection:'row',width:Width,borderBottomWidth:1,borderColor:'#C4C4C4',height:ScaleSize(23)}}>
+            <View style={{position:'absolute', left:ScaleSize(5),fontSize:SetSpText(30)}}>
+              <Text>分享</Text>
+            </View>
+            <View style={{position:'absolute',right:ScaleSize(5),fontSize:SetSpText(30)}}>
+              <Text>历史信息</Text>
+            </View>
           </View>
-          <View style={{height:130,borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}><FlatList data={TheData.Ping} renderItem={this._renderItem1} refreshing={this.state.FlatListIsRefreshing}
+          <View style={{height:ScaleSize(130),borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}>
+            <FlatList 
+              data={TheData.Ping} renderItem={this._renderItem1} 
+              refreshing={this.state.FlatListIsRefreshing}
               onRefresh={() => {
                 this.setState((prevState) => ({FlatListIsRefreshing: true}));
                 setTimeout(() => {
                   this.setState((prevState) => ({FlatListIsRefreshing: false}));
                 }, 1000);
-              }}/></View>
-
-{/*console.log(TheData.Ping)*/}
-          <TouchableOpacity onPress={()=>{if(TheData.Ping.length!=0){
-            let key=TheData.Ping[(TheData.Ping.length)-1].key+1
-            TheData.Ping=[...TheData.Ping,{key:key,url:''}] 
-            this.setState({refresh:!this.state.refresh})
-          }else{
-            TheData.Ping=[...TheData.Ping,{key:0,url:''}] 
-        this.setState({refresh:!this.state.refresh})}}} style={{marginLeft:ScaleSizeW(20),marginVertical:ScaleSizeH(10)}}><Text style={{color:'blue',fontSize:SetSpText(25)}}>✚ 添加</Text></TouchableOpacity>
-
-
-
-
-
-
-
-          <View style={{marginHorizontal:ScaleSizeW(4),marginVertical:ScaleSizeH(20)}}><Button onPress={()=>{
-            for(let i=0;i<TheData.Ping.length;i++){
-              if(!TheData.Ping[i].url){this.identify=false;break;}
-              else{this.identify=true}
-            }
+              }}/>
+          </View>
+          <TouchableOpacity 
+            onPress={()=>{
+              if(TheData.Ping.length!=0){
+                let key=TheData.Ping[(TheData.Ping.length)-1].key+1
+                TheData.Ping=[...TheData.Ping,{key:key,url:''}] 
+                this.setState({refresh:!this.state.refresh})
+              }else{
+                TheData.Ping=[...TheData.Ping,{key:0,url:''}] 
+                this.setState({refresh:!this.state.refresh})}}} 
+            style={{marginLeft:ScaleSize(10),marginVertical:ScaleSize(10)}}>
+            <Text style={{color:'blue',fontSize:SetSpText(25)}}>✚ 添加</Text>
+          </TouchableOpacity>
+          <View 
+            style={{marginHorizontal:ScaleSize(4),marginVertical:ScaleSize(20)}}>
+            <Button 
+              onPress={()=>{
+                for(let i=0;i<TheData.Ping.length;i++){
+                  if(!TheData.Ping[i].url){this.identify=false;break;}
+                  else{this.identify=true}
+                }
             if(this.identify){
             if(TheData.Ping.length!=0){
               if(TheData.historyPing.length!=0){TheData.historyPing=[]}
@@ -972,18 +1003,19 @@ class My extends Component{
             else{Toast.message('尚未添加需要Ping的网址!');}
             TheData.Ping.splice(0,TheData.Ping.length)}
             else{Toast.message('输入网址不能有空!')}
-          }} title='Ping'></Button></View>
+          }} title='Ping'></Button>
+          </View>
           <TouchableOpacity 
           onPress={() => {
             this.props.navigation.navigate('Setting', {
               mainThis: this,
             });
           }} 
-          style={{width:Width,alignItems:'center',marginBottom:ScaleSizeH(4)}}><Text style={{color:'gray',}}>参数设置</Text></TouchableOpacity>
+          style={{width:Width,alignItems:'center',marginBottom:ScaleSize(4)}}><Text style={{color:'gray',}}>参数设置</Text></TouchableOpacity>
           <View style={{borderBottomWidth:1,borderBottomColor:'#C4C4C4'}}><Text></Text></View>
           <View>
-            <View style={{marginVertical:ScaleSizeH(20),marginLeft:ScaleSizeW(20)}}><Text style={{color:'gray'}}>快捷输入</Text></View>
-            <View flexDirection='row' style={{marginHorizontal:ScaleSizeW(20)}}>
+            <View style={{marginVertical:ScaleSize(10),marginLeft:ScaleSize(20)}}><Text style={{color:'gray'}}>快捷输入</Text></View>
+            <View flexDirection='row' style={{marginHorizontal:ScaleSize(10), justifyContent:'space-between'}}>
 
 
             
@@ -1002,7 +1034,7 @@ class My extends Component{
                 if(TheData.QuickSelect[0].url){this.overlay.show()}
                 else{this.setState({QuickSelectIndex:0},()=>{this.state.QuickSelectIndex=this.state.QuickSelectIndex;console.log(this.state.QuickSelectIndex)})
                 this.overlay.show()}
-              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSizeW(155),marginRight:ScaleSizeW(120),height:ScaleSizeH(75)}}><Text ellipsizeMode='tail'>{TheData.QuickSelect[0].name?TheData.QuickSelect[0].name:"✚"}</Text></TouchableOpacity>
+              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSize(75),height:ScaleSize(40)}}><Text ellipsizeMode='tail'>{TheData.QuickSelect[0].name?TheData.QuickSelect[0].name:"✚"}</Text></TouchableOpacity>
 
 
 
@@ -1027,7 +1059,7 @@ class My extends Component{
                 if(TheData.QuickSelect[1].url){this.overlay.show()}
                 else{this.setState({QuickSelectIndex:1},()=>{this.state.QuickSelectIndex=this.state.QuickSelectIndex;console.log(this.state.QuickSelectIndex)})
                 this.overlay.show()}
-              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSizeW(155),marginRight:ScaleSizeW(120)}}><Text>{TheData.QuickSelect[1].name?TheData.QuickSelect[1].name:"✚"}</Text></TouchableOpacity>
+              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSize(75)}}><Text>{TheData.QuickSelect[1].name?TheData.QuickSelect[1].name:"✚"}</Text></TouchableOpacity>
               
 
 
@@ -1050,7 +1082,7 @@ class My extends Component{
                 if(TheData.QuickSelect[2].url){this.overlay.show()}
                 else{this.setState({QuickSelectIndex:2},()=>{this.state.QuickSelectIndex=this.state.QuickSelectIndex;console.log(this.state.QuickSelectIndex)})
                 this.overlay.show()}
-              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSizeW(155),marginRight:ScaleSizeW(120)}}><Text>{TheData.QuickSelect[2].name?TheData.QuickSelect[2].name:"✚"}</Text></TouchableOpacity>
+              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSize(75)}}><Text>{TheData.QuickSelect[2].name?TheData.QuickSelect[2].name:"✚"}</Text></TouchableOpacity>
             
             
             
@@ -1058,7 +1090,7 @@ class My extends Component{
             
             
             </View>
-            <View flexDirection='row' style={{marginHorizontal:ScaleSizeW(20),marginTop:ScaleSizeH(40)}}>
+            <View flexDirection='row' style={{marginHorizontal:ScaleSizeW(20),marginTop:ScaleSizeH(40), justifyContent:'space-between'}}>
               <TouchableOpacity onLongPress={()=>this.overlay.show()} onPress={()=>{
                 if(TheData.QuickSelect[3].name&&TheData.QuickSelect[3].url){
                   if(TheData.Ping.length!=0){
@@ -1073,7 +1105,7 @@ class My extends Component{
                 if(TheData.QuickSelect[3].url){this.overlay.show()}
                 else{this.setState({QuickSelectIndex:3},()=>{this.state.QuickSelectIndex=this.state.QuickSelectIndex;console.log(this.state.QuickSelectIndex)})
                 this.overlay.show()}
-              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSizeW(155),marginRight:ScaleSizeW(120),height:ScaleSizeH(75)}}><Text>{TheData.QuickSelect[3].name?TheData.QuickSelect[3].name:"✚"}</Text></TouchableOpacity>
+              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSize(75),height:ScaleSizeH(75)}}><Text>{TheData.QuickSelect[3].name?TheData.QuickSelect[3].name:"✚"}</Text></TouchableOpacity>
               
               
               
@@ -1092,7 +1124,7 @@ class My extends Component{
                 if(TheData.QuickSelect[4].url){this.overlay.show()}
                 else{this.setState({QuickSelectIndex:4},()=>{this.state.QuickSelectIndex=this.state.QuickSelectIndex;console.log(this.state.QuickSelectIndex)})
                 this.overlay.show()}
-              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSizeW(155),marginRight:ScaleSizeW(120)}}><Text>{TheData.QuickSelect[4].name?TheData.QuickSelect[4].name:"✚"}</Text></TouchableOpacity>
+              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSize(75)}}><Text>{TheData.QuickSelect[4].name?TheData.QuickSelect[4].name:"✚"}</Text></TouchableOpacity>
               
               
               
@@ -1112,16 +1144,16 @@ class My extends Component{
                 if(TheData.QuickSelect[5].url){this.overlay.show()}
                 else{this.setState({QuickSelectIndex:5},()=>{this.state.QuickSelectIndex=this.state.QuickSelectIndex;console.log(this.state.QuickSelectIndex)})
                 this.overlay.show()}
-              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSizeW(155),marginRight:ScaleSizeW(120)}}><Text>{TheData.QuickSelect[5].name?TheData.QuickSelect[5].name:"✚"}</Text></TouchableOpacity>
+              }}} style={{borderRadius:20,backgroundColor:'#E5E5E5',alignItems:'center',justifyContent:'center',width:ScaleSize(75)}}><Text>{TheData.QuickSelect[5].name?TheData.QuickSelect[5].name:"✚"}</Text></TouchableOpacity>
             
             
             
             </View>
-            <View style={{backgroundColor:'#DDDDDD',marginVertical:ScaleSizeH(20),height:1,marginBottom:ScaleSizeH(30)}}><Text></Text></View>
-            <View flexDirection='row' style={{marginLeft:ScaleSizeW(20),}}><Text style={{color:'gray'}}>历史记录</Text>
-            <TouchableOpacity onPress={()=>{TheData.historyPing.splice(0,TheData.historyPing.length);this.setState({refresh:!this.state.refresh})}} style={{marginLeft:ScaleSizeW(525)}}><Text style={{color:'blue'}}>清空</Text></TouchableOpacity>
+            <View style={{backgroundColor:'#DDDDDD',marginVertical:ScaleSize(20),height:1,marginBottom:ScaleSize(20)}}><Text></Text></View>
+            <View flexDirection='row' style={{marginLeft:ScaleSize(10),}}><Text style={{color:'gray'}}>历史记录</Text>
+            <TouchableOpacity onPress={()=>{TheData.historyPing.splice(0,TheData.historyPing.length);this.setState({refresh:!this.state.refresh})}} style={{marginLeft:ScaleSize(255)}}><Text style={{color:'blue'}}>清空</Text></TouchableOpacity>
             </View>
-            <View style={{height:ScaleSizeH(500),borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}><FlatList onRefresh={() => {
+            <View style={{height:ScaleSize(210),borderBottomWidth:1,borderColor:'#C4C4C4',borderStyle:'solid'}}><FlatList onRefresh={() => {
                 this.setState((prevState) => ({FlatListIsRefreshing: true}));
                 setTimeout(() => {
                   this.setState((prevState) => ({FlatListIsRefreshing: false}));
@@ -1131,16 +1163,16 @@ class My extends Component{
         </View>
         <View style={{backgroundColor:'black'}} onPress={()=>this.overlay.close()}>{/*快捷输入编辑框*/ }
         <Overlay ref={ele => this.overlay = ele} style={{justifyContent:"center"}}>
-                <View style={{paddingHorizontal:ScaleSizeW(20),paddingTop:ScaleSizeH(20),marginHorizontal:ScaleSizeW(20), backgroundColor:"white",borderRadius:10,}}>
+                <View style={{paddingHorizontal:ScaleSize(10),paddingTop:ScaleSize(10),marginHorizontal:ScaleSize(10), backgroundColor:"white",borderRadius:10,height:ScaleSize(290),}}>
                   <View><Text style={{fontSize:SetSpText(30)}}>名称:</Text></View>
-                  <TextInput defaultValue={TheData.QuickSelect[this.state.QuickSelectIndex].name} placeholder='请输入名称' style={{borderColor:'#C4C4C4',borderStyle:'solid',borderWidth:2,margin:ScaleSizeH(5),borderRadius:10,fontSize:SetSpText(35)}} onChangeText={(text)=>{TheData.QuickSelect[this.state.QuickSelectIndex].name=text;store.save(TheData.QuickSelect[this.state.QuickSelectIndex].name,text);console.log(TheData.QuickSelect)}}></TextInput>
+                  <TextInput defaultValue={TheData.QuickSelect[this.state.QuickSelectIndex].name} placeholder='请输入名称' style={{borderColor:'#C4C4C4',borderStyle:'solid',borderWidth:2,margin:ScaleSize(5),borderRadius:10,fontSize:SetSpText(35)}} onChangeText={(text)=>{TheData.QuickSelect[this.state.QuickSelectIndex].name=text;store.save(TheData.QuickSelect[this.state.QuickSelectIndex].name,text);console.log(TheData.QuickSelect)}}></TextInput>
                   <View><Text style={{fontSize:SetSpText(30)}}>URL：</Text></View>
-                    <TextInput defaultValue={TheData.QuickSelect[this.state.QuickSelectIndex].url} placeholder="请输入URL" style={{borderColor:'#C4C4C4',borderStyle:'solid',borderWidth:2,margin:ScaleSizeH(5),borderRadius:10,fontSize:SetSpText(35)}} onChangeText={(text)=>{TheData.QuickSelect[this.state.QuickSelectIndex].url=text;store.save(TheData.QuickSelect[this.state.QuickSelectIndex].url,text);console.log(TheData.QuickSelect)}}></TextInput>
-                    <View style={{marginBottom:ScaleSizeH(15)}}><Button style={{marginTop:ScaleSizeH(10)}} title="确定" onPress={() => {
+                    <TextInput defaultValue={TheData.QuickSelect[this.state.QuickSelectIndex].url} placeholder="请输入URL" style={{borderColor:'#C4C4C4',borderStyle:'solid',borderWidth:2,margin:ScaleSize(5),borderRadius:10,fontSize:SetSpText(35)}} onChangeText={(text)=>{TheData.QuickSelect[this.state.QuickSelectIndex].url=text;store.save(TheData.QuickSelect[this.state.QuickSelectIndex].url,text);console.log(TheData.QuickSelect)}}></TextInput>
+                    <View style={{marginBottom:ScaleSize(10),marginTop:ScaleSize(15)}}><Button title="确定" onPress={() => {
                       if(TheData.QuickSelect[this.state.QuickSelectIndex].url&&TheData.QuickSelect[this.state.QuickSelectIndex].name){this.overlay.close();this.setState({refresh:!this.state.refresh})}
                       else{Toast.message('输入名称或者URL不能为空！')}
                       }}/></View>
-                      <View><Button title="取消" onPress={()=>this.overlay.close()}></Button></View>
+                      <View><Button title="取消" style={{marginBottom:ScaleSize(10)}}onPress={()=>this.overlay.close()}></Button></View>
                 </View>
         </Overlay>
     </View>
