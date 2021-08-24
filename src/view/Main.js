@@ -911,16 +911,16 @@ class My extends Component {
             borderColor: '#C4C4C4',
             borderStyle: 'solid',
             borderWidth: 2,
-            margin: ScaleSizeH(5),
-            width: ScaleSizeW(650),
+            margin: ScaleSize(5),
+            width: ScaleSize(310),
             borderRadius: 10,
             fontSize: SetSpText(35),
           }}></TextInput>
         <View
           style={{
             position: 'absolute',
-            marginLeft: ScaleSizeW(675),
-            marginTop: ScaleSizeH(30),
+            right: ScaleSize(5),
+            top: ScaleSize(20),
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -931,7 +931,7 @@ class My extends Component {
               this.setState({refresh: !this.state.refresh});
               console.log(TheData.Ping);
             }}>
-            <Text style={{color: 'blue'}}>删除</Text>
+            <Text style={{color: 'blue', fontSize: SetSpText(25)}}>删除</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -941,18 +941,15 @@ class My extends Component {
 
   _renderitem2 = ({item}) => {
     return (
-      <View>
+      <View style={{flexDirection:'row'}}>
         <View>
           <Image
             source={require('../imgs/task.png')}
             style={{
-              width: ScaleSizeW(40),
-              height: ScaleSizeH(40),
-              // marginBottom: ScaleSizeH(-40),
-              marginLeft: ScaleSizeW(30),
-              marginBottom: ScaleSizeH(-15),
-              marginTop: ScaleSizeH(8),
-              marginRight: ScaleSizeW(10),
+              width: ScaleSize(30),
+              height: ScaleSize(30),   
+              marginVertical: ScaleSize(5),       
+              marginHorizontal: ScaleSize(10),
             }}
           />
         </View>
@@ -960,14 +957,11 @@ class My extends Component {
         <TouchableOpacity>
           <View
             style={{
-              marginVertical: ScaleSizeH(20),
-              alignItems: 'center',
-              flexDirection: 'row',
+              width: ScaleSize(255),
+              height: ScaleSize(34),  
+              justifyContent: 'center',
               borderBottomColor: '#919191',
               borderBottomWidth: 1,
-              marginLeft: ScaleSizeW(100),
-              marginTop: ScaleSizeH(-30),
-              width: ScaleSizeW(500),
             }}>
             <Text
               numberOfLines={1}
@@ -975,7 +969,6 @@ class My extends Component {
               style={{
                 color: '#919191',
                 fontSize: SetSpText(35),
-                //textDecorationLine: 'underline',
               }}>
               {item.url}
             </Text>
@@ -983,9 +976,8 @@ class My extends Component {
         </TouchableOpacity>
         <View
           style={{
-            position: 'absolute',
-            marginLeft: ScaleSizeW(650),
-            marginTop: ScaleSizeH(25),
+            marginLeft: ScaleSize(15),
+            marginTop: ScaleSize(15),
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -1000,8 +992,7 @@ class My extends Component {
             <Text
               style={{
                 color: 'blue',
-                marginTop: ScaleSizeH(-10),
-                marginLeft: ScaleSizeW(0),
+                fontSize: SetSpText(25),
               }}>
               删除
             </Text>
@@ -1021,15 +1012,16 @@ class My extends Component {
             <View
               style={{
                 flexDirection: 'row',
-                width: Width,
+                width: ScaleSize(360),
+                height: ScaleSize(40),
+                alignItems:'center',
                 borderBottomWidth: 1,
                 borderColor: '#C4C4C4',
               }}>
               <View
                 style={{
-                  marginLeft: ScaleSizeW(40),
-                  marginTop: ScaleSizeH(8),
-                  fontSize: SetSpText(30),
+                  position:'absolute',
+                  left: ScaleSize(20),
                 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -1040,18 +1032,16 @@ class My extends Component {
                   <Image
                     source={require('../imgs/about.png')}
                     style={{
-                      marginTop: ScaleSizeH(6),
-                      height: ScaleSizeH(40),
-                      width: ScaleSizeW(47),
+                      height: ScaleSize(25),
+                      width: ScaleSize(25),
                     }}
                   />
                 </TouchableOpacity>
               </View>
               <View
                 style={{
-                  marginLeft: ScaleSizeW(565),
-                  marginTop: ScaleSizeH(8),
-                  fontSize: SetSpText(30),
+                  position:'absolute',
+                  right:ScaleSize(20),
                 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -1060,8 +1050,8 @@ class My extends Component {
                   <Image
                     source={require('../imgs/history.png')}
                     style={{
-                      width: ScaleSizeW(50),
-                      height: ScaleSizeH(50),
+                      height: ScaleSize(30),
+                      width: ScaleSize(30),
                     }}
                   />
                 </TouchableOpacity>
@@ -1069,7 +1059,7 @@ class My extends Component {
             </View>
             <View
               style={{
-                height: 130,
+                height: ScaleSize(130),
                 borderBottomWidth: 1,
                 borderColor: '#C4C4C4',
                 borderStyle: 'solid',
@@ -1102,8 +1092,8 @@ class My extends Component {
                 }
               }}
               style={{
-                marginLeft: ScaleSizeW(20),
-                marginVertical: ScaleSizeH(10),
+                marginLeft: ScaleSize(15),
+                marginVertical: ScaleSize(10),
               }}>
               <Text style={{color: 'blue', fontSize: SetSpText(25)}}>
                 ✚ 添加
@@ -1112,10 +1102,10 @@ class My extends Component {
 
             <View
               style={{
-                marginHorizontal: ScaleSizeW(4),
-                marginVertical: ScaleSizeH(20),
+                marginHorizontal: ScaleSize(5),
+                marginBottom: ScaleSize(10),
               }}>
-              <Button
+              <TouchableOpacity
                 onPress={() => {
                   for (let i = 0; i < TheData.Ping.length; i++) {
                     if (!TheData.Ping[i].url) {
@@ -1152,7 +1142,15 @@ class My extends Component {
                     Toast.message('输入网址不能有空!');
                   }
                 }}
-                title="Ping"></Button>
+                style={{
+                  marginHorizontal: ScaleSize(5),
+                  alignItems: 'center',
+                  backgroundColor: 'blue',
+                  height: ScaleSize(35),
+                  justifyContent: 'center',
+                }}>
+                  <Text style={{fontSize: SetSpText(30),color:'white'}}>PING</Text>
+                </TouchableOpacity>
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -1161,11 +1159,11 @@ class My extends Component {
                 });
               }}
               style={{
-                width: Width,
+                marginHorizontal: ScaleSize(5),
                 alignItems: 'center',
-                marginBottom: ScaleSizeH(4),
+                justifyContent: 'center',
               }}>
-              <Text style={{color: 'gray'}}>参数设置</Text>
+              <Text style={{color: 'gray', fontSize: SetSpText(30)}}>参数设置</Text>
             </TouchableOpacity>
             <View style={{borderBottomWidth: 1, borderBottomColor: '#C4C4C4'}}>
               <Text></Text>
@@ -1173,14 +1171,14 @@ class My extends Component {
             <View>
               <View
                 style={{
-                  marginVertical: ScaleSizeH(20),
-                  marginLeft: ScaleSizeW(20),
+                  marginVertical: ScaleSize(10),
+                  marginLeft: ScaleSize(15),
                 }}>
-                <Text style={{color: 'gray'}}>快捷输入</Text>
+                <Text style={{color: 'gray', fontSize: SetSpText(30)}}>快捷输入</Text>
               </View>
               <View
                 flexDirection="row"
-                style={{marginHorizontal: ScaleSizeW(20)}}>
+                style={{marginHorizontal: ScaleSize(15), justifyContent:'space-between',}}>
                 <TouchableOpacity
                   onLongPress={() => this.overlay.show()}
                   onPress={() => {
@@ -1219,14 +1217,12 @@ class My extends Component {
                     backgroundColor: '#E5E5E5',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: ScaleSizeW(155),
-                    marginRight: ScaleSizeW(120),
-                    height: ScaleSizeH(75),
+                    width: ScaleSize(80),
+                    height: ScaleSize(40),
                   }}>
                   <Text
                     numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={{marginLeft: ScaleSizeW(2)}}>
+                    ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[0].name
                       ? TheData.QuickSelect[0].name
                       : '✚'}
@@ -1271,13 +1267,11 @@ class My extends Component {
                     backgroundColor: '#E5E5E5',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: ScaleSizeW(155),
-                    marginRight: ScaleSizeW(120),
+                    width: ScaleSize(80),
                   }}>
                   <Text
                     numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={{marginLeft: ScaleSizeW(2)}}>
+                    ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[1].name
                       ? TheData.QuickSelect[1].name
                       : '✚'}
@@ -1322,24 +1316,23 @@ class My extends Component {
                     backgroundColor: '#E5E5E5',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: ScaleSizeW(155),
-                    marginRight: ScaleSizeW(120),
+                    width: ScaleSize(80),
                   }}>
                   <Text
                     numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={{marginLeft: ScaleSizeW(2)}}>
+                    ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[2].name
                       ? TheData.QuickSelect[2].name
                       : '✚'}
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View
-                flexDirection="row"
+              <View  
                 style={{
-                  marginHorizontal: ScaleSizeW(20),
-                  marginTop: ScaleSizeH(40),
+                  flexDirection:"row",
+                  justifyContent:'space-between',
+                  marginHorizontal: ScaleSize(15),
+                  marginVertical: ScaleSize(20),
                 }}>
                 <TouchableOpacity
                   onLongPress={() => this.overlay.show()}
@@ -1379,14 +1372,12 @@ class My extends Component {
                     backgroundColor: '#E5E5E5',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: ScaleSizeW(155),
-                    marginRight: ScaleSizeW(120),
-                    height: ScaleSizeH(75),
+                    width: ScaleSize(80),
+                    height: ScaleSize(40),
                   }}>
                   <Text
                     numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={{marginLeft: ScaleSizeW(2)}}>
+                    ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[3].name
                       ? TheData.QuickSelect[3].name
                       : '✚'}
@@ -1431,13 +1422,11 @@ class My extends Component {
                     backgroundColor: '#E5E5E5',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: ScaleSizeW(155),
-                    marginRight: ScaleSizeW(120),
+                    width: ScaleSize(80),
                   }}>
                   <Text
                     numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={{marginLeft: ScaleSizeW(2)}}>
+                    ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[4].name
                       ? TheData.QuickSelect[4].name
                       : '✚'}
@@ -1482,13 +1471,11 @@ class My extends Component {
                     backgroundColor: '#E5E5E5',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: ScaleSizeW(155),
-                    marginRight: ScaleSizeW(120),
+                    width: ScaleSize(80),
                   }}>
                   <Text
                     numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={{marginLeft: ScaleSizeW(2)}}>
+                    ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[5].name
                       ? TheData.QuickSelect[5].name
                       : '✚'}
@@ -1498,26 +1485,24 @@ class My extends Component {
               <View
                 style={{
                   backgroundColor: '#DDDDDD',
-                  marginVertical: ScaleSizeH(20),
                   height: 1,
-                  marginBottom: ScaleSizeH(30),
                 }}>
                 <Text></Text>
               </View>
-              <View flexDirection="row" style={{marginLeft: ScaleSizeW(20)}}>
-                <Text style={{color: 'gray'}}>历史记录</Text>
+              <View flexDirection="row" style={{marginLeft: ScaleSizeW(20),marginTop: ScaleSize(20),marginBottom:ScaleSize(10),}}>
+                <Text style={{color: 'gray', fontSize: SetSpText(30)}}>历史记录</Text>
                 <TouchableOpacity
                   onPress={() => {
                     TheData.historyPing.splice(0, TheData.historyPing.length);
                     this.setState({refresh: !this.state.refresh});
                   }}
-                  style={{marginLeft: ScaleSizeW(525)}}>
-                  <Text style={{color: 'blue'}}>清空</Text>
+                  style={{marginLeft: ScaleSize(253)}}>
+                  <Text style={{color: 'blue', fontSize: SetSpText(25)}}>清空</Text>
                 </TouchableOpacity>
               </View>
               <View
                 style={{
-                  height: ScaleSizeH(500),
+                  height: ScaleSize(220),
                   borderBottomWidth: 1,
                   borderColor: '#C4C4C4',
                   borderStyle: 'solid',
@@ -1548,9 +1533,10 @@ class My extends Component {
               style={{justifyContent: 'center'}}>
               <View
                 style={{
-                  paddingHorizontal: ScaleSizeW(20),
-                  paddingTop: ScaleSizeH(20),
-                  marginHorizontal: ScaleSizeW(20),
+                  height: ScaleSize(300),
+                  paddingHorizontal: ScaleSize(10),
+                  paddingTop: ScaleSize(20),
+                  marginHorizontal: ScaleSize(5),
                   backgroundColor: 'white',
                   borderRadius: 10,
                 }}>
@@ -1566,7 +1552,7 @@ class My extends Component {
                     borderColor: '#C4C4C4',
                     borderStyle: 'solid',
                     borderWidth: 2,
-                    margin: ScaleSizeH(5),
+                    margin: ScaleSize(5),
                     borderRadius: 10,
                     fontSize: SetSpText(35),
                   }}
@@ -1592,7 +1578,7 @@ class My extends Component {
                     borderColor: '#C4C4C4',
                     borderStyle: 'solid',
                     borderWidth: 2,
-                    margin: ScaleSizeH(5),
+                    margin: ScaleSize(5),
                     borderRadius: 10,
                     fontSize: SetSpText(35),
                   }}
@@ -1604,10 +1590,14 @@ class My extends Component {
                     );
                     console.log(TheData.QuickSelect);
                   }}></TextInput>
-                <View style={{marginBottom: ScaleSizeH(15)}}>
-                  <Button
-                    style={{marginTop: ScaleSizeH(10)}}
-                    title="确定"
+                <View style={{marginBottom: ScaleSize(15),marginTop: ScaleSize(10)}}>
+                  <TouchableOpacity
+                    style={{
+                      height: ScaleSize(40),
+                      width: ScaleSize(330),
+                      backgroundColor:'blue',
+                      alignItems: 'center',
+                      justifyContent:'center',}}
                     onPress={() => {
                       if (
                         TheData.QuickSelect[this.state.QuickSelectIndex].url &&
@@ -1619,12 +1609,21 @@ class My extends Component {
                         Toast.message('输入名称或者URL不能为空！');
                       }
                     }}
-                  />
+                  >
+                    <Text style={{fontSize: SetSpText(30),color:'white'}}>确定</Text>
+                  </TouchableOpacity>
                 </View>
                 <View>
-                  <Button
-                    title="取消"
-                    onPress={() => this.overlay.close()}></Button>
+                  <TouchableOpacity
+                   style={{
+                    height: ScaleSize(40),
+                    width: ScaleSize(330),
+                    backgroundColor:'blue',
+                    alignItems: 'center',
+                    justifyContent:'center',}}
+                    onPress={() => this.overlay.close()}>
+                      <Text style={{fontSize: SetSpText(30),color:'white'}}>取消</Text>
+                    </TouchableOpacity>
                 </View>
               </View>
             </Overlay>
