@@ -21,7 +21,7 @@ import {NavigationBar, Label, Checkbox} from 'teaset';
 import * as RNLocalize from 'react-native-localize';
 import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
-import {SetSpText, ScaleSizeH, ScaleSizeW, ScaleSize} from '../controller/Adaptation';
+import {SetSpText, ScaleSizeH, ScaleSizeW} from '../controller/Adaptation';
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
 const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
 const Height = Dimensions.get('window').height;
@@ -70,83 +70,95 @@ export default class Setting extends Component {
     this.setState({modalVisible: visible});
   };
 
+  
   render() {
     const {modalVisible} = this.state;
     return (
       <View
         style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: '#f1f4ee',
-        }}>       
-        <View style={styles.headerViewStyle}>
-          <NavigationBar
-            style={{backgroundColor: '#fffef4'}}
-            type="ios"
-            tintColor="#333"
-            title={
-              <View
-                style={{
-                  flex: 1,
-                  paddingLeft: ScaleSize(4),
-                  paddingRight: ScaleSize(4),
-                  borderRadius: 60,
-                  alignItems: 'center',
-                }}>
-                <Label
-                  style={{color: '#333333', fontSize: SetSpText(20)}}
-                  text=""
-                  style={styles.headerTextStyle}
-                />
-              </View>
-            }
-            leftView={
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop:ScaleSize(10),
-                  marginLeft:ScaleSize(10),
-                }}>
-                <NavigationBar.IconButton
-                  icon={require('../imgs/back.png')}
-                  onPress={() => {
-                    this.props.navigation.navigate('Main');
-                  }}
-                />
-              </View>
-            }
-            // rightView={
-            //   <View
-            //     style={{flexDirection: 'row', marginTop: 10, marginRight: 10}}>
-            //     <NavigationBar.IconButton
-            //       icon={require('../imgs/caozuo-quanbuxuan.png')}
-            //       onPress={this.deletitems}
-            //     />
-            //     <NavigationBar.IconButton
-            //       icon={require('../imgs/total_selection.png')}
-            //       onPress={this.addhandle}
-            //     />
-            //   </View>
-            // }
-          />
+        }}>
+        <View>
+          <View style={styles.headerViewStyle}>
+            <NavigationBar
+              style={{backgroundColor: '#fffef4'}}
+              type="ios"
+              tintColor="#333"
+              title={
+                <View
+                  style={{
+                    flex: 1,
+                    paddingLeft: 4,
+                    paddingRight: 4,
+                    borderRadius: 60,
+                    alignItems: 'center',
+                  }}>
+                  <Label
+                    style={{color: '#333333', fontSize: 20}}
+                    text=""
+                    style={styles.headerTextStyle}
+                  />
+                </View>
+              }
+              leftView={
+                <View
+                  style={{
+                    height:Height,
+                    width:Width,
+                    flexDirection: 'row',
+                    marginTop:50,
+                    marginLeft:0,
+                  }}>
+                  <NavigationBar.IconButton
+                    icon={require('../imgs/back.png')}
+                    onPress={() => {
+                      this.props.navigation.navigate('Main');
+                    }}
+                  />
+                </View>
+              }
+              // rightView={
+              //   <View
+              //     style={{flexDirection: 'row', marginTop: 10, marginRight: 10}}>
+              //     <NavigationBar.IconButton
+              //       icon={require('../imgs/caozuo-quanbuxuan.png')}
+              //       onPress={this.deletitems}
+              //     />
+              //     <NavigationBar.IconButton
+              //       icon={require('../imgs/total_selection.png')}
+              //       onPress={this.addhandle}
+              //     />
+              //   </View>
+              // }
+            />
+          </View>
         </View>
-        
         <View
           style={{
-            width: ScaleSize(325),
-            height: ScaleSize(76),
+            width: 320,
+            height: 100,
+            position: 'absolute',
             backgroundColor: '#f1f4ee',
+            flex: 0,
+            top: 0,
             borderBottomWidth: 1,
             borderBottomColor: '#666',
-            marginTop: ScaleSize(100),
-            marginLeft: ScaleSize(20),
+            marginTop: 100,
           }}>
           <Text
             style={{
-              fontSize: SetSpText(35),              
+              fontSize: SetSpText(35),
+              top: ScaleSizeH(30),
+              left: ScaleSizeW(40),
               color: '#85b2ae',
             }}>
             GENERAL
           </Text>
           <TouchableOpacity
+            style={{flex: 1}}
             onPress={() => {
               if (I18n.locale === 'zh') {
                 I18n.locale = 'en';
@@ -160,12 +172,14 @@ export default class Setting extends Component {
                 this.setState({langvis: false});
               }
               // 获得home页面的this并进行刷新，在这里写变换快，在componentWillUnmount中写会有一点延迟。
-              const mainThis = this.props.route.params.mainThis;
-              mainThis.setState({langvis: false});
+              const homeThis = this.props.route.params.homeThis;
+              homeThis.setState({langvis: false});
             }}>
             <Text
               style={{
                 fontSize: SetSpText(40),
+                top: ScaleSizeH(30),
+                left: ScaleSizeW(40),
                 color: '#666',
               }}>
               {I18n.t('switchlanguage')}
@@ -173,20 +187,22 @@ export default class Setting extends Component {
           </TouchableOpacity>
           <Text
             style={{
-              fontSize: SetSpText(30),
               color: '#666',
+              top: ScaleSizeH(1),
+              left: ScaleSizeW(40),
+              marginBottom: 5,
             }}>
             {I18n.t('currentlanguage')} :{' '}
             {I18n.locale === 'zh' ? '中文' : 'English'}
           </Text>
         </View>
-
         <View
           style={{
-            width: ScaleSize(320),
-            height: ScaleSize(76), 
-            marginLeft: ScaleSize(20),
-            marginTop: ScaleSize(10),
+            width: 320,
+            height: 100,
+            position: 'absolute',
+            flex: 0,
+            top: 200,
             borderBottomWidth: 1,
             borderBottomColor: '#666',
           }}>
@@ -223,7 +239,7 @@ export default class Setting extends Component {
                               this.setState({reqTime: item.key});
                             }}>
                             <Text style={styles.textStyle}>
-                              {parseInt(item.key) < 10 ? '0'+item.key + ' ms':item.key + ' ms'}                  
+                              {item.key + ' ms'}
                             </Text>
                           </TouchableOpacity>
                         )}
@@ -241,30 +257,33 @@ export default class Setting extends Component {
               </View>
             </TouchableWithoutFeedback>
           </Modal>
+
           <Text
             style={{
               fontSize: SetSpText(35),
+              top: ScaleSizeH(10),
+              left: ScaleSizeW(40),
               color: '#85b2ae',
             }}>
             ADVANCED
           </Text>
           <TouchableOpacity
+            style={{padding: 10, width: 320, height: 40, top: 20}}
             onPress={() => {
               this.setModalVisible(true);
             }}>
             <Text
               style={{
                 fontSize: SetSpText(40),
+                top: ScaleSizeH(-34),
+                left: ScaleSizeW(20),
                 color: '#666',
               }}>
               {I18n.t('requestinterval')}
             </Text>
           </TouchableOpacity>
           <Text
-            style={{
-              fontSize: SetSpText(30),
-              color: '#666',
-              }}>
+            style={{color: '#666', top: ScaleSizeH(10), left: ScaleSizeW(40)}}>
             {I18n.t('currenttime')} : {this.state.reqTime} ms
           </Text>
         </View>
@@ -284,8 +303,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
-    height: ScaleSize(200),
-    width: ScaleSize(300),
+    height: 200,
+    width: 300,
     backgroundColor: '#666',
     shadowColor: '#666',
     shadowOffset: {
@@ -298,50 +317,53 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    top: ScaleSize(-100),
+    top: -100,
   },
   modalTitle: {
     textAlign: 'center',
     fontSize: SetSpText(45),
-    top: ScaleSize(-20),
-    paddingLeft: ScaleSize(20),
+    top: -20,
+    paddingLeft: 20,
     color: 'white',
   },
   flatlistContainer: {
-    height: ScaleSize(65),
-    width: ScaleSize(260),
-    marginLeft: ScaleSize(20),
+    height: 65,
+    width: 260,
+    marginLeft: 20,
   },
   textcontainer: {
     flex: 1,
   },
   textStyle: {
+    textAlign: 'center',
     fontSize: SetSpText(50),
     position: 'relative',
-    color: 'white',    
+    color: 'white',
+    left: -100,
   },
   modalCancel: {
-    fontSize: SetSpText(30),
-    left: ScaleSize(230),
-    top: ScaleSize(20),
+    fontSize: 15,
+    left: 230,
+    top: 20,
     color: '#88b3ad',
   },
   //
 
   headerTextStyle: {
-    paddingTop: ScaleSize(10),
+    paddingTop: 10,
     fontWeight: 'bold',
-    fontSize:SetSpText(30),
+    fontSize: 20,
     color: '#FFFFFF',
   },
   headerViewStyle: {
-    height: ScaleSize(60),
-    width: ScaleSize(360),
+    height: 80,
     position: 'absolute',
-    top: 0, 
+    top: -430,
+    right: -216,
+    width: Width,
     backgroundColor: '#fffef4',
     justifyContent: 'center',
     alignItems: 'center',
-    // borderRadius: 40,
+    borderRadius: 40,
   },
 });
