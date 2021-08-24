@@ -973,7 +973,13 @@ class My extends Component{
             TheData.Ping.splice(0,TheData.Ping.length)}
             else{Toast.message('输入网址不能有空!')}
           }} title='Ping'></Button></View>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Setting')} style={{width:Width,alignItems:'center',marginBottom:ScaleSizeH(4)}}><Text style={{color:'gray',}}>参数设置</Text></TouchableOpacity>
+          <TouchableOpacity 
+          onPress={() => {
+            this.props.navigation.navigate('Setting', {
+              mainThis: this,
+            });
+          }} 
+          style={{width:Width,alignItems:'center',marginBottom:ScaleSizeH(4)}}><Text style={{color:'gray',}}>参数设置</Text></TouchableOpacity>
           <View style={{borderBottomWidth:1,borderBottomColor:'#C4C4C4'}}><Text></Text></View>
           <View>
             <View style={{marginVertical:ScaleSizeH(20),marginLeft:ScaleSizeW(20)}}><Text style={{color:'gray'}}>快捷输入</Text></View>
