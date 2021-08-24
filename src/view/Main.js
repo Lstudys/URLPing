@@ -868,6 +868,7 @@ import {
   ScaleSizeR,
   ScaleSizeW,
   SetSpText,
+  ScaleSize,
 } from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import TheData from '../modal/TheData';
