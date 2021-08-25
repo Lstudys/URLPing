@@ -24,8 +24,10 @@ import {
   ScaleSizeH,
   ScaleSizeW,
   ScaleSizeR,
+  ScaleSize,
 } from '../controller/Adaptation';
 import {color} from 'react-native-reanimated';
+import { TouchableHighlight,TouchableOpacity } from 'react-native';
 
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
 const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
@@ -75,7 +77,7 @@ class Index extends Component {
       <View>
         <View
           style={{
-            height: ScaleSizeH(1200),
+            height: Height,
             backgroundColor: '#f1f3f0',
             alignItems: 'center',
             position: 'relative',
@@ -83,7 +85,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(125),
+              top: ScaleSize(75),
               fontSize: SetSpText(50),
               color: '#666',
               fontWeight: 'bold',
@@ -93,7 +95,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(200),
+              top: ScaleSize(110),
               fontSize: SetSpText(50),
               color: '#666',
               fontWeight: 'bold',
@@ -103,7 +105,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(350),
+              top: ScaleSize(190),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -113,7 +115,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(400),
+              top: ScaleSize(220),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -123,7 +125,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(500),
+              top: ScaleSize(270),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -133,7 +135,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(550),
+              top: ScaleSize(300),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -143,7 +145,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(700),
+              top: ScaleSize(360),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -153,7 +155,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(800),
+              top: ScaleSize(440),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -163,7 +165,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(1000),
+              top: ScaleSize(470),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -173,7 +175,7 @@ class Index extends Component {
           <Text
             style={{
               position: 'absolute',
-              top: ScaleSizeH(1050),
+              top: ScaleSize(500),
               fontSize: SetSpText(40),
               color: '#666',
               fontWeight: 'bold',
@@ -182,13 +184,21 @@ class Index extends Component {
           </Text>
           {/* <View style={{position:"absolute",top:700}}> */}
         </View>
-        <Button
-          color="#666"
-          title="Home"
+        <TouchableOpacity
+        style={{
+          position:'absolute',
+          bottom: ScaleSize(10),
+          height:ScaleSize(70),
+          width:Width,
+          alignItems:'center',
+          justifyContent:'center',
+          backgroundColor:'#fffef4',}}
           onPress={() => {
             this.props.navigation.navigate('Main');
           }}
-        />
+        >
+          <Text style={{fontSize: SetSpText(40),}}>Home</Text>
+        </TouchableOpacity>
       </View>
     );
   }

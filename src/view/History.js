@@ -408,7 +408,7 @@
 import React,{Component} from 'react'
 import { View,Button,Text,TouchableOpacity,FlatList,Dimensions } from 'react-native'
 import { ScreenStackHeaderLeftView } from 'react-native-screens';
-import { ScaleSizeH, ScaleSizeW, SetSpText } from '../controller/Adaptation'
+import { ScaleSizeH, ScaleSizeW, SetSpText, ScaleSize} from '../controller/Adaptation'
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const DATA=[{key:0,url:'http://baidu.com',Avg:200,N95:120,time:'2021年8月24日 16:41'},{key:1,url:'http://souhu.com',Avg:200,N95:120,time:'2021年8月24日 16:41'},{key:3,url:'http://baidu.com',Avg:200,N95:120,time:'2021年8月24日 16:41'}]
@@ -422,23 +422,22 @@ class History extends Component{
   
   renderitem=({item})=>{
     return(
-      <View style={{width:Width,height:ScaleSizeH(150),borderBottomWidth:1,borderColor:'#C4C4C4',marginBottom:ScaleSizeH(10)}}>
-        <View style={{marginTop:ScaleSizeH(30),marginLeft:ScaleSizeW(35)}}><Text style={{fontSize:SetSpText(35),fontWeight:'bold'}}>{item.url}</Text></View>
-        <View style={{marginTop:ScaleSizeH(10),marginLeft:ScaleSizeW(35)}}><Text>{item.time}</Text></View>
-        <View style={{position:'absolute',marginLeft:ScaleSizeW(535),marginTop:ScaleSizeH(30)}}><Text style={{color:'#3C3CC4',fontSize:SetSpText(30),fontWeight:'bold'}}>N95: {item.N95}</Text></View>
-        <View style={{position:'absolute',marginLeft:ScaleSizeW(535),marginTop:ScaleSizeH(85)}}><Text style={{color:'#3C3CC4',fontSize:SetSpText(30),fontWeight:'bold'}}>AVG: {item.Avg}</Text></View>
+      <View style={{width:Width,height:ScaleSize(90),borderBottomWidth:1,borderColor:'#C4C4C4',marginBottom:ScaleSize(5),flexDirection:'row',alignItems:'center'}}>
+        <View><View style={{marginLeft:ScaleSizeW(35)}}><Text style={{fontSize:SetSpText(35),fontWeight:'bold'}}>{item.url}</Text></View>
+        <View style={{marginLeft:ScaleSizeW(35)}}><Text style={{fontSize:SetSpText(25),}}>{item.time}</Text></View></View>
+        <View><View style={{marginLeft:ScaleSize(120),}}><Text style={{color:'#3C3CC4',fontSize:SetSpText(30),fontWeight:'bold'}}>N95: {item.N95}</Text></View>
+        <View style={{marginLeft:ScaleSize(120),}}><Text style={{color:'#3C3CC4',fontSize:SetSpText(30),fontWeight:'bold'}}>AVG: {item.Avg}</Text></View></View>
       </View>
     )
   }
   render(){
     return(
       <View>
-         <View>
-      <TouchableOpacity style={{position:'absolute',marginTop:ScaleSizeH(20),marginLeft:ScaleSizeW(15)}} onPress={()=>this.props.navigation.navigate('Main')}><Text style={{fontSize:SetSpText(25)}}>返回</Text></TouchableOpacity>
-      <TouchableOpacity style={{position:'absolute',marginTop:ScaleSizeH(20),marginLeft:ScaleSizeW(666)}}><Text style={{fontSize:SetSpText(25),color:'#3352CC'}}>清空</Text></TouchableOpacity>
-      <View style={{alignItems:'center',marginTop:ScaleSizeH(20)}}><Text style={{fontSize:SetSpText(35),fontWeight:'bold',marginBottom:ScaleSizeH(20)}}>历史记录</Text></View>
-      <View style={{borderWidth:1,borderColor:'#C4C4C4'}}></View>
-          </View>
+        <View style={{flexDirection:'row',justifyContent:'space-between',width:Width,height:ScaleSize(35),alignItems:'center',borderBottomWidth:1,borderColor:'#C4C4C4',}}>
+      <TouchableOpacity style={{marginLeft:ScaleSize(5),}} onPress={()=>this.props.navigation.navigate('Main')}><Text style={{fontSize:SetSpText(25)}}>返回</Text></TouchableOpacity>
+      <View style={{}}><Text style={{fontSize:SetSpText(35),fontWeight:'bold'}}>历史记录</Text></View>
+      <TouchableOpacity style={{marginRight:ScaleSize(5),}}><Text style={{fontSize:SetSpText(25),color:'#3352CC'}}>清空</Text></TouchableOpacity>
+        </View>
           <View>
           <FlatList data={DATA} renderItem={this.renderitem} 
               onRefresh={() => {
