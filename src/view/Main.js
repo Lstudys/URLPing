@@ -1092,12 +1092,14 @@ class My extends Component {
               <TouchableOpacity
                 onPress={() => {
                   if (TheData.Ping.length != 0) {
-                    let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                    TheData.Ping = [...TheData.Ping, { key: key, url: '' }];
+                    let key = TheData.Ping.length
+                    TheData.Ping = [...TheData.Ping, { key: key, url: 'https://' }];
                     this.setState({ refresh: !this.state.refresh });
+                    console.log("1")
                   } else {
-                    TheData.Ping = [...TheData.Ping, { key: 0, url: '' }];
+                    TheData.Ping = [{ key: 0, url: 'https://' }];
                     this.setState({ refresh: !this.state.refresh });
+                    console.log('2')
                   }
                 }}
                 style={{
@@ -1142,7 +1144,7 @@ class My extends Component {
               <TouchableOpacity
                 onPress={() => {
                   for (let i = 0; i < TheData.Ping.length; i++) {
-                    if (!TheData.Ping[i].url) {
+                    if ((TheData.Ping[i].url=='https://')||(TheData.Ping[i].url=='')) {
                       this.identify = false;
                       break;
                     } else {
@@ -1171,7 +1173,7 @@ class My extends Component {
                     } else {
                       Toast.message('尚未添加需要Ping的网址!');
                     }
-                    TheData.Ping.splice(0, TheData.Ping.length);
+                    //TheData.Ping.splice(0, TheData.Ping.length);
                   } else {
                     Toast.message('输入网址不能有空!');
                   }
@@ -1219,7 +1221,7 @@ class My extends Component {
                   onPress={() => {
                     if (
                       TheData.QuickSelect[0].name &&
-                      TheData.QuickSelect[0].url
+                      TheData.QuickSelect[0].url!='https://'
                     ) {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
@@ -1236,15 +1238,12 @@ class My extends Component {
                         this.setState({ refresh: !this.state.refresh });
                       }
                     } else {
-                      if (TheData.QuickSelect[0].url) {
-                        this.overlay.show();
-                      } else {
                         this.setState({ QuickSelectIndex: 0 }, () => {
                           this.state.QuickSelectIndex = this.state.QuickSelectIndex;
                           console.log(this.state.QuickSelectIndex);
                         });
+                        TheData.QuickSelect[0].url='https://'
                         this.overlay.show();
-                      }
                     }
                   }}
                   style={{
@@ -1286,16 +1285,13 @@ class My extends Component {
                         this.setState({ refresh: !this.state.refresh });
                       }
                     } else {
-                      if (TheData.QuickSelect[1].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 1 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
-                    }
+                      this.setState({ QuickSelectIndex: 1 }, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[1].url='https://'
+                      this.overlay.show();
+                  }
                   }}
                   style={{
                     borderRadius: 20,
@@ -1335,16 +1331,13 @@ class My extends Component {
                         this.setState({ refresh: !this.state.refresh });
                       }
                     } else {
-                      if (TheData.QuickSelect[2].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 2 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
-                    }
+                      this.setState({ QuickSelectIndex: 2 }, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[2].url='https://'
+                      this.overlay.show();
+                  }
                   }}
                   style={{
                     borderRadius: 20,
@@ -1391,16 +1384,13 @@ class My extends Component {
                         this.setState({ refresh: !this.state.refresh });
                       }
                     } else {
-                      if (TheData.QuickSelect[3].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 3 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
-                    }
+                      this.setState({ QuickSelectIndex: 3 }, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[3].url='https://'
+                      this.overlay.show();
+                  }
                   }}
                   style={{
                     borderRadius: 20,
@@ -1441,16 +1431,13 @@ class My extends Component {
                         this.setState({ refresh: !this.state.refresh });
                       }
                     } else {
-                      if (TheData.QuickSelect[4].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 4 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
-                    }
+                      this.setState({ QuickSelectIndex: 4 }, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[4].url='https://'
+                      this.overlay.show();
+                  }
                   }}
                   style={{
                     borderRadius: 20,
@@ -1490,16 +1477,13 @@ class My extends Component {
                         this.setState({ refresh: !this.state.refresh });
                       }
                     } else {
-                      if (TheData.QuickSelect[5].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 5 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
-                    }
+                      this.setState({ QuickSelectIndex: 5 }, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[5].url='https://'
+                      this.overlay.show();
+                  }
                   }}
                   style={{
                     borderRadius: 20,
@@ -1537,7 +1521,7 @@ class My extends Component {
               </View>
               <View
                 style={{
-                  height: ScaleSize(220),
+                  //height: ScaleSize(220),
                   borderBottomWidth: 1,
                   borderColor: '#C4C4C4',
                   borderStyle: 'solid',
@@ -1564,8 +1548,8 @@ class My extends Component {
             ref={(ele) => (this.overlay = ele)}
             style={{ justifyContent: 'center', }}>
             <TouchableOpacity onPress={() => {
-              if (TheData.QuickSelect[this.state.QuickSelectIndex].name && TheData.QuickSelect[this.state.QuickSelectIndex].url) { this.overlay.close() }
-              else { TheData.QuickSelect[this.state.QuickSelectIndex] = { key: this.state.QuickSelectIndex, name: '', url: '' }; this.overlay.close(); this.setState({ refresh: !this.state.refresh }); console.log(TheData.QuickSelect[this.state.QuickSelectIndex]) }
+              if (TheData.QuickSelect[this.state.QuickSelectIndex].name && TheData.QuickSelect[this.state.QuickSelectIndex].url!='https://') { this.overlay.close() }
+              else { TheData.QuickSelect[this.state.QuickSelectIndex] = { key: this.state.QuickSelectIndex, name: '', url: 'https://' }; this.overlay.close(); this.setState({ refresh: !this.state.refresh }); console.log(TheData.QuickSelect[this.state.QuickSelectIndex]) }
             }} activeOpacity={1} style={{ width: Width, height: Height, justifyContent: 'center' }}>
               <View
                 style={{
@@ -1657,8 +1641,8 @@ class My extends Component {
                         alignItems: 'center',
                       }}
                       onPress={() => {
-                        if (TheData.QuickSelect[this.state.QuickSelectIndex].name && TheData.QuickSelect[this.state.QuickSelectIndex].url) { this.overlay.close() }
-                        else { TheData.QuickSelect[this.state.QuickSelectIndex] = { key: this.state.QuickSelectIndex, name: '', url: '' }; this.overlay.close(); this.setState({ refresh: !this.state.refresh }); console.log(TheData.QuickSelect[this.state.QuickSelectIndex]) }
+                        if (TheData.QuickSelect[this.state.QuickSelectIndex].name && TheData.QuickSelect[this.state.QuickSelectIndex].url!='https://') { this.overlay.close() }
+                        else { TheData.QuickSelect[this.state.QuickSelectIndex] = { key: this.state.QuickSelectIndex, name: '', url: 'https://' }; this.overlay.close(); this.setState({ refresh: !this.state.refresh }); console.log(TheData.QuickSelect[this.state.QuickSelectIndex]) }
                       }}>
                       <Text style={{ fontSize: SetSpText(30), color: '#2a82e4' }}>取消</Text>
                     </TouchableOpacity>
