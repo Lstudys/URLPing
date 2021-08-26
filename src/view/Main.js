@@ -931,7 +931,7 @@ class My extends Component {
               this.setState({ refresh: !this.state.refresh });
               console.log(TheData.Ping);
             }}>
-            <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>删除</Text>
+            <Text style={{ color: '#2a82e4', fontSize: SetSpText(25) }}>删除</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -995,7 +995,7 @@ class My extends Component {
             }}>
             <Text
               style={{
-                color: 'blue',
+                color: '#2a82e4',
                 fontSize: SetSpText(25),
               }}>
               删除
@@ -1100,12 +1100,12 @@ class My extends Component {
                   marginLeft: ScaleSize(15),
                   marginVertical: ScaleSize(10),
                 }}>
-                <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>
+                <Text style={{ color: '#2a82e4', fontSize: SetSpText(25) }}>
                   ✚ 添加
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/*<TouchableOpacity
                 onPress={() => {
                   TheData.Ping.splice(0, TheData.Ping.length);
                   this.setState({ refresh: !this.state.refresh });
@@ -1119,7 +1119,7 @@ class My extends Component {
                   }}>
                   清空
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity>*/}
             </View>
             <View
               style={{
@@ -1166,7 +1166,7 @@ class My extends Component {
                 style={{
                   marginHorizontal: ScaleSize(5),
                   alignItems: 'center',
-                  backgroundColor: 'blue',
+                  backgroundColor: '#2a82e4',
                   height: ScaleSize(35),
                   justifyContent: 'center',
                 }}>
@@ -1180,11 +1180,10 @@ class My extends Component {
                 });
               }}
               style={{
-                marginHorizontal: ScaleSize(5),
-                alignItems: 'center',
-                justifyContent: 'center',
+                width:ScaleSize(60),
+                marginLeft:ScaleSize(150)
               }}>
-              <Text style={{ color: 'gray', fontSize: SetSpText(30) }}>参数设置</Text>
+              <Text style={{ color: 'gray', fontSize: SetSpText(30), }}>参数设置</Text>
             </TouchableOpacity>
             <View style={{ borderBottomWidth: 1, borderBottomColor: '#C4C4C4' }}>
               <Text></Text>
@@ -1201,7 +1200,7 @@ class My extends Component {
                 flexDirection="row"
                 style={{ marginHorizontal: ScaleSize(15), justifyContent: 'space-between', }}>
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => { this.setState({ QuickSelectIndex: 0 }, () => { this.state.QuickSelectIndex = this.state.QuickSelectIndex; console.log(this.state.QuickSelectIndex) }); this.overlay.show() }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[0].name &&
@@ -1251,7 +1250,7 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => { this.setState({ QuickSelectIndex: 1 }, () => { this.state.QuickSelectIndex = this.state.QuickSelectIndex; console.log(this.state.QuickSelectIndex) }); this.overlay.show() }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[1].name &&
@@ -1300,7 +1299,7 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => { this.setState({ QuickSelectIndex: 2 }, () => { this.state.QuickSelectIndex = this.state.QuickSelectIndex; console.log(this.state.QuickSelectIndex) }); this.overlay.show() }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[2].name &&
@@ -1356,7 +1355,7 @@ class My extends Component {
                   marginVertical: ScaleSize(20),
                 }}>
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => { this.setState({ QuickSelectIndex: 3 }, () => { this.state.QuickSelectIndex = this.state.QuickSelectIndex; console.log(this.state.QuickSelectIndex) }); this.overlay.show() }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[3].name &&
@@ -1406,7 +1405,7 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => { this.setState({ QuickSelectIndex: 4 }, () => { this.state.QuickSelectIndex = this.state.QuickSelectIndex; console.log(this.state.QuickSelectIndex) }); this.overlay.show() }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[4].name &&
@@ -1455,7 +1454,7 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => { this.setState({ QuickSelectIndex: 5 }, () => { this.state.QuickSelectIndex = this.state.QuickSelectIndex; console.log(this.state.QuickSelectIndex) }); this.overlay.show() }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[5].name &&
@@ -1518,7 +1517,7 @@ class My extends Component {
                     this.setState({ refresh: !this.state.refresh });
                   }}
                   style={{ marginLeft: ScaleSize(253) }}>
-                  <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>清空</Text>
+                  <Text style={{ color: '#2a82e4', fontSize: SetSpText(25) }}>清空</Text>
                 </TouchableOpacity>
               </View>
               <View
@@ -1545,36 +1544,37 @@ class My extends Component {
               </View>
             </View>
           </View>
-          <View
-            style={{ backgroundColor: 'black' }}
-            onPress={() => this.overlay.close()}>
-            {/*快捷输入编辑框*/}
-            <Overlay
-              ref={(ele) => (this.overlay = ele)}
-              style={{ justifyContent: 'center' }}>
+          {/*快捷输入编辑框*/}
+          <Overlay
+            ref={(ele) => (this.overlay = ele)}
+            style={{ justifyContent: 'center', }}>
+            <TouchableOpacity onPress={() => {
+              if (TheData.QuickSelect[this.state.QuickSelectIndex].name && TheData.QuickSelect[this.state.QuickSelectIndex].url) { this.overlay.close() }
+              else { TheData.QuickSelect[this.state.QuickSelectIndex] = { key: this.state.QuickSelectIndex, name: '', url: '' }; this.overlay.close(); this.setState({ refresh: !this.state.refresh }); console.log(TheData.QuickSelect[this.state.QuickSelectIndex]) }
+            }} activeOpacity={1} style={{ width: Width, height: Height, justifyContent: 'center' }}>
               <View
                 style={{
-                  height: ScaleSize(300),
+                  height: ScaleSize(185),
                   paddingHorizontal: ScaleSize(10),
                   paddingTop: ScaleSize(20),
-                  marginHorizontal: ScaleSize(5),
+                  marginHorizontal: ScaleSize(20),
                   backgroundColor: 'white',
                   borderRadius: 10,
+                  elevation: 20,
+                  shadowColor: '#ddd',
+                  shadowOpacity: 200,
+                  shadowRadius: 5,
                 }}>
-                <View>
-                  <Text style={{ fontSize: SetSpText(30) }}>名称:</Text>
-                </View>
                 <TextInput
                   defaultValue={
                     TheData.QuickSelect[this.state.QuickSelectIndex].name
                   }
-                  placeholder="请输入名称"
+                  placeholder="请输入代名"
                   style={{
                     borderColor: '#C4C4C4',
                     borderStyle: 'solid',
-                    borderWidth: 2,
+                    borderBottomWidth: 1,
                     margin: ScaleSize(5),
-                    borderRadius: 10,
                     fontSize: SetSpText(35),
                   }}
                   onChangeText={(text) => {
@@ -1587,20 +1587,16 @@ class My extends Component {
                     );
                     console.log(TheData.QuickSelect);
                   }}></TextInput>
-                <View>
-                  <Text style={{ fontSize: SetSpText(30) }}>URL：</Text>
-                </View>
                 <TextInput
                   defaultValue={
                     TheData.QuickSelect[this.state.QuickSelectIndex].url
                   }
-                  placeholder="请输入URL"
+                  placeholder="请输入网址"
                   style={{
                     borderColor: '#C4C4C4',
                     borderStyle: 'solid',
-                    borderWidth: 2,
+                    borderBottomWidth: 1,
                     margin: ScaleSize(5),
-                    borderRadius: 10,
                     fontSize: SetSpText(35),
                   }}
                   onChangeText={(text) => {
@@ -1611,46 +1607,51 @@ class My extends Component {
                     );
                     console.log(TheData.QuickSelect);
                   }}></TextInput>
-                <View style={{ marginBottom: ScaleSize(15), marginTop: ScaleSize(10) }}>
-                  <TouchableOpacity
-                    style={{
-                      height: ScaleSize(40),
-                      width: ScaleSize(330),
-                      backgroundColor: 'blue',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      if (
-                        TheData.QuickSelect[this.state.QuickSelectIndex].url &&
-                        TheData.QuickSelect[this.state.QuickSelectIndex].name
-                      ) {
-                        this.overlay.close();
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        Toast.message('输入名称或者URL不能为空！');
-                      }
-                    }}
-                  >
-                    <Text style={{ fontSize: SetSpText(30), color: 'white' }}>确定</Text>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    style={{
-                      height: ScaleSize(40),
-                      width: ScaleSize(330),
-                      backgroundColor: 'blue',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => this.overlay.close()}>
-                    <Text style={{ fontSize: SetSpText(30), color: 'white' }}>取消</Text>
-                  </TouchableOpacity>
+                <View flexDirection='row'>
+                  <View style={{ marginBottom: ScaleSize(15), marginTop: ScaleSize(10) }}>
+                    <TouchableOpacity
+                      style={{
+                        height: ScaleSize(40),
+                        width: ScaleSize(145),
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRightWidth: 1,
+                        borderRightColor: '#C4C4C4'
+                      }}
+                      onPress={() => {
+                        if (
+                          TheData.QuickSelect[this.state.QuickSelectIndex].url &&
+                          TheData.QuickSelect[this.state.QuickSelectIndex].name
+                        ) {
+                          this.overlay.close();
+                          this.setState({ refresh: !this.state.refresh });
+                        } else {
+                          Toast.message('输入名称或者URL不能为空！');
+                        }
+                      }}
+                    >
+                      <Text style={{ fontSize: SetSpText(30), color: '#2a82e4' }}>确定</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{ marginBottom: ScaleSize(15), marginTop: ScaleSize(10) }}>
+                    <TouchableOpacity
+                      style={{
+                        height: ScaleSize(40),
+                        width: ScaleSize(155),
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => {
+                        if (TheData.QuickSelect[this.state.QuickSelectIndex].name && TheData.QuickSelect[this.state.QuickSelectIndex].url) { this.overlay.close() }
+                        else { TheData.QuickSelect[this.state.QuickSelectIndex] = { key: this.state.QuickSelectIndex, name: '', url: '' }; this.overlay.close(); this.setState({ refresh: !this.state.refresh }); console.log(TheData.QuickSelect[this.state.QuickSelectIndex]) }
+                      }}>
+                      <Text style={{ fontSize: SetSpText(30), color: '#2a82e4' }}>取消</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </Overlay>
-          </View>
+            </TouchableOpacity>
+          </Overlay>
         </View>
       );
     }
