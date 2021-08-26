@@ -892,12 +892,16 @@ class My extends Component {
       isPing: false,
       refresh: false,
     };
+    if(TheData.Ping==[]){
+      TheData.Ping=[{ key: 0, url: '' }];
+      this.setState({ refresh: !this.state.refresh });
+    }
   }
   identify = true;
 
   _renderItem1 = ({ item }) => {
     return (
-      <View>
+      <View style={{borderBottomWidth:ScaleSize(1),borderBottomColor:"rgba(0,0,0,.1)",height:Height * .055, width:Width * .92, marginLeft:Width * .04}}>
         <TextInput
           defaultValue={TheData.Ping[parseInt(item.key)].url}
           onChangeText={(value) => {
@@ -906,17 +910,18 @@ class My extends Component {
             store.update(TheData.Ping[parseInt(item.key)].url, value);
             console.log(TheData.Ping);
           }}
-          placeholder="请输入ping的地址"
+          placeholder="请输入Ping的地址"
           style={{
-            borderColor: '#C4C4C4',
             borderStyle: 'solid',
-            borderWidth: 2,
-            margin: ScaleSize(5),
+            marginTop: ScaleSize(1),
+            marginLeft: ScaleSize(4),
             width: ScaleSize(310),
             borderRadius: 10,
-            fontSize: SetSpText(35),
+            paddingBottom:ScaleSize(4),
+            fontSize: SetSpText(30),
           }}></TextInput>
-        <View
+        {  /*第一个不包含删除按钮*/}
+  {item.key!=0?<View
           style={{
             position: 'absolute',
             right: ScaleSize(5),
@@ -931,9 +936,10 @@ class My extends Component {
               this.setState({ refresh: !this.state.refresh });
               console.log(TheData.Ping);
             }}>
-            <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>删除</Text>
+            <Text style={{ color: '#2a82e4', fontSize: SetSpText(30), marginRight:ScaleSize(10), marginTop:ScaleSize(-10),}}>删除</Text>
           </TouchableOpacity>
-        </View>
+        </View>:<View></View>}
+        
       </View>
       //<Text>{this.Data}</Text>
     );
@@ -1011,23 +1017,23 @@ class My extends Component {
       return;
     } else {
       return (
-        <View style={{ backgroundColor: 'white' }}>
+        <View style={{ backgroundColor: '#ffffff' }}>
           <View>
             <View
               style={{
                 flexDirection: 'row',
                 width: ScaleSize(360),
-                height: ScaleSize(40),
+                height: Height * .053,
                 alignItems: 'center',
                 borderBottomWidth: 1,
-                borderColor: '#C4C4C4',
+                borderColor: "rgba(0,0,0,.2)",
               }}>
               <View
                 style={{
                   position: 'absolute',
-                  left: ScaleSize(20),
+                  left: ScaleSize(15),
                 }}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('About', {
                       mainThis: this,
@@ -1036,16 +1042,21 @@ class My extends Component {
                   <Image
                     source={require('../imgs/about.png')}
                     style={{
-                      height: ScaleSize(25),
-                      width: ScaleSize(25),
+                      height: ScaleSize(20),
+                      width: ScaleSize(20),
                     }}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+              </View>
+              <View style={{marginLeft:(Width * .38)}}>
+                <Text style={{fontSize:SetSpText(28),fontWeight:"500"}}>
+                  GraphURLPing
+                </Text>
               </View>
               <View
                 style={{
                   position: 'absolute',
-                  right: ScaleSize(20),
+                  right: ScaleSize(15),
                 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -1054,20 +1065,15 @@ class My extends Component {
                   <Image
                     source={require('../imgs/history.png')}
                     style={{
-                      height: ScaleSize(30),
-                      width: ScaleSize(30),
+                      height: ScaleSize(25),
+                      width: ScaleSize(25),
                     }}
                   />
                 </TouchableOpacity>
+
               </View>
             </View>
-            <View
-              style={{
-                height: ScaleSize(130),
-                borderBottomWidth: 1,
-                borderColor: '#C4C4C4',
-                borderStyle: 'solid',
-              }}>
+            
               <FlatList
                 data={TheData.Ping}
                 renderItem={this._renderItem1}
@@ -1081,8 +1087,6 @@ class My extends Component {
                   }, 1000);
                 }}
               />
-            </View>
-
             {/*console.log(TheData.Ping)*/}
             <View flexDirection='row'>
               <TouchableOpacity
@@ -1100,12 +1104,21 @@ class My extends Component {
                   marginLeft: ScaleSize(15),
                   marginVertical: ScaleSize(10),
                 }}>
-                <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>
-                  ✚ 添加
+                <View style={{flexDirection:"row" ,alignSelf:"center",marginTop:SetSpText(10)}}>
+                 <Image
+                    source={require('../imgs/add4.png')}
+                    style={{
+                      height: ScaleSize(20),
+                      width: ScaleSize(20),
+                    }}
+                  />
+                <Text style={{ color: '#2a82e4', fontSize: SetSpText(30),paddingTop: ScaleSize(0)}}>
+                  添加
                 </Text>
+                </View>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   TheData.Ping.splice(0, TheData.Ping.length);
                   this.setState({ refresh: !this.state.refresh });
@@ -1119,7 +1132,7 @@ class My extends Component {
                   }}>
                   清空
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View
               style={{
@@ -1164,13 +1177,15 @@ class My extends Component {
                   }
                 }}
                 style={{
-                  marginHorizontal: ScaleSize(5),
+                  marginHorizontal: ScaleSize(2),
                   alignItems: 'center',
-                  backgroundColor: 'blue',
-                  height: ScaleSize(35),
+                  marginTop:ScaleSize(5),
+                  borderRadius:ScaleSize(10),
+                  backgroundColor: '#2a82e4',
+                  height:ScaleSize(42),
                   justifyContent: 'center',
                 }}>
-                <Text style={{ fontSize: SetSpText(30), color: 'white' }}>PING</Text>
+                <Text style={{ fontSize: SetSpText(30), color: 'white' }}>Ping</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -1180,15 +1195,14 @@ class My extends Component {
                 });
               }}
               style={{
+                marginTop:ScaleSize(5),
                 marginHorizontal: ScaleSize(5),
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{ color: 'gray', fontSize: SetSpText(30) }}>参数设置</Text>
+              <Text style={{ color: 'gray', fontSize: SetSpText(25) }}>参数设置</Text>
             </TouchableOpacity>
-            <View style={{ borderBottomWidth: 1, borderBottomColor: '#C4C4C4' }}>
-              <Text></Text>
-            </View>
+              <View style={{height:Height * .0127,backgroundColor:"#e5e5e5",marginTop:ScaleSize(15)}}></View>
             <View>
               <View
                 style={{
@@ -1545,6 +1559,7 @@ class My extends Component {
               </View>
             </View>
           </View>
+
           <View
             style={{ backgroundColor: 'black' }}
             onPress={() => this.overlay.close()}>
