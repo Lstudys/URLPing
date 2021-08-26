@@ -12,6 +12,7 @@ import {
   FlatList,
   TouchableWithoutFeedback,
   LogBox,
+  Image
 } from 'react-native';
 import Data from '../modal/data';
 import store from 'react-native-simple-store';
@@ -77,7 +78,7 @@ export default class Setting extends Component {
         style={{
           backgroundColor: '#f1f4ee',
         }}>       
-        <View style={styles.headerViewStyle}>
+        {/* <View style={styles.headerViewStyle}>
           <NavigationBar
             style={{backgroundColor: '#fffef4'}}
             type="ios"
@@ -127,6 +128,24 @@ export default class Setting extends Component {
             //   </View>
             // }
           />
+        </View> */}
+
+
+        <View style={{width:Width, height:ScaleSize(50),justifyContent:'center',backgroundColor:'#fffef4'}}>
+          <TouchableOpacity
+          style={{position:'absolute',left:ScaleSize(10),}}
+            onPress={() => {
+              this.props.navigation.navigate('Main');
+            }}>
+            <Image
+              source={require('../imgs/back.png')}
+              style={{
+                height: ScaleSize(25),
+                width: ScaleSize(25),
+              }}
+              tintColor="#333"
+            />
+          </TouchableOpacity>
         </View>
         
         <View
@@ -136,7 +155,7 @@ export default class Setting extends Component {
             backgroundColor: '#f1f4ee',
             borderBottomWidth: 1,
             borderBottomColor: '#666',
-            marginTop: ScaleSize(100),
+            marginTop: ScaleSize(50),
             marginLeft: ScaleSize(20),
           }}>
           <Text
