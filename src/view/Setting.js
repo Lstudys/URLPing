@@ -76,7 +76,7 @@ export default class Setting extends Component {
     return (
       <View
         style={{
-          backgroundColor: '#f1f4ee',
+         
         }}>       
         {/* <View style={styles.headerViewStyle}>
           <NavigationBar
@@ -131,7 +131,7 @@ export default class Setting extends Component {
         </View> */}
 
 
-        <View style={{width:Width, height:ScaleSize(50),justifyContent:'center',backgroundColor:'#fffef4'}}>
+        <View style={{width:Width, height:ScaleSize(50),justifyContent:'center',backgroundColor:'white'}}>
           <TouchableOpacity
           style={{position:'absolute',left:ScaleSize(10),}}
             onPress={() => {
@@ -150,21 +150,22 @@ export default class Setting extends Component {
         
         <View
           style={{
-            width: ScaleSize(325),
-            height: ScaleSize(76),
-            backgroundColor: '#f1f4ee',
+            width: ScaleSize(360),
+            height: ScaleSize(60),
             borderBottomWidth: 1,
             borderBottomColor: '#666',
             marginTop: ScaleSize(50),
-            marginLeft: ScaleSize(20),
+            flexDirection: 'row',
+            alignItems:'center',
+            backgroundColor:'white',
           }}>
-          <Text
+          {/* <Text
             style={{
               fontSize: SetSpText(35),              
               color: '#85b2ae',
             }}>
             GENERAL
-          </Text>
+          </Text> */}
           <TouchableOpacity
             onPress={() => {
               if (I18n.locale === 'zh') {
@@ -181,33 +182,40 @@ export default class Setting extends Component {
               // 获得home页面的this并进行刷新，在这里写变换快，在componentWillUnmount中写会有一点延迟。
               const mainThis = this.props.route.params.mainThis;
               mainThis.setState({langvis: false});
+            }}
+            style={{
+              position:'absolute',
+              left:ScaleSize(15),
+              width:Width,
             }}>
             <Text
               style={{
                 fontSize: SetSpText(40),
                 color: '#666',
               }}>
-              {I18n.t('switchlanguage')}
+              {I18n.t('language')}
             </Text>
           </TouchableOpacity>
           <Text
             style={{
-              fontSize: SetSpText(30),
+              position:'absolute',
+              right: ScaleSize(15),
+              fontSize: SetSpText(40),
               color: '#666',
             }}>
-            {I18n.t('currentlanguage')} :{' '}
             {I18n.locale === 'zh' ? '中文' : 'English'}
           </Text>
         </View>
 
         <View
           style={{
-            width: ScaleSize(320),
-            height: ScaleSize(76), 
-            marginLeft: ScaleSize(20),
-            marginTop: ScaleSize(10),
-            borderBottomWidth: 1,
-            borderBottomColor: '#666',
+            width: Width,
+            height: ScaleSize(60), 
+            // borderBottomWidth: 1,
+            // borderBottomColor: '#666',
+            flexDirection: 'row',
+            alignItems:'center',
+            backgroundColor:'white',
           }}>
           <Modal
             animationType="fade"
@@ -260,16 +268,21 @@ export default class Setting extends Component {
               </View>
             </TouchableWithoutFeedback>
           </Modal>
-          <Text
+          {/* <Text
             style={{
               fontSize: SetSpText(35),
               color: '#85b2ae',
             }}>
             ADVANCED
-          </Text>
+          </Text> */}
           <TouchableOpacity
             onPress={() => {
               this.setModalVisible(true);
+            }}
+            style={{
+              position: 'absolute',
+              left: ScaleSize(15),
+              width: Width,
             }}>
             <Text
               style={{
@@ -281,10 +294,12 @@ export default class Setting extends Component {
           </TouchableOpacity>
           <Text
             style={{
-              fontSize: SetSpText(30),
+              position:'absolute',
+              right: ScaleSize(15),
+              fontSize: SetSpText(40),
               color: '#666',
               }}>
-            {I18n.t('currenttime')} : {this.state.reqTime} ms
+            {this.state.reqTime}  ms
           </Text>
         </View>
       </View>
@@ -305,7 +320,7 @@ const styles = StyleSheet.create({
   modalView: {
     height: ScaleSize(200),
     width: ScaleSize(300),
-    backgroundColor: '#666',
+    backgroundColor: 'white',
     shadowColor: '#666',
     shadowOffset: {
       width: 0,
@@ -324,7 +339,6 @@ const styles = StyleSheet.create({
     fontSize: SetSpText(45),
     top: ScaleSize(-20),
     paddingLeft: ScaleSize(20),
-    color: 'white',
   },
   flatlistContainer: {
     height: ScaleSize(65),
@@ -336,8 +350,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: SetSpText(50),
-    position: 'relative',
-    color: 'white',    
+    position: 'relative',    
   },
   modalCancel: {
     fontSize: SetSpText(30),

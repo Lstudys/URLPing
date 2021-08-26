@@ -1154,7 +1154,8 @@ class My extends Component {
                         ];
                       }
                       this.setState({ refresh: !this.state.refresh });
-                      console.log(TheData.historyPing);
+                      // console.log(TheData.historyPing);
+                      this.props.navigation.navigate('Ping',{urlData:[...TheData.Ping]});
                     } else {
                       Toast.message('尚未添加需要Ping的网址!');
                     }

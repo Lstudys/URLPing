@@ -25,6 +25,7 @@ export default {
     cancel:'Cancel',
     toast1:'Input URL is null!',
     switchlanguage: 'Switch Language',
+    language:'Language',
     requestinterval: 'Request Interval',
     currentlanguage: 'current language',
     //About页面的英文显示
