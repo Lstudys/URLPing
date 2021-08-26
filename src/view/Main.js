@@ -909,24 +909,31 @@ class My extends Component {
           width: Width * 0.92,
           marginLeft: Width * 0.04,
         }}>
-        <TextInput
-          defaultValue={TheData.Ping[parseInt(item.key)].url}
-          onChangeText={(value) => {
-            TheData.Ping[parseInt(item.key)].url = value;
-            this.setState({refresh: !this.state.refresh});
-            store.update(TheData.Ping[parseInt(item.key)].url, value);
-            console.log(TheData.Ping);
-          }}
-          placeholder="请输入Ping的地址"
+        <View
           style={{
-            borderStyle: 'solid',
-            marginTop: ScaleSize(1),
-            marginLeft: ScaleSize(4),
-            width: ScaleSize(310),
-            borderRadius: 10,
-            paddingBottom: ScaleSize(4),
-            fontSize: SetSpText(30),
-          }}></TextInput>
+            // paddingRight: ScaleSize(-20),
+            marginRight: ScaleSize(0),
+          }}>
+          <TextInput
+            defaultValue={TheData.Ping[parseInt(item.key)].url}
+            onChangeText={(value) => {
+              TheData.Ping[parseInt(item.key)].url = value;
+              this.setState({refresh: !this.state.refresh});
+              store.update(TheData.Ping[parseInt(item.key)].url, value);
+              console.log(TheData.Ping);
+            }}
+            placeholder="请输入Ping的地址"
+            style={{
+              borderStyle: 'solid',
+              marginTop: ScaleSize(1),
+              marginLeft: ScaleSize(4),
+              paddingRight: ScaleSize(35),
+              width: ScaleSize(310),
+              borderRadius: 10,
+              paddingBottom: ScaleSize(4),
+              fontSize: SetSpText(30),
+            }}></TextInput>
+        </View>
         {/*第一个不包含删除按钮*/}
         {item.key != 0 ? (
           <View
@@ -934,10 +941,13 @@ class My extends Component {
               position: 'absolute',
               right: ScaleSize(5),
               top: ScaleSize(20),
+              marginRight: ScaleSize(0),
+              marginTop: ScaleSize(-10),
             }}>
             <TouchableOpacity
               onPress={() => {
                 TheData.Ping.splice(parseInt(item.key), 1);
+                //可能会有问题 标记一下
                 for (let i = 0; i < TheData.Ping.length; i++) {
                   TheData.Ping[i].key = i;
                 }
@@ -948,8 +958,6 @@ class My extends Component {
                 style={{
                   color: '#2a82e4',
                   fontSize: SetSpText(30),
-                  marginRight: ScaleSize(10),
-                  marginTop: ScaleSize(-10),
                 }}>
                 删除
               </Text>
