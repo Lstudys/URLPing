@@ -116,7 +116,7 @@
 //           I18n.locale = SystemLanguage;
 //         } else {
 //           // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
-//           I18n.locale = 'en'; 
+//           I18n.locale = 'en';
 //         }
 //         this.setState({
 //           langvis: false,
@@ -213,7 +213,7 @@
 //               />
 //         <View>
 //           <FlatList/>
-          
+
 //         </View>
 //       </View>
 //     );
@@ -364,16 +364,6 @@
 //   },
 // });
 
-
-
-
-
-
-
-
-
-
-
 // {
 //   /* <View style={styles.textinput}>
 //                          <TextInput
@@ -405,50 +395,146 @@
 //                          />
 //                      </View> */
 // }
-import React,{Component} from 'react'
-import { View,Button,Text,TouchableOpacity,FlatList,Dimensions } from 'react-native'
-import { ScreenStackHeaderLeftView } from 'react-native-screens';
-import { ScaleSizeH, ScaleSizeW, SetSpText, ScaleSize} from '../controller/Adaptation'
+import React, {Component} from 'react';
+import {
+  View,
+  Button,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+} from 'react-native';
+import {ScreenStackHeaderLeftView} from 'react-native-screens';
+import {
+  ScaleSizeH,
+  ScaleSizeW,
+  SetSpText,
+  ScaleSize,
+} from '../controller/Adaptation';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
-const DATA=[{key:0,url:'http://baidu.com',Avg:200,N95:120,time:'2021年8月24日 16:41'},{key:1,url:'http://souhu.com',Avg:200,N95:120,time:'2021年8月24日 16:41'},{key:3,url:'http://baidu.com',Avg:200,N95:120,time:'2021年8月24日 16:41'}]
-class History extends Component{
-  constructor(props){
-    super(props)
-    this.state={
-      FlatListIsRefreshing: false
-    }
+const DATA = [
+  {
+    key: 0,
+    url: 'http://baidu.com',
+    Avg: 200,
+    N95: 120,
+    time: '2021年8月24日 16:41',
+  },
+  {
+    key: 1,
+    url: 'http://souhu.com',
+    Avg: 200,
+    N95: 120,
+    time: '2021年8月24日 16:41',
+  },
+  {
+    key: 3,
+    url: 'http://baidu.com',
+    Avg: 200,
+    N95: 120,
+    time: '2021年8月24日 16:41',
+  },
+];
+class History extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      FlatListIsRefreshing: false,
+    };
   }
-  
-  renderitem=({item})=>{
-    return(
-      <View style={{width:Width,height:ScaleSize(90),borderBottomWidth:1,borderColor:'#C4C4C4',marginBottom:ScaleSize(5),flexDirection:'row',alignItems:'center'}}>
-        <View><View style={{marginLeft:ScaleSizeW(35)}}><Text style={{fontSize:SetSpText(35),fontWeight:'bold'}}>{item.url}</Text></View>
-        <View style={{marginLeft:ScaleSizeW(35)}}><Text style={{fontSize:SetSpText(25),}}>{item.time}</Text></View></View>
-        <View><View style={{marginLeft:ScaleSize(120),}}><Text style={{color:'#3C3CC4',fontSize:SetSpText(30),fontWeight:'bold'}}>N95: {item.N95}</Text></View>
-        <View style={{marginLeft:ScaleSize(120),}}><Text style={{color:'#3C3CC4',fontSize:SetSpText(30),fontWeight:'bold'}}>AVG: {item.Avg}</Text></View></View>
-      </View>
-    )
-  }
-  render(){
-    return(
-      <View>
-        <View style={{flexDirection:'row',justifyContent:'space-between',width:Width,height:ScaleSize(35),alignItems:'center',borderBottomWidth:1,borderColor:'#C4C4C4',}}>
-      <TouchableOpacity style={{marginLeft:ScaleSize(5),}} onPress={()=>this.props.navigation.navigate('Main')}><Text style={{fontSize:SetSpText(25)}}>返回</Text></TouchableOpacity>
-      <View style={{}}><Text style={{fontSize:SetSpText(35),fontWeight:'bold'}}>历史记录</Text></View>
-      <TouchableOpacity style={{marginRight:ScaleSize(5),}}><Text style={{fontSize:SetSpText(25),color:'#3352CC'}}>清空</Text></TouchableOpacity>
-        </View>
-          <View>
-          <FlatList data={DATA} renderItem={this.renderitem} 
-              onRefresh={() => {
-                this.setState((prevState) => ({FlatListIsRefreshing: true}));
-                setTimeout(() => {
-                  this.setState((prevState) => ({FlatListIsRefreshing: false}));
-                }, 1000);
-              }}     refreshing={this.state.FlatListIsRefreshing}/>
+
+  renderitem = ({item}) => {
+    return (
+      <View
+        style={{
+          width: Width,
+          height: ScaleSize(90),
+          borderBottomWidth: 1,
+          borderColor: '#C4C4C4',
+          marginBottom: ScaleSize(5),
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <View>
+          <View style={{marginLeft: ScaleSizeW(35)}}>
+            <Text style={{fontSize: SetSpText(35), fontWeight: 'bold'}}>
+              {item.url}
+            </Text>
           </View>
+          <View style={{marginLeft: ScaleSizeW(35)}}>
+            <Text style={{fontSize: SetSpText(25)}}>{item.time}</Text>
+          </View>
+        </View>
+        <View>
+          <View style={{marginLeft: ScaleSize(120)}}>
+            <Text
+              style={{
+                color: '#3C3CC4',
+                fontSize: SetSpText(30),
+                fontWeight: 'bold',
+              }}>
+              N95: {item.N95}
+            </Text>
+          </View>
+          <View style={{marginLeft: ScaleSize(120)}}>
+            <Text
+              style={{
+                color: '#3C3CC4',
+                fontSize: SetSpText(30),
+                fontWeight: 'bold',
+              }}>
+              AVG: {item.Avg}
+            </Text>
+          </View>
+        </View>
       </View>
-    )
+    );
+  };
+  render() {
+    return (
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: Width,
+            height: ScaleSize(35),
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderColor: '#C4C4C4',
+          }}>
+          <TouchableOpacity
+            style={{marginLeft: ScaleSize(5)}}
+            onPress={() => this.props.navigation.navigate('Main')}>
+            <Text style={{fontSize: SetSpText(25)}}>返回</Text>
+          </TouchableOpacity>
+          <View style={{}}>
+            <Text style={{fontSize: SetSpText(35), fontWeight: 'bold'}}>
+              历史记录
+            </Text>
+          </View>
+          <TouchableOpacity style={{marginRight: ScaleSize(5)}}>
+            <Text style={{fontSize: SetSpText(25), color: '#3352CC'}}>
+              清空
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <FlatList
+            data={DATA}
+            renderItem={this.renderitem}
+            onRefresh={() => {
+              this.setState((prevState) => ({FlatListIsRefreshing: true}));
+              setTimeout(() => {
+                this.setState((prevState) => ({FlatListIsRefreshing: false}));
+              }, 1000);
+            }}
+            refreshing={this.state.FlatListIsRefreshing}
+          />
+        </View>
+      </View>
+    );
   }
 }
-export default History
+export default History;

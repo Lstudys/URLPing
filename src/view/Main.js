@@ -848,10 +848,10 @@
 //     borderRadius: 15,
 //   },
 // });
-import { blue } from 'chalk';
-import React, { Component } from 'react';
-import { Image } from 'react-native';
-import { Toast } from 'teaset';
+import {blue} from 'chalk';
+import React, {Component} from 'react';
+import {Image} from 'react-native';
+import {Toast} from 'teaset';
 import {
   Button,
   View,
@@ -877,9 +877,9 @@ const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 //样式数据
 const history = [
-  { key: '0', url: 'http://www.baidu.com' },
-  { key: '1', url: 'http://www.souhu.com' },
-  { key: '2', url: 'http://www.souhu.com' },
+  {key: '0', url: 'http://www.baidu.com'},
+  {key: '1', url: 'http://www.souhu.com'},
+  {key: '2', url: 'http://www.souhu.com'},
 ];
 
 class My extends Component {
@@ -892,56 +892,88 @@ class My extends Component {
       isPing: false,
       refresh: false,
     };
+    if (TheData.Ping == []) {
+      TheData.Ping = [{key: 0, url: ''}];
+      this.setState({refresh: !this.state.refresh});
+    }
   }
   identify = true;
 
-  _renderItem1 = ({ item }) => {
+  _renderItem1 = ({item}) => {
     return (
-      <View>
-        <TextInput
-          defaultValue={TheData.Ping[parseInt(item.key)].url}
-          onChangeText={(value) => {
-            TheData.Ping[parseInt(item.key)].url = value;
-            this.setState({ refresh: !this.state.refresh });
-            store.update(TheData.Ping[parseInt(item.key)].url, value);
-            console.log(TheData.Ping);
-          }}
-          placeholder="请输入ping的地址"
-          style={{
-            borderColor: '#C4C4C4',
-            borderStyle: 'solid',
-            borderWidth: 2,
-            margin: ScaleSize(5),
-            width: ScaleSize(310),
-            borderRadius: 10,
-            fontSize: SetSpText(35),
-          }}></TextInput>
+      <View
+        style={{
+          borderBottomWidth: ScaleSize(1),
+          borderBottomColor: 'rgba(0,0,0,.1)',
+          height: Height * 0.055,
+          width: Width * 0.92,
+          marginLeft: Width * 0.04,
+        }}>
         <View
           style={{
-            position: 'absolute',
-            right: ScaleSize(5),
-            top: ScaleSize(20),
+            // paddingRight: ScaleSize(-20),
+            marginRight: ScaleSize(0),
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              TheData.Ping.splice(parseInt(item.key), 1);
-              for (let i = 0; i < TheData.Ping.length; i++) {
-                TheData.Ping[i].key = i;
-              }
-              this.setState({ refresh: !this.state.refresh });
+          <TextInput
+            defaultValue={TheData.Ping[parseInt(item.key)].url}
+            onChangeText={(value) => {
+              TheData.Ping[parseInt(item.key)].url = value;
+              this.setState({refresh: !this.state.refresh});
+              store.update(TheData.Ping[parseInt(item.key)].url, value);
               console.log(TheData.Ping);
-            }}>
-            <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>删除</Text>
-          </TouchableOpacity>
+            }}
+            placeholder="请输入Ping的地址"
+            style={{
+              borderStyle: 'solid',
+              marginTop: ScaleSize(1),
+              marginLeft: ScaleSize(4),
+              paddingRight: ScaleSize(35),
+              width: ScaleSize(310),
+              borderRadius: 10,
+              paddingBottom: ScaleSize(4),
+              fontSize: SetSpText(30),
+            }}></TextInput>
         </View>
+        {/*第一个不包含删除按钮*/}
+        {item.key != 0 ? (
+          <View
+            style={{
+              position: 'absolute',
+              right: ScaleSize(5),
+              top: ScaleSize(20),
+              marginRight: ScaleSize(0),
+              marginTop: ScaleSize(-10),
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                TheData.Ping.splice(parseInt(item.key), 1);
+                //可能会有问题 标记一下
+                for (let i = 0; i < TheData.Ping.length; i++) {
+                  TheData.Ping[i].key = i;
+                }
+                this.setState({refresh: !this.state.refresh});
+                console.log(TheData.Ping);
+              }}>
+              <Text
+                style={{
+                  color: '#2a82e4',
+                  fontSize: SetSpText(30),
+                }}>
+                删除
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View></View>
+        )}
       </View>
       //<Text>{this.Data}</Text>
     );
   };
 
-  _renderitem2 = ({ item }) => {
+  _renderitem2 = ({item}) => {
     return (
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{flexDirection: 'row'}}>
         <View>
           <Image
             source={require('../imgs/task.png')}
@@ -954,11 +986,15 @@ class My extends Component {
           />
         </View>
 
-        <TouchableOpacity onPress={() => {
-          let length = TheData.Ping.length
-          TheData.Ping = [...TheData.Ping, { key: length, url: TheData.historyPing[item.key].url }]
-          this.setState({ refresh: !this.state.refresh })
-        }}>
+        <TouchableOpacity
+          onPress={() => {
+            let length = TheData.Ping.length;
+            TheData.Ping = [
+              ...TheData.Ping,
+              {key: length, url: TheData.historyPing[item.key].url},
+            ];
+            this.setState({refresh: !this.state.refresh});
+          }}>
           <View
             style={{
               width: ScaleSize(255),
@@ -990,12 +1026,12 @@ class My extends Component {
               for (let i = 0; i < TheData.historyPing.length; i++) {
                 TheData.historyPing[i].key = i;
               }
-              this.setState({ refresh: !this.state.refresh });
+              this.setState({refresh: !this.state.refresh});
               console.log(TheData.historyPing);
             }}>
             <Text
               style={{
-                color: 'blue',
+                color: '#2a82e4',
                 fontSize: SetSpText(25),
               }}>
               删除
@@ -1011,23 +1047,23 @@ class My extends Component {
       return;
     } else {
       return (
-        <View style={{ backgroundColor: 'white' }}>
+        <View style={{backgroundColor: '#ffffff'}}>
           <View>
             <View
               style={{
                 flexDirection: 'row',
                 width: ScaleSize(360),
-                height: ScaleSize(40),
+                height: Height * 0.053,
                 alignItems: 'center',
                 borderBottomWidth: 1,
-                borderColor: '#C4C4C4',
+                borderColor: 'rgba(0,0,0,.2)',
               }}>
               <View
                 style={{
                   position: 'absolute',
-                  left: ScaleSize(20),
+                  left: ScaleSize(15),
                 }}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('About', {
                       mainThis: this,
@@ -1036,16 +1072,21 @@ class My extends Component {
                   <Image
                     source={require('../imgs/about.png')}
                     style={{
-                      height: ScaleSize(25),
-                      width: ScaleSize(25),
+                      height: ScaleSize(20),
+                      width: ScaleSize(20),
                     }}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+              </View>
+              <View style={{marginLeft: Width * 0.38}}>
+                <Text style={{fontSize: SetSpText(28), fontWeight: '500'}}>
+                  GraphURLPing
+                </Text>
               </View>
               <View
                 style={{
                   position: 'absolute',
-                  right: ScaleSize(20),
+                  right: ScaleSize(15),
                 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -1054,58 +1095,74 @@ class My extends Component {
                   <Image
                     source={require('../imgs/history.png')}
                     style={{
-                      height: ScaleSize(30),
-                      width: ScaleSize(30),
+                      height: ScaleSize(25),
+                      width: ScaleSize(25),
                     }}
                   />
                 </TouchableOpacity>
               </View>
             </View>
-            <View
-              style={{
-                height: ScaleSize(130),
-                borderBottomWidth: 1,
-                borderColor: '#C4C4C4',
-                borderStyle: 'solid',
-              }}>
-              <FlatList
-                data={TheData.Ping}
-                renderItem={this._renderItem1}
-                refreshing={this.state.FlatListIsRefreshing}
-                onRefresh={() => {
-                  this.setState((prevState) => ({ FlatListIsRefreshing: true }));
-                  setTimeout(() => {
-                    this.setState((prevState) => ({
-                      FlatListIsRefreshing: false,
-                    }));
-                  }, 1000);
-                }}
-              />
-            </View>
 
+            <FlatList
+              data={TheData.Ping}
+              renderItem={this._renderItem1}
+              refreshing={this.state.FlatListIsRefreshing}
+              onRefresh={() => {
+                this.setState((prevState) => ({FlatListIsRefreshing: true}));
+                setTimeout(() => {
+                  this.setState((prevState) => ({
+                    FlatListIsRefreshing: false,
+                  }));
+                }, 1000);
+              }}
+            />
             {/*console.log(TheData.Ping)*/}
-            <View flexDirection='row'>
+            <View flexDirection="row">
               <TouchableOpacity
                 onPress={() => {
                   if (TheData.Ping.length != 0) {
-                    let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                    TheData.Ping = [...TheData.Ping, { key: key, url: '' }];
-                    this.setState({ refresh: !this.state.refresh });
+                    let key = TheData.Ping.length;
+                    TheData.Ping = [
+                      ...TheData.Ping,
+                      {key: key, url: 'https://'},
+                    ];
+                    this.setState({refresh: !this.state.refresh});
+                    console.log('1');
                   } else {
-                    TheData.Ping = [...TheData.Ping, { key: 0, url: '' }];
-                    this.setState({ refresh: !this.state.refresh });
+                    TheData.Ping = [{key: 0, url: 'https://'}];
+                    this.setState({refresh: !this.state.refresh});
+                    console.log('2');
                   }
                 }}
                 style={{
                   marginLeft: ScaleSize(15),
                   marginVertical: ScaleSize(10),
                 }}>
-                <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>
-                  ✚ 添加
-                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    marginTop: SetSpText(10),
+                  }}>
+                  <Image
+                    source={require('../imgs/add4.png')}
+                    style={{
+                      height: ScaleSize(20),
+                      width: ScaleSize(20),
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: '#2a82e4',
+                      fontSize: SetSpText(30),
+                      paddingTop: ScaleSize(0),
+                    }}>
+                    添加
+                  </Text>
+                </View>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   TheData.Ping.splice(0, TheData.Ping.length);
                   this.setState({ refresh: !this.state.refresh });
@@ -1119,7 +1176,7 @@ class My extends Component {
                   }}>
                   清空
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View
               style={{
@@ -1129,7 +1186,10 @@ class My extends Component {
               <TouchableOpacity
                 onPress={() => {
                   for (let i = 0; i < TheData.Ping.length; i++) {
-                    if (!TheData.Ping[i].url) {
+                    if (
+                      TheData.Ping[i].url == 'https://' ||
+                      TheData.Ping[i].url == ''
+                    ) {
                       this.identify = false;
                       break;
                     } else {
@@ -1150,7 +1210,7 @@ class My extends Component {
                       ) {
                         TheData.historyPing = [
                           ...TheData.historyPing,
-                          { key: j, url: TheData.Ping[i].url },
+                          {key: j, url: TheData.Ping[i].url},
                         ];
                       }
                       this.setState({ refresh: !this.state.refresh });
@@ -1159,19 +1219,23 @@ class My extends Component {
                     } else {
                       Toast.message('尚未添加需要Ping的网址!');
                     }
-                    TheData.Ping.splice(0, TheData.Ping.length);
+                    //TheData.Ping.splice(0, TheData.Ping.length);
                   } else {
                     Toast.message('输入网址不能有空!');
                   }
                 }}
                 style={{
-                  marginHorizontal: ScaleSize(5),
+                  marginHorizontal: ScaleSize(2),
                   alignItems: 'center',
-                  backgroundColor: 'blue',
-                  height: ScaleSize(35),
+                  marginTop: ScaleSize(5),
+                  borderRadius: ScaleSize(10),
+                  backgroundColor: '#2a82e4',
+                  height: ScaleSize(42),
                   justifyContent: 'center',
                 }}>
-                <Text style={{ fontSize: SetSpText(30), color: 'white' }}>PING</Text>
+                <Text style={{fontSize: SetSpText(30), color: 'white'}}>
+                  Ping
+                </Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -1181,57 +1245,71 @@ class My extends Component {
                 });
               }}
               style={{
+                marginTop: ScaleSize(5),
                 marginHorizontal: ScaleSize(5),
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{ color: 'gray', fontSize: SetSpText(30) }}>参数设置</Text>
+              <Text style={{color: 'gray', fontSize: SetSpText(25)}}>
+                参数设置
+              </Text>
             </TouchableOpacity>
-            <View style={{ borderBottomWidth: 1, borderBottomColor: '#C4C4C4' }}>
-              <Text></Text>
-            </View>
+            <View
+              style={{
+                height: Height * 0.0127,
+                backgroundColor: '#e5e5e5',
+                marginTop: ScaleSize(15),
+              }}></View>
             <View>
               <View
                 style={{
                   marginVertical: ScaleSize(10),
                   marginLeft: ScaleSize(15),
                 }}>
-                <Text style={{ color: 'gray', fontSize: SetSpText(30) }}>快捷输入</Text>
+                <Text style={{color: 'gray', fontSize: SetSpText(30)}}>
+                  快捷输入
+                </Text>
               </View>
               <View
                 flexDirection="row"
-                style={{ marginHorizontal: ScaleSize(15), justifyContent: 'space-between', }}>
+                style={{
+                  marginHorizontal: ScaleSize(15),
+                  justifyContent: 'space-between',
+                }}>
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => {
+                    this.setState({QuickSelectIndex: 0}, () => {
+                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                      console.log(this.state.QuickSelectIndex);
+                    });
+                    this.overlay.show();
+                  }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[0].name &&
-                      TheData.QuickSelect[0].url
+                      TheData.QuickSelect[0].url != 'https://'
                     ) {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: key, url: TheData.QuickSelect[0].url },
+                          {key: key, url: TheData.QuickSelect[0].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       } else {
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: 0, url: TheData.QuickSelect[0].url },
+                          {key: 0, url: TheData.QuickSelect[0].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       }
                     } else {
-                      if (TheData.QuickSelect[0].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 0 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
+                      this.setState({QuickSelectIndex: 0}, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[0].url = 'https://';
+                      this.overlay.show();
                     }
                   }}
                   style={{
@@ -1242,9 +1320,7 @@ class My extends Component {
                     width: ScaleSize(80),
                     height: ScaleSize(40),
                   }}>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}>
+                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[0].name
                       ? TheData.QuickSelect[0].name
                       : '✚'}
@@ -1252,7 +1328,13 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => {
+                    this.setState({QuickSelectIndex: 1}, () => {
+                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                      console.log(this.state.QuickSelectIndex);
+                    });
+                    this.overlay.show();
+                  }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[1].name &&
@@ -1262,26 +1344,23 @@ class My extends Component {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: key, url: TheData.QuickSelect[1].url },
+                          {key: key, url: TheData.QuickSelect[1].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       } else {
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: 0, url: TheData.QuickSelect[1].url },
+                          {key: 0, url: TheData.QuickSelect[1].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       }
                     } else {
-                      if (TheData.QuickSelect[1].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 1 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
+                      this.setState({QuickSelectIndex: 1}, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[1].url = 'https://';
+                      this.overlay.show();
                     }
                   }}
                   style={{
@@ -1291,9 +1370,7 @@ class My extends Component {
                     justifyContent: 'center',
                     width: ScaleSize(80),
                   }}>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}>
+                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[1].name
                       ? TheData.QuickSelect[1].name
                       : '✚'}
@@ -1301,7 +1378,13 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => {
+                    this.setState({QuickSelectIndex: 2}, () => {
+                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                      console.log(this.state.QuickSelectIndex);
+                    });
+                    this.overlay.show();
+                  }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[2].name &&
@@ -1311,26 +1394,23 @@ class My extends Component {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: key, url: TheData.QuickSelect[2].url },
+                          {key: key, url: TheData.QuickSelect[2].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       } else {
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: 0, url: TheData.QuickSelect[2].url },
+                          {key: 0, url: TheData.QuickSelect[2].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       }
                     } else {
-                      if (TheData.QuickSelect[2].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 2 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
+                      this.setState({QuickSelectIndex: 2}, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[2].url = 'https://';
+                      this.overlay.show();
                     }
                   }}
                   style={{
@@ -1340,9 +1420,7 @@ class My extends Component {
                     justifyContent: 'center',
                     width: ScaleSize(80),
                   }}>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}>
+                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[2].name
                       ? TheData.QuickSelect[2].name
                       : '✚'}
@@ -1351,13 +1429,19 @@ class My extends Component {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   justifyContent: 'space-between',
                   marginHorizontal: ScaleSize(15),
                   marginVertical: ScaleSize(20),
                 }}>
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => {
+                    this.setState({QuickSelectIndex: 3}, () => {
+                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                      console.log(this.state.QuickSelectIndex);
+                    });
+                    this.overlay.show();
+                  }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[3].name &&
@@ -1367,26 +1451,23 @@ class My extends Component {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: key, url: TheData.QuickSelect[3].url },
+                          {key: key, url: TheData.QuickSelect[3].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       } else {
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: 0, url: TheData.QuickSelect[3].url },
+                          {key: 0, url: TheData.QuickSelect[3].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       }
                     } else {
-                      if (TheData.QuickSelect[3].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 3 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
+                      this.setState({QuickSelectIndex: 3}, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[3].url = 'https://';
+                      this.overlay.show();
                     }
                   }}
                   style={{
@@ -1397,9 +1478,7 @@ class My extends Component {
                     width: ScaleSize(80),
                     height: ScaleSize(40),
                   }}>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}>
+                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[3].name
                       ? TheData.QuickSelect[3].name
                       : '✚'}
@@ -1407,7 +1486,13 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => {
+                    this.setState({QuickSelectIndex: 4}, () => {
+                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                      console.log(this.state.QuickSelectIndex);
+                    });
+                    this.overlay.show();
+                  }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[4].name &&
@@ -1417,26 +1502,23 @@ class My extends Component {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: key, url: TheData.QuickSelect[4].url },
+                          {key: key, url: TheData.QuickSelect[4].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       } else {
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: 0, url: TheData.QuickSelect[4].url },
+                          {key: 0, url: TheData.QuickSelect[4].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       }
                     } else {
-                      if (TheData.QuickSelect[4].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 4 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
+                      this.setState({QuickSelectIndex: 4}, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[4].url = 'https://';
+                      this.overlay.show();
                     }
                   }}
                   style={{
@@ -1446,9 +1528,7 @@ class My extends Component {
                     justifyContent: 'center',
                     width: ScaleSize(80),
                   }}>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}>
+                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[4].name
                       ? TheData.QuickSelect[4].name
                       : '✚'}
@@ -1456,7 +1536,13 @@ class My extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onLongPress={() => this.overlay.show()}
+                  onLongPress={() => {
+                    this.setState({QuickSelectIndex: 5}, () => {
+                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                      console.log(this.state.QuickSelectIndex);
+                    });
+                    this.overlay.show();
+                  }}
                   onPress={() => {
                     if (
                       TheData.QuickSelect[5].name &&
@@ -1466,26 +1552,23 @@ class My extends Component {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: key, url: TheData.QuickSelect[5].url },
+                          {key: key, url: TheData.QuickSelect[5].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       } else {
                         TheData.Ping = [
                           ...TheData.Ping,
-                          { key: 0, url: TheData.QuickSelect[5].url },
+                          {key: 0, url: TheData.QuickSelect[5].url},
                         ];
-                        this.setState({ refresh: !this.state.refresh });
+                        this.setState({refresh: !this.state.refresh});
                       }
                     } else {
-                      if (TheData.QuickSelect[5].url) {
-                        this.overlay.show();
-                      } else {
-                        this.setState({ QuickSelectIndex: 5 }, () => {
-                          this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                          console.log(this.state.QuickSelectIndex);
-                        });
-                        this.overlay.show();
-                      }
+                      this.setState({QuickSelectIndex: 5}, () => {
+                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
+                        console.log(this.state.QuickSelectIndex);
+                      });
+                      TheData.QuickSelect[5].url = 'https://';
+                      this.overlay.show();
                     }
                   }}
                   style={{
@@ -1495,9 +1578,7 @@ class My extends Component {
                     justifyContent: 'center',
                     width: ScaleSize(80),
                   }}>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}>
+                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
                     {TheData.QuickSelect[5].name
                       ? TheData.QuickSelect[5].name
                       : '✚'}
@@ -1511,20 +1592,30 @@ class My extends Component {
                 }}>
                 <Text></Text>
               </View>
-              <View flexDirection="row" style={{ marginLeft: ScaleSizeW(20), marginTop: ScaleSize(20), marginBottom: ScaleSize(10), }}>
-                <Text style={{ color: 'gray', fontSize: SetSpText(30) }}>历史记录</Text>
+              <View
+                flexDirection="row"
+                style={{
+                  marginLeft: ScaleSizeW(20),
+                  marginTop: ScaleSize(20),
+                  marginBottom: ScaleSize(10),
+                }}>
+                <Text style={{color: 'gray', fontSize: SetSpText(30)}}>
+                  历史记录
+                </Text>
                 <TouchableOpacity
                   onPress={() => {
                     TheData.historyPing.splice(0, TheData.historyPing.length);
-                    this.setState({ refresh: !this.state.refresh });
+                    this.setState({refresh: !this.state.refresh});
                   }}
-                  style={{ marginLeft: ScaleSize(253) }}>
-                  <Text style={{ color: 'blue', fontSize: SetSpText(25) }}>清空</Text>
+                  style={{marginLeft: ScaleSize(253)}}>
+                  <Text style={{color: '#2a82e4', fontSize: SetSpText(25)}}>
+                    清空
+                  </Text>
                 </TouchableOpacity>
               </View>
               <View
                 style={{
-                  height: ScaleSize(220),
+                  //height: ScaleSize(220),
                   borderBottomWidth: 1,
                   borderColor: '#C4C4C4',
                   borderStyle: 'solid',
@@ -1546,36 +1637,54 @@ class My extends Component {
               </View>
             </View>
           </View>
-          <View
-            style={{ backgroundColor: 'black' }}
-            onPress={() => this.overlay.close()}>
-            {/*快捷输入编辑框*/}
-            <Overlay
-              ref={(ele) => (this.overlay = ele)}
-              style={{ justifyContent: 'center' }}>
+          {/*快捷输入编辑框*/}
+          <Overlay
+            ref={(ele) => (this.overlay = ele)}
+            style={{justifyContent: 'center'}}>
+            <TouchableOpacity
+              onPress={() => {
+                if (
+                  TheData.QuickSelect[this.state.QuickSelectIndex].name &&
+                  TheData.QuickSelect[this.state.QuickSelectIndex].url !=
+                    'https://'
+                ) {
+                  this.overlay.close();
+                } else {
+                  TheData.QuickSelect[this.state.QuickSelectIndex] = {
+                    key: this.state.QuickSelectIndex,
+                    name: '',
+                    url: 'https://',
+                  };
+                  this.overlay.close();
+                  this.setState({refresh: !this.state.refresh});
+                  console.log(TheData.QuickSelect[this.state.QuickSelectIndex]);
+                }
+              }}
+              activeOpacity={1}
+              style={{width: Width, height: Height, justifyContent: 'center'}}>
               <View
                 style={{
-                  height: ScaleSize(300),
+                  height: ScaleSize(185),
                   paddingHorizontal: ScaleSize(10),
                   paddingTop: ScaleSize(20),
-                  marginHorizontal: ScaleSize(5),
+                  marginHorizontal: ScaleSize(20),
                   backgroundColor: 'white',
                   borderRadius: 10,
+                  elevation: 20,
+                  shadowColor: '#ddd',
+                  shadowOpacity: 200,
+                  shadowRadius: 5,
                 }}>
-                <View>
-                  <Text style={{ fontSize: SetSpText(30) }}>名称:</Text>
-                </View>
                 <TextInput
                   defaultValue={
                     TheData.QuickSelect[this.state.QuickSelectIndex].name
                   }
-                  placeholder="请输入名称"
+                  placeholder="请输入代名"
                   style={{
                     borderColor: '#C4C4C4',
                     borderStyle: 'solid',
-                    borderWidth: 2,
+                    borderBottomWidth: 1,
                     margin: ScaleSize(5),
-                    borderRadius: 10,
                     fontSize: SetSpText(35),
                   }}
                   onChangeText={(text) => {
@@ -1588,20 +1697,16 @@ class My extends Component {
                     );
                     console.log(TheData.QuickSelect);
                   }}></TextInput>
-                <View>
-                  <Text style={{ fontSize: SetSpText(30) }}>URL：</Text>
-                </View>
                 <TextInput
                   defaultValue={
                     TheData.QuickSelect[this.state.QuickSelectIndex].url
                   }
-                  placeholder="请输入URL"
+                  placeholder="请输入网址"
                   style={{
                     borderColor: '#C4C4C4',
                     borderStyle: 'solid',
-                    borderWidth: 2,
+                    borderBottomWidth: 1,
                     margin: ScaleSize(5),
-                    borderRadius: 10,
                     fontSize: SetSpText(35),
                   }}
                   onChangeText={(text) => {
@@ -1612,46 +1717,80 @@ class My extends Component {
                     );
                     console.log(TheData.QuickSelect);
                   }}></TextInput>
-                <View style={{ marginBottom: ScaleSize(15), marginTop: ScaleSize(10) }}>
-                  <TouchableOpacity
+                <View flexDirection="row">
+                  <View
                     style={{
-                      height: ScaleSize(40),
-                      width: ScaleSize(330),
-                      backgroundColor: 'blue',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      if (
-                        TheData.QuickSelect[this.state.QuickSelectIndex].url &&
-                        TheData.QuickSelect[this.state.QuickSelectIndex].name
-                      ) {
-                        this.overlay.close();
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        Toast.message('输入名称或者URL不能为空！');
-                      }
-                    }}
-                  >
-                    <Text style={{ fontSize: SetSpText(30), color: 'white' }}>确定</Text>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  <TouchableOpacity
+                      marginBottom: ScaleSize(15),
+                      marginTop: ScaleSize(10),
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        height: ScaleSize(40),
+                        width: ScaleSize(145),
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRightWidth: 1,
+                        borderRightColor: '#C4C4C4',
+                      }}
+                      onPress={() => {
+                        if (
+                          TheData.QuickSelect[this.state.QuickSelectIndex]
+                            .url &&
+                          TheData.QuickSelect[this.state.QuickSelectIndex].name
+                        ) {
+                          this.overlay.close();
+                          this.setState({refresh: !this.state.refresh});
+                        } else {
+                          Toast.message('输入名称或者URL不能为空！');
+                        }
+                      }}>
+                      <Text style={{fontSize: SetSpText(30), color: '#2a82e4'}}>
+                        确定
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
                     style={{
-                      height: ScaleSize(40),
-                      width: ScaleSize(330),
-                      backgroundColor: 'blue',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => this.overlay.close()}>
-                    <Text style={{ fontSize: SetSpText(30), color: 'white' }}>取消</Text>
-                  </TouchableOpacity>
+                      marginBottom: ScaleSize(15),
+                      marginTop: ScaleSize(10),
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        height: ScaleSize(40),
+                        width: ScaleSize(155),
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => {
+                        if (
+                          TheData.QuickSelect[this.state.QuickSelectIndex]
+                            .name &&
+                          TheData.QuickSelect[this.state.QuickSelectIndex]
+                            .url != 'https://'
+                        ) {
+                          this.overlay.close();
+                        } else {
+                          TheData.QuickSelect[this.state.QuickSelectIndex] = {
+                            key: this.state.QuickSelectIndex,
+                            name: '',
+                            url: 'https://',
+                          };
+                          this.overlay.close();
+                          this.setState({refresh: !this.state.refresh});
+                          console.log(
+                            TheData.QuickSelect[this.state.QuickSelectIndex],
+                          );
+                        }
+                      }}>
+                      <Text style={{fontSize: SetSpText(30), color: '#2a82e4'}}>
+                        取消
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </Overlay>
-          </View>
+            </TouchableOpacity>
+          </Overlay>
         </View>
       );
     }
