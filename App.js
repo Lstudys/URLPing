@@ -6,6 +6,7 @@ import Main from './src/view/Main';
 import History from './src/view/History';
 import Setting from './src/view/Setting';
 import About from './src/view/About';
+import Ping from './src/view/Ping';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ function Nav() {
         <Stack.Screen name="History" component={History} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="About" component={About} />
+        <Stack.Screen name="Ping" component={Ping} />
       </Stack.Navigator>
     </NavigationContainer>
   );

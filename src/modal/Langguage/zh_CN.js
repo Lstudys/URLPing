@@ -26,6 +26,7 @@ export default {
     delete:'删除',
     toast1:'URL输入为空！',
     switchlanguage: '转换语言',
+    language:'语言',
     requestinterval: '请求间隔',
     currentlanguage: '当前语言',
     cancel: '取消',
