@@ -993,8 +993,8 @@ class My extends Component {
             onPress={() => {
               TheData.historyPing.splice(parseInt(item.key), 1);
 
-              for (let i = 0; i < TheData.historyPing.length; i++) {
-                TheData.historyPing[i].key = i;
+              for (let i = 0,j=TheData.historyPing.length; i < TheData.historyPing.length; i++,j--) {
+                TheData.historyPing[i].key = j;
               }
               this.setState({ refresh: !this.state.refresh });
               console.log(TheData.historyPing);
@@ -1093,7 +1093,10 @@ class My extends Component {
                 onPress={() => {
                   if (TheData.Ping.length != 0) {
                     let key = TheData.Ping.length
-                    TheData.Ping = [...TheData.Ping, { key: key, url: 'https://' }];
+                    TheData.Ping = [{ key: key, url: 'https://' },...TheData.Ping];
+                    for(let i=0;i<TheData.Ping.length;i++){
+                      TheData.Ping[i].key=i
+                    }
                     this.setState({ refresh: !this.state.refresh });
                     console.log("1")
                   } else {
@@ -1226,13 +1229,15 @@ class My extends Component {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: key, url: TheData.QuickSelect[0].url },
+                          ...TheData.Ping,
                         ];
+                        for(let i=0;i<TheData.Ping.length;i++){
+                          TheData.Ping[i].key=i
+                        }
                         this.setState({ refresh: !this.state.refresh });
                       } else {
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: 0, url: TheData.QuickSelect[0].url },
                         ];
                         this.setState({ refresh: !this.state.refresh });
@@ -1273,13 +1278,15 @@ class My extends Component {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: key, url: TheData.QuickSelect[1].url },
+                          ...TheData.Ping,
                         ];
+                        for(let i=0;i<TheData.Ping.length;i++){
+                          TheData.Ping[i].key=i
+                        }
                         this.setState({ refresh: !this.state.refresh });
                       } else {
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: 0, url: TheData.QuickSelect[1].url },
                         ];
                         this.setState({ refresh: !this.state.refresh });
@@ -1319,13 +1326,15 @@ class My extends Component {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: key, url: TheData.QuickSelect[2].url },
+                          ...TheData.Ping,
                         ];
+                        for(let i=0;i<TheData.Ping.length;i++){
+                          TheData.Ping[i].key=i
+                        }
                         this.setState({ refresh: !this.state.refresh });
                       } else {
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: 0, url: TheData.QuickSelect[2].url },
                         ];
                         this.setState({ refresh: !this.state.refresh });
@@ -1372,13 +1381,15 @@ class My extends Component {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: key, url: TheData.QuickSelect[3].url },
+                          ...TheData.Ping,
                         ];
+                        for(let i=0;i<TheData.Ping.length;i++){
+                          TheData.Ping[i].key=i
+                        }
                         this.setState({ refresh: !this.state.refresh });
                       } else {
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: 0, url: TheData.QuickSelect[3].url },
                         ];
                         this.setState({ refresh: !this.state.refresh });
@@ -1419,13 +1430,15 @@ class My extends Component {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: key, url: TheData.QuickSelect[4].url },
+                          ...TheData.Ping,
                         ];
+                        for(let i=0;i<TheData.Ping.length;i++){
+                          TheData.Ping[i].key=i
+                        }
                         this.setState({ refresh: !this.state.refresh });
                       } else {
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: 0, url: TheData.QuickSelect[4].url },
                         ];
                         this.setState({ refresh: !this.state.refresh });
@@ -1465,13 +1478,15 @@ class My extends Component {
                       if (TheData.Ping.length != 0) {
                         let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: key, url: TheData.QuickSelect[5].url },
+                          ...TheData.Ping,
                         ];
+                        for(let i=0;i<TheData.Ping.length;i++){
+                          TheData.Ping[i].key=i
+                        }
                         this.setState({ refresh: !this.state.refresh });
                       } else {
                         TheData.Ping = [
-                          ...TheData.Ping,
                           { key: 0, url: TheData.QuickSelect[5].url },
                         ];
                         this.setState({ refresh: !this.state.refresh });
