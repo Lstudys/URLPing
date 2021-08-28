@@ -142,16 +142,24 @@ export const SendRequest = function () {
             value2.end = t2;
             value2.time = value2.end - value2.begin;
             if (value2.time != 0) {
+              // const d = new Data();
+              // let hour =new Data().getHours();
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
-              if (minute < 10) {
-                minute = '0' + minute;
-              }
-              if (second < 10) {
-                second = '0' + second;
-              }
+              // if (minute < 10) {
+              //   minute = '0' + minute;
+              // }
+              // if (second < 10) {
+              //   second = '0' + second;
+              // }
               var xtime = `${new Date().getHours()}:` + minute + ':' + second;
               const ydata = value2.time;
+              if(this.state.minXtime[this.state.url2Number]> minute + second *0.01){
+                this.state.minXtimeData[this.state.url2Number]=xtime;
+                this.state.minXtime[this.state.url2Number]=minute + second *0.01
+              }else{
+                xtime=this.state.minXtimeData[this.state.url2Number];
+              }
               this.setState({
                 values2: this.state.values2.concat([ydata]),
                 chartLabels2: this.state.chartLabels2.concat([xtime]),
@@ -189,14 +197,32 @@ export const SendRequest = function () {
               nowTime2s < beginTime + reqTime * 60 * 1000 &&
               this.state.isPing
             ) {
-              xhr2.abort();
+              console.log("进入到url2判断了么");
+              if(this.state.url2for==false){
+                console.log("进行了xhr2.abort");
+                xhr2.abort();
+              }
+              if(this.state.urlfor==true){
+                xhr.abort();
+              }
+              
               setTimeout(() => {
-                if (this.state.isPing) {
+                if (this.state.isPing && this.state.url2Number<= this.state.urlNumber+1) {
+                  this.state.url2Number++;
+                  console.log("url2Nummber:",this.state.url2Number);
                   xhr2.open('GET', this.state.url2, true);
                   xhr2.send();
+                  if(this.state.isPing && this.state.url2Number > this.state.urlNumber +1 &&this.state.urlfor==true){
+                    xhr.open('GET', this.state.url, true);
+                    xhr.send();
+                  }
+                  this.state.url2for=false;
+                }else{
+                  this.state.url2for=true;
                 }
+               
               }, 1000);
-            } else {
+            }else {
               this.setState({isPing: false});
               this.setState({ifOverlayAble: true});
               this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
@@ -226,17 +252,29 @@ export const SendRequest = function () {
               const t2 = new Date().valueOf();
               value.end = t2;
               value.time = value.end - value.begin;
+
               if (value.time != 0) {
+                // const d=new Data();
+                // let hours =new Date().getHours();
                 let minute = new Date().getMinutes();
                 let second = new Date().getSeconds();
-                if (minute < 10) {
-                  minute = '0' + minute;
-                }
-                if (second < 10) {
-                  second = '0' + second;
-                }
+
+                // if (minute < 10) {
+                //   minute = '0' + minute;
+                // }
+                // if (second < 10) {
+                //   second = '0' + second;
+                // }
                 var xtime = `${new Date().getHours()}:` + minute + ':' + second;
+
                 var ytime = value.time;
+                if(this.state.minXtime[this.state.urlNumber]>minute + second *0.01){
+                  this.state.minXtimeData[this.state.urlNumber]=xtime;
+                  this.state.minXtime[this.state.urlNumber]=minute + second *0.01
+                }else{
+                  xtime=this.state.minXtimeData[this.state.urlNumber];
+                }
+                
                 this.setState({
                   values: this.state.values.concat([ytime]),
                   chartLabels: this.state.chartLabels.concat([xtime]),
@@ -274,14 +312,31 @@ export const SendRequest = function () {
                 nowTime < beginTime + reqTime * 60 * 1000 &&
                 this.state.isPing
               ) {
-                xhr.abort();
+              console.log("进入到url判断了么");
+                if(this.state.urlfor==false){
+                  console.log("进行了xhr.abort");
+                  xhr.abort();
+                }
+                if(this.state.url2for==true){
+                  xhr2.abort();
+                }
                 setTimeout(() => {
-                  if (this.state.isPing) {
-                    xhr.open('GET', this.state.url, true);
-                    xhr.send();
+                if (this.state.isPing && this.state.urlNumber <= this.state.url2Number+1) {
+                  this.state.urlNumber++;
+                  console.log("urlNumber:",this.state.urlNumber);
+                  xhr.open('GET', this.state.url, true);
+                  xhr.send();
+                  if(this.state.isPing && this.state.urlNumber > this.state.url2Number+1 && this.state.url2for==true){
+                    xhr2.open('GET', this.state.url2, true);
+                    xhr2.send();
                   }
-                }, 1000);
-              } else {
+                  this.state.urlfor=false;
+                }else{
+                  this.state.urlfor=true;
+                }
+                
+              }, 1000);
+              }else {
                 this.setState({isPing: false});
                 this.setState({ifOverlayAble: true});
                 this.setState({defaultvalue1: ''});
