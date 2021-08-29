@@ -189,7 +189,7 @@ class Ping extends Component {
                     config: {
                     drawValues: false,
                     color: Colors[colorIndex],
-                    mode: 'CUBIC_BEZIER',
+                    mode: 'LINEAR',
                     drawCircles: false,
                     lineWidth: 2,
                     },
@@ -201,7 +201,7 @@ class Ping extends Component {
                     config: {
                     drawValues: false,
                     color: Colors[colorIndex2],
-                    mode: 'CUBIC_BEZIER',
+                    mode: 'LINEAR',
                     drawCircles: false,
                     lineWidth: 2,
                     },
@@ -228,7 +228,7 @@ class Ping extends Component {
                     config: {
                     drawValues: false,
                     color: Colors[colorIndex],
-                    mode: 'CUBIC_BEZIER',
+                    mode: 'LINEAR',
                     drawCircles: false,
                     lineWidth: 2,
                     },
@@ -255,7 +255,7 @@ class Ping extends Component {
                     config: {
                     drawValues: false,
                     color: Colors[colorIndex2],
-                    mode: 'CUBIC_BEZIER',
+                    mode: 'LINEAR',
                     drawCircles: false,
                     lineWidth: 2,
                     },
@@ -298,7 +298,14 @@ class Ping extends Component {
           <View style={styles.bottomStyle}>
           <ScrollView>
             {true ? (
-                  <LineChart width={Width} height={Height * 0.9}  bottom={0} data={this.config.data} xAxis={this.config.xAxis} style={styles.container} marker={this.state.marker}
+                  <LineChart width={Width} height={Height * 0.9}  bottom={0} data={this.config.data} xAxis={this.config.xAxis} yAxis={{
+                    left: {
+                      enabled: true,
+                    },
+                    right: {
+                      enabled: false,
+                    },
+                  }} style={styles.container} marker={this.state.marker}
                       chartDescription={{text:''}} ref="chart" />
               ) : (
                   <View />

@@ -154,7 +154,7 @@ export default class Setting extends Component {
             height: ScaleSize(60),
             borderBottomWidth: 1,
             borderBottomColor: '#666',
-            marginTop: ScaleSize(50),
+            marginTop: ScaleSize(30),
             flexDirection: 'row',
             alignItems:'center',
             backgroundColor:'white',
