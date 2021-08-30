@@ -163,7 +163,7 @@ export const SendRequest = function () {
         this.state.chart10 = this.state.url10 ? true : false;
 
 
-        this.setState({isPing: true});
+        // this.setState({isPing: true});
 
         this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
 

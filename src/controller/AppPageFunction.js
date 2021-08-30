@@ -26,7 +26,7 @@
                  for(let i=0;i<data.urls.length;i++){
                     data.urls[i].mark=false
                 }
-                Toast.message('再按一次取消Ping');
+                Toast.message('再按一次暂停Ping');
                  return true;
              } else {
                  if (this.firstpress + 2000 > new Date().valueOf()) {
@@ -38,30 +38,30 @@
                      this.setState({
                          isPing: false,
                      });
-                     this.setState({
-                         url: '',
-                     });
-                     this.setState({
-                         url2: '',
-                     });
-                     this.setState({
-                         defaultvalue1: '',
-                     });
-                     this.setState({
-                         defaultvalue2: '',
-                     });
-                     this.setState({
-                         values: [],
-                     });
-                     this.setState({
-                         chartLabels: [],
-                     });
-                     this.setState({
-                         values2: [],
-                     });
-                     this.setState({
-                         chartLabels2: [],
-                     });
+                    //  this.setState({
+                    //      url: '',
+                    //  });
+                    //  this.setState({
+                    //      url2: '',
+                    //  });
+                    //  this.setState({
+                    //      defaultvalue1: '',
+                    //  });
+                    //  this.setState({
+                    //      defaultvalue2: '',
+                    //  });
+                    //  this.setState({
+                    //      values: [],
+                    //  });
+                    //  this.setState({
+                    //      chartLabels: [],
+                    //  });
+                    //  this.setState({
+                    //      values2: [],
+                    //  });
+                    //  this.setState({
+                    //      chartLabels2: [],
+                    //  });
                      this.setState({ifOverlayAble: true});
                      Orientation.lockToPortrait();
                      return true;
@@ -71,7 +71,7 @@
                      for(let i=0;i<data.urls.length;i++){
                         data.urls[i].mark=false
                     }
-                     Toast.message('再按一次取消Ping');
+                     Toast.message('再按一次暂停Ping');
                      //Toast.message("时阿大撒大撒"+data.urls[0].mark);
                      return true;
                  }
