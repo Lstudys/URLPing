@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Main from './src/view/Main';
+import Professional from './src/view/Professional';
+import Ordinary from './src/view/Ordinary';
 import History from './src/view/History';
 import Setting from './src/view/Setting';
 import About from './src/view/About';
@@ -13,8 +14,9 @@ const Stack = createStackNavigator();
 function Nav() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode="none" initialRouteName="Main">
-        <Stack.Screen name="Main" component={Main} />
+      <Stack.Navigator headerMode="none" initialRouteName="Ordinary">
+        <Stack.Screen name="Professional" component={Professional} />
+        <Stack.Screen name="Ordinary" component={Ordinary} />
         <Stack.Screen name="History" component={History} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="About" component={About} />

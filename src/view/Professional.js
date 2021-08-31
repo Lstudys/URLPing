@@ -1053,7 +1053,7 @@ class My extends Component {
               style={{
                 flexDirection: 'row',
                 width: ScaleSize(360),
-                height: Height * 0.053,
+                height: Height * 0.068,
                 alignItems: 'center',
                 borderBottomWidth: 1,
                 borderColor: 'rgba(0,0,0,.2)',
@@ -1260,8 +1260,8 @@ class My extends Component {
                 backgroundColor: '#e5e5e5',
                 marginTop: ScaleSize(15),
               }}></View>
-            <View>
-              <View
+            {/* <View> */}
+              {/* <View
                 style={{
                   marginVertical: ScaleSize(10),
                   marginLeft: ScaleSize(15),
@@ -1647,10 +1647,10 @@ class My extends Component {
                   renderItem={this._renderitem2}
                   data={TheData.historyPing}></FlatList>
               </View>
-            </View>
-          </View>
+            </View> */}
+          {/* </View> */}
           {/*快捷输入编辑框*/}
-          <Overlay
+          {/* <Overlay
             ref={(ele) => (this.overlay = ele)}
             style={{justifyContent: 'center'}}>
             <TouchableOpacity
@@ -1802,7 +1802,8 @@ class My extends Component {
                 </View>
               </View>
             </TouchableOpacity>
-          </Overlay>
+          </Overlay> */}
+        </View>
         </View>
       );
     }
