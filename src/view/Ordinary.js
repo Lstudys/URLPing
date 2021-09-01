@@ -892,11 +892,10 @@ class My extends Component {
       FlatListIsRefreshing: false,
       isPing: false,
       refresh: false,
+      currentUrlindex:-1,
+      focus:false
     };
-    if (TheData.Ping == []) {
-      TheData.Ping = [{key: 0, url: ''}];
-      this.setState({refresh: !this.state.refresh});
-    }
+    
   }
   identify = true;
 
@@ -918,7 +917,17 @@ class My extends Component {
             marginRight: ScaleSize(0),
           }}>
           <TextInput
+          autoFocus={this.state.focus}
+          keyboardAppearance="blue"
             defaultValue={TheData.Ping[parseInt(item.key)].url}
+            autoFocus={true}
+            onFocus={(value)=>{
+              this.state.currentUrlindex=item.key;
+              console.log("key:",this.state.currentUrlindex);
+            }}
+            onBlur={()=>{
+              this.setState({focus:false})
+            }}
             onChangeText={(value) => {
               TheData.Ping[parseInt(item.key)].url = value;
               this.setState({refresh: !this.state.refresh});
@@ -966,7 +975,6 @@ class My extends Component {
                   position:"relative",
                   top:ScaleSize(-3),
                   right:ScaleSize(15),
-                  z: 99,
                 }}>
                 删除
               </Text>
@@ -983,17 +991,7 @@ class My extends Component {
   _renderitem2 = ({item}) => {
     return (
       <View style={{flexDirection: 'row'}}>
-        <View>
-          <Image
-            source={require('../imgs/task.png')}
-            style={{
-              width: ScaleSize(30),
-              height: ScaleSize(30),
-              marginVertical: ScaleSize(5),
-              marginHorizontal: ScaleSize(10),
-            }}
-          />
-        </View>
+        
 
         <TouchableOpacity
           onPress={() => {
@@ -1051,10 +1049,21 @@ class My extends Component {
     );
   };
 
-  _renderRow(item) {
+  _renderRow=({item}) => {
     return (
         <TouchableOpacity
             onPress={() => {
+              for(let i=0;i<TheData.urlsArr.length;i++){
+                if(TheData.urlsArr[i]==item){
+                  var key=i;
+                  break;
+                }
+              }
+              // alert(TheData.urlsArr[item.key])
+                TheData.Ping[parseInt(this.state.currentUrlindex)].url=TheData.Ping[parseInt(this.state.currentUrlindex)].url+TheData.urlsArr[key];
+                this.setState({refresh: !this.state.refresh});
+                this.setState({focus:true})
+                // this.refs.key.blur();
                 // if (this.state.overlayOne) {
                 //     if (this.state.url == '') {
                 //         this.setState({url: item});
@@ -1080,9 +1089,10 @@ class My extends Component {
                 marginTop:ScaleSize(4),
                 height:Height * .045,
                 backgroundColor:"#ffffff",
+                marginRight:ScaleSize(9),
                 borderRadius:ScaleSize(20)
             }}>
-            <Text style={{borderRadius:ScaleSizeH(12), fontSize: SetSpText(40),  margin:ScaleSizeH(5),color:"#2a82e4",fontWeight:"550"}}>{item}</Text>
+            <Text style={{borderRadius:ScaleSizeH(12), fontSize: SetSpText(35),  margin:ScaleSizeH(5),color:"#2a82e4",fontWeight:"550"}}>{item}</Text>
         </TouchableOpacity>
     );
 }
@@ -1114,7 +1124,7 @@ class My extends Component {
                   onPress={() => {
                     this.props.navigation.navigate('Ordinary');
                   }}>
-                  <Text style={{position:"absolute",left:Width *0.13,top:ScaleSize(-10),fontSize:20,color:"#2a82e4"}}>
+                  <Text style={{position:"absolute",left:Width *0.13,top:ScaleSize(-13),fontSize:SetSpText(33),color:"#2a82e4"}}>
                   简洁模式
                   </Text>
                 </TouchableOpacity> 
@@ -1124,7 +1134,7 @@ class My extends Component {
                     this.props.navigation.navigate('Ordinary');
                   }}>
                   <Image source={require('../imgs/转换.png')} style={{height: ScaleSize(20),
-                      width: ScaleSize(20),position:"absolute",left:Width *0.43,top:ScaleSize(-8)}}>
+                      width: ScaleSize(20),position:"absolute",left:Width *0.43,top:ScaleSize(-12)}}>
                   </Image>
                 </TouchableOpacity> 
 
@@ -1144,13 +1154,15 @@ class My extends Component {
 
 
                 <TouchableOpacity
-                style={{position:"relative"}}
+                style={{position:"absolute",height:Height * .09,top:ScaleSize(-45),width:Width * .48,left:Width *0.47}}
                   onPress={() => {
-                    this.props.navigation.navigate('About');
+                    
+                    this.props.navigation.navigate('Professional');
                   }}>
-                  <Text style={{position:"relative",left:Width *0.60,top:ScaleSize(-10),fontSize:SetSpText(33),color:"#666"}}>
+                  <Text style={{position:"absolute",left:Width *0.15,top:ScaleSize(30),fontSize:SetSpText(33),color:"#666"}}>
                   专业模式
                   </Text>
+                  {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
                 </TouchableOpacity> 
                 {/* <TouchableOpacity
                   onPress={() => {
@@ -1276,9 +1288,22 @@ class My extends Component {
                 style={{marginLeft:ScaleSizeH(4),marginRight:ScaleSizeH(4),marginBottom:ScaleSizeH(60),borderRadius:ScaleSize(13),backgroundColor:"#2a82e4"}}
                 horizontal={true}
                 data={TheData.urlsArr}
-                renderItem={({item, index}) => this._renderRow(item, index)}
-                keyExtractor={(item, index) => item + index}
+              renderItem={this._renderRow}
+              
                 />
+                {/* <FlatList
+              data={TheData.Ping}
+              renderItem={this._renderItem1}
+              refreshing={this.state.FlatListIsRefreshing}
+              onRefresh={() => {
+                this.setState((prevState) => ({FlatListIsRefreshing: true}));
+                setTimeout(() => {
+                  this.setState((prevState) => ({
+                    FlatListIsRefreshing: false,
+                  }));
+                }, 1000);
+              }}
+            /> */}
               </View>
 
 
