@@ -20,6 +20,9 @@ build1:
   script:
     - echo "Do your build here"
     - ping -c 10 127.0.0.1
+  tags:
+      ["urlpingRunner"]
+
     
 test1:
   stage: test
@@ -27,6 +30,9 @@ test1:
     - echo "Do a test here"
     - echo "For example run a test suite"
     - ping -c 11 127.0.0.1
+  tags:
+      ["urlpingRunner"]
+
     
 test2:
   stage: test
@@ -34,9 +40,16 @@ test2:
     - echo "Do another parallel test here"
     - echo "For example run a lint test"
     - ping -c 12 127.0.0.1
+  tags:
+      ["urlpingRunner"]
+
     
 deploy1:
   stage: deploy
   script:
     - echo "Do your deploy here"
     - ping -c 20 127.0.0.1
+  tags:
+      ["urlpingRunner"]
+
+  
