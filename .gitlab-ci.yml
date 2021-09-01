@@ -1,23 +1,6 @@
-stages:
-     [
-     -"check",
-     -"test",
-     -"build"]
-check:
-   stage: -"check"
+image: node:latest
+publish_package:
+   stage:deploy
    script:
-      echo "find 0 err"
-   tags:
-      ["urlpingRunner"]
-test:
-   stage: -"test"
-   script:
-      echo "test successful"
-   tags:
-      ["urlpingRunner"]
-build:
-   stage: -"build"
-   script:
-      echo "build the app"
-   tags:
-      ["urlpingRunner"]
+      -npm install
+      -npm run build
