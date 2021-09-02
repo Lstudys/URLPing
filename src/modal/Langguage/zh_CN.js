@@ -19,11 +19,8 @@ export default {
     max:'MAX',
     min:'MIN',
     avg:'AVG',
-    add:'新建',
     start:'开始',
-    input:'请输入URL',
     ok:"确定",
-    delete:'删除',
     toast1:'URL输入为空！',
     switchlanguage: '转换语言',
     language:'语言',
@@ -38,4 +35,10 @@ export default {
     versionupdatetime: '版本更新时间',
     iftherearebugsduringuse: '使用过程中，如果出现bugs',
     pleasecontact: '请联系',
+    //Ordinary页面的英文显示
+    ordinary:'简易模式',
+    professional:'专业模式',
+    input:'请输入URL',
+    delete:'删除',
+    add:'添加',
 };
