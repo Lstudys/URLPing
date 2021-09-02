@@ -134,6 +134,9 @@ class Ping extends Component {
               markerColor: processColor('#F0C0FF8C'),
               textColor: processColor('white'),
             },
+            legend: {
+              wordWrapEnabled:true,
+            },
             chartDate: [{y: 0, x: 0}], // 只作为刷新页面用的state
             setting: false,
             secondDataHeight: 120, // 第二个图表数据style属性的bottom值
@@ -1318,7 +1321,7 @@ class Ping extends Component {
                     right: {
                       enabled: false,
                     },
-                  }} style={styles.container} marker={this.state.marker}
+                  }} style={styles.container} marker={this.state.marker} legend={this.state.legend}
                       chartDescription={{text:''}} ref="chart" />
               ) : (
                   <View />

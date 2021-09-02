@@ -873,6 +873,13 @@ import {
 import store from 'react-native-simple-store';
 import TheData from '../modal/TheData';
 import {ScrollView} from 'react-native';
+import I18n from 'i18n-js';
+import * as RNLocalize from 'react-native-localize';
+import zh from '../modal/Langguage/zh_CN';
+import en from '../modal/Langguage/en_US';
+import Data from '../modal/data';
+const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
+const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -894,7 +901,33 @@ class My extends Component {
       refresh: false,
       currentUrlindex: -1,
       focus: false,
+      langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
     };
+
+    store
+      .get('Language')
+      .then((res) => {
+        Data.userChoose = res;
+      })
+      .finally(() => {
+        if (Data.userChoose) {
+          // 首选用户设置记录
+          I18n.locale = Data.userChoose;
+        } else if (SystemLanguage) {
+          // 获取系统语言
+          I18n.locale = SystemLanguage;
+        } else {
+          // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
+          I18n.locale = 'en'; 
+        }
+        this.setState({
+          langvis: false,
+        });
+      });
+
+    I18n.fallbacks = true;
+    // 加载语言包
+    I18n.translations = {zh, en};
   }
   identify = true;
 
@@ -932,7 +965,7 @@ class My extends Component {
               store.update(TheData.Ping[parseInt(item.key)].url, value);
               console.log(TheData.Ping);
             }}
-            placeholder="请输入Ping的地址"
+            placeholder={I18n.t('input')}
             style={{
               borderStyle: 'solid',
               marginTop: ScaleSize(1),
@@ -974,7 +1007,7 @@ class My extends Component {
                   top: ScaleSize(-3),
                   right: ScaleSize(15),
                 }}>
-                删除
+                {I18n.t('delete')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -1041,7 +1074,7 @@ class My extends Component {
                 color: '#2a82e4',
                 fontSize: SetSpText(25),
               }}>
-              删除
+              {I18n.t('delete')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -1144,7 +1177,7 @@ class My extends Component {
                       fontSize: SetSpText(33),
                       color: '#2a82e4',
                     }}>
-                    简洁模式
+                    {I18n.t('ordinary')}
                   </Text>
                 </TouchableOpacity>
 
@@ -1196,7 +1229,7 @@ class My extends Component {
                       fontSize: SetSpText(33),
                       color: '#666',
                     }}>
-                    专业模式
+                    {I18n.t('professional')}
                   </Text>
                   {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
                 </TouchableOpacity>
@@ -1303,7 +1336,7 @@ class My extends Component {
                       fontSize: SetSpText(30),
                       paddingTop: ScaleSize(0),
                     }}>
-                    添加
+                    {I18n.t('add')}
                   </Text>
                 </View>
               </TouchableOpacity>
