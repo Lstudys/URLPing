@@ -41,4 +41,5 @@ export default {
     input:'请输入URL',
     delete:'删除',
     add:'添加',
+    test:'测试中'
 };

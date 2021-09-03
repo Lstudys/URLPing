@@ -930,6 +930,14 @@ class My extends Component {
     I18n.fallbacks = true;
     // 加载语言包
     I18n.translations = {zh, en};
+
+    store.get(TheData.pingIndex).then((res) => {
+      if (res != null) {
+        TheData.Ping = res;
+        console.log('res:', res);
+        this.setState({refresh: !this.state.refresh});
+      }
+    });
   }
   identify = true;
 
@@ -992,6 +1000,10 @@ class My extends Component {
               this.setState({refresh: !this.state.refresh});
               store.update(TheData.Ping[parseInt(item.key)].url, value);
               console.log(TheData.Ping);
+              store.save(TheData.pingIndex, TheData.Ping);
+              store.get(TheData.pingIndex).then((res) => {
+                console.log('res:', res);
+              });
             }}
             placeholder={I18n.t('input')}
             style={{
@@ -1026,6 +1038,7 @@ class My extends Component {
                 }
                 this.setState({refresh: !this.state.refresh});
                 console.log(TheData.Ping);
+                store.save(TheData.pingIndex, TheData.Ping);
               }}>
               <Text
                 style={{
@@ -1056,6 +1069,11 @@ class My extends Component {
                   this.setState({refresh: !this.state.refresh});
                   console.log('2');
                 }
+                store.save(TheData.pingIndex, TheData.Ping);
+                store.get(TheData.pingIndex).then((res) => {
+                  console.log('res:', res);
+                });
+                console.log();
               }}
               style={{
                 position: 'absolute',
@@ -1095,68 +1113,68 @@ class My extends Component {
     );
   };
 
-  _renderitem2 = ({item}) => {
-    return (
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity
-          onPress={() => {
-            let length = TheData.Ping.length;
-            TheData.Ping = [
-              ...TheData.Ping,
-              {key: length, url: TheData.historyPing[item.key].url},
-            ];
-            this.setState({refresh: !this.state.refresh});
-          }}>
-          <View
-            style={{
-              width: ScaleSize(255),
-              height: ScaleSize(34),
-              justifyContent: 'center',
-              borderBottomColor: '#919191',
-              borderBottomWidth: 1,
-            }}>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
-              style={{
-                color: '#919191',
-                fontSize: SetSpText(35),
-              }}>
-              {item.url}
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <View
-          style={{
-            marginLeft: ScaleSize(15),
-            marginTop: ScaleSize(15),
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              TheData.historyPing.splice(parseInt(item.key), 1);
+  // _renderitem2 = ({item}) => {
+  //   return (
+  //     <View style={{flexDirection: 'row'}}>
+  //       <TouchableOpacity
+  //         onPress={() => {
+  //           let length = TheData.Ping.length;
+  //           TheData.Ping = [
+  //             ...TheData.Ping,
+  //             {key: length, url: TheData.historyPing[item.key].url},
+  //           ];
+  //           this.setState({refresh: !this.state.refresh});
+  //         }}>
+  //         <View
+  //           style={{
+  //             width: ScaleSize(255),
+  //             height: ScaleSize(34),
+  //             justifyContent: 'center',
+  //             borderBottomColor: '#919191',
+  //             borderBottomWidth: 1,
+  //           }}>
+  //           <Text
+  //             numberOfLines={1}
+  //             ellipsizeMode={'tail'}
+  //             style={{
+  //               color: '#919191',
+  //               fontSize: SetSpText(35),
+  //             }}>
+  //             {item.url}
+  //           </Text>
+  //         </View>
+  //       </TouchableOpacity>
+  //       <View
+  //         style={{
+  //           marginLeft: ScaleSize(15),
+  //           marginTop: ScaleSize(15),
+  //         }}>
+  //         <TouchableOpacity
+  //           onPress={() => {
+  //             TheData.historyPing.splice(parseInt(item.key), 1);
 
-              for (
-                let i = 0, j = TheData.historyPing.length;
-                i < TheData.historyPing.length;
-                i++, j--
-              ) {
-                TheData.historyPing[i].key = j;
-              }
-              this.setState({refresh: !this.state.refresh});
-              console.log(TheData.historyPing);
-            }}>
-            <Text
-              style={{
-                color: '#2a82e4',
-                fontSize: SetSpText(25),
-              }}>
-              {I18n.t('delete')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
+  //             for (
+  //               let i = 0, j = TheData.historyPing.length;
+  //               i < TheData.historyPing.length;
+  //               i++, j--
+  //             ) {
+  //               TheData.historyPing[i].key = j;
+  //             }
+  //             this.setState({refresh: !this.state.refresh});
+  //             console.log(TheData.historyPing);
+  //           }}>
+  //           <Text
+  //             style={{
+  //               color: '#2a82e4',
+  //               fontSize: SetSpText(25),
+  //             }}>
+  //             {I18n.t('delete')}
+  //           </Text>
+  //         </TouchableOpacity>
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   onLayout = (event) => {
     const viewHeight = event.nativeEvent.layout.height;
@@ -1183,6 +1201,10 @@ class My extends Component {
             TheData.Ping[parseInt(this.state.currentUrlindex)].url.slice(
               this.state.currentIndex,
             );
+          store.save(TheData.pingIndex, TheData.Ping);
+          store.get(TheData.pingIndex).then((res) => {
+            console.log('res:', res);
+          });
           this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
           // this.refs.key.blur();
