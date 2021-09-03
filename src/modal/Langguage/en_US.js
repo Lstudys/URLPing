@@ -39,4 +39,5 @@ export default {
     input:'Please Enter URL',
     delete:'Delete',
     add:'Add',
+    test:'Test'
 };
