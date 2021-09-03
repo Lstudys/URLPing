@@ -850,7 +850,7 @@
 // });
 import {blue} from 'chalk';
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {Image, Keyboard} from 'react-native';
 import {Toast} from 'teaset';
 import {
   Button,
@@ -902,6 +902,8 @@ class My extends Component {
       currentUrlindex: -1,
       focus: false,
       langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
+      keyBoardHeight: 0,
+      currentIndex: -1,
     };
 
     store
@@ -918,7 +920,7 @@ class My extends Component {
           I18n.locale = SystemLanguage;
         } else {
           // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
-          I18n.locale = 'en'; 
+          I18n.locale = 'en';
         }
         this.setState({
           langvis: false,
@@ -930,6 +932,33 @@ class My extends Component {
     I18n.translations = {zh, en};
   }
   identify = true;
+
+  componentWillMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow.bind(this),
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide.bind(this),
+    );
+  }
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+  _keyboardDidShow(e) {
+    this.setState({
+      keyBoardHeight: e.endCoordinates.height,
+    });
+    console.log('键盘高度为:', this.state.keyBoardHeight);
+    console.log('屏幕高度为:', Height);
+  }
+  _keyboardDidHide() {
+    this.setState({
+      keyBoardHeight: 0,
+    });
+  }
 
   _renderItem1 = ({item}) => {
     return (
@@ -948,16 +977,15 @@ class My extends Component {
             marginRight: ScaleSize(0),
           }}>
           <TextInput
-            autoFocus={this.state.focus}
+            onSelectionChange={(event) => {
+              (this.state.currentIndex = event.nativeEvent.selection.start),
+                console.log('光标位置', this.state.currentIndex);
+            }}
             keyboardAppearance="blue"
             defaultValue={TheData.Ping[parseInt(item.key)].url}
-            autoFocus={true}
             onFocus={(value) => {
               this.state.currentUrlindex = item.key;
               console.log('key:', this.state.currentUrlindex);
-            }}
-            onBlur={() => {
-              this.setState({focus: false});
             }}
             onChangeText={(value) => {
               TheData.Ping[parseInt(item.key)].url = value;
@@ -1012,7 +1040,55 @@ class My extends Component {
             </TouchableOpacity>
           </View>
         ) : (
-          <View></View>
+          <View flexDirection="row">
+            <TouchableOpacity
+              onPress={() => {
+                if (TheData.Ping.length != 0) {
+                  let key = TheData.Ping.length;
+                  TheData.Ping = [{key: key, url: ''}, ...TheData.Ping];
+                  for (let i = 0; i < TheData.Ping.length; i++) {
+                    TheData.Ping[i].key = i;
+                  }
+                  this.setState({refresh: !this.state.refresh});
+                  console.log('1');
+                } else {
+                  TheData.Ping = [{key: 0, url: ''}];
+                  this.setState({refresh: !this.state.refresh});
+                  console.log('2');
+                }
+              }}
+              style={{
+                position: 'absolute',
+                right: ScaleSize(5),
+                top: ScaleSize(-55),
+                marginRight: ScaleSize(14),
+                marginTop: ScaleSize(-10),
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  marginTop: ScaleSize(20),
+                  marginBottom: ScaleSize(20),
+                }}>
+                <Image
+                  source={require('../imgs/add4.png')}
+                  style={{
+                    height: ScaleSize(20),
+                    width: ScaleSize(20),
+                  }}
+                />
+                <Text
+                  style={{
+                    color: '#2a82e4',
+                    fontSize: SetSpText(30),
+                    paddingTop: ScaleSize(0),
+                  }}>
+                  {I18n.t('add')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
       //<Text>{this.Data}</Text>
@@ -1082,6 +1158,11 @@ class My extends Component {
     );
   };
 
+  onLayout = (event) => {
+    const viewHeight = event.nativeEvent.layout.height;
+    console.log('view的高度', viewHeight);
+  };
+
   _renderRow = ({item}) => {
     return (
       <TouchableOpacity
@@ -1094,8 +1175,14 @@ class My extends Component {
           }
           // alert(TheData.urlsArr[item.key])
           TheData.Ping[parseInt(this.state.currentUrlindex)].url =
-            TheData.Ping[parseInt(this.state.currentUrlindex)].url +
-            TheData.urlsArr[key];
+            TheData.Ping[parseInt(this.state.currentUrlindex)].url.slice(
+              0,
+              this.state.currentIndex,
+            ) +
+            TheData.urlsArr[key] +
+            TheData.Ping[parseInt(this.state.currentUrlindex)].url.slice(
+              this.state.currentIndex,
+            );
           this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
           // this.refs.key.blur();
@@ -1146,63 +1233,68 @@ class My extends Component {
       return;
     } else {
       return (
-        <ScrollView
-          keyboardShouldPersistTaps={true}
-          style={{backgroundColor: '#ffffff', height: Height + 10}}>
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: ScaleSize(360),
-                height: Height * 0.058,
-                alignItems: 'center',
-                borderBottomWidth: 1,
-                borderColor: 'rgba(0,0,0,.05)',
-                marginTop: ScaleSize(20),
-              }}>
+        <View style={{height: Height, flex: 1, backgroundColor: 'pink'}}>
+          <ScrollView
+            onLayout={(event) => this.onLayout(event)}
+            ref={(ScrollView) => {
+              ScrollView = ScrollView;
+            }}
+            keyboardShouldPersistTaps={true}
+            style={{backgroundColor: '#ffffff', flex: 1}}>
+            <View>
               <View
                 style={{
-                  position: 'absolute',
-                  left: ScaleSize(15),
+                  flexDirection: 'row',
+                  width: ScaleSize(360),
+                  height: Height * 0.058,
+                  alignItems: 'center',
+                  borderBottomWidth: 1,
+                  borderColor: 'rgba(0,0,0,.05)',
+                  marginTop: ScaleSize(20),
                 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('Ordinary');
+                <View
+                  style={{
+                    position: 'absolute',
+                    left: ScaleSize(15),
                   }}>
-                  <Text
-                    style={{
-                      position: 'absolute',
-                      left: Width * 0.13,
-                      top: ScaleSize(-13),
-                      fontSize: SetSpText(33),
-                      color: '#2a82e4',
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Ordinary');
                     }}>
-                    {I18n.t('ordinary')}
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      style={{
+                        position: 'absolute',
+                        left: Width * 0.13,
+                        top: ScaleSize(-13),
+                        fontSize: SetSpText(33),
+                        color: '#2a82e4',
+                      }}>
+                      {I18n.t('ordinary')}
+                    </Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('Ordinary');
-                  }}>
-                  <Image
-                    source={require('../imgs/转换.png')}
-                    style={{
-                      height: ScaleSize(20),
-                      width: ScaleSize(20),
-                      position: 'absolute',
-                      left: Width * 0.43,
-                      top: ScaleSize(-12),
-                    }}></Image>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Ordinary');
+                    }}>
+                    <Image
+                      source={require('../imgs/转换.png')}
+                      style={{
+                        height: ScaleSize(20),
+                        width: ScaleSize(20),
+                        position: 'absolute',
+                        left: Width * 0.43,
+                        top: ScaleSize(-12),
+                      }}></Image>
+                  </TouchableOpacity>
 
-                {/* // onPress={() => {
+                  {/* // onPress={() => {
                   //   this.props.navigation.navigate('About', {
                   //     mainThis: this,
                   //   });
                   // }} */}
 
-                {/* <Image
+                  {/* <Image
                     source={require('../imgs/转换.png')}
                     style={{
                       height: ScaleSize(20),
@@ -1210,30 +1302,30 @@ class My extends Component {
                     }}
                   /> */}
 
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    height: Height * 0.09,
-                    top: ScaleSize(-45),
-                    width: Width * 0.48,
-                    left: Width * 0.47,
-                  }}
-                  onPress={() => {
-                    this.props.navigation.navigate('Professional');
-                  }}>
-                  <Text
+                  <TouchableOpacity
                     style={{
                       position: 'absolute',
-                      left: Width * 0.15,
-                      top: ScaleSize(30),
-                      fontSize: SetSpText(33),
-                      color: '#666',
+                      height: Height * 0.09,
+                      top: ScaleSize(-45),
+                      width: Width * 0.48,
+                      left: Width * 0.47,
+                    }}
+                    onPress={() => {
+                      this.props.navigation.navigate('Professional');
                     }}>
-                    {I18n.t('professional')}
-                  </Text>
-                  {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
-                </TouchableOpacity>
-                {/* <TouchableOpacity
+                    <Text
+                      style={{
+                        position: 'absolute',
+                        left: Width * 0.15,
+                        top: ScaleSize(30),
+                        fontSize: SetSpText(33),
+                        color: '#666',
+                      }}>
+                      {I18n.t('professional')}
+                    </Text>
+                    {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
+                  </TouchableOpacity>
+                  {/* <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('About', {
                       mainThis: this,
@@ -1247,13 +1339,13 @@ class My extends Component {
                     }}
                   />
                 </TouchableOpacity> */}
-              </View>
-              {/* <View style={{marginLeft: Width * 0.38}}>
+                </View>
+                {/* <View style={{marginLeft: Width * 0.38}}>
                 <Text style={{fontSize: SetSpText(28), fontWeight: '500'}}>
                   GraphURLPing
                 </Text>
               </View> */}
-              {/* <View
+                {/* <View
                 style={{
                   position: 'absolute',
                   right: ScaleSize(15),
@@ -1271,31 +1363,44 @@ class My extends Component {
                   />
                 </TouchableOpacity>
               </View> */}
-            </View>
-            <View
-              style={{
-                borderBottomWidth: 1,
-                width: Width * 0.5,
-                borderBottomColor: '#2a82e4',
-              }}></View>
-            <View style={{marginTop: ScaleSize(40)}}>
-              <FlatList
-                keyboardShouldPersistTaps={'handled'}
-                data={TheData.Ping}
-                renderItem={this._renderItem1}
-                refreshing={this.state.FlatListIsRefreshing}
-                onRefresh={() => {
-                  this.setState((prevState) => ({FlatListIsRefreshing: true}));
-                  setTimeout(() => {
-                    this.setState((prevState) => ({
-                      FlatListIsRefreshing: false,
-                    }));
-                  }, 1000);
-                }}
-              />
-            </View>
-            {/*console.log(TheData.Ping)*/}
-            <View flexDirection="row">
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  width: Width * 0.5 + 2,
+                  borderBottomColor: '#2a82e4',
+                }}></View>
+
+              <View style={{height: Height * 0.062, marginTop: ScaleSizeH(60)}}>
+                <FlatList
+                  keyboardShouldPersistTaps={'handled'}
+                  style={{
+                    marginLeft: ScaleSizeH(4),
+                    marginRight: ScaleSizeH(4),
+                    marginBottom: ScaleSizeH(10),
+                    borderRadius: ScaleSize(13),
+                    backgroundColor: '#2a82e4',
+                  }}
+                  horizontal={true}
+                  data={TheData.urlsArr}
+                  renderItem={this._renderRow}
+                />
+                {/* <FlatList
+              data={TheData.Ping}
+              renderItem={this._renderItem1}
+              refreshing={this.state.FlatListIsRefreshing}
+              onRefresh={() => {
+                this.setState((prevState) => ({FlatListIsRefreshing: true}));
+                setTimeout(() => {
+                  this.setState((prevState) => ({
+                    FlatListIsRefreshing: false,
+                  }));
+                }, 1000);
+              }}
+            /> */}
+              </View>
+              {/* <View flexDirection="row">
               <TouchableOpacity
                 onPress={() => {
                   if (TheData.Ping.length != 0) {
@@ -1313,7 +1418,7 @@ class My extends Component {
                   }
                 }}
                 style={{
-                  marginLeft: ScaleSize(15),
+                  marginTop:ScaleSize(100),
                   marginVertical: ScaleSize(10),
                 }}>
                 <View
@@ -1341,120 +1446,97 @@ class My extends Component {
                 </View>
               </TouchableOpacity>
 
-              {/* <TouchableOpacity
-                onPress={() => {
-                  TheData.Ping.splice(0, TheData.Ping.length);
-                  this.setState({ refresh: !this.state.refresh });
-                }}>
-                <Text
-                  style={{
-                    color: 'blue',
-                    marginLeft: ScaleSize(265),
-                    marginVertical: ScaleSize(10),
-                    fontSize: SetSpText(25)
-                  }}>
-                  清空
-                </Text>
-              </TouchableOpacity> */}
-            </View>
+            </View> */}
 
-            <View style={{height: Height * 0.1}}>
-              <FlatList
-                keyboardShouldPersistTaps={'handled'}
+              <View style={{marginTop: ScaleSize(40)}}>
+                <FlatList
+                  keyboardShouldPersistTaps={'handled'}
+                  data={TheData.Ping}
+                  renderItem={this._renderItem1}
+                  refreshing={this.state.FlatListIsRefreshing}
+                  onRefresh={() => {
+                    this.setState((prevState) => ({
+                      FlatListIsRefreshing: true,
+                    }));
+                    setTimeout(() => {
+                      this.setState((prevState) => ({
+                        FlatListIsRefreshing: false,
+                      }));
+                    }, 1000);
+                  }}
+                />
+              </View>
+              {/*console.log(TheData.Ping)*/}
+
+              <View
                 style={{
-                  marginLeft: ScaleSizeH(4),
-                  marginRight: ScaleSizeH(4),
-                  marginBottom: ScaleSizeH(60),
-                  borderRadius: ScaleSize(13),
-                  backgroundColor: '#2a82e4',
-                }}
-                horizontal={true}
-                data={TheData.urlsArr}
-                renderItem={this._renderRow}
-              />
-              {/* <FlatList
-              data={TheData.Ping}
-              renderItem={this._renderItem1}
-              refreshing={this.state.FlatListIsRefreshing}
-              onRefresh={() => {
-                this.setState((prevState) => ({FlatListIsRefreshing: true}));
-                setTimeout(() => {
-                  this.setState((prevState) => ({
-                    FlatListIsRefreshing: false,
-                  }));
-                }, 1000);
-              }}
-            /> */}
-            </View>
-
-            <View
-              style={{
-                marginHorizontal: ScaleSize(5),
-                marginBottom: ScaleSize(10),
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  for (let i = 0; i < TheData.Ping.length; i++) {
-                    if (
-                      TheData.Ping[i].url == 'https://' ||
-                      TheData.Ping[i].url == ''
-                    ) {
-                      this.identify = false;
-                      break;
-                    } else {
-                      this.identify = true;
-                    }
-                  }
-                  if (this.identify) {
-                    if (TheData.Ping.length != 0) {
-                      //if (TheData.historyPing.length != 0) {
-                      //TheData.historyPing = [];
-                      //}
-                      let Ping_length = TheData.Ping.length;
-                      let History_length = TheData.historyPing.length;
-                      for (
-                        let i = 0, j = History_length;
-                        i < Ping_length;
-                        i++, j++
+                  marginHorizontal: ScaleSize(5),
+                  marginBottom: ScaleSize(10),
+                  marginTop: ScaleSize(30),
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    for (let i = 0; i < TheData.Ping.length; i++) {
+                      if (
+                        TheData.Ping[i].url == 'https://' ||
+                        TheData.Ping[i].url == ''
                       ) {
-                        TheData.historyPing = [
-                          ...TheData.historyPing,
-                          {key: j, url: TheData.Ping[i].url},
-                        ];
+                        this.identify = false;
+                        break;
+                      } else {
+                        this.identify = true;
                       }
-                      this.setState({refresh: !this.state.refresh});
-                      // console.log(TheData.historyPing);
-                      this.props.navigation.navigate('Ping', {
-                        urlData: [...TheData.Ping],
-                      });
-                    } else {
-                      Toast.message('尚未添加需要Ping的网址!');
                     }
-                    //TheData.Ping.splice(0, TheData.Ping.length);
-                  } else {
-                    Toast.message('输入网址不能有空!');
-                  }
-                }}
-                style={{
-                  marginHorizontal: ScaleSize(2),
-                  alignItems: 'center',
-                  marginTop: ScaleSize(5),
-                  borderRadius: ScaleSize(10),
-                  backgroundColor: '#2a82e4',
-                  height: ScaleSize(42),
-                  justifyContent: 'center',
-                }}>
-                <Text
+                    if (this.identify) {
+                      if (TheData.Ping.length != 0) {
+                        //if (TheData.historyPing.length != 0) {
+                        //TheData.historyPing = [];
+                        //}
+                        let Ping_length = TheData.Ping.length;
+                        let History_length = TheData.historyPing.length;
+                        for (
+                          let i = 0, j = History_length;
+                          i < Ping_length;
+                          i++, j++
+                        ) {
+                          TheData.historyPing = [
+                            ...TheData.historyPing,
+                            {key: j, url: TheData.Ping[i].url},
+                          ];
+                        }
+                        this.setState({refresh: !this.state.refresh});
+                        // console.log(TheData.historyPing);
+                        this.props.navigation.navigate('Ping', {
+                          urlData: [...TheData.Ping],
+                        });
+                      } else {
+                        Toast.message('尚未添加需要Ping的网址!');
+                      }
+                      //TheData.Ping.splice(0, TheData.Ping.length);
+                    } else {
+                      Toast.message('输入网址不能有空!');
+                    }
+                  }}
                   style={{
-                    fontSize: SetSpText(40),
-                    color: 'white',
-                    fontWeight: '600',
+                    marginHorizontal: ScaleSize(2),
+                    alignItems: 'center',
+                    marginTop: ScaleSize(5),
+                    borderRadius: ScaleSize(10),
+                    backgroundColor: '#2a82e4',
+                    height: ScaleSize(42),
+                    justifyContent: 'center',
                   }}>
-                  Ping
-                </Text>
-              </TouchableOpacity>
-            </View>
-            {/* <TouchableOpacity
+                  <Text
+                    style={{
+                      fontSize: SetSpText(40),
+                      color: 'white',
+                      fontWeight: '600',
+                    }}>
+                    Ping
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* <TouchableOpacity
               onPress={() => {
                 this.props.navigation.navigate('Setting', {
                   mainThis: this,
@@ -1470,14 +1552,14 @@ class My extends Component {
                 参数设置
               </Text>
             </TouchableOpacity> */}
-            {/* <View
+              {/* <View
               style={{
                 height: Height * 0.0127,
                 backgroundColor: '#e5e5e5',
                 marginTop: ScaleSize(15),
               }}></View> */}
-            {/* <View> */}
-            {/* <View
+              {/* <View> */}
+              {/* <View
                 style={{
                   marginVertical: ScaleSize(10),
                   marginLeft: ScaleSize(15),
@@ -1864,9 +1946,9 @@ class My extends Component {
                   data={TheData.historyPing}></FlatList>
               </View>
             </View> */}
-            {/* </View> */}
-            {/*快捷输入编辑框*/}
-            {/* <Overlay
+              {/* </View> */}
+              {/*快捷输入编辑框*/}
+              {/* <Overlay
             ref={(ele) => (this.overlay = ele)}
             style={{justifyContent: 'center'}}>
             <TouchableOpacity
@@ -2019,8 +2101,9 @@ class My extends Component {
               </View>
             </TouchableOpacity>
           </Overlay> */}
-          </View>
-        </ScrollView>
+            </View>
+          </ScrollView>
+        </View>
       );
     }
   }
