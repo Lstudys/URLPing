@@ -1,7 +1,7 @@
 import {blue} from 'chalk';
 import React, {Component} from 'react';
 import {Image, Keyboard} from 'react-native';
-import {Toast} from 'teaset';
+import {Toast,Carousel} from 'teaset';
 import {
   Button,
   View,
@@ -269,6 +269,77 @@ class My extends Component {
         )}
       </View>
       //<Text>{this.Data}</Text>
+    );
+  };
+
+  _renderitem2 = ({item}) => {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <View>
+          <Image
+            source={require('../imgs/task.png')}
+            style={{
+              width: ScaleSize(30),
+              height: ScaleSize(30),
+              marginVertical: ScaleSize(5),
+              marginHorizontal: ScaleSize(10),
+            }}
+          />
+        </View>
+
+        <TouchableOpacity
+          onPress={() => {
+            let length = TheData.Ping.length;
+            TheData.Ping = [
+              ...TheData.Ping,
+              {key: length, url: TheData.historyPing[item.key].url},
+            ];
+            this.setState({refresh: !this.state.refresh});
+          }}>
+          <View
+            style={{
+              width: ScaleSize(255),
+              height: ScaleSize(34),
+              justifyContent: 'center',
+              borderBottomColor: '#919191',
+              borderBottomWidth: 1,
+            }}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode={'tail'}
+              style={{
+                color: '#919191',
+                fontSize: SetSpText(35),
+              }}>
+              {item.url}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            marginLeft: ScaleSize(15),
+            marginTop: ScaleSize(15),
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              // TheData.historyPing.splice(parseInt(item.key), 1);
+
+              // for (let i = 0,j=TheData.historyPing.length; i < TheData.historyPing.length; i++,j--) {
+              //   TheData.historyPing[i].key = j;
+              // }
+              // this.setState({refresh: !this.state.refresh});
+              // console.log(TheData.historyPing);
+            }}>
+            <Text
+              style={{
+                color: '#2a82e4',
+                fontSize: SetSpText(25),
+              }}>
+              删除
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
@@ -749,7 +820,80 @@ class My extends Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
+
+                      <View>
+                      <TouchableOpacity
+                      style={{
+                        marginLeft:Width * .4+ScaleSize(18),
+                        width: Width * 0.1,
+                      }}
+                      onPress={() => {
+                        this.props.navigation.navigate('Setting')
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: SetSpText(30),
+                          color: '#666',
+                        }}>
+                        {I18n.t('settings')}
+                      </Text>
+                      {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
+                    </TouchableOpacity>
+                      </View>
+
+
               </View>
+              <View style={{height:Height * .02,backgroundColor:"#e5e5e5",marginTop:ScaleSize(25)}}></View>
+
+              <Carousel style={{height: Height * .4,marginTop:ScaleSize(0)}} control={true} carousel={false}>
+                  <View>
+                  <View
+                flexDirection="row"
+                style={{
+                  marginLeft: ScaleSizeW(20),
+                  marginTop: ScaleSize(20),
+                  marginBottom: ScaleSize(10),
+                }}>
+                <Text style={{color: 'gray', fontSize: SetSpText(30)}}>
+                  历史记录
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    TheData.historyPing.splice(0, TheData.historyPing.length);
+                    this.setState({refresh: !this.state.refresh});
+                  }}
+                  style={{marginLeft: ScaleSize(253)}}>
+                  <Text style={{color: '#2a82e4', fontSize: SetSpText(25)}}>
+                    清空
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  //height: ScaleSize(220),
+                  borderBottomWidth: 1,
+                  borderColor: '#C4C4C4',
+                  borderStyle: 'solid',
+                }}>
+                <FlatList
+                  onRefresh={() => {
+                    this.setState((prevState) => ({
+                      FlatListIsRefreshing: true,
+                    }));
+                    setTimeout(() => {
+                      this.setState((prevState) => ({
+                        FlatListIsRefreshing: false,
+                      }));
+                    }, 1000);
+                  }}
+                  refreshing={this.state.FlatListIsRefreshing}
+                  renderItem={this._renderitem2}
+                  data={TheData.historyPing}></FlatList>
+              </View>
+                  </View>
+                  <View><Text>2</Text></View>
+                  <View><Text>3</Text></View>
+</Carousel>
             </ScrollView>
           )}
         </View>

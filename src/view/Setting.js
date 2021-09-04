@@ -135,7 +135,7 @@ export default class Setting extends Component {
           <TouchableOpacity
           style={{position:'absolute',left:ScaleSize(10),}}
             onPress={() => {
-              this.props.navigation.navigate('Main');
+              this.props.navigation.navigate('Ordinary');
             }}>
             <Image
               source={require('../imgs/back.png')}
