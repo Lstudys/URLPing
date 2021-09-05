@@ -1,7 +1,9 @@
 import {blue} from 'chalk';
 import React, {Component} from 'react';
-import {Image, Keyboard} from 'react-native';
-import {Toast} from 'teaset';
+import {Image, Keyboard,KeyboardAvoidingView } from 'react-native';
+import {Toast,Carousel} from 'teaset';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import {
   Button,
   View,
@@ -13,6 +15,7 @@ import {
   TouchableOpacity,
   Overlay,
 } from 'react-native';
+
 import {
   ScaleSizeH,
   ScaleSizeR,
@@ -28,6 +31,8 @@ import * as RNLocalize from 'react-native-localize';
 import zh from '../modal/Langguage/zh_CN';
 import en from '../modal/Langguage/en_US';
 import Data from '../modal/data';
+import ActionButton from 'react-native-action-button';
+
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
 const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
 
@@ -93,13 +98,16 @@ class My extends Component {
   identify = true;
 
   componentWillMount() {
-    store.get('isNew').then((res) => {
-      this.setState({
-        isNew: res,
-      });
-      console.log('isNew:', this.state.isNew);
+    
+
+    store.get('historyPing').then((res) => {
+      if(res!=null){
+      TheData.historyPing=res;
       this.setState({refresh: !this.state.refresh});
+      }
     });
+
+
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       this._keyboardDidShow.bind(this),
@@ -147,7 +155,6 @@ class My extends Component {
               (this.state.currentIndex = event.nativeEvent.selection.start),
                 console.log('光标位置', this.state.currentIndex);
             }}
-            keyboardAppearance="blue"
             defaultValue={TheData.Ping[parseInt(item.key)].url}
             onFocus={(value) => {
               this.state.currentUrlindex = item.key;
@@ -179,7 +186,7 @@ class My extends Component {
             }}></TextInput>
         </View>
         {/*第一个不包含删除按钮*/}
-        {item.key != 0 ? (
+        
           <View
             style={{
               position: 'absolute',
@@ -211,64 +218,80 @@ class My extends Component {
               </Text>
             </TouchableOpacity>
           </View>
-        ) : (
-          <View flexDirection="row">
-            <TouchableOpacity
-              onPress={() => {
-                if (TheData.Ping.length != 0) {
-                  let key = TheData.Ping.length;
-                  TheData.Ping = [{key: key, url: ''}, ...TheData.Ping];
-                  for (let i = 0; i < TheData.Ping.length; i++) {
-                    TheData.Ping[i].key = i;
-                  }
-                  this.setState({refresh: !this.state.refresh});
-                  console.log('1');
-                } else {
-                  TheData.Ping = [{key: 0, url: ''}];
-                  this.setState({refresh: !this.state.refresh});
-                  console.log('2');
-                }
-                store.save(TheData.pingIndex, TheData.Ping);
-                store.get(TheData.pingIndex).then((res) => {
-                  console.log('res:', res);
-                });
-                console.log();
-              }}
-              style={{
-                position: 'absolute',
-                right: ScaleSize(5),
-                top: ScaleSize(-55),
-                marginRight: ScaleSize(14),
-                marginTop: ScaleSize(-10),
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignSelf: 'center',
-                  marginTop: ScaleSize(20),
-                  marginBottom: ScaleSize(20),
-                }}>
-                <Image
-                  source={require('../imgs/add4.png')}
-                  style={{
-                    height: ScaleSize(20),
-                    width: ScaleSize(20),
-                  }}
-                />
-                <Text
-                  style={{
-                    color: '#2a82e4',
-                    fontSize: SetSpText(30),
-                    paddingTop: ScaleSize(0),
-                  }}>
-                  {I18n.t('add')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
+        
       </View>
       //<Text>{this.Data}</Text>
+    );
+  };
+
+  _renderitem2 = ({item}) => {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <View>
+          <Image
+            source={require('../imgs/task.png')}
+            style={{
+              width: ScaleSize(30),
+              height: ScaleSize(30),
+              marginVertical: ScaleSize(5),
+              marginHorizontal: ScaleSize(10),
+            }}
+          />
+        </View>
+
+        <TouchableOpacity
+          onPress={() => {
+            let length = TheData.Ping.length;
+            TheData.Ping = [
+              ...TheData.Ping,
+              {key: length, url: TheData.historyPing[item.key].url},
+            ];
+            this.setState({refresh: !this.state.refresh});
+          }}>
+          <View
+            style={{
+              width: ScaleSize(255),
+              height: ScaleSize(34),
+              justifyContent: 'center',
+              borderBottomColor: '#919191',
+              borderBottomWidth: 1,
+            }}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode={'tail'}
+              style={{
+                color: '#919191',
+                fontSize: SetSpText(35),
+              }}>
+              {item.url}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            marginLeft: ScaleSize(15),
+            marginTop: ScaleSize(15),
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              // TheData.historyPing.splice(parseInt(item.key), 1);
+
+              // for (let i = 0,j=TheData.historyPing.length; i < TheData.historyPing.length; i++,j--) {
+              //   TheData.historyPing[i].key = j;
+              // }
+              // this.setState({refresh: !this.state.refresh});
+              // console.log(TheData.historyPing);
+            }}>
+            <Text
+              style={{
+                color: '#2a82e4',
+                fontSize: SetSpText(25),
+              }}>
+              删除
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
@@ -337,15 +360,16 @@ class My extends Component {
       return;
     } else {
       return (
-        <View style={{height: Height, flex: 1, backgroundColor: 'pink'}}>
+        <View>
+        <View style={{height: Height-100, position:"relative"}}>
           {this.state.isNew ? (
-            <ScrollView
+            <View
               onLayout={(event) => this.onLayout(event)}
               ref={(ScrollView) => {
                 ScrollView = ScrollView;
               }}
               keyboardShouldPersistTaps={true}
-              style={{backgroundColor: '#ffffff', flex: 1}}>
+              style={{ flex: 1,height: Height,position:"relative"}}>
               <View>
                 <View
                   style={{
@@ -353,32 +377,117 @@ class My extends Component {
                     width: ScaleSize(360),
                     height: Height * 0.058,
                     alignItems: 'center',
-                    borderBottomWidth: 1,
-                    borderColor: 'rgba(0,0,0,.05)',
+                    borderBottomWidth: 2,
+                    borderColor: '#2a82e4',
                     marginTop: ScaleSize(20),
                   }}>
-                  <View
-                    style={{
-                      position: 'absolute',
-                      left: ScaleSize(15),
-                    }}>
+                    {/* <View flexDirection="row">
+            <TouchableOpacity
+              onPress={() => {
+                if (TheData.Ping.length != 0) {
+                  let key = TheData.Ping.length;
+                  TheData.Ping = [...TheData.Ping,{key: key, url: ''}];
+                  for (let i = 0; i < TheData.Ping.length; i++) {
+                    TheData.Ping[i].key = i;
+                  }
+                  this.setState({refresh: !this.state.refresh});
+                  console.log('1');
+                } else {
+                  TheData.Ping = [{key: 0, url: ''}];
+                  this.setState({refresh: !this.state.refresh});
+                  console.log('2');
+                }
+                store.save(TheData.pingIndex, TheData.Ping);
+                store.get(TheData.pingIndex).then((res) => {
+                  console.log('res:', res);
+                });
+                console.log();
+              }}
+              style={{
+                position: 'absolute',
+                right: ScaleSize(5),
+                top: ScaleSize(-55),
+                marginRight: ScaleSize(14),
+                marginTop: ScaleSize(-10),
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  marginTop: ScaleSize(20),
+                  marginBottom: ScaleSize(20),
+                }}>
+                <Image
+                  source={require('../imgs/add4.png')}
+                  style={{
+                    height: ScaleSize(20),
+                    width: ScaleSize(20),
+                  }}
+                />
+                <Text
+                  style={{
+                    color: '#2a82e4',
+                    fontSize: SetSpText(30),
+                    paddingTop: ScaleSize(0),
+                  }}>
+                  {I18n.t('add')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View> */}
+                    
+                  
                     <TouchableOpacity
+                      style={{backgroundColor:"#ffffff",borderRadius:ScaleSize(40),width:ScaleSize(40),height:ScaleSize(40),position:"absolute",right:ScaleSize(10),top:ScaleSize(-10)}}
                       onPress={() => {
-                        this.props.navigation.navigate('Ordinary');
-                      }}>
-                      <Text
-                        style={{
-                          position: 'absolute',
-                          left: Width * 0.101,
-                          top: ScaleSize(-15),
-                          fontSize: SetSpText(33),
-                          color: '#2a82e4',
+                        if (TheData.Ping.length != 0) {
+                          let key = TheData.Ping.length;
+                          if(key>=5){
+                            alert("为保证软件性能，一次最多ping5个网址！");
+                            return
+                          }
+                          TheData.Ping = [...TheData.Ping,{key: key, url: ''}];
+                          for (let i = 0; i < TheData.Ping.length; i++) {
+                            TheData.Ping[i].key = i;
+                          }
+                          this.setState({refresh: !this.state.refresh});
+                          console.log('1');
+                        } else {
+                          TheData.Ping = [{key: 0, url: ''}];
+                          this.setState({refresh: !this.state.refresh});
+                          console.log('2');
+                        }
+                        store.save(TheData.pingIndex, TheData.Ping);
+                        store.get(TheData.pingIndex).then((res) => {
+                          console.log('res:', res);
+                        });
+                        console.log();
                         }}>
-                        {I18n.t('ordinary')}
-                      </Text>
+                          <View
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  marginTop: ScaleSize(10),
+                  marginBottom: ScaleSize(20),
+                }}>
+                <Image
+                  source={require('../imgs/add4.png')}
+                  style={{
+                    height: ScaleSize(20),
+                    width: ScaleSize(20),
+                  }}
+                />
+                
+              </View>
+                      
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+
+                    <Text
+                    style={{color:"#2a82e4",fontSize:SetSpText(35),marginLeft:ScaleSize(15),marginBottom:ScaleSize(15),fontWeight:"500"}}
+                    >Welcome to GraphURLPing !</Text>
+
+                    {/* <TouchableOpacity
                       onPress={() => {
                         // this.props.navigation.navigate('Ordinary');
                       }}>
@@ -391,9 +500,9 @@ class My extends Component {
                           left: Width * 0.43,
                           top: ScaleSize(-12),
                         }}></Image>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{
                         position: 'absolute',
                         height: Height * 0.09,
@@ -420,20 +529,22 @@ class My extends Component {
                         }}>
                         {I18n.t('professional')}
                       </Text>
-                      {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
-                    </TouchableOpacity>
-                  </View>
+                    </TouchableOpacity> 
+                    */}
+                    
                 </View>
 
-                <View
+                {/* <View
                   style={{
                     borderBottomWidth: 1,
                     width: Width * 0.5 + 2,
                     borderBottomColor: '#2a82e4',
-                  }}></View>
+                  }}></View> */}
 
-                <View
-                  style={{height: Height * 0.062, marginTop: ScaleSizeH(60)}}>
+                {/* <View
+                  style={{height: Height * 0.062, marginTop: ScaleSizeH(60)}}
+        
+                  >
                   <FlatList
                     keyboardShouldPersistTaps={'handled'}
                     style={{
@@ -447,9 +558,12 @@ class My extends Component {
                     data={TheData.urlsArr}
                     renderItem={this._renderRow}
                   />
-                </View>
+                </View> */}
 
-                <View style={{marginTop: ScaleSize(40)}}>
+                <View
+      style={{marginTop: ScaleSize(20)}}
+
+      >
                   <FlatList
                     keyboardShouldPersistTaps={'handled'}
                     data={TheData.Ping}
@@ -470,222 +584,325 @@ class My extends Component {
                 {/*console.log(TheData.Ping)*/}
 
                 <View
-                  style={{
-                    marginHorizontal: ScaleSize(5),
-                    marginBottom: ScaleSize(10),
-                    marginTop: ScaleSize(30),
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      for (let i = 0; i < TheData.Ping.length; i++) {
-                        if (
-                          TheData.Ping[i].url == 'https://' ||
-                          TheData.Ping[i].url == ''
-                        ) {
-                          this.identify = false;
-                          break;
-                        } else {
-                          this.identify = true;
-                        }
-                      }
-                      if (this.identify) {
-                        if (TheData.Ping.length != 0) {
-                          //if (TheData.historyPing.length != 0) {
-                          //TheData.historyPing = [];
-                          //}
-                          let Ping_length = TheData.Ping.length;
-                          let History_length = TheData.historyPing.length;
-                          for (
-                            let i = 0, j = History_length;
-                            i < Ping_length;
-                            i++, j++
-                          ) {
-                            TheData.historyPing = [
-                              ...TheData.historyPing,
-                              {key: j, url: TheData.Ping[i].url},
-                            ];
-                          }
-                          this.setState({refresh: !this.state.refresh});
-                          // console.log(TheData.historyPing);
-                          this.props.navigation.navigate('Ping', {
-                            urlData: [...TheData.Ping],
-                          });
-                        } else {
-                          Toast.message('尚未添加需要Ping的网址!');
-                        }
-                        //TheData.Ping.splice(0, TheData.Ping.length);
-                      } else {
-                        Toast.message('输入网址不能有空!');
-                      }
-                    }}
+                  style={{height: Height * 0.062, marginTop: ScaleSizeH(0)}}
+        
+                  >
+                  <FlatList
+                    keyboardShouldPersistTaps={'handled'}
                     style={{
-                      marginHorizontal: ScaleSize(2),
-                      alignItems: 'center',
-                      marginTop: ScaleSize(5),
-                      borderRadius: ScaleSize(10),
+                      marginLeft: ScaleSizeH(4),
+                      marginRight: ScaleSizeH(4),
+                      marginBottom: ScaleSizeH(10),
+                      borderRadius: ScaleSize(13),
                       backgroundColor: '#2a82e4',
-                      height: ScaleSize(42),
-                      justifyContent: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: SetSpText(40),
-                        color: 'white',
-                        fontWeight: '600',
-                      }}>
-                      Ping
-                    </Text>
-                  </TouchableOpacity>
+                    }}
+                    horizontal={true}
+                    data={TheData.urlsArr}
+                    renderItem={this._renderRow}
+                  />
                 </View>
+
+                
+                
+        </View>
               </View>
-            </ScrollView>
+              
           ) : (
             ///////////////////////////////////////////////////////////////////////
 
-            <ScrollView
-              onLayout={(event) => this.onLayout(event)}
-              ref={(ScrollView) => {
-                ScrollView = ScrollView;
-              }}
-              keyboardShouldPersistTaps={true}
-              style={{backgroundColor: '#ffffff', flex: 1}}>
-              <View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: ScaleSize(360),
-                    height: Height * 0.058,
-                    alignItems: 'center',
-                    borderBottomWidth: 1,
-                    borderColor: 'rgba(0,0,0,.05)',
-                    marginTop: ScaleSize(20),
-                  }}>
+//             <ScrollView
+//               onLayout={(event) => this.onLayout(event)}
+//               ref={(ScrollView) => {
+//                 ScrollView = ScrollView;
+//               }}
+//               keyboardShouldPersistTaps={true}
+//               style={{backgroundColor: '#ffffff', flex: 1}}>
+//               <View>
+//                 <View
+//                   style={{
+//                     flexDirection: 'row',
+//                     width: ScaleSize(360),
+//                     height: Height * 0.058,
+//                     alignItems: 'center',
+//                     borderBottomWidth: 1,
+//                     borderColor: 'rgba(0,0,0,.05)',
+//                     marginTop: ScaleSize(20),
+//                   }}>
+//                   <View
+//                     style={{
+//                       position: 'absolute',
+//                       left: ScaleSize(15),
+//                     }}>
+//                     <TouchableOpacity
+//                       style={{
+//                         position: 'absolute',
+//                         height: Height * 0.09,
+//                         top: ScaleSize(-45),
+//                         width: Width * 0.48,
+//                         left: Width * -0.03,
+//                       }}
+//                       onPress={() => {
+//                         store.save('isNew', true);
+//                         store.get('isNew').then((res) => {
+//                           console.log('点击之后isNew:', res);
+//                         });
+//                         this.setState({
+//                           isNew: true,
+//                         });
+//                       }}>
+//                       <Text
+//                         style={{
+//                           position: 'absolute',
+//                           left: Width * 0.13,
+//                           top: ScaleSize(30),
+//                           fontSize: SetSpText(33),
+//                           color: '#666',
+//                         }}>
+//                         {I18n.t('ordinary')}
+//                       </Text>
+//                     </TouchableOpacity>
+
+//                     <TouchableOpacity
+//                       onPress={() => {
+//                         this.setState({
+//                           isNew: true,
+//                         });
+//                         store.save('isNew', this.state.isNew);
+//                       }}>
+//                       <Image
+//                         source={require('../imgs/转换.png')}
+//                         style={{
+//                           height: ScaleSize(20),
+//                           width: ScaleSize(20),
+//                           position: 'absolute',
+//                           left: Width * 0.43,
+//                           top: ScaleSize(-12),
+//                         }}></Image>
+//                     </TouchableOpacity>
+
+//                     <TouchableOpacity
+//                       style={{
+//                         position: 'absolute',
+//                         height: Height * 0.09,
+//                         top: ScaleSize(-45),
+//                         width: Width * 0.48,
+//                         left: Width * 0.47,
+//                       }}
+//                       onPress={() => {}}>
+//                       <Text
+//                         style={{
+//                           position: 'absolute',
+//                           left: Width * 0.15,
+//                           top: ScaleSize(30),
+//                           fontSize: SetSpText(33),
+//                           color: '#2a82e4',
+//                         }}>
+//                         {I18n.t('professional')}
+//                       </Text>
+//                       {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
+//                     </TouchableOpacity>
+//                   </View>
+//                 </View>
+
+//                 <View
+//                   style={{
+//                     marginLeft: Width * 0.5,
+//                     borderBottomWidth: 1,
+//                     width: Width * 0.5 + 2,
+//                     borderBottomColor: '#2a82e4',
+//                   }}></View>
+
+//                 <View
+//                   style={{height: Height * 0.062, marginTop: ScaleSizeH(60)}}>
+//                   <FlatList
+//                     keyboardShouldPersistTaps={'handled'}
+//                     style={{
+//                       marginLeft: ScaleSizeH(4),
+//                       marginRight: ScaleSizeH(4),
+//                       marginBottom: ScaleSizeH(10),
+//                       borderRadius: ScaleSize(13),
+//                       backgroundColor: '#2a82e4',
+//                     }}
+//                     horizontal={true}
+//                     data={TheData.urlsArr}
+//                     renderItem={this._renderRow}
+//                   />
+//                 </View>
+
+//                 <View style={{marginTop: ScaleSize(40)}}>
+//                   <FlatList
+//                     keyboardShouldPersistTaps={'handled'}
+//                     data={TheData.Ping}
+//                     renderItem={this._renderItem1}
+//                     refreshing={this.state.FlatListIsRefreshing}
+//                     onRefresh={() => {
+//                       this.setState((prevState) => ({
+//                         FlatListIsRefreshing: true,
+//                       }));
+//                       setTimeout(() => {
+//                         this.setState((prevState) => ({
+//                           FlatListIsRefreshing: false,
+//                         }));
+//                       }, 1000);
+//                     }}
+//                   />
+//                 </View>
+//                 {/*console.log(TheData.Ping)*/}
+
+//                 <View
+//                   style={{
+//                     marginHorizontal: ScaleSize(5),
+//                     marginBottom: ScaleSize(10),
+//                     marginTop: ScaleSize(30),
+//                   }}>
+//                   <TouchableOpacity
+//                     onPress={() => {
+//                       for (let i = 0; i < TheData.Ping.length; i++) {
+//                         if (
+//                           TheData.Ping[i].url == 'https://' ||
+//                           TheData.Ping[i].url == ''
+//                         ) {
+//                           this.identify = false;
+//                           break;
+//                         } else {
+//                           this.identify = true;
+//                         }
+//                       }
+//                       if (this.identify) {
+//                         if (TheData.Ping.length != 0) {
+//                           //if (TheData.historyPing.length != 0) {
+//                           //TheData.historyPing = [];
+//                           //}
+//                           let Ping_length = TheData.Ping.length;
+//                           let History_length = TheData.historyPing.length;
+//                           for (
+//                             let i = 0, j = History_length;
+//                             i < Ping_length;
+//                             i++, j++
+//                           ) {
+//                             TheData.historyPing = [
+//                               ...TheData.historyPing,
+//                               {key: j, url: TheData.Ping[i].url},
+//                             ];
+//                           }
+//                           this.setState({refresh: !this.state.refresh});
+//                           console.log(TheData.historyPing);
+//                           store.save("historyPing",TheData.historyPing);
+//                           this.props.navigation.navigate('Ping', {
+//                             urlData: [...TheData.Ping],
+//                           });
+//                         } else {
+//                           Toast.message('尚未添加需要Ping的网址!');
+//                         }
+//                         //TheData.Ping.splice(0, TheData.Ping.length);
+//                       } else {
+//                         Toast.message('输入网址不能有空!');
+//                       }
+//                     }}
+//                     style={{
+//                       marginHorizontal: ScaleSize(2),
+//                       alignItems: 'center',
+//                       marginTop: ScaleSize(5),
+//                       borderRadius: ScaleSize(10),
+//                       backgroundColor: '#2a82e4',
+//                       height: ScaleSize(42),
+//                       justifyContent: 'center',
+//                     }}>
+//                     <Text
+//                       style={{
+//                         fontSize: SetSpText(40),
+//                         color: 'white',
+//                         fontWeight: '600',
+//                       }}>
+//                       Ping
+//                     </Text>
+//                   </TouchableOpacity>
+//                 </View>
+
+//                       <View>
+//                       <TouchableOpacity
+//                       style={{
+//                         marginLeft:Width * .4+ScaleSize(18),
+//                         width: Width * 0.1,
+//                       }}
+//                       onPress={() => {
+//                         this.props.navigation.navigate('Setting')
+//                       }}>
+//                       <Text
+//                         style={{
+//                           fontSize: SetSpText(30),
+//                           color: '#666',
+//                         }}>
+//                         {I18n.t('settings')}
+//                       </Text>
+//                       {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
+//                     </TouchableOpacity>
+//                       </View>
+
+
+//               </View>
+//               <View style={{height:Height * .02,backgroundColor:"#e5e5e5",marginTop:ScaleSize(25)}}></View>
+
+//               <Carousel style={{height: Height * .4,marginTop:ScaleSize(0)}} control={true} carousel={false}>
+//                   <View>
+//                   <View
+//                 flexDirection="row"
+//                 style={{
+//                   marginLeft: ScaleSizeW(20),
+//                   marginTop: ScaleSize(20),
+//                   marginBottom: ScaleSize(10),
+//                 }}>
+//                 <Text style={{color: 'gray', fontSize: SetSpText(30),color:"#2a82e4"}}>
+//                   历史输入
+//                 </Text>
+//                 <TouchableOpacity
+//                   onPress={() => {
+//                     TheData.historyPing.splice(0, TheData.historyPing.length);
+//                     this.setState({refresh: !this.state.refresh});
+//                   }}
+//                   style={{marginLeft: ScaleSize(253)}}>
+//                   <Text style={{color: '#2a82e4', fontSize: SetSpText(25)}}>
+//                     清空
+//                   </Text>
+//                 </TouchableOpacity>
+//               </View>
+              
+//               <ScrollView
+//                 style={{
+//                   //height: ScaleSize(220),
+//                   // borderBottomWidth: 1,
+//                   borderColor: '#C4C4C4',
+//                   borderStyle: 'solid',
+//                 }}>
+//                 <FlatList
+//                   onRefresh={() => {
+//                     this.setState((prevState) => ({
+//                       FlatListIsRefreshing: true,
+//                     }));
+//                     setTimeout(() => {
+//                       this.setState((prevState) => ({
+//                         FlatListIsRefreshing: false,
+//                       }));
+//                     }, 1000);
+//                   }}
+//                   refreshing={this.state.FlatListIsRefreshing}
+//                   renderItem={this._renderitem2}
+//                   data={TheData.historyPing}></FlatList>
+//               </ScrollView>
+//                   </View>
+//                   <View><Text>2</Text></View>
+//                   <View><Text>3</Text></View>
+// </Carousel>
+//             </ScrollView>
+<View></View>
+          )}
+        </View>
+
                   <View
-                    style={{
-                      position: 'absolute',
-                      left: ScaleSize(15),
-                    }}>
-                    <TouchableOpacity
-                      style={{
-                        position: 'absolute',
-                        height: Height * 0.09,
-                        top: ScaleSize(-45),
-                        width: Width * 0.48,
-                        left: Width * -0.03,
-                      }}
-                      onPress={() => {
-                        store.save('isNew', true);
-                        store.get('isNew').then((res) => {
-                          console.log('点击之后isNew:', res);
-                        });
-                        this.setState({
-                          isNew: true,
-                        });
-                      }}>
-                      <Text
-                        style={{
-                          position: 'absolute',
-                          left: Width * 0.13,
-                          top: ScaleSize(30),
-                          fontSize: SetSpText(33),
-                          color: '#666',
-                        }}>
-                        {I18n.t('ordinary')}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.setState({
-                          isNew: true,
-                        });
-                        store.save('isNew', this.state.isNew);
-                      }}>
-                      <Image
-                        source={require('../imgs/转换.png')}
-                        style={{
-                          height: ScaleSize(20),
-                          width: ScaleSize(20),
-                          position: 'absolute',
-                          left: Width * 0.43,
-                          top: ScaleSize(-12),
-                        }}></Image>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={{
-                        position: 'absolute',
-                        height: Height * 0.09,
-                        top: ScaleSize(-45),
-                        width: Width * 0.48,
-                        left: Width * 0.47,
-                      }}
-                      onPress={() => {}}>
-                      <Text
-                        style={{
-                          position: 'absolute',
-                          left: Width * 0.15,
-                          top: ScaleSize(30),
-                          fontSize: SetSpText(33),
-                          color: '#2a82e4',
-                        }}>
-                        {I18n.t('professional')}
-                      </Text>
-                      {/* position:"absolute",left:Width *0.60,top:ScaleSize(0),fontSize:SetSpText(330),color:"#666" */}
-                    </TouchableOpacity>
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    marginLeft: Width * 0.5,
-                    borderBottomWidth: 1,
-                    width: Width * 0.5 + 2,
-                    borderBottomColor: '#2a82e4',
-                  }}></View>
-
-                <View
-                  style={{height: Height * 0.062, marginTop: ScaleSizeH(60)}}>
-                  <FlatList
-                    keyboardShouldPersistTaps={'handled'}
-                    style={{
-                      marginLeft: ScaleSizeH(4),
-                      marginRight: ScaleSizeH(4),
-                      marginBottom: ScaleSizeH(10),
-                      borderRadius: ScaleSize(13),
-                      backgroundColor: '#2a82e4',
-                    }}
-                    horizontal={true}
-                    data={TheData.urlsArr}
-                    renderItem={this._renderRow}
-                  />
-                </View>
-
-                <View style={{marginTop: ScaleSize(40)}}>
-                  <FlatList
-                    keyboardShouldPersistTaps={'handled'}
-                    data={TheData.Ping}
-                    renderItem={this._renderItem1}
-                    refreshing={this.state.FlatListIsRefreshing}
-                    onRefresh={() => {
-                      this.setState((prevState) => ({
-                        FlatListIsRefreshing: true,
-                      }));
-                      setTimeout(() => {
-                        this.setState((prevState) => ({
-                          FlatListIsRefreshing: false,
-                        }));
-                      }, 1000);
-                    }}
-                  />
-                </View>
-                {/*console.log(TheData.Ping)*/}
-
-                <View
                   style={{
                     marginHorizontal: ScaleSize(5),
                     marginBottom: ScaleSize(10),
-                    marginTop: ScaleSize(30),
+                    marginTop: ScaleSize(10),
                   }}>
                   <TouchableOpacity
                     onPress={() => {
@@ -749,9 +966,8 @@ class My extends Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-            </ScrollView>
-          )}
+
+
         </View>
       );
     }
@@ -759,648 +975,5 @@ class My extends Component {
 }
 export default My;
 
-{
-  /* <FlatList
-              data={TheData.Ping}
-              renderItem={this._renderItem1}
-              refreshing={this.state.FlatListIsRefreshing}
-              onRefresh={() => {
-                this.setState((prevState) => ({FlatListIsRefreshing: true}));
-                setTimeout(() => {
-                  this.setState((prevState) => ({
-                    FlatListIsRefreshing: false,
-                  }));
-                }, 1000);
-              }}
-            /> */
-}
 
-{
-  /* <View flexDirection="row">
-              <TouchableOpacity
-                onPress={() => {
-                  if (TheData.Ping.length != 0) {
-                    let key = TheData.Ping.length;
-                    TheData.Ping = [{key: key, url: ''}, ...TheData.Ping];
-                    for (let i = 0; i < TheData.Ping.length; i++) {
-                      TheData.Ping[i].key = i;
-                    }
-                    this.setState({refresh: !this.state.refresh});
-                    console.log('1');
-                  } else {
-                    TheData.Ping = [{key: 0, url: ''}];
-                    this.setState({refresh: !this.state.refresh});
-                    console.log('2');
-                  }
-                }}
-                style={{
-                  marginTop:ScaleSize(100),
-                  marginVertical: ScaleSize(10),
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignSelf: 'center',
-                    marginTop: ScaleSize(20),
-                    marginBottom: ScaleSize(20),
-                  }}>
-                  <Image
-                    source={require('../imgs/add4.png')}
-                    style={{
-                      height: ScaleSize(20),
-                      width: ScaleSize(20),
-                    }}
-                  />
-                  <Text
-                    style={{
-                      color: '#2a82e4',
-                      fontSize: SetSpText(30),
-                      paddingTop: ScaleSize(0),
-                    }}>
-                    {I18n.t('add')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
 
-            </View> */
-}
-
-{
-  /* <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('Setting', {
-                  mainThis: this,
-                });
-              }}
-              style={{
-                marginTop: ScaleSize(5),
-                marginHorizontal: ScaleSize(5),
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text style={{color: 'gray', fontSize: SetSpText(25)}}>
-                参数设置
-              </Text>
-            </TouchableOpacity> */
-}
-{
-  /* <View
-              style={{
-                height: Height * 0.0127,
-                backgroundColor: '#e5e5e5',
-                marginTop: ScaleSize(15),
-              }}></View> */
-}
-{
-  /* <View> */
-}
-{
-  /* <View
-                style={{
-                  marginVertical: ScaleSize(10),
-                  marginLeft: ScaleSize(15),
-                }}>
-                <Text style={{color: 'gray', fontSize: SetSpText(30)}}>
-                  快捷输入
-                </Text>
-              </View>
-              <View
-                flexDirection="row"
-                style={{
-                  marginHorizontal: ScaleSize(15),
-                  justifyContent: 'space-between',
-                }}>
-                <TouchableOpacity
-                  onLongPress={() => {
-                    this.setState({QuickSelectIndex: 0}, () => {
-                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                      console.log(this.state.QuickSelectIndex);
-                    });
-                    this.overlay.show();
-                  }}
-                  onPress={() => {
-                    if (
-                      TheData.QuickSelect[0].name &&
-                      TheData.QuickSelect[0].url != 'https://'
-                    ) {
-                      if (TheData.Ping.length != 0) {
-                        let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                        TheData.Ping = [
-                          { key: key, url: TheData.QuickSelect[0].url },
-                          ...TheData.Ping,
-                        ];
-                        for(let i=0;i<TheData.Ping.length;i++){
-                          TheData.Ping[i].key=i
-                        }
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        TheData.Ping = [
-                          { key: 0, url: TheData.QuickSelect[0].url },
-                        ];
-                        this.setState({refresh: !this.state.refresh});
-                      }
-                    } else {
-                      this.setState({QuickSelectIndex: 0}, () => {
-                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                        console.log(this.state.QuickSelectIndex);
-                      });
-                      TheData.QuickSelect[0].url = 'https://';
-                      this.overlay.show();
-                    }
-                  }}
-                  style={{
-                    borderRadius: 20,
-                    backgroundColor: '#E5E5E5',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: ScaleSize(80),
-                    height: ScaleSize(40),
-                  }}>
-                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                    {TheData.QuickSelect[0].name
-                      ? TheData.QuickSelect[0].name
-                      : '✚'}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onLongPress={() => {
-                    this.setState({QuickSelectIndex: 1}, () => {
-                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                      console.log(this.state.QuickSelectIndex);
-                    });
-                    this.overlay.show();
-                  }}
-                  onPress={() => {
-                    if (
-                      TheData.QuickSelect[1].name &&
-                      TheData.QuickSelect[1].url
-                    ) {
-                      if (TheData.Ping.length != 0) {
-                        let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                        TheData.Ping = [
-                          { key: key, url: TheData.QuickSelect[1].url },
-                          ...TheData.Ping,
-                        ];
-                        for(let i=0;i<TheData.Ping.length;i++){
-                          TheData.Ping[i].key=i
-                        }
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        TheData.Ping = [
-                          { key: 0, url: TheData.QuickSelect[1].url },
-                        ];
-                        this.setState({refresh: !this.state.refresh});
-                      }
-                    } else {
-                      this.setState({QuickSelectIndex: 1}, () => {
-                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                        console.log(this.state.QuickSelectIndex);
-                      });
-                      TheData.QuickSelect[1].url = 'https://';
-                      this.overlay.show();
-                    }
-                  }}
-                  style={{
-                    borderRadius: 20,
-                    backgroundColor: '#E5E5E5',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: ScaleSize(80),
-                  }}>
-                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                    {TheData.QuickSelect[1].name
-                      ? TheData.QuickSelect[1].name
-                      : '✚'}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onLongPress={() => {
-                    this.setState({QuickSelectIndex: 2}, () => {
-                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                      console.log(this.state.QuickSelectIndex);
-                    });
-                    this.overlay.show();
-                  }}
-                  onPress={() => {
-                    if (
-                      TheData.QuickSelect[2].name &&
-                      TheData.QuickSelect[2].url
-                    ) {
-                      if (TheData.Ping.length != 0) {
-                        let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                        TheData.Ping = [
-                          { key: key, url: TheData.QuickSelect[2].url },
-                          ...TheData.Ping,
-                        ];
-                        for(let i=0;i<TheData.Ping.length;i++){
-                          TheData.Ping[i].key=i
-                        }
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        TheData.Ping = [
-                          { key: 0, url: TheData.QuickSelect[2].url },
-                        ];
-                        this.setState({refresh: !this.state.refresh});
-                      }
-                    } else {
-                      this.setState({QuickSelectIndex: 2}, () => {
-                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                        console.log(this.state.QuickSelectIndex);
-                      });
-                      TheData.QuickSelect[2].url = 'https://';
-                      this.overlay.show();
-                    }
-                  }}
-                  style={{
-                    borderRadius: 20,
-                    backgroundColor: '#E5E5E5',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: ScaleSize(80),
-                  }}>
-                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                    {TheData.QuickSelect[2].name
-                      ? TheData.QuickSelect[2].name
-                      : '✚'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginHorizontal: ScaleSize(15),
-                  marginVertical: ScaleSize(20),
-                }}>
-                <TouchableOpacity
-                  onLongPress={() => {
-                    this.setState({QuickSelectIndex: 3}, () => {
-                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                      console.log(this.state.QuickSelectIndex);
-                    });
-                    this.overlay.show();
-                  }}
-                  onPress={() => {
-                    if (
-                      TheData.QuickSelect[3].name &&
-                      TheData.QuickSelect[3].url
-                    ) {
-                      if (TheData.Ping.length != 0) {
-                        let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                        TheData.Ping = [
-                          { key: key, url: TheData.QuickSelect[3].url },
-                          ...TheData.Ping,
-                        ];
-                        for(let i=0;i<TheData.Ping.length;i++){
-                          TheData.Ping[i].key=i
-                        }
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        TheData.Ping = [
-                          { key: 0, url: TheData.QuickSelect[3].url },
-                        ];
-                        this.setState({refresh: !this.state.refresh});
-                      }
-                    } else {
-                      this.setState({QuickSelectIndex: 3}, () => {
-                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                        console.log(this.state.QuickSelectIndex);
-                      });
-                      TheData.QuickSelect[3].url = 'https://';
-                      this.overlay.show();
-                    }
-                  }}
-                  style={{
-                    borderRadius: 20,
-                    backgroundColor: '#E5E5E5',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: ScaleSize(80),
-                    height: ScaleSize(40),
-                  }}>
-                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                    {TheData.QuickSelect[3].name
-                      ? TheData.QuickSelect[3].name
-                      : '✚'}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onLongPress={() => {
-                    this.setState({QuickSelectIndex: 4}, () => {
-                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                      console.log(this.state.QuickSelectIndex);
-                    });
-                    this.overlay.show();
-                  }}
-                  onPress={() => {
-                    if (
-                      TheData.QuickSelect[4].name &&
-                      TheData.QuickSelect[4].url
-                    ) {
-                      if (TheData.Ping.length != 0) {
-                        let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                        TheData.Ping = [
-                          { key: key, url: TheData.QuickSelect[4].url },
-                          ...TheData.Ping,
-                        ];
-                        for(let i=0;i<TheData.Ping.length;i++){
-                          TheData.Ping[i].key=i
-                        }
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        TheData.Ping = [
-                          { key: 0, url: TheData.QuickSelect[4].url },
-                        ];
-                        this.setState({refresh: !this.state.refresh});
-                      }
-                    } else {
-                      this.setState({QuickSelectIndex: 4}, () => {
-                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                        console.log(this.state.QuickSelectIndex);
-                      });
-                      TheData.QuickSelect[4].url = 'https://';
-                      this.overlay.show();
-                    }
-                  }}
-                  style={{
-                    borderRadius: 20,
-                    backgroundColor: '#E5E5E5',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: ScaleSize(80),
-                  }}>
-                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                    {TheData.QuickSelect[4].name
-                      ? TheData.QuickSelect[4].name
-                      : '✚'}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onLongPress={() => {
-                    this.setState({QuickSelectIndex: 5}, () => {
-                      this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                      console.log(this.state.QuickSelectIndex);
-                    });
-                    this.overlay.show();
-                  }}
-                  onPress={() => {
-                    if (
-                      TheData.QuickSelect[5].name &&
-                      TheData.QuickSelect[5].url
-                    ) {
-                      if (TheData.Ping.length != 0) {
-                        let key = TheData.Ping[TheData.Ping.length - 1].key + 1;
-                        TheData.Ping = [
-                          { key: key, url: TheData.QuickSelect[5].url },
-                          ...TheData.Ping,
-                        ];
-                        for(let i=0;i<TheData.Ping.length;i++){
-                          TheData.Ping[i].key=i
-                        }
-                        this.setState({ refresh: !this.state.refresh });
-                      } else {
-                        TheData.Ping = [
-                          { key: 0, url: TheData.QuickSelect[5].url },
-                        ];
-                        this.setState({refresh: !this.state.refresh});
-                      }
-                    } else {
-                      this.setState({QuickSelectIndex: 5}, () => {
-                        this.state.QuickSelectIndex = this.state.QuickSelectIndex;
-                        console.log(this.state.QuickSelectIndex);
-                      });
-                      TheData.QuickSelect[5].url = 'https://';
-                      this.overlay.show();
-                    }
-                  }}
-                  style={{
-                    borderRadius: 20,
-                    backgroundColor: '#E5E5E5',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: ScaleSize(80),
-                  }}>
-                  <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                    {TheData.QuickSelect[5].name
-                      ? TheData.QuickSelect[5].name
-                      : '✚'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  backgroundColor: '#DDDDDD',
-                  height: 1,
-                }}>
-                <Text></Text>
-              </View>
-              <View
-                flexDirection="row"
-                style={{
-                  marginLeft: ScaleSizeW(20),
-                  marginTop: ScaleSize(20),
-                  marginBottom: ScaleSize(10),
-                }}>
-                <Text style={{color: 'gray', fontSize: SetSpText(30)}}>
-                  历史记录
-                </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    TheData.historyPing.splice(0, TheData.historyPing.length);
-                    this.setState({refresh: !this.state.refresh});
-                  }}
-                  style={{marginLeft: ScaleSize(253)}}>
-                  <Text style={{color: '#2a82e4', fontSize: SetSpText(25)}}>
-                    清空
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  //height: ScaleSize(220),
-                  borderBottomWidth: 1,
-                  borderColor: '#C4C4C4',
-                  borderStyle: 'solid',
-                }}>
-                <FlatList
-                  onRefresh={() => {
-                    this.setState((prevState) => ({
-                      FlatListIsRefreshing: true,
-                    }));
-                    setTimeout(() => {
-                      this.setState((prevState) => ({
-                        FlatListIsRefreshing: false,
-                      }));
-                    }, 1000);
-                  }}
-                  refreshing={this.state.FlatListIsRefreshing}
-                  renderItem={this._renderitem2}
-                  data={TheData.historyPing}></FlatList>
-              </View>
-            </View> */
-}
-{
-  /* </View> */
-}
-{
-  /*快捷输入编辑框*/
-}
-{
-  /* <Overlay
-            ref={(ele) => (this.overlay = ele)}
-            style={{justifyContent: 'center'}}>
-            <TouchableOpacity
-              onPress={() => {
-                if (
-                  TheData.QuickSelect[this.state.QuickSelectIndex].name &&
-                  TheData.QuickSelect[this.state.QuickSelectIndex].url !=
-                    'https://'
-                ) {
-                  this.overlay.close();
-                } else {
-                  TheData.QuickSelect[this.state.QuickSelectIndex] = {
-                    key: this.state.QuickSelectIndex,
-                    name: '',
-                    url: 'https://',
-                  };
-                  this.overlay.close();
-                  this.setState({refresh: !this.state.refresh});
-                  console.log(TheData.QuickSelect[this.state.QuickSelectIndex]);
-                }
-              }}
-              activeOpacity={1}
-              style={{width: Width, height: Height, justifyContent: 'center'}}>
-              <View
-                style={{
-                  height: ScaleSize(185),
-                  paddingHorizontal: ScaleSize(10),
-                  paddingTop: ScaleSize(20),
-                  marginHorizontal: ScaleSize(20),
-                  backgroundColor: 'white',
-                  borderRadius: 10,
-                  elevation: 20,
-                  shadowColor: '#ddd',
-                  shadowOpacity: 200,
-                  shadowRadius: 5,
-                }}>
-                <TextInput
-                  defaultValue={
-                    TheData.QuickSelect[this.state.QuickSelectIndex].name
-                  }
-                  placeholder="请输入代名"
-                  style={{
-                    borderColor: '#C4C4C4',
-                    borderStyle: 'solid',
-                    borderBottomWidth: 1,
-                    margin: ScaleSize(5),
-                    fontSize: SetSpText(35),
-                  }}
-                  onChangeText={(text) => {
-                    TheData.QuickSelect[
-                      this.state.QuickSelectIndex
-                    ].name = text;
-                    store.save(
-                      TheData.QuickSelect[this.state.QuickSelectIndex].name,
-                      text,
-                    );
-                    console.log(TheData.QuickSelect);
-                  }}></TextInput>
-                <TextInput
-                  defaultValue={
-                    TheData.QuickSelect[this.state.QuickSelectIndex].url
-                  }
-                  placeholder="请输入网址"
-                  style={{
-                    borderColor: '#C4C4C4',
-                    borderStyle: 'solid',
-                    borderBottomWidth: 1,
-                    margin: ScaleSize(5),
-                    fontSize: SetSpText(35),
-                  }}
-                  onChangeText={(text) => {
-                    TheData.QuickSelect[this.state.QuickSelectIndex].url = text;
-                    store.save(
-                      TheData.QuickSelect[this.state.QuickSelectIndex].url,
-                      text,
-                    );
-                    console.log(TheData.QuickSelect);
-                  }}></TextInput>
-                <View flexDirection="row">
-                  <View
-                    style={{
-                      marginBottom: ScaleSize(15),
-                      marginTop: ScaleSize(10),
-                    }}>
-                    <TouchableOpacity
-                      style={{
-                        height: ScaleSize(40),
-                        width: ScaleSize(145),
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRightWidth: 1,
-                        borderRightColor: '#C4C4C4',
-                      }}
-                      onPress={() => {
-                        if (
-                          TheData.QuickSelect[this.state.QuickSelectIndex]
-                            .url &&
-                          TheData.QuickSelect[this.state.QuickSelectIndex].name
-                        ) {
-                          this.overlay.close();
-                          this.setState({refresh: !this.state.refresh});
-                        } else {
-                          Toast.message('输入名称或者URL不能为空！');
-                        }
-                      }}>
-                      <Text style={{fontSize: SetSpText(30), color: '#2a82e4'}}>
-                        确定
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      marginBottom: ScaleSize(15),
-                      marginTop: ScaleSize(10),
-                    }}>
-                    <TouchableOpacity
-                      style={{
-                        height: ScaleSize(40),
-                        width: ScaleSize(155),
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                      onPress={() => {
-                        if (
-                          TheData.QuickSelect[this.state.QuickSelectIndex]
-                            .name &&
-                          TheData.QuickSelect[this.state.QuickSelectIndex]
-                            .url != 'https://'
-                        ) {
-                          this.overlay.close();
-                        } else {
-                          TheData.QuickSelect[this.state.QuickSelectIndex] = {
-                            key: this.state.QuickSelectIndex,
-                            name: '',
-                            url: 'https://',
-                          };
-                          this.overlay.close();
-                          this.setState({refresh: !this.state.refresh});
-                          console.log(
-                            TheData.QuickSelect[this.state.QuickSelectIndex],
-                          );
-                        }
-                      }}>
-                      <Text style={{fontSize: SetSpText(30), color: '#2a82e4'}}>
-                        取消
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </Overlay> */
-}

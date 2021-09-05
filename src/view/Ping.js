@@ -1386,6 +1386,9 @@ class Ping extends Component {
             }}
             onPress={() => {
               this.props.navigation.navigate('Ordinary');
+              this.setState({
+                isPing:false
+              })
             }}>
             <Image
               source={require('../imgs/退.png')}
@@ -1434,13 +1437,7 @@ class Ping extends Component {
             </View>
 
             <View style={styles.bottomChartData}>
-              <View
-                style={{
-                  borderBottomWidth: ScaleSize(1),
-                  borderBottomColor: '#2a82e4',
-                  borderTopWidth: ScaleSize(1),
-                  borderTopColor: '#2a82e4',
-                }}></View>
+              
               {/* ,borderBottomWidth:ScaleSize(2),borderBottomColor:"rgba(0,0,0,.3)",borderTopWidth:ScaleSize(2),borderTopColor:"rgba(0,0,0,.3)" */}
               <View style={styles.bottomChartDataItem}>
                 <Text
@@ -1489,10 +1486,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: 'red',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -1573,10 +1569,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: '#2a82e4',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -1656,10 +1651,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: 'green',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -1739,10 +1733,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: 'yellow',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -1822,10 +1815,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: 'purple',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -1905,10 +1897,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: 'pink',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -1988,10 +1979,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: 'black',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -2071,10 +2061,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: '#b07219',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -2154,10 +2143,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: '#666666',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -2237,10 +2225,9 @@ class Ping extends Component {
                   <View
                     style={{
                       width: Width * 0.66,
-                      borderBottomColor: '#f67e1e',
+                      borderBottomColor: '#000',
                       borderBottomWidth: ScaleSize(1.3),
                       position: 'absolute',
-                      opacity: 0.3,
                       left: ScaleSizeW(115),
                       top: ScaleSizeW(52),
                     }}></View>
@@ -2412,7 +2399,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: Height * 0.5,
     // height: ScaleSize(27) * (TheData.Ping.length+1),
-    backgroundColor: '#f4fbfd',
+    backgroundColor: '#ffffff',
   },
   bottomStyle: {
     height: Height * 1.2,
