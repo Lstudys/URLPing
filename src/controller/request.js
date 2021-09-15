@@ -143,12 +143,6 @@ export const SendRequest = function () {
               url9,
               url10,
         );
-        this.setState({DataArrfirst: []}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrsecond: []}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrthird: []}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrfour: []}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrfive: []}); // 设置发送请求时不能设置请求时长
-
         this.state.chart1 = this.state.url ? true : false;
 
         this.state.chart2 = this.state.url2 ? true : false;
@@ -172,6 +166,7 @@ export const SendRequest = function () {
         // this.setState({isPing: true});
 
         this.setState({ifOverlayAble: false}); // 设置发送请求时不能设置请求时长
+        
 
         this.setState({backChart: false});
         this.setState({linechart: false}); // 设置状态以显示图表
@@ -253,9 +248,8 @@ export const SendRequest = function () {
         const reqTime = this.state.reqTime; // 获取发送请求的持续时间
         const beginTime = new Date().valueOf(); // 点击PING后获取当前时间（分钟），用来控制循环
         
-        var space=0;
-        var x=0;
-        var x1 = 1; // 图表1的横坐标
+        
+        var x = 1; // 图表1的横坐标
         var x2 = 1;
         var x3 = 1;
         var x4 = 1;
@@ -380,57 +374,146 @@ export const SendRequest = function () {
         xhr9.timeout = 5000;
         xhr10.timeout = 5000;
 
-        let hour = new Date().getHours()
-        let minute = new Date().getMinutes();
-        let second = new Date().getSeconds();
-        if (minute < 10) {
-          minute = '0' + minute;
+        
+        let minuteall = new Date().getMinutes();
+        let secondall = new Date().getSeconds();
+        let hourall = new Date().getHours();
+        let xData = hourall*10000+minuteall*100+secondall;
+        if (minuteall < 10) {
+          minuteall = '0' + minuteall;
         }
-        if (second < 10) {
-          second = '0' + second;
+        if (secondall < 10) {
+          secondall = '0' + secondall;
         }
-        var xtime = `${new Date().getHours()}:` + minute + ':' + second;
-        var xtime_two = `${new Date().getHours()}:` + minute + ':' + second+1;
-        var xtotal_all=hour*10000+minute*100+second;
-        this.setState({DataArrfirst: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrsecond: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrthird: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrfour: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
-        this.setState({DataArrfive: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
+        let xtimeall = hourall+':' + minuteall + ':' + secondall;
 
-        // setInterval(()=>{
-        //   space++;
-        // },2000)
+        this.setState({
+          urlDatafirst: [],
+          urlDatasecond: [],
+          urlDatathrid: [],
+          urlDatafour: [],
+          urlDatafive: []
+        }); // 设置发送请求时不能设置请求时长
 
-        setInterval(() => {
-          if(this.state.DataArrfirst[0].xtotal>=xtotal_all&&this.state.DataArrfirst[0].xtotal<xtotal_all+1.5)
-          {this.setState({
-            values: this.state.values.concat([this.state.DataArrfirst[x].y]),
-            chartLabels: this.state.chartLabels.concat([this.state.DataArrfirst[x].x]),
-          })
-        }
-          if(this.state.DataArrsecond[0].xtotal>=xtotal_all&&this.state.DataArrsecond[0].xtotal<xtotal_all+1.5)
-        {
+        console.log("xData :"+xData);
+        console.log("xtimeall :"+xtimeall);
+        setInterval(()=>{
+          // console.log("values1:"+this.state.values);
+          // console.log("chartLabels:"+this.state.chartLabels);
+          // console.log("values2:"+this.state.values2);
+          // console.log("chartLabels2:"+this.state.chartLabels2);
           this.setState({
-            values2: this.state.values2.concat([this.state.DataArrsecond[x].y]),
-            chartLabels2: this.state.chartLabels2.concat([this.state.DataArrsecond[x].x]),
+            chartLabels: this.state.chartLabels.concat([xtimeall]),
           })
-         } // this.setState({
-          //   values3: this.state.values3.concat([this.state.DataArrthird[x].y]),
-          //   chartLabels3: this.state.chartLabels3.concat([this.state.DataArrthird[x].x]),
-          // })
-          // this.setState({
-          //   values4: this.state.values4.concat([this.state.DataArrfour[x].y]),
-          //   chartLabels4: this.state.chartLabels4.concat([this.state.DataArrfour[x].x]),
-          // })
-          // this.setState({
-          //   values5: this.state.values5.concat([this.state.DataArrfive[x].y]),
-          //   chartLabels5: this.state.chartLabels5.concat([this.state.DataArrfive[x].x]),
-          // })
-          // this.state.DataArrfirst.isDisplay=true;
-          xtotal_all=xtotal_all+1.5;
-          x++;
-      }, 1500);
+          let flag1=false;
+          let flag2=false;
+          let flag3=false;
+          let flag4=false;
+          let flag5=false;
+
+          for(let i=0;i<this.state.urlDatafirst.length;i++){
+            let Data=this.state.urlDatafirst[i].xTimeall;
+            let yData1=this.state.urlDatafirst[i].yData;
+            let xDataformat=this.state.urlDatafirst[i].xTime_format;
+            if(Data>=xData&&Data<xData+1){
+              
+              this.setState({
+                  values: this.state.values.concat([yData1]),
+              })
+              flag1=true;
+            }
+            
+        }
+        
+          for(let i=0;i<this.state.urlDatasecond.length;i++){
+            let Data2=this.state.urlDatasecond[i].xTimeall;
+            let yData2=this.state.urlDatasecond[i].yData;
+            if(Data2>=xData&&Data2<xData+1){
+
+              this.setState({
+                  values2: this.state.values2.concat([yData2]),
+              })
+              flag2=true;
+            }
+          }
+
+          for(let i=0;i<this.state.urlDatathrid.length;i++){
+            let Data3=this.state.urlDatathrid[i].xTimeall;
+            let yData3=this.state.urlDatathrid[i].yData;
+            if(Data3>=xData&&Data3<xData+1){
+              this.setState({
+                  values3: this.state.values3.concat([yData3]),
+              })
+              flag3=true;
+            }
+          }
+
+          for(let i=0;i<this.state.urlDatafour.length;i++){
+            let Data4=this.state.urlDatafour[i].xTimeall;
+            let yData4=this.state.urlDatafour[i].yData;
+            if(Data4>=xData&&Data4<xData+1){
+              this.setState({
+                  values4: this.state.values4.concat([yData4]),
+              })
+              flag4=true;
+            }
+          }
+
+          for(let i=0;i<this.state.urlDatafive.length;i++){
+            let Data5=this.state.urlDatafive[i].xTimeall;
+            let yData5=this.state.urlDatafive[i].yData;
+            if(Data5>=xData&&Data5<xData+1){
+              this.setState({
+                  values5: this.state.values5.concat([yData5]),
+              })
+              flag5=true;
+            }
+          }
+        if(flag1==false){
+            this.setState({
+              values: this.state.values.concat(null)
+          
+          })
+        }
+        if(flag2==false){
+          this.setState({
+            values2: this.state.values2.concat(null)
+        
+        })
+      }
+      if(flag3==false){
+        this.setState({
+          values3: this.state.values3.concat(null)
+      
+      })
+    }
+    if(flag4==false){
+      this.setState({
+        values4: this.state.values4.concat(null)
+    
+    })
+  }
+  if(flag5==false){
+    this.setState({
+      values5: this.state.values5.concat(null)
+  
+  })
+}
+        let minuteall1 = new Date().getMinutes();
+        let secondall1 = new Date().getSeconds();
+        let hourall1 = new Date().getHours();
+        xData = hourall1*10000+minuteall1*100+secondall1;
+        if (minuteall1 < 10) {
+          minuteall1 = '0' + minuteall1;
+        }
+        if (secondall1 < 10) {
+          secondall1 = '0' + secondall1;
+        }
+        xtimeall = hourall1+':' + minuteall1 + ':' + secondall1;
+          console.log("后两位："+xtimeall.charAt(xtimeall.length-1)+'+'+xtimeall);
+        
+        },1000);
+
 
         xhr.ontimeout = (e) => {
           // 超时事件，请求超时时触发
@@ -523,6 +606,7 @@ export const SendRequest = function () {
                 values10: this.state.values10.concat([ydata]),
                 chartLabels10: this.state.chartLabels10.concat([xtime]),
               });
+
               this.sumReqTime10.push(value10.time);
               value10.sumtime += value10.time; // 求和，算出总时间
               this.avgTime10 = value10.sumtime / x10;
@@ -909,6 +993,12 @@ export const SendRequest = function () {
           if (xhr5.readyState == 1) {
             // readystate等于1是请求发送的时刻，获取当前时间
             const t5 = new Date().valueOf();
+            // let hour = new Date().getHours();
+            // let minute = new Date().getMinutes();
+            // let second = new Date().getSeconds();
+            // let xData5 = hour*10000+minute*100+second;
+            // console.log("xhr5的发送请求时间是"+xData5);
+
             value5.begin = t5;
           }
           if (xhr5.readyState == 4) {
@@ -918,26 +1008,25 @@ export const SendRequest = function () {
             value5.end = t5;
             value5.time = value5.end - value5.begin;
             if (value5.time != 0) {
-              let hour=new Date().getHours();
-
+              let hour = new Date().getHours();
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
+              let xData5 = hour*10000+minute*100+second;
+
               if (minute < 10) {
                 minute = '0' + minute;
               }
               if (second < 10) {
                 second = '0' + second;
               }
-              var xtime = `${new Date().getHours()}:` + minute + ':' + second;
+              var xtime = hour+ ':' + minute + ':' + second;
               const ytime = value5.time;
-              var xData =hour *10000+minute*100+second;
 
-              this.state.DataArrfive.push({
-                xtotal:xData,
-                x:xtime,
-                y:ytime,
-                isDisplay:false
-
+              console.log("xData5第一次结束时间:"+xData5);
+              this.state.urlDatafive.push({
+                xTimeall:xData5,
+                xData:xtime,
+                yData:ytime
               })
               // this.setState({
               //   values5: this.state.values5.concat([ydata]),
@@ -1001,6 +1090,12 @@ export const SendRequest = function () {
           if (xhr4.readyState == 1) {
             // readystate等于1是请求发送的时刻，获取当前时间
             const t4 = new Date().valueOf();
+            // let hour = new Date().getHours();
+            // let minute = new Date().getMinutes();
+            // let second = new Date().getSeconds();
+            // let xData4 = hour*10000+minute*100+second;
+            // console.log("xhr4的发送请求时间是"+xData4);
+
             value4.begin = t4;
           }
           if (xhr4.readyState == 4) {
@@ -1010,9 +1105,11 @@ export const SendRequest = function () {
             value4.end = t4;
             value4.time = value4.end - value4.begin;
             if (value4.time != 0) {
+              let hour = new Date().getHours();
+
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
-              let hour=new Date().getHours();
+              let xData4 = hour*10000+minute*100+second;
 
               if (minute < 10) {
                 minute = '0' + minute;
@@ -1022,14 +1119,13 @@ export const SendRequest = function () {
               }
               var xtime = `${new Date().getHours()}:` + minute + ':' + second;
               const ytime = value4.time;
-              var xData =hour *10000+minute*100+second;
 
-              this.state.DataArrfour.push({
-                xtotal:xData,
-                x:xtime,
-                y:ytime,
-                isDisplay:false
-
+              console.log("xData4第一次结束时间:"+xData4);
+              
+              this.state.urlDatafour.push({
+                xTimeall:xData4,
+                xData:xtime,
+                yData:ytime
               })
               // this.setState({
               //   values4: this.state.values4.concat([ydata]),
@@ -1093,6 +1189,12 @@ export const SendRequest = function () {
           if (xhr3.readyState == 1) {
             // readystate等于1是请求发送的时刻，获取当前时间
             const t1 = new Date().valueOf();
+        //     let hour = new Date().getHours();
+        //     let minute = new Date().getMinutes();
+        //     let second = new Date().getSeconds();
+        // let xData3 = hour*10000+minute*100+second;
+        //     console.log("xhr3的发送请求时间是"+xData3);
+
             value3.begin = t1;
           }
           if (xhr3.readyState == 4) {
@@ -1102,28 +1204,32 @@ export const SendRequest = function () {
             value3.end = t3;
             value3.time = value3.end - value3.begin;
             if (value3.time != 0) {
-              let hour=new Date().getHours();
-
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
+              let hour = new Date().getHours();
+              let xData3 = hour*10000+minute*100+second;
+
               if (minute < 10) {
                 minute = '0' + minute;
               }
               if (second < 10) {
                 second = '0' + second;
               }
-              var xtime = `${new Date().getHours()}:` + minute + ':' + second;
+              var xtime = hour+':' + minute + ':' + second;
               const ytime = value3.time;
-              var xData =hour *10000+minute*100+second;
+        console.log("xData3第一次结束时间:"+xData3);
 
-              this.state.DataArrthird.push({
-                xtotal:xData,
-                x:xtime,
-                y:ytime,
-                isDisplay:false
-
-              })
               
+              this.state.urlDatathrid.push({
+                xTimeall:xData3,
+                xData:xtime,
+                yData:ytime
+              })
+             
+              // this.setState({
+              //   values3: this.state.values3.concat([ydata]),
+              //   chartLabels3: this.state.chartLabels3.concat([xtime]),
+              // });
               this.sumReqTime3.push(value3.time);
               value3.sumtime += value3.time; // 求和，算出总时间
               this.avgTime3 = value3.sumtime / x3;
@@ -1182,6 +1288,11 @@ export const SendRequest = function () {
           if (xhr2.readyState == 1) {
             // readystate等于1是请求发送的时刻，获取当前时间
             const t1 = new Date().valueOf();
+        //     let hour = new Date().getHours();
+        //     let minute = new Date().getMinutes();
+        //     let second = new Date().getSeconds();
+        // let xData2 = hour*10000+minute*100+second;
+        //     console.log("xhr2的发送请求时间是"+xData2);
             value2.begin = t1;
           }
           if (xhr2.readyState == 4) {
@@ -1191,23 +1302,25 @@ export const SendRequest = function () {
             value2.end = t2;
             value2.time = value2.end - value2.begin;
             if (value2.time != 0) {
-              let hour=new Date().getHours();
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
+              let hour = new Date().getHours();
+              let xData2 = hour*10000+minute*100+second;
+
               if (minute < 10) {
                 minute = '0' + minute;
               }
               if (second < 10) {
                 second = '0' + second;
               }
-              var xtime = `${new Date().getHours()}:` + minute + ':' + second;
+              var xtime = hour+ ':' + minute + ':' + second;
               const ytime = value2.time;
-              var xData =hour *10000+minute*100+second;
-              this.state.DataArrsecond.push({
-                xtotal:xData,
-                x:xtime,
-                y:ytime,
-                isDisplay:false
+                console.log("xData2第一次结束时间:"+xData2);
+
+              this.state.urlDatasecond.push({
+                xTimeall:xData2,
+                xData:xtime,
+                yData:ytime
               })
               // this.setState({
               //   values2: this.state.values2.concat([ydata]),
@@ -1270,6 +1383,13 @@ export const SendRequest = function () {
           if (xhr.readyState == 1) {
             // readystate等于1是请求发送的时刻，获取当前时间
             const t1 = new Date().valueOf();
+        //     let hour = new Date().getHours();
+        //     let minute = new Date().getMinutes();
+        //     let second = new Date().getSeconds();
+        //     let hour = new Date().getHours();
+
+        // let xData1 = hour*10000+minute*100+second;
+        //     console.log("xhr1的发送请求时间是"+xData1);
             value.begin = t1;
           }
           if (xhr.readyState == 4) {
@@ -1281,30 +1401,30 @@ export const SendRequest = function () {
               value.time = value.end - value.begin;
 
               if (value.time != 0) {
-                let hour = new Data().getHours();
                 let minute = new Date().getMinutes();
                 let second = new Date().getSeconds();
+                let hour = new Date().getHours();
+                let xData1 = hour*10000+minute*100+second;
+
                 if (minute < 10) {
                   minute = '0' + minute;
                 }
                 if (second < 10) {
                   second = '0' + second;
                 }
-                var xtime = `${new Date().getHours()}:` + minute + ':' + second;
+                var xtime = hour+ ':' + minute + ':' + second;
 
                 var ytime = value.time;
                 
-                var xData=hour*10000+minute*100+second;
-
-                // if()
-                this.state.DataArrfirst.push({
-                  xtotal:xData,
-                  x:xtime,
-                  y:ytime,
-                  isDisplay:false
+                console.log("xData1第一次结束时间:"+xData1);
+                this.state.urlDatafirst.push({
+                  xTime_format:xtime,
+                  xTimeall:xData1,
+                  xData:xtime,
+                  yData:ytime
                 })
                 
-                // console.log("ytime:"+ytime);
+
                 // this.setState({
                 //   values: this.state.values.concat([ytime]),
                 //   chartLabels: this.state.chartLabels.concat([xtime]),
@@ -1312,7 +1432,7 @@ export const SendRequest = function () {
 
                 this.sumReqTime.push(value.time);
                 value.sumtime += value.time; // 求和，算出总时间
-                this.avgTime = value.sumtime / x1;
+                this.avgTime = value.sumtime / x;
                 if (value.time > this.maxTime) {
                   this.maxTime = value.time;
                 }
@@ -1327,7 +1447,7 @@ export const SendRequest = function () {
                   const bzc = num - this.avgTime;
                   sum += bzc * bzc;
                 });
-                let num1 = sum / x1;
+                let num1 = sum / x;
                 let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
                 if (num2 > this.avgTime) {
                   this.n95 = num2 - this.avgTime;
@@ -1335,7 +1455,7 @@ export const SendRequest = function () {
                   this.n95 = this.avgTime - num2;
                 } // end
                 this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
-                x1++;
+                x++;
               }
               nowTime = new Date().valueOf(); // 获取当前时间戟
               if (nowTime < beginTime + reqTime * 60 * 1000 && this.state.isPing) {

@@ -141,7 +141,7 @@ class My extends Component {
           marginBottom: ScaleSize(20),
           borderBottomWidth: ScaleSize(2),
           borderBottomColor: 'rgba(0,0,0,.1)',
-          height: Height * 0.055,
+          height: Height * 0.045,
           width: Width * 0.92,
           marginLeft: Width * 0.04,
         }}>
@@ -190,8 +190,8 @@ class My extends Component {
           <View
             style={{
               position: 'absolute',
-              right: ScaleSize(5),
-              top: ScaleSize(20),
+              right: ScaleSize(10),
+              top: ScaleSize(15),
               marginRight: ScaleSize(0),
               marginTop: ScaleSize(-10),
             }}>
@@ -206,16 +206,13 @@ class My extends Component {
                 console.log(TheData.Ping);
                 store.save(TheData.pingIndex, TheData.Ping);
               }}>
-              <Text
-                style={{
-                  color: '#2a82e4',
-                  fontSize: SetSpText(30),
-                  position: 'relative',
-                  top: ScaleSize(-3),
-                  right: ScaleSize(15),
-                }}>
-                {I18n.t('delete')}
-              </Text>
+              <Image
+                  source={require('../imgs/delete123.png')}
+                  style={{
+                    height: ScaleSize(20),
+                    width: ScaleSize(20),
+                  }}
+                />
             </TouchableOpacity>
           </View>
         
@@ -437,7 +434,7 @@ class My extends Component {
           </View> */}
                     
                   
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{backgroundColor:"#ffffff",borderRadius:ScaleSize(40),width:ScaleSize(40),height:ScaleSize(40),position:"absolute",right:ScaleSize(10),top:ScaleSize(-10)}}
                       onPress={() => {
                         if (TheData.Ping.length != 0) {
@@ -480,12 +477,12 @@ class My extends Component {
                 
               </View>
                       
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
 
                     <Text
-                    style={{color:"#2a82e4",fontSize:SetSpText(35),marginLeft:ScaleSize(15),marginBottom:ScaleSize(15),fontWeight:"500"}}
-                    >Welcome to GraphURLPing !</Text>
+                    style={{color:"#2a82e4",position:"absolute",left:Width* .26,bottom:ScaleSize(0),fontSize:SetSpText(40),marginLeft:ScaleSize(15),marginBottom:ScaleSize(15),fontWeight:"500"}}
+                    >GraphURLPing</Text>
 
                     {/* <TouchableOpacity
                       onPress={() => {
@@ -583,9 +580,52 @@ class My extends Component {
                 </View>
                 {/*console.log(TheData.Ping)*/}
 
+                <TouchableOpacity
+                      style={{borderRadius:ScaleSize(40),width:ScaleSize(40),height:ScaleSize(40),marginLeft:ScaleSize(20),marginBottom:ScaleSize(20),marginTop:ScaleSize(-10)}}
+                      onPress={() => {
+                        if (TheData.Ping.length != 0) {
+                          let key = TheData.Ping.length;
+                          if(key>=5){
+                            alert("为保证软件性能，一次最多ping5个网址！");
+                            return
+                          }
+                          TheData.Ping = [...TheData.Ping,{key: key, url: ''}];
+                          for (let i = 0; i < TheData.Ping.length; i++) {
+                            TheData.Ping[i].key = i;
+                          }
+                          this.setState({refresh: !this.state.refresh});
+                          console.log('1');
+                        } else {
+                          TheData.Ping = [{key: 0, url: ''}];
+                          this.setState({refresh: !this.state.refresh});
+                          console.log('2');
+                        }
+                        store.save(TheData.pingIndex, TheData.Ping);
+                        store.get(TheData.pingIndex).then((res) => {
+                          console.log('res:', res);
+                        });
+                        console.log();
+                        }}>
+                          <View
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  marginTop: ScaleSize(10),
+                }}>
+                <Image
+                  source={require('../imgs/add1234.png')}
+                  style={{
+                    height: ScaleSize(30),
+                    width: ScaleSize(30),
+                  }}
+                />
+                
+              </View>
+                      
+                    </TouchableOpacity>
                 <View
                   style={{height: Height * 0.062, marginTop: ScaleSizeH(0)}}
-        
+                    
                   >
                   <FlatList
                     keyboardShouldPersistTaps={'handled'}
@@ -977,3 +1017,25 @@ export default My;
 
 
 
+
+
+// new Promise((resolve, reject) => { 
+//   // console.log(1); //
+//    resolve() //
+//    }).then(arg =>
+//      {
+//         // 执行到这里 仅仅是将成功的回调放入队列中 代码还不会执行 因此不需要继续往下看了
+//           console.log(2) 
+//           new Promise((resolve, reject) => { 
+//           console.log(3); 
+//           resolve() 
+//           }).then(() => {
+//              console.log(4) 
+//               }).then(() => {
+//                 // 如果上面的回调放入队列中的话 在没有执行的情况下 该回调仍然无法进入微队列中 
+//                  console.log(5) //
+//                }) 
+//                 }).then(() => {
+//                   // 即使上面的回调没有返回值 也会默认触发下一个fulfilled状态 
+//                    console.log(6) //
+//                  })

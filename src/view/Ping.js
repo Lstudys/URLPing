@@ -16,6 +16,8 @@ import {
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
+import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
+
 import {
   ReqTimeChange,
   ConfirmRqTime,
@@ -62,6 +64,14 @@ class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tableHead: ['MAX','MIN', 'AVG', 'N95'],
+      tableData: [
+        ['2','1', '2', '3'],
+        ['a','3', 'b', 'c'],
+        ['1', '4','2', '3'],
+        ['a', '3','b', 'c']
+      ],
+
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -77,13 +87,6 @@ class Ping extends Component {
       url9: '',
       url10: '',
 
-      DataArrfirst: [],
-      DataArrsecond: [],
-      DataArrthird: [],
-      DataArrfour: [],
-      DataArrfive: [],
-
-
       values: [],
       values2: [],
       values3: [],
@@ -94,6 +97,12 @@ class Ping extends Component {
       values8: [],
       values9: [],
       values10: [],
+
+      urlDatafirst: [],
+      urlDatasecond: [],
+      urlDatathrid: [],
+      urlDatafour: [],
+      urlDatafive: [],
 
       colorIndex: 0,
       colorIndex2: 1,
@@ -107,15 +116,7 @@ class Ping extends Component {
       colorIndex10: 9,
 
       chartLabels: [],
-      chartLabels2: [],
-      chartLabels3: [],
-      chartLabels4: [],
-      chartLabels5: [],
-      chartLabels6: [],
-      chartLabels7: [],
-      chartLabels8: [],
-      chartLabels9: [],
-      chartLabels10: [],
+     
 
       chart1: false,
       chart2: false,
@@ -330,15 +331,7 @@ class Ping extends Component {
     colorIndex10,
 
     chartLabels,
-    chartLabels2,
-    chartLabels3,
-    chartLabels4,
-    chartLabels5,
-    chartLabels6,
-    chartLabels7,
-    chartLabels8,
-    chartLabels9,
-    chartLabels10,
+    
 
     url,
     url2,
@@ -1164,6 +1157,7 @@ class Ping extends Component {
     }
 
     if (this.state.url != '' && this.state.url2 != '') {
+      
       return {
         data: {
           dataSets: [
@@ -1198,10 +1192,11 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
         },
       };
     }
+    
     if (this.state.url != '') {
       return {
         data: {
@@ -1248,7 +1243,7 @@ class Ping extends Component {
           ],
         },
         xAxis: {
-          valueFormatter: chartLabels2,
+          valueFormatter: chartLabels,
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
@@ -1267,6 +1262,7 @@ class Ping extends Component {
   };
 
   render() {
+    const state = this.state;
     if (
       this.state.url != '' ||
       this.state.url2 != '' ||
@@ -1304,15 +1300,7 @@ class Ping extends Component {
           colorIndex10,
 
           chartLabels,
-          chartLabels2,
-          chartLabels3,
-          chartLabels4,
-          chartLabels5,
-          chartLabels6,
-          chartLabels7,
-          chartLabels8,
-          chartLabels9,
-          chartLabels10,
+          
 
           url,
           url2,
@@ -1349,15 +1337,7 @@ class Ping extends Component {
           colorIndex10,
 
           chartLabels,
-          chartLabels2,
-          chartLabels3,
-          chartLabels4,
-          chartLabels5,
-          chartLabels6,
-          chartLabels7,
-          chartLabels8,
-          chartLabels9,
-          chartLabels10,
+      
 
           url,
           url2,
@@ -1420,7 +1400,6 @@ class Ping extends Component {
         </View>
         <View style={styles.bottomStyle}>
           <ScrollView>
-            <View style={{marginLeft: Width * 0.05}}>
               <LineChart
                 width={Width * 0.9}
                 height={Height * 0.45}
@@ -1441,877 +1420,19 @@ class Ping extends Component {
                 chartDescription={{text: ''}}
                 ref="chart"
               />
+            </ScrollView>
+
+            <View style={styles.container2}>
+              <Table borderStyle={{borderWidth: 1,borderColor:"#323233"}}>
+              <Row data={state.tableHead} flexArr={[1, 1, 1]} style={styles.head} textStyle={styles.textHead}/>               
+                <TableWrapper style={styles.wrapper}>
+                  <Rows data={state.tableData} flexArr={[1, 1, 1]} style={styles.row} textStyle={styles.textformat}/>
+                </TableWrapper>
+              </Table>
             </View>
+ {/* <Rows data={state.tableData} textStyle={styles.text}/> */}
 
-            <View style={styles.bottomChartData}>
-              
-              {/* ,borderBottomWidth:ScaleSize(2),borderBottomColor:"rgba(0,0,0,.3)",borderTopWidth:ScaleSize(2),borderTopColor:"rgba(0,0,0,.3)" */}
-              <View style={styles.bottomChartDataItem}>
-                <Text
-                  style={{
-                    color: '#000',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(115),
-                    position: 'absolute',
-                    fontWeight: '300',
-                  }}>
-                  MAX
-                </Text>
-                <Text
-                  style={{
-                    color: '#000',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(265),
-                    position: 'absolute',
-                    fontWeight: '300',
-                  }}>
-                  MIN
-                </Text>
-                <Text
-                  style={{
-                    color: '#000',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(400),
-                    position: 'absolute',
-                    fontWeight: '300',
-                  }}>
-                  AVG
-                </Text>
-                <Text
-                  style={{
-                    color: '#000',
-                    fontSize: SetSpText(35),
-                    left: ScaleSizeW(540),
-                    position: 'absolute',
-                    fontWeight: '300',
-                  }}>
-                  N95
-                </Text>
-              </View>
-              {this.state.chart1 ? (
-                <View style={styles.bottomChartDataOne}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: 'red',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'red',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'red',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'red',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n95 ? `${this.n95.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart2 ? (
-                <View style={styles.bottomChartDataTwo}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: '#2a82e4',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime2}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#2a82e4',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime2}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#2a82e4',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime2.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#2a82e4',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n952 ? `${this.n952.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart3 ? (
-                <View style={styles.bottomChartDataThree}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: 'green',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime3}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'green',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime3}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'green',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime3.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'green',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n953 ? `${this.n953.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart4 ? (
-                <View style={styles.bottomChartDataFour}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: 'yellow',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime4}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'yellow',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime4}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'yellow',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime4.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'yellow',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n954 ? `${this.n954.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart5 ? (
-                <View style={styles.bottomChartDataFive}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: 'purple',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime5}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'purple',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime5}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'purple',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime5.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'purple',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n955 ? `${this.n955.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart6 ? (
-                <View style={styles.bottomChartDataSix}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: 'pink',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime6}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'pink',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime6}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'pink',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime6.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'pink',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n956 ? `${this.n956.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart7 ? (
-                <View style={styles.bottomChartDataSeven}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime7}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime7}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime7.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n957 ? `${this.n957.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart8 ? (
-                <View style={styles.bottomChartDataEight}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: '#b07219',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime8}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#b07219',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime8}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#b07219',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime8.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#b07219',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n958 ? `${this.n958.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart9 ? (
-                <View style={styles.bottomChartDataNine}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: '#666666',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime9}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#666666',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime9}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#666666',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime9.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#666666',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n959 ? `${this.n959.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {this.state.chart10 ? (
-                <View style={styles.bottomChartDataTen}>
-                  <View
-                    style={{
-                      width: Width * 0.66,
-                      borderBottomColor: '#000',
-                      borderBottomWidth: ScaleSize(1.3),
-                      position: 'absolute',
-                      left: ScaleSizeW(115),
-                      top: ScaleSizeW(52),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(235),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(375),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-                  <View
-                    style={{
-                      height: ScaleSizeW(30),
-                      borderLeftWidth: ScaleSize(2),
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(510),
-                      position: 'absolute',
-                      width: ScaleSize(2),
-                      top: ScaleSizeW(10),
-                    }}></View>
-
-                  <Text
-                    style={{
-                      color: '#f67e1e',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(115),
-                      position: 'absolute',
-                    }}>
-                    {this.maxTime10}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#f67e1e',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(265),
-                      position: 'absolute',
-                    }}>
-                    {this.minTime10}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#f67e1e',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(400),
-                      position: 'absolute',
-                    }}>
-                    {this.avgTime10.toFixed(0)}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#f67e1e',
-                      fontSize: SetSpText(35),
-                      left: ScaleSizeW(540),
-                      position: 'absolute',
-                    }}>
-                    {this.n9510 ? `${this.n9510.toFixed(0)}` : ''}
-                  </Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              {/* <View style={{borderBottomWidth:ScaleSize(2),marginTop:ScaleSize(-25),borderBottomColor:"#",borderTopWidth:ScaleSize(2),borderTopColor:"#2a82e4"}}></View> */}
-            </View>
-          </ScrollView>
+            
         </View>
       </View>
     );
@@ -2412,4 +1533,880 @@ const styles = StyleSheet.create({
     height: Height * 1.2,
     backgroundColor: '#ffffff',
   },
+  container2: { flex: 1, marginBottom:Width*1.2,width:.9*Width,marginLeft:Width*.05 },
+  head: {  height: 40,  backgroundColor: '#2a82e4'},
+  wrapper: { flexDirection: 'row' },
+  row: {  height: ScaleSize(30)  },
+  textHead: { textAlign: 'center',color:"#ffffff",fontWeight:"bold",fontSize:ScaleSize(15) },
+  textformat: { textAlign: 'center',color:"#2a82e4",fontWeight:"bold",fontSize:ScaleSize(14) }
+
 });
+
+//  <View style={styles.bottomChartData}>
+              
+//               borderBottomWidth:ScaleSize(2),borderBottomColor:"rgba(0,0,0,.3)",borderTopWidth:ScaleSize(2),borderTopColor:"rgba(0,0,0,.3)" */}
+//               <View style={styles.bottomChartDataItem}>
+//                 <Text
+//                   style={{
+//                     color: '#000',
+//                     fontSize: SetSpText(35),
+//                     left: ScaleSizeW(115),
+//                     position: 'absolute',
+//                     fontWeight: '300',
+//                   }}>
+//                   MAX
+//                 </Text>
+//                 <Text
+//                   style={{
+//                     color: '#000',
+//                     fontSize: SetSpText(35),
+//                     left: ScaleSizeW(265),
+//                     position: 'absolute',
+//                     fontWeight: '300',
+//                   }}>
+//                   MIN
+//                 </Text>
+//                 <Text
+//                   style={{
+//                     color: '#000',
+//                     fontSize: SetSpText(35),
+//                     left: ScaleSizeW(400),
+//                     position: 'absolute',
+//                     fontWeight: '300',
+//                   }}>
+//                   AVG
+//                 </Text>
+//                 <Text
+//                   style={{
+//                     color: '#000',
+//                     fontSize: SetSpText(35),
+//                     left: ScaleSizeW(540),
+//                     position: 'absolute',
+//                     fontWeight: '300',
+//                   }}>
+//                   N95
+//                 </Text>
+//               </View>
+//               {this.state.chart1 ? (
+//                 <View style={styles.bottomChartDataOne}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: 'red',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'red',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'red',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'red',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n95 ? `${this.n95.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart2 ? (
+//                 <View style={styles.bottomChartDataTwo}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: '#2a82e4',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime2}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#2a82e4',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime2}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#2a82e4',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime2.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#2a82e4',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n952 ? `${this.n952.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart3 ? (
+//                 <View style={styles.bottomChartDataThree}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: 'green',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime3}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'green',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime3}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'green',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime3.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'green',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n953 ? `${this.n953.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart4 ? (
+//                 <View style={styles.bottomChartDataFour}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: 'yellow',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime4}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'yellow',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime4}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'yellow',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime4.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'yellow',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n954 ? `${this.n954.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart5 ? (
+//                 <View style={styles.bottomChartDataFive}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: 'purple',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime5}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'purple',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime5}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'purple',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime5.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'purple',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n955 ? `${this.n955.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart6 ? (
+//                 <View style={styles.bottomChartDataSix}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: 'pink',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime6}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'pink',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime6}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'pink',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime6.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'pink',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n956 ? `${this.n956.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart7 ? (
+//                 <View style={styles.bottomChartDataSeven}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: 'black',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime7}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'black',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime7}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'black',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime7.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: 'black',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n957 ? `${this.n957.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart8 ? (
+//                 <View style={styles.bottomChartDataEight}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: '#b07219',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime8}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#b07219',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime8}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#b07219',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime8.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#b07219',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n958 ? `${this.n958.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart9 ? (
+//                 <View style={styles.bottomChartDataNine}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: '#666666',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime9}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#666666',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime9}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#666666',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime9.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#666666',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n959 ? `${this.n959.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {this.state.chart10 ? (
+//                 <View style={styles.bottomChartDataTen}>
+//                   <View
+//                     style={{
+//                       width: Width * 0.66,
+//                       borderBottomColor: '#000',
+//                       borderBottomWidth: ScaleSize(1.3),
+//                       position: 'absolute',
+//                       left: ScaleSizeW(115),
+//                       top: ScaleSizeW(52),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(235),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(375),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+//                   <View
+//                     style={{
+//                       height: ScaleSizeW(30),
+//                       borderLeftWidth: ScaleSize(2),
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(510),
+//                       position: 'absolute',
+//                       width: ScaleSize(2),
+//                       top: ScaleSizeW(10),
+//                     }}></View>
+
+//                   <Text
+//                     style={{
+//                       color: '#f67e1e',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(115),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.maxTime10}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#f67e1e',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(265),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.minTime10}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#f67e1e',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(400),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.avgTime10.toFixed(0)}
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       color: '#f67e1e',
+//                       fontSize: SetSpText(35),
+//                       left: ScaleSizeW(540),
+//                       position: 'absolute',
+//                     }}>
+//                     {this.n9510 ? `${this.n9510.toFixed(0)}` : ''}
+//                   </Text>
+//                 </View>
+//               ) : (
+//                 <View />
+//               )}
+//               {/* <View style={{borderBottomWidth:ScaleSize(2),marginTop:ScaleSize(-25),borderBottomColor:"#",borderTopWidth:ScaleSize(2),borderTopColor:"#2a82e4"}}></View> */}
+//             </View> */}
