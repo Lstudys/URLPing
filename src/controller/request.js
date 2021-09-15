@@ -143,6 +143,12 @@ export const SendRequest = function () {
               url9,
               url10,
         );
+        this.setState({DataArrfirst: []}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrsecond: []}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrthird: []}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrfour: []}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrfive: []}); // 设置发送请求时不能设置请求时长
+
         this.state.chart1 = this.state.url ? true : false;
 
         this.state.chart2 = this.state.url2 ? true : false;
@@ -247,8 +253,9 @@ export const SendRequest = function () {
         const reqTime = this.state.reqTime; // 获取发送请求的持续时间
         const beginTime = new Date().valueOf(); // 点击PING后获取当前时间（分钟），用来控制循环
         
-        
-        var x = 1; // 图表1的横坐标
+        var space=0;
+        var x=0;
+        var x1 = 1; // 图表1的横坐标
         var x2 = 1;
         var x3 = 1;
         var x4 = 1;
@@ -372,6 +379,58 @@ export const SendRequest = function () {
         xhr8.timeout = 5000;
         xhr9.timeout = 5000;
         xhr10.timeout = 5000;
+
+        let hour = new Date().getHours()
+        let minute = new Date().getMinutes();
+        let second = new Date().getSeconds();
+        if (minute < 10) {
+          minute = '0' + minute;
+        }
+        if (second < 10) {
+          second = '0' + second;
+        }
+        var xtime = `${new Date().getHours()}:` + minute + ':' + second;
+        var xtime_two = `${new Date().getHours()}:` + minute + ':' + second+1;
+        var xtotal_all=hour*10000+minute*100+second;
+        this.setState({DataArrfirst: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrsecond: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrthird: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrfour: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
+        this.setState({DataArrfive: [{xtotal:xtotal_all,x:xtime,y:100,isDisplay:false},{xtotal:xtotal_all,x:xtime_two,y:100,isDisplay:false}]}); // 设置发送请求时不能设置请求时长
+
+        // setInterval(()=>{
+        //   space++;
+        // },2000)
+
+        setInterval(() => {
+          if(this.state.DataArrfirst[0].xtotal>=xtotal_all&&this.state.DataArrfirst[0].xtotal<xtotal_all+1.5)
+          {this.setState({
+            values: this.state.values.concat([this.state.DataArrfirst[x].y]),
+            chartLabels: this.state.chartLabels.concat([this.state.DataArrfirst[x].x]),
+          })
+        }
+          if(this.state.DataArrsecond[0].xtotal>=xtotal_all&&this.state.DataArrsecond[0].xtotal<xtotal_all+1.5)
+        {
+          this.setState({
+            values2: this.state.values2.concat([this.state.DataArrsecond[x].y]),
+            chartLabels2: this.state.chartLabels2.concat([this.state.DataArrsecond[x].x]),
+          })
+         } // this.setState({
+          //   values3: this.state.values3.concat([this.state.DataArrthird[x].y]),
+          //   chartLabels3: this.state.chartLabels3.concat([this.state.DataArrthird[x].x]),
+          // })
+          // this.setState({
+          //   values4: this.state.values4.concat([this.state.DataArrfour[x].y]),
+          //   chartLabels4: this.state.chartLabels4.concat([this.state.DataArrfour[x].x]),
+          // })
+          // this.setState({
+          //   values5: this.state.values5.concat([this.state.DataArrfive[x].y]),
+          //   chartLabels5: this.state.chartLabels5.concat([this.state.DataArrfive[x].x]),
+          // })
+          // this.state.DataArrfirst.isDisplay=true;
+          xtotal_all=xtotal_all+1.5;
+          x++;
+      }, 1500);
 
         xhr.ontimeout = (e) => {
           // 超时事件，请求超时时触发
@@ -859,6 +918,8 @@ export const SendRequest = function () {
             value5.end = t5;
             value5.time = value5.end - value5.begin;
             if (value5.time != 0) {
+              let hour=new Date().getHours();
+
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
               if (minute < 10) {
@@ -868,12 +929,20 @@ export const SendRequest = function () {
                 second = '0' + second;
               }
               var xtime = `${new Date().getHours()}:` + minute + ':' + second;
-              const ydata = value5.time;
-              
-              this.setState({
-                values5: this.state.values5.concat([ydata]),
-                chartLabels5: this.state.chartLabels5.concat([xtime]),
-              });
+              const ytime = value5.time;
+              var xData =hour *10000+minute*100+second;
+
+              this.state.DataArrfive.push({
+                xtotal:xData,
+                x:xtime,
+                y:ytime,
+                isDisplay:false
+
+              })
+              // this.setState({
+              //   values5: this.state.values5.concat([ydata]),
+              //   chartLabels5: this.state.chartLabels5.concat([xtime]),
+              // });
               this.sumReqTime5.push(value5.time);
               value5.sumtime += value5.time; // 求和，算出总时间
               this.avgTime5 = value5.sumtime / x5;
@@ -943,6 +1012,8 @@ export const SendRequest = function () {
             if (value4.time != 0) {
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
+              let hour=new Date().getHours();
+
               if (minute < 10) {
                 minute = '0' + minute;
               }
@@ -950,12 +1021,20 @@ export const SendRequest = function () {
                 second = '0' + second;
               }
               var xtime = `${new Date().getHours()}:` + minute + ':' + second;
-              const ydata = value4.time;
-              
-              this.setState({
-                values4: this.state.values4.concat([ydata]),
-                chartLabels4: this.state.chartLabels4.concat([xtime]),
-              });
+              const ytime = value4.time;
+              var xData =hour *10000+minute*100+second;
+
+              this.state.DataArrfour.push({
+                xtotal:xData,
+                x:xtime,
+                y:ytime,
+                isDisplay:false
+
+              })
+              // this.setState({
+              //   values4: this.state.values4.concat([ydata]),
+              //   chartLabels4: this.state.chartLabels4.concat([xtime]),
+              // });
               this.sumReqTime4.push(value4.time);
               value4.sumtime += value4.time; // 求和，算出总时间
               this.avgTime4 = value4.sumtime / x4;
@@ -1023,6 +1102,8 @@ export const SendRequest = function () {
             value3.end = t3;
             value3.time = value3.end - value3.begin;
             if (value3.time != 0) {
+              let hour=new Date().getHours();
+
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
               if (minute < 10) {
@@ -1032,12 +1113,17 @@ export const SendRequest = function () {
                 second = '0' + second;
               }
               var xtime = `${new Date().getHours()}:` + minute + ':' + second;
-              const ydata = value3.time;
+              const ytime = value3.time;
+              var xData =hour *10000+minute*100+second;
+
+              this.state.DataArrthird.push({
+                xtotal:xData,
+                x:xtime,
+                y:ytime,
+                isDisplay:false
+
+              })
               
-              this.setState({
-                values3: this.state.values3.concat([ydata]),
-                chartLabels3: this.state.chartLabels3.concat([xtime]),
-              });
               this.sumReqTime3.push(value3.time);
               value3.sumtime += value3.time; // 求和，算出总时间
               this.avgTime3 = value3.sumtime / x3;
@@ -1105,6 +1191,7 @@ export const SendRequest = function () {
             value2.end = t2;
             value2.time = value2.end - value2.begin;
             if (value2.time != 0) {
+              let hour=new Date().getHours();
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
               if (minute < 10) {
@@ -1114,12 +1201,18 @@ export const SendRequest = function () {
                 second = '0' + second;
               }
               var xtime = `${new Date().getHours()}:` + minute + ':' + second;
-              const ydata = value2.time;
-              
-              this.setState({
-                values2: this.state.values2.concat([ydata]),
-                chartLabels2: this.state.chartLabels2.concat([xtime]),
-              });
+              const ytime = value2.time;
+              var xData =hour *10000+minute*100+second;
+              this.state.DataArrsecond.push({
+                xtotal:xData,
+                x:xtime,
+                y:ytime,
+                isDisplay:false
+              })
+              // this.setState({
+              //   values2: this.state.values2.concat([ydata]),
+              //   chartLabels2: this.state.chartLabels2.concat([xtime]),
+              // });
               this.sumReqTime2.push(value2.time);
               value2.sumtime += value2.time; // 求和，算出总时间
               this.avgTime2 = value2.sumtime / x2;
@@ -1188,6 +1281,7 @@ export const SendRequest = function () {
               value.time = value.end - value.begin;
 
               if (value.time != 0) {
+                let hour = new Data().getHours();
                 let minute = new Date().getMinutes();
                 let second = new Date().getSeconds();
                 if (minute < 10) {
@@ -1200,15 +1294,25 @@ export const SendRequest = function () {
 
                 var ytime = value.time;
                 
+                var xData=hour*10000+minute*100+second;
+
+                // if()
+                this.state.DataArrfirst.push({
+                  xtotal:xData,
+                  x:xtime,
+                  y:ytime,
+                  isDisplay:false
+                })
                 
-                this.setState({
-                  values: this.state.values.concat([ytime]),
-                  chartLabels: this.state.chartLabels.concat([xtime]),
-                });
+                // console.log("ytime:"+ytime);
+                // this.setState({
+                //   values: this.state.values.concat([ytime]),
+                //   chartLabels: this.state.chartLabels.concat([xtime]),
+                // });
 
                 this.sumReqTime.push(value.time);
                 value.sumtime += value.time; // 求和，算出总时间
-                this.avgTime = value.sumtime / x;
+                this.avgTime = value.sumtime / x1;
                 if (value.time > this.maxTime) {
                   this.maxTime = value.time;
                 }
@@ -1223,7 +1327,7 @@ export const SendRequest = function () {
                   const bzc = num - this.avgTime;
                   sum += bzc * bzc;
                 });
-                let num1 = sum / x;
+                let num1 = sum / x1;
                 let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
                 if (num2 > this.avgTime) {
                   this.n95 = num2 - this.avgTime;
@@ -1231,7 +1335,7 @@ export const SendRequest = function () {
                   this.n95 = this.avgTime - num2;
                 } // end
                 this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
-                x++;
+                x1++;
               }
               nowTime = new Date().valueOf(); // 获取当前时间戟
               if (nowTime < beginTime + reqTime * 60 * 1000 && this.state.isPing) {

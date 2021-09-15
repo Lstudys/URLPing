@@ -7493,6 +7493,13 @@ react-is@^17.0.1:
   resolved "https://registry.npm.taobao.org/react-is/download/react-is-17.0.1.tgz?cache=0&sync_timestamp=1613455976551&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-is%2Fdownload%2Freact-is-17.0.1.tgz"
   integrity sha1-WzUxvXamRaTJ+25pPtNkGeMwEzk=
 
+react-native-action-button@^2.8.5:
+  version "2.8.5"
+  resolved "https://registry.npm.taobao.org/react-native-action-button/download/react-native-action-button-2.8.5.tgz#4152a50323a8a6b3468e6f161f9a9071f2f0739a"
+  integrity sha1-QVKlAyOoprNGjm8WH5qQcfLwc5o=
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-charts-wrapper@^0.5.7:
   version "0.5.7"
   resolved "https://registry.nlark.com/react-native-charts-wrapper/download/react-native-charts-wrapper-0.5.7.tgz"

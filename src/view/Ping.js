@@ -77,6 +77,13 @@ class Ping extends Component {
       url9: '',
       url10: '',
 
+      DataArrfirst: [],
+      DataArrsecond: [],
+      DataArrthird: [],
+      DataArrfour: [],
+      DataArrfive: [],
+
+
       values: [],
       values2: [],
       values3: [],
