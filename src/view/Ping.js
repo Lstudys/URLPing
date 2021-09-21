@@ -16,7 +16,13 @@ import {
 import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
-import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Rows,
+  Col,
+} from 'react-native-table-component';
 
 import {
   ReqTimeChange,
@@ -64,14 +70,7 @@ class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['MAX','MIN', 'AVG', 'N95'],
-      tableData: [
-        ['2','1', '2', '3'],
-        ['a','3', 'b', 'c'],
-        ['1', '4','2', '3'],
-        ['a', '3','b', 'c']
-      ],
-
+      tableHead: ['MAX', 'MIN', 'AVG', 'N95'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -116,7 +115,6 @@ class Ping extends Component {
       colorIndex10: 9,
 
       chartLabels: [],
-     
 
       chart1: false,
       chart2: false,
@@ -331,7 +329,6 @@ class Ping extends Component {
     colorIndex10,
 
     chartLabels,
-    
 
     url,
     url2,
@@ -1157,7 +1154,6 @@ class Ping extends Component {
     }
 
     if (this.state.url != '' && this.state.url2 != '') {
-      
       return {
         data: {
           dataSets: [
@@ -1196,7 +1192,7 @@ class Ping extends Component {
         },
       };
     }
-    
+
     if (this.state.url != '') {
       return {
         data: {
@@ -1262,6 +1258,168 @@ class Ping extends Component {
   };
 
   render() {
+    const urlArr = [
+      this.state.url,
+      this.state.url2,
+      this.state.url3,
+      this.state.url4,
+      this.state.url5,
+      this.state.url6,
+      this.state.url7,
+      this.state.url8,
+      this.state.url9,
+      this.state.url10,
+    ];
+    const tableDataArr = [
+      [
+        this.maxTime,
+        this.minTime,
+        Math.round(this.avgTime),
+        Math.round(this.n95),
+      ],
+      [
+        this.maxTime2,
+        this.minTime2,
+        Math.round(this.avgTime2),
+        Math.round(this.n952),
+      ],
+      [
+        this.maxTime3,
+        this.minTime3,
+        Math.round(this.avgTime3),
+        Math.round(this.n953),
+      ],
+      [
+        this.maxTime4,
+        this.minTime4,
+        Math.round(this.avgTime4),
+        Math.round(this.n954),
+      ],
+      [
+        this.maxTime5,
+        this.minTime5,
+        Math.round(this.avgTime5),
+        Math.round(this.n955),
+      ],
+      [
+        this.maxTime6,
+        this.minTime6,
+        Math.round(this.avgTime6),
+        Math.round(this.n956),
+      ],
+      [
+        this.maxTime7,
+        this.minTime7,
+        Math.round(this.avgTime7),
+        Math.round(this.n957),
+      ],
+      [
+        this.maxTime8,
+        this.minTime8,
+        Math.round(this.avgTime8),
+        Math.round(this.n958),
+      ],
+      [
+        this.maxTime9,
+        this.minTime9,
+        Math.round(this.avgTime9),
+        Math.round(this.n959),
+      ],
+      [
+        this.maxTime10,
+        this.minTime10,
+        Math.round(this.avgTime10),
+        Math.round(this.n9510),
+      ],
+    ];
+
+    if (urlArr[0] != '') {
+      var tableData = [tableDataArr[0]];
+      if (urlArr[1] != '') {
+        tableData = [tableDataArr[0], tableDataArr[1]];
+        if (urlArr[2] != '') {
+          tableData = [tableDataArr[0], tableDataArr[1], tableDataArr[2]];
+          if (urlArr[3] != '') {
+            tableData = [
+              tableDataArr[0],
+              tableDataArr[1],
+              tableDataArr[2],
+              tableDataArr[3],
+            ];
+            if (urlArr[4] != '') {
+              tableData = [
+                tableDataArr[0],
+                tableDataArr[1],
+                tableDataArr[2],
+                tableDataArr[3],
+                tableDataArr[4],
+              ];
+              if (urlArr[5] != '') {
+                tableData = [
+                  tableDataArr[0],
+                  tableDataArr[1],
+                  tableDataArr[2],
+                  tableDataArr[3],
+                  tableDataArr[4],
+                  tableDataArr[5],
+                ];
+                if (urlArr[6] != '') {
+                  tableData = [
+                    tableDataArr[0],
+                    tableDataArr[1],
+                    tableDataArr[2],
+                    tableDataArr[3],
+                    tableDataArr[4],
+                    tableDataArr[5],
+                    tableDataArr[6],
+                  ];
+                  if (urlArr[7] != '') {
+                    tableData = [
+                      tableDataArr[0],
+                      tableDataArr[1],
+                      tableDataArr[2],
+                      tableDataArr[3],
+                      tableDataArr[4],
+                      tableDataArr[5],
+                      tableDataArr[6],
+                      tableDataArr[7],
+                    ];
+                    if (urlArr[8] != '') {
+                      tableData = [
+                        tableDataArr[0],
+                        tableDataArr[1],
+                        tableDataArr[2],
+                        tableDataArr[3],
+                        tableDataArr[4],
+                        tableDataArr[5],
+                        tableDataArr[6],
+                        tableDataArr[7],
+                        tableDataArr[8],
+                      ];
+                      if (urlArr[9] != '') {
+                        tableData = [
+                          tableDataArr[0],
+                          tableDataArr[1],
+                          tableDataArr[2],
+                          tableDataArr[3],
+                          tableDataArr[4],
+                          tableDataArr[5],
+                          tableDataArr[6],
+                          tableDataArr[7],
+                          tableDataArr[8],
+                          tableDataArr[9],
+                        ];
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     const state = this.state;
     if (
       this.state.url != '' ||
@@ -1300,7 +1458,6 @@ class Ping extends Component {
           colorIndex10,
 
           chartLabels,
-          
 
           url,
           url2,
@@ -1337,7 +1494,6 @@ class Ping extends Component {
           colorIndex10,
 
           chartLabels,
-      
 
           url,
           url2,
@@ -1374,8 +1530,8 @@ class Ping extends Component {
             onPress={() => {
               this.props.navigation.navigate('Ordinary');
               this.setState({
-                isPing:false
-              })
+                isPing: false,
+              });
             }}>
             <Image
               source={require('../imgs/退.png')}
@@ -1400,39 +1556,47 @@ class Ping extends Component {
         </View>
         <View style={styles.bottomStyle}>
           <ScrollView>
-              <LineChart
-                width={Width * 0.9}
-                height={Height * 0.45}
-                bottom={0}
-                data={this.config.data}
-                xAxis={this.config.xAxis}
-                yAxis={{
-                  left: {
-                    enabled: true,
-                  },
-                  right: {
-                    enabled: false,
-                  },
-                }}
-                style={styles.container}
-                marker={this.state.marker}
-                legend={this.state.legend}
-                chartDescription={{text: ''}}
-                ref="chart"
+            <LineChart
+              width={Width * 0.9}
+              height={Height * 0.45}
+              bottom={0}
+              data={this.config.data}
+              xAxis={this.config.xAxis}
+              yAxis={{
+                left: {
+                  enabled: true,
+                },
+                right: {
+                  enabled: false,
+                },
+              }}
+              style={styles.container}
+              marker={this.state.marker}
+              legend={this.state.legend}
+              chartDescription={{text: ''}}
+              ref="chart"
+            />
+          </ScrollView>
+
+          <View style={styles.container2}>
+            <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
+              <Row
+                data={state.tableHead}
+                flexArr={[1, 1, 1]}
+                style={styles.head}
+                textStyle={styles.textHead}
               />
-            </ScrollView>
-
-            <View style={styles.container2}>
-              <Table borderStyle={{borderWidth: 1,borderColor:"#323233"}}>
-              <Row data={state.tableHead} flexArr={[1, 1, 1]} style={styles.head} textStyle={styles.textHead}/>               
-                <TableWrapper style={styles.wrapper}>
-                  <Rows data={state.tableData} flexArr={[1, 1, 1]} style={styles.row} textStyle={styles.textformat}/>
-                </TableWrapper>
-              </Table>
-            </View>
- {/* <Rows data={state.tableData} textStyle={styles.text}/> */}
-
-            
+              <TableWrapper style={styles.wrapper}>
+                <Rows
+                  data={tableData}
+                  flexArr={[1, 1, 1]}
+                  style={styles.row}
+                  textStyle={styles.textformat}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+          {/* <Rows data={state.tableData} textStyle={styles.text}/> */}
         </View>
       </View>
     );
@@ -1533,17 +1697,31 @@ const styles = StyleSheet.create({
     height: Height * 1.2,
     backgroundColor: '#ffffff',
   },
-  container2: { flex: 1, marginBottom:Width*1.2,width:.9*Width,marginLeft:Width*.05 },
-  head: {  height: 40,  backgroundColor: '#2a82e4'},
-  wrapper: { flexDirection: 'row' },
-  row: {  height: ScaleSize(30)  },
-  textHead: { textAlign: 'center',color:"#ffffff",fontWeight:"bold",fontSize:ScaleSize(15) },
-  textformat: { textAlign: 'center',color:"#2a82e4",fontWeight:"bold",fontSize:ScaleSize(14) }
-
+  container2: {
+    flex: 1,
+    marginBottom: Width * 1.2,
+    width: 0.9 * Width,
+    marginLeft: Width * 0.05,
+  },
+  head: {height: 40, backgroundColor: '#2a82e4'},
+  wrapper: {flexDirection: 'row'},
+  row: {height: ScaleSize(30)},
+  textHead: {
+    textAlign: 'center',
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(15),
+  },
+  textformat: {
+    textAlign: 'center',
+    color: '#2a82e4',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+  },
 });
 
 //  <View style={styles.bottomChartData}>
-              
+
 //               borderBottomWidth:ScaleSize(2),borderBottomColor:"rgba(0,0,0,.3)",borderTopWidth:ScaleSize(2),borderTopColor:"rgba(0,0,0,.3)" */}
 //               <View style={styles.bottomChartDataItem}>
 //                 <Text
