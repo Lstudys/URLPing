@@ -33,7 +33,7 @@ import {
   SaveValue,
 } from '../controller/AppPageFunction';
 import Data from '../modal/data';
-import store from 'react-native-simple-store';
+import store, {keys} from 'react-native-simple-store';
 import I18n from 'i18n-js';
 import {NavigationBar, Label, Checkbox} from 'teaset';
 import * as RNLocalize from 'react-native-localize';
@@ -48,6 +48,7 @@ import {
   SetSpText,
   ScaleSize,
 } from '../controller/Adaptation';
+import {color} from 'react-native-reanimated';
 
 const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
 const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
@@ -65,7 +66,18 @@ const Colors = [
   processColor('#666666'),
   processColor('#f67e1e'),
 ];
-
+const textColors = [
+  'red',
+  '#2a82e4',
+  'green',
+  'yellow',
+  'purple',
+  'pink',
+  'black',
+  '#b07219',
+  '#666666',
+  '#f67e1e',
+];
 class Ping extends Component {
   constructor(props) {
     super(props);
@@ -1335,6 +1347,7 @@ class Ping extends Component {
 
     if (urlArr[0] != '') {
       var tableData = [tableDataArr[0]];
+
       if (urlArr[1] != '') {
         tableData = [tableDataArr[0], tableDataArr[1]];
         if (urlArr[2] != '') {
@@ -1586,14 +1599,38 @@ class Ping extends Component {
                 style={styles.head}
                 textStyle={styles.textHead}
               />
-              <TableWrapper style={styles.wrapper}>
-                <Rows
-                  data={tableData}
-                  flexArr={[1, 1, 1]}
-                  style={styles.row}
-                  textStyle={styles.textformat}
-                />
-              </TableWrapper>
+            </Table>
+            <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
+              {tableData.map((tableData, index) => {
+                return (
+                  <Row
+                    key={index}
+                    data={tableData}
+                    //flexArr={[1, 1, 1]}
+                    style={styles.row}
+                    //只需要找到key值判断一下可以了
+                    textStyle={
+                      index == 0
+                        ? styles.textformat
+                        : index == 1
+                        ? styles.textformat2
+                        : index == 2
+                        ? styles.textformat3
+                        : index == 3
+                        ? styles.textformat4
+                        : index == 4
+                        ? styles.textformat5
+                        : index == 5
+                        ? styles.textformat6
+                        : index == 6
+                        ? styles.textformat7
+                        : index == 7
+                        ? styles.textformat8
+                        : styles.textformat10
+                    }
+                  />
+                );
+              })}
             </Table>
           </View>
           {/* <Rows data={state.tableData} textStyle={styles.text}/> */}
@@ -1714,9 +1751,63 @@ const styles = StyleSheet.create({
   },
   textformat: {
     textAlign: 'center',
-    color: '#2a82e4',
     fontWeight: 'bold',
     fontSize: ScaleSize(14),
+    color: textColors[0],
+  },
+  textformat2: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[1],
+  },
+  textformat3: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[2],
+  },
+  textformat4: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[3],
+  },
+  textformat5: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[4],
+  },
+  textformat6: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[5],
+  },
+  textformat7: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[6],
+  },
+  textformat8: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[7],
+  },
+  textformat9: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[8],
+  },
+  textformat10: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: textColors[9],
   },
 });
 
