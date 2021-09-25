@@ -398,6 +398,7 @@ export const SendRequest = function () {
         console.log("xData :"+xData);
         console.log("xtimeall :"+xtimeall);
         setInterval(()=>{
+          if(this.state.isPing==false) return;
           // console.log("values1:"+this.state.values);
           // console.log("chartLabels:"+this.state.chartLabels);
           // console.log("values2:"+this.state.values2);
