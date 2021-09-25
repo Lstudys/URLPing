@@ -179,9 +179,9 @@ class My extends Component {
               paddingRight: ScaleSize(35),
               width: ScaleSize(310),
               height: ScaleSize(50),
-              // backgroundColor:"pink",
+              //backgroundColor:"pink",
               borderRadius: 10,
-              paddingBottom: ScaleSize(25),
+              paddingBottom: ScaleSize(21),
               fontSize: SetSpText(30),
             }}></TextInput>
         </View>
