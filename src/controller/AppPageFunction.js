@@ -6,7 +6,6 @@
  import {BackHandler} from 'react-native';
  import Orientation from 'react-native-orientation';
  import {Toast} from 'teaset';
- import {navigation} from '@react-navigation/stack'
  import store from 'react-native-simple-store';
  import data from '../modal/data';
 
@@ -21,8 +20,6 @@
              this.pressnum++;
              if (this.pressnum == 1) {
                  this.firstpress = new Date().valueOf();
-                 //data.urls[0].mark=false
-                 //Toast.message("时阿大撒大撒"+data.urls[0].mark);
                  for(let i=0;i<data.urls.length;i++){
                     data.urls[i].mark=false
                 }
@@ -38,30 +35,6 @@
                      this.setState({
                          isPing: false,
                      });
-                    //  this.setState({
-                    //      url: '',
-                    //  });
-                    //  this.setState({
-                    //      url2: '',
-                    //  });
-                    //  this.setState({
-                    //      defaultvalue1: '',
-                    //  });
-                    //  this.setState({
-                    //      defaultvalue2: '',
-                    //  });
-                    //  this.setState({
-                    //      values: [],
-                    //  });
-                    //  this.setState({
-                    //      chartLabels: [],
-                    //  });
-                    //  this.setState({
-                    //      values2: [],
-                    //  });
-                    //  this.setState({
-                    //      chartLabels2: [],
-                    //  });
                      this.setState({ifOverlayAble: true});
                      Orientation.lockToPortrait();
                      return true;
@@ -87,7 +60,6 @@
      } else {
          if(this.state.linechart){}
          else{BackHandler.exitApp();}
-         // console.log(num);
      }
  };
  
@@ -139,8 +111,6 @@
  // 验证URL
  export const TestURL = function (url) {
      let match = /http|https/;
-     // /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
-     // /^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
      return match.test(url);
  };
  
