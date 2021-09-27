@@ -15,13 +15,9 @@ import {LineChart} from 'react-native-charts-wrapper';
 import {Table, Row} from 'react-native-table-component';
 
 import {BackAction} from '../controller/AppPageFunction';
-import Data from '../modal/data';
-import store from 'react-native-simple-store';
 import I18n from 'i18n-js';
-import * as RNLocalize from 'react-native-localize';
-import zh from '../modal/Langguage/zh_CN';
-import en from '../modal/Langguage/en_US';
 import TheData from '../modal/TheData';
+import {LanguageChange} from '../controller/LanguageChange';
 
 import {
   ScaleSizeH,
@@ -31,8 +27,6 @@ import {
   ScaleSize,
 } from '../controller/Adaptation';
 
-const Locales = RNLocalize.getLocales(); // 获取手机本地国际化信息
-const SystemLanguage = Locales[0]?.languageCode; // 用户系统偏好语言
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const Colors = [
@@ -104,30 +98,8 @@ class Ping extends Component {
       chartDisplay: false,
       urlsWitch: true, //刷新页面
     };
-    store
-      .get('Language')
-      .then((res) => {
-        Data.userChoose = res;
-      })
-      .finally(() => {
-        if (Data.userChoose.length !== 0) {
-          // 首选用户设置记录
-          I18n.locale = Data.userChoose;
-        } else if (SystemLanguage) {
-          // 获取系统语言
-          I18n.locale = SystemLanguage;
-        } else {
-          // 用户既没有设置，也没有获取到系统语言，默认加载英语语言资源
-          I18n.locale = 'en';
-        }
-        this.setState({
-          langvis: false,
-        });
-      });
 
-    I18n.fallbacks = true;
-    // 加载语言包
-    I18n.translations = {zh, en};
+    LanguageChange.bind(this)();
 
     var pingLength = TheData.Ping.length;
     console.log('pingLength:', pingLength);
