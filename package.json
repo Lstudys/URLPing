@@ -26,6 +26,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-charts-wrapper": "^0.5.7",
     "react-native-cli": "^2.0.1",
+    "react-native-dns-lookup": "^1.0.3",
     "react-native-elements": "^3.2.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",

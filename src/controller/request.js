@@ -4,6 +4,7 @@
  */
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
+import TheData from '../modal/TheData';
 import {TestURL} from './AppPageFunction';
 let TABLE_INITIAL_VALUE = 0;
 let TIMER_PERIOD = 1000;
@@ -23,8 +24,7 @@ export const SendRequest = function () {
     NetInfo.fetch().then((state) => {
       myNetInfo = state.isConnected;
       if (!myNetInfo) {
-        Toast.message('网络未连接!');
-        alert('yes');
+        Toast.message('网络未连接! 请及时连接网络');
       } else {
         this.state.chart1 = false;
         this.state.chart2 = false;
@@ -202,6 +202,8 @@ export const SendRequest = function () {
 
         let minuteall = new Date().getMinutes();
         let secondall = new Date().getSeconds();
+        let secondall_small_1 = new Date().getSeconds()-1;
+        
         let hourall = new Date().getHours();
         let xData = hourall * 10000 + minuteall * 100 + secondall;
         if (minuteall < 10) {
@@ -210,6 +212,11 @@ export const SendRequest = function () {
         if (secondall < 10) {
           secondall = '0' + secondall;
         }
+        if (secondall_small_1 < 10) {
+          secondall_small_1 = '0' + secondall_small_1;
+        }
+        
+
         let xtimeall = hourall + ':' + minuteall + ':' + secondall;
 
         this.setState({
@@ -218,7 +225,16 @@ export const SendRequest = function () {
           urlDatathrid: [],
           urlDatafour: [],
           urlDatafive: [],
-        }); // 设置发送请求时不能设置请求时长
+        }); 
+        this.setState({
+          chartLabels: this.state.chartLabels.concat([hourall + ':' + minuteall + ':' + secondall_small_1]),
+          values: this.state.values.concat([200]),
+          values2: this.state.values.concat([200]),
+          values3: this.state.values.concat([200]),
+          values4: this.state.values.concat([200]),
+          values5: this.state.values.concat([200]),
+        });
+
         setInterval(() => {
           if (this.state.isPing == false) return;
           this.setState({
@@ -470,7 +486,6 @@ export const SendRequest = function () {
               }
               var xtime = `${new Date().getHours()}:` + minute + ':' + second;
               const ytime = value4.time;
-
 
               this.state.urlDatafour.push({
                 xTimeall: xData4,

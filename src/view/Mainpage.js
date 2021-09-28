@@ -8,8 +8,9 @@ import {
   Dimensions,
   FlatList,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
+import {getIpAddressesForHostname} from 'react-native-dns-lookup';
 
 import {
   ScaleSizeH,
@@ -21,7 +22,7 @@ import {
 import store from 'react-native-simple-store';
 import TheData from '../modal/TheData';
 import I18n from 'i18n-js';
-import {LanguageChange} from '../controller/LanguageChange';
+import {LanguageChange} from '../component/LanguageChange';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -39,6 +40,12 @@ class My extends Component {
       keyBoardHeight: 0,
       currentIndex: -1,
       isNew: true, //判断是不是先进入简易模式
+      ip: '1234',
+      ip2: '',
+      ip3: '',
+      ip4: '',
+      ip5: '',
+      IP: [],
     };
 
     LanguageChange.bind(this)();
@@ -46,7 +53,6 @@ class My extends Component {
     store.get(TheData.pingIndex).then((res) => {
       if (res != null) {
         TheData.Ping = res;
-        console.log('res:', res);
         this.setState({refresh: !this.state.refresh});
       }
     });
@@ -54,7 +60,6 @@ class My extends Component {
   identify = true;
 
   componentWillMount() {
-    
     store.get('historyPing').then((res) => {
       if (res != null) {
         TheData.historyPing = res;
@@ -90,8 +95,7 @@ class My extends Component {
 
   renderItem = ({item}) => {
     return (
-      <View
-        style={styles.renderItem}>
+      <View style={styles.renderItem}>
         <View
           style={{
             // paddingRight: ScaleSize(-20),
@@ -123,8 +127,7 @@ class My extends Component {
         </View>
         {/*第一个不包含删除按钮*/}
 
-        <View
-          style={styles.delete}>
+        <View style={styles.delete}>
           <TouchableOpacity
             onPress={() => {
               TheData.Ping.splice(parseInt(item.key), 1);
@@ -144,45 +147,6 @@ class My extends Component {
       </View>
     );
   };
-
-  // _renderRow = ({item}) => {
-  //   return (
-  //     <TouchableOpacity
-  //       onPress={() => {
-  //         for (let i = 0; i < TheData.urlsArr.length; i++) {
-  //           if (TheData.urlsArr[i] == item) {
-  //             var key = i;
-  //             break;
-  //           }
-  //         }
-  //         if (this.state.currentUrlindex == -1) {
-  //           alert('请先选择输入框');
-  //           return;
-  //         }
-  //         TheData.Ping[parseInt(this.state.currentUrlindex)].url =
-  //           TheData.Ping[parseInt(this.state.currentUrlindex)].url.slice(
-  //             0,
-  //             this.state.currentIndex,
-  //           ) +
-  //           TheData.urlsArr[key] +
-  //           TheData.Ping[parseInt(this.state.currentUrlindex)].url.slice(
-  //             this.state.currentIndex,
-  //           );
-  //         store.save(TheData.pingIndex, TheData.Ping);
-  //         store.get(TheData.pingIndex).then((res) => {
-  //           console.log('res:', res);
-  //         });
-  //         this.setState({refresh: !this.state.refresh});
-  //         this.setState({focus: true});
-  //       }}
-  //       style={styles._renderRow}>
-  //       <Text
-  //         style={styles._renderRowitem}>
-  //         {item}
-  //       </Text>
-  //     </TouchableOpacity>
-  //   );
-  // };
   _renderRow = ({item}) => {
     return (
       <TouchableOpacity
@@ -194,7 +158,7 @@ class My extends Component {
             }
           }
           if (this.state.currentUrlindex == -1) {
-            alert(I18n.t('selectinputbox'));
+            // alert(I18n.t('selectinputbox'));
             return;
           }
 
@@ -216,10 +180,7 @@ class My extends Component {
           this.setState({focus: true});
         }}
         style={styles.renderRow}>
-        <Text
-          style={styles._renderRowitem}>
-          {item}
-        </Text>
+        <Text style={styles._renderRowitem}>{item}</Text>
       </TouchableOpacity>
     );
   };
@@ -237,12 +198,8 @@ class My extends Component {
               keyboardShouldPersistTaps={true}
               style={{flex: 1, height: Height, position: 'relative'}}>
               <View>
-                <View
-                  style={styles.navigation}>
-                  <Text
-                    style={styles.navigationtext}>
-                    GraphURLPing
-                  </Text>
+                <View style={styles.navigation}>
+                  <Text style={styles.navigationtext}>GraphURLPing</Text>
                 </View>
 
                 <View style={{marginTop: ScaleSize(20)}}>
@@ -278,20 +235,13 @@ class My extends Component {
                         TheData.Ping[i].key = i;
                       }
                       this.setState({refresh: !this.state.refresh});
-                      console.log('1');
                     } else {
                       TheData.Ping = [{key: 0, url: ''}];
                       this.setState({refresh: !this.state.refresh});
-                      console.log('2');
                     }
                     store.save(TheData.pingIndex, TheData.Ping);
-                    store.get(TheData.pingIndex).then((res) => {
-                      console.log('res:', res);
-                    });
-                    console.log();
                   }}>
-                  <View
-                    style={styles.add}>
+                  <View style={styles.add}>
                     <Image
                       source={require('../imgs/add.png')}
                       style={styles.addimage}
@@ -312,8 +262,7 @@ class My extends Component {
             </View>
           </View>
 
-          <View
-            style={styles.pingwhole}>
+          <View style={styles.pingwhole}>
             <TouchableOpacity
               onPress={() => {
                 for (let i = 0; i < TheData.Ping.length; i++) {
@@ -329,9 +278,7 @@ class My extends Component {
                 }
                 if (this.identify) {
                   if (TheData.Ping.length != 0) {
-                    //if (TheData.historyPing.length != 0) {
-                    //TheData.historyPing = [];
-                    //}
+                    
                     let Ping_length = TheData.Ping.length;
                     let History_length = TheData.historyPing.length;
                     for (
@@ -345,23 +292,18 @@ class My extends Component {
                       ];
                     }
                     this.setState({refresh: !this.state.refresh});
-                    // console.log(TheData.historyPing);
                     this.props.navigation.navigate('Ping', {
                       urlData: [...TheData.Ping],
                     });
                   } else {
                     Toast.message(I18n.t('nourladded'));
                   }
-                  //TheData.Ping.splice(0, TheData.Ping.length);
                 } else {
                   Toast.message(I18n.t('urlempty'));
                 }
               }}
               style={styles.pingbutton}>
-              <Text
-                style={styles.pingtext}>
-                Ping
-              </Text>
+              <Text style={styles.pingtext}>Ping</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -372,112 +314,111 @@ class My extends Component {
 export default My;
 
 const styles = StyleSheet.create({
-
-renderItem:{
-  marginBottom: ScaleSize(20),
-  borderBottomWidth: ScaleSize(2),
-  borderBottomColor: 'rgba(0,0,0,.1)',
-  height: Height * 0.045,
-  width: Width * 0.92,
-  marginLeft: Width * 0.04,
-},
-input:{
-  borderStyle: 'solid',
-  marginTop: ScaleSize(1),
-  marginLeft: ScaleSize(4),
-  paddingRight: ScaleSize(35),
-  width: ScaleSize(310),
-  height: ScaleSize(50),
-  borderRadius: 10,
-  paddingBottom: ScaleSize(21),
-  fontSize: SetSpText(30),
-},
-pingbutton:{
-  marginHorizontal: ScaleSize(2),
-  alignItems: 'center',
-  marginTop: ScaleSize(5),
-  borderRadius: ScaleSize(10),
-  backgroundColor: '#2a82e4',
-  height: ScaleSize(42),
-  justifyContent: 'center',
-},
-pingtext:{
-  fontSize: SetSpText(40),
-  color: 'white',
-  fontWeight: '600',
-},
-pingwhole:{
-  marginHorizontal: ScaleSize(5),
-  marginBottom: ScaleSize(10),
-  marginTop: ScaleSize(10),
-},
-urlsArrFlatlist:{
-  marginLeft: ScaleSizeH(4),
-  marginRight: ScaleSizeH(4),
-  marginBottom: ScaleSizeH(10),
-  borderRadius: ScaleSize(13),
-  backgroundColor: '#2a82e4',
-},
-add:{
-  flexDirection: 'row',
-  alignSelf: 'center',
-  marginTop: ScaleSize(10),
-},
-addimage:{
-  height: ScaleSize(30),
-  width: ScaleSize(30),
-},
-pingTouchable:{
-  borderRadius: ScaleSize(40),
-  width: ScaleSize(40),
-  height: ScaleSize(40),
-  marginLeft: ScaleSize(20),
-  marginBottom: ScaleSize(20),
-  marginTop: ScaleSize(-10),
-},
-navigationtext:{
-  color: '#2782e5',
-  position: 'absolute',
-  left: Width * 0.26,
-  bottom: ScaleSize(0),
-  fontSize: SetSpText(40),
-  marginLeft: ScaleSize(15),
-  marginBottom: ScaleSize(15),
-},
-navigation:{
-  flexDirection: 'row',
-  width: ScaleSize(360),
-  height: Height * 0.058,
-  alignItems: 'center',
-  borderBottomWidth: 1.4,
-  borderColor: '#2a82e4',
-  marginTop: ScaleSize(20),
-},
-renderRow:{
-  marginLeft: ScaleSize(13),
-  flexDirection: 'row',
-  marginTop: ScaleSize(4),
-  height: Height * 0.045,
-  backgroundColor: '#ffffff',
-  marginRight: ScaleSize(9),
-  borderRadius: ScaleSize(20),
-},
-_renderRowitem:{
-  borderRadius: ScaleSizeH(12),
-  fontSize: SetSpText(35),
-  margin: ScaleSizeH(5),
-  color: '#2782e5',
-  fontWeight: '700',
-},
-deleteimage:{
-  height: ScaleSize(20),
-  width: ScaleSize(20),
-},
-delete:{
-  position: 'absolute',
-  right: ScaleSize(10),
-  top: ScaleSize(15),
-  marginRight: ScaleSize(0),
-  marginTop: ScaleSize(-10),
-}
-})
+  renderItem: {
+    marginBottom: ScaleSize(20),
+    borderBottomWidth: ScaleSize(2),
+    borderBottomColor: 'rgba(0,0,0,.1)',
+    height: Height * 0.045,
+    width: Width * 0.92,
+    marginLeft: Width * 0.04,
+  },
+  input: {
+    borderStyle: 'solid',
+    marginTop: ScaleSize(1),
+    marginLeft: ScaleSize(4),
+    paddingRight: ScaleSize(35),
+    width: ScaleSize(310),
+    height: ScaleSize(50),
+    borderRadius: 10,
+    paddingBottom: ScaleSize(21),
+    fontSize: SetSpText(30),
+  },
+  pingbutton: {
+    marginHorizontal: ScaleSize(2),
+    alignItems: 'center',
+    marginTop: ScaleSize(5),
+    borderRadius: ScaleSize(10),
+    backgroundColor: '#2a82e4',
+    height: ScaleSize(42),
+    justifyContent: 'center',
+  },
+  pingtext: {
+    fontSize: SetSpText(40),
+    color: 'white',
+    fontWeight: '600',
+  },
+  pingwhole: {
+    marginHorizontal: ScaleSize(5),
+    marginBottom: ScaleSize(10),
+    marginTop: ScaleSize(10),
+  },
+  urlsArrFlatlist: {
+    marginLeft: ScaleSizeH(4),
+    marginRight: ScaleSizeH(4),
+    marginBottom: ScaleSizeH(10),
+    borderRadius: ScaleSize(13),
+    backgroundColor: '#2a82e4',
+  },
+  add: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginTop: ScaleSize(10),
+  },
+  addimage: {
+    height: ScaleSize(30),
+    width: ScaleSize(30),
+  },
+  pingTouchable: {
+    borderRadius: ScaleSize(40),
+    width: ScaleSize(40),
+    height: ScaleSize(40),
+    marginLeft: ScaleSize(20),
+    marginBottom: ScaleSize(20),
+    marginTop: ScaleSize(-10),
+  },
+  navigationtext: {
+    color: '#2782e5',
+    position: 'absolute',
+    left: Width * 0.26,
+    bottom: ScaleSize(0),
+    fontSize: SetSpText(40),
+    marginLeft: ScaleSize(15),
+    marginBottom: ScaleSize(15),
+  },
+  navigation: {
+    flexDirection: 'row',
+    width: ScaleSize(360),
+    height: Height * 0.058,
+    alignItems: 'center',
+    borderBottomWidth: 1.4,
+    borderColor: '#2a82e4',
+    marginTop: ScaleSize(20),
+  },
+  renderRow: {
+    marginLeft: ScaleSize(13),
+    flexDirection: 'row',
+    marginTop: ScaleSize(4),
+    height: Height * 0.045,
+    backgroundColor: '#ffffff',
+    marginRight: ScaleSize(9),
+    borderRadius: ScaleSize(20),
+  },
+  _renderRowitem: {
+    borderRadius: ScaleSizeH(12),
+    fontSize: SetSpText(35),
+    margin: ScaleSizeH(5),
+    color: '#2782e5',
+    fontWeight: '700',
+  },
+  deleteimage: {
+    height: ScaleSize(20),
+    width: ScaleSize(20),
+  },
+  delete: {
+    position: 'absolute',
+    right: ScaleSize(10),
+    top: ScaleSize(15),
+    marginRight: ScaleSize(0),
+    marginTop: ScaleSize(-10),
+  },
+});
