@@ -13,9 +13,6 @@ import {
 import {getIpAddressesForHostname} from 'react-native-dns-lookup';
 
 import {
-  ScaleSizeH,
-  ScaleSizeR,
-  ScaleSizeW,
   SetSpText,
   ScaleSize,
 } from '../controller/Adaptation';
@@ -249,7 +246,7 @@ class My extends Component {
                   </View>
                 </TouchableOpacity>
                 <View
-                  style={{height: Height * 0.062, marginTop: ScaleSizeH(0)}}>
+                  style={{height: Height * 0.062}}>
                   <FlatList
                     keyboardShouldPersistTaps={'handled'}
                     style={styles.urlsArrFlatlist}
@@ -353,9 +350,9 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
-    marginLeft: ScaleSizeH(4),
-    marginRight: ScaleSizeH(4),
-    marginBottom: ScaleSizeH(10),
+    marginLeft: ScaleSize(3),
+    marginRight: ScaleSize(3),
+    marginBottom: ScaleSize(4),
     borderRadius: ScaleSize(13),
     backgroundColor: '#2a82e4',
   },
@@ -404,9 +401,8 @@ const styles = StyleSheet.create({
     borderRadius: ScaleSize(20),
   },
   _renderRowitem: {
-    borderRadius: ScaleSizeH(12),
     fontSize: SetSpText(35),
-    margin: ScaleSizeH(5),
+    margin: ScaleSize(2),
     color: '#2782e5',
     fontWeight: '700',
   },

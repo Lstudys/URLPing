@@ -21,9 +21,6 @@ import TheData from '../modal/TheData';
 import {LanguageChange} from '../component/LanguageChange';
 
 import {
-  ScaleSizeH,
-  ScaleSizeR,
-  ScaleSizeW,
   SetSpText,
   ScaleSize,
 } from '../controller/Adaptation';
