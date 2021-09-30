@@ -575,6 +575,10 @@ class Ping extends Component {
       }
     }
 
+    if (!this.state.isPing) {
+      tableData = [].concat(tableData);
+    }
+
     const state = this.state;
     if (
       this.state.url != '' ||
@@ -625,7 +629,11 @@ class Ping extends Component {
         url4,
         url5,
       );
+      // if (!this.state.isPing) {
+      //   this.config = this.config;
+      // }
     }
+
     return (
       <View>
         <View style={styles.navigation}>
@@ -718,6 +726,20 @@ class Ping extends Component {
               })}
             </Table>
           </View>
+
+          <View style={styles.stopwhole}>
+            <TouchableOpacity
+              style={styles.stopbutton}
+              onPress={() => {
+                //这里写函数stop
+                this.setState({
+                  isPing: false,
+                });
+              }}>
+              {/* 这里要把纯中文改一下 */}
+              <Text style={styles.stoptext}>停止测试</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -801,5 +823,27 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-25),
     fontSize: SetSpText(38),
     paddingTop: ScaleSize(0),
+  },
+
+  stoptext: {
+    fontSize: SetSpText(40),
+    color: 'white',
+    fontWeight: '600',
+  },
+  stopwhole: {
+    marginBottom: Width * 0.42,
+    marginTop: -(Height * 0.4),
+    width: 0.975 * Width,
+    marginLeft: Width * 0.0125,
+    height: 0.2 * Height,
+  },
+  stopbutton: {
+    marginHorizontal: ScaleSize(2),
+    alignItems: 'center',
+    marginTop: ScaleSize(5),
+    borderRadius: ScaleSize(10),
+    backgroundColor: '#2a82e4',
+    height: ScaleSize(42),
+    justifyContent: 'center',
   },
 });
