@@ -37,12 +37,6 @@ class My extends Component {
       keyBoardHeight: 0,
       currentIndex: -1,
       isNew: true, //判断是不是先进入简易模式
-      ip: '1234',
-      ip2: '',
-      ip3: '',
-      ip4: '',
-      ip5: '',
-      IP: [],
     };
 
     LanguageChange.bind(this)();
