@@ -20,10 +20,7 @@ import I18n from 'i18n-js';
 import TheData from '../modal/TheData';
 import {LanguageChange} from '../component/LanguageChange';
 
-import {
-  SetSpText,
-  ScaleSize,
-} from '../controller/Adaptation';
+import {SetSpText, ScaleSize} from '../controller/Adaptation';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -193,11 +190,17 @@ class Ping extends Component {
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
+    this.stoptimer = setTimeout(() => {
+      this.setState(() => ({
+        isPing: false,
+      }));
+    }, 180000);
 
     /* 选择合适语言 */
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
+    clearTimeout(this.stoptimer);
   }
 
   // `${this.state.url}(${TheData.IP1})`
