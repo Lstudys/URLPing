@@ -20,10 +20,7 @@ import I18n from 'i18n-js';
 import TheData from '../modal/TheData';
 import {LanguageChange} from '../component/LanguageChange';
 
-import {
-  SetSpText,
-  ScaleSize,
-} from '../controller/Adaptation';
+import {SetSpText, ScaleSize} from '../controller/Adaptation';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -36,13 +33,14 @@ const Colors = [
 ];
 var a = '123';
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
+const gridColor = processColor('#E6E6E6');
 class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scaleX:1.05,
+      scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
-      tableHead: ['MAX', 'MIN', 'AVG', 'N95','ERROR'],
+      tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERROR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -151,14 +149,14 @@ class Ping extends Component {
     SendRequest.bind(this)();
   }
 
-  resetZoom=(scale_switch)=>{
-    console.log("调用了");
+  resetZoom = (scale_switch) => {
+    console.log('调用了');
     this.setState({
-    zoom :{scaleX: this.state.scaleX, scaleY: 1, xValue: 200, yValue: 500},
+      zoom: {scaleX: this.state.scaleX, scaleY: 1, xValue: 200, yValue: 500},
     });
-    console.log("zoom改变"+this.state.zoom.scaleX);
-    this.state.scaleX=this.state.scaleX+scale_switch;
-    }
+    console.log('zoom改变' + this.state.zoom.scaleX);
+    this.state.scaleX = this.state.scaleX + scale_switch;
+  };
 
   pressnum = 0; // 表示安卓手机返回键按压次数，以控制返回上一界面
   firstpress = 0; // 第一次按返回键的时间戟
@@ -169,7 +167,7 @@ class Ping extends Component {
   n95 = ''; // 95%的数据
   status1 = '';
   sumReqTime = []; // 所有请求时间的数组，用来计算标准差
-  error1=0;
+  error1 = 0;
 
   /**
    * 下面是第二个图表的数据
@@ -180,7 +178,7 @@ class Ping extends Component {
   n952 = ''; // 95%的数据
   status2 = '';
   sumReqTime2 = []; // 所有请求时间的数组，用来计算标准差
-  error2=0;
+  error2 = 0;
 
   maxTime3 = 0; // 最大时间
   minTime3 = ''; // 最小时间
@@ -188,7 +186,7 @@ class Ping extends Component {
   n953 = ''; // 95%的数据
   status3 = '';
   sumReqTime3 = []; // 所有请求时间的数组，用来计算标准差
-  error3=0;
+  error3 = 0;
 
   maxTime4 = 0; // 最大时间
   minTime4 = ''; // 最小时间
@@ -196,7 +194,7 @@ class Ping extends Component {
   n954 = ''; // 95%的数据
   status4 = '';
   sumReqTime4 = []; // 所有请求时间的数组，用来计算标准差
-  error4=0;
+  error4 = 0;
 
   maxTime5 = 0; // 最大时间
   minTime5 = ''; // 最小时间
@@ -204,17 +202,23 @@ class Ping extends Component {
   n955 = ''; // 95%的数据
   status5 = '';
   sumReqTime5 = []; // 所有请求时间的数组，用来计算标准差
-  error5=0;
+  error5 = 0;
 
   config = {};
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
+    this.stoptimer = setTimeout(() => {
+      this.setState(() => ({
+        isPing: false,
+      }));
+    }, 180000);
 
     /* 选择合适语言 */
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
+    clearTimeout(this.stoptimer);
   }
 
   // `${this.state.url}(${TheData.IP1})`
@@ -232,7 +236,6 @@ class Ping extends Component {
     colorIndex5,
 
     chartLabels,
-
   ) {
     if (
       this.state.url != '' &&
@@ -311,7 +314,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor: gridColor,
         },
       };
     }
@@ -380,7 +384,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor: gridColor,
         },
       };
     }
@@ -436,7 +441,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor: gridColor,
         },
       };
     }
@@ -477,6 +483,7 @@ class Ping extends Component {
           drawLabels: true,
           position: 'BOTTOM',
           drawGridLines: true,
+          gridColor: gridColor,
         },
       };
     }
@@ -504,7 +511,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor: gridColor,
         },
       };
     }
@@ -540,7 +548,6 @@ class Ping extends Component {
         Math.round(this.avgTime2),
         Math.round(this.n952),
         this.error2,
-
       ],
       [
         this.maxTime3,
@@ -548,7 +555,6 @@ class Ping extends Component {
         Math.round(this.avgTime3),
         Math.round(this.n953),
         this.error3,
-
       ],
       [
         this.maxTime4,
@@ -563,10 +569,8 @@ class Ping extends Component {
         Math.round(this.avgTime5),
         Math.round(this.n955),
         this.error5,
-
       ],
     ];
-
 
     if (urlArr[0] != '') {
       var tableData = [tableDataArr[0]];
@@ -690,7 +694,7 @@ class Ping extends Component {
         </View>
         <View style={styles.bottomStyle}>
           <ScrollView>
-          <LineChart
+            <LineChart
               width={Width * 0.9}
               height={Height * 0.45}
               bottom={0}
@@ -699,6 +703,8 @@ class Ping extends Component {
               yAxis={{
                 left: {
                   enabled: true,
+                  drawGridLines: true,
+                  gridColor: gridColor,
                 },
                 right: {
                   enabled: false,
