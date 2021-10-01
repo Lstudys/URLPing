@@ -440,6 +440,9 @@ export const SendRequest = function () {
           if (xhr5.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status5 = xhr5.status;
+            if(this.status5!=200){
+              this.error5++;
+            }
             const t5 = new Date().valueOf();
             value5.end = t5;
             value5.time = value5.end - value5.begin;
@@ -528,6 +531,9 @@ export const SendRequest = function () {
           if (xhr4.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status4 = xhr4.status;
+            if(this.status4!=200){
+              this.error4++;
+            }
             const t4 = new Date().valueOf();
             value4.end = t4;
             value4.time = value4.end - value4.begin;
@@ -617,6 +623,9 @@ export const SendRequest = function () {
           if (xhr3.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status3 = xhr3.status;
+            if(this.status3!=200){
+              this.error3++;
+            }
             const t3 = new Date().valueOf();
             value3.end = t3;
             value3.time = value3.end - value3.begin;
@@ -706,6 +715,9 @@ export const SendRequest = function () {
           if (xhr2.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status2 = xhr2.status;
+            if(this.status2!=200){
+              this.error2++;
+            }
             const t2 = new Date().valueOf();
             value2.end = t2;
             value2.time = value2.end - value2.begin;
@@ -794,6 +806,9 @@ export const SendRequest = function () {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             if (xhr.status != TABLE_INITIAL_VALUE) {
               this.status1 = xhr.status;
+              if(this.status1!=200){
+                this.error1++;
+              }
               const t2 = new Date().valueOf();
               value.end = t2;
               value.time = value.end - value.begin;
