@@ -12,10 +12,7 @@ import {
 } from 'react-native';
 import {getIpAddressesForHostname} from 'react-native-dns-lookup';
 
-import {
-  SetSpText,
-  ScaleSize,
-} from '../controller/Adaptation';
+import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import TheData from '../modal/TheData';
 import I18n from 'i18n-js';
@@ -239,8 +236,7 @@ class My extends Component {
                     />
                   </View>
                 </TouchableOpacity>
-                <View
-                  style={{height: Height * 0.062}}>
+                <View style={{height: Height * 0.062}}>
                   <FlatList
                     keyboardShouldPersistTaps={'handled'}
                     style={styles.urlsArrFlatlist}
@@ -269,7 +265,6 @@ class My extends Component {
                 }
                 if (this.identify) {
                   if (TheData.Ping.length != 0) {
-                    
                     let Ping_length = TheData.Ping.length;
                     let History_length = TheData.historyPing.length;
                     for (

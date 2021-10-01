@@ -202,8 +202,8 @@ export const SendRequest = function () {
 
         let minuteall = new Date().getMinutes();
         let secondall = new Date().getSeconds();
-        let secondall_small_1 = new Date().getSeconds()-1;
-        
+        let secondall_small_1 = new Date().getSeconds() - 1;
+
         let hourall = new Date().getHours();
         let xData = hourall * 10000 + minuteall * 100 + secondall;
         if (minuteall < 10) {
@@ -215,7 +215,6 @@ export const SendRequest = function () {
         if (secondall_small_1 < 10) {
           secondall_small_1 = '0' + secondall_small_1;
         }
-        
 
         let xtimeall = hourall + ':' + minuteall + ':' + secondall;
 
@@ -225,20 +224,22 @@ export const SendRequest = function () {
           urlDatathrid: [],
           urlDatafour: [],
           urlDatafive: [],
-        }); 
+        });
         this.setState({
-          chartLabels: this.state.chartLabels.concat([hourall + ':' + minuteall + ':' + secondall_small_1]),
+          chartLabels: this.state.chartLabels.concat([
+            hourall + ':' + minuteall + ':' + secondall_small_1,
+          ]),
           values: this.state.values.concat([200]),
           values2: this.state.values.concat([200]),
           values3: this.state.values.concat([200]),
           values4: this.state.values.concat([200]),
           values5: this.state.values.concat([200]),
         });
-        var start_scale1=false;
-        var start_scale2=false;
-        var start_scale3=false;
-        var start_scale4=false;
-        var start_scale5=false;
+        var start_scale1 = false;
+        var start_scale2 = false;
+        var start_scale3 = false;
+        var start_scale4 = false;
+        var start_scale5 = false;
 
         setInterval(() => {
           if (this.state.isPing == false) return;
@@ -250,8 +251,7 @@ export const SendRequest = function () {
           let flag3 = false;
           let flag4 = false;
           let flag5 = false;
-          let scale_flag=false;
-
+          let scale_flag = false;
 
           for (let i = 0; i < this.state.urlDatafirst.length; i++) {
             let Data = this.state.urlDatafirst[i].xTimeall;
@@ -261,7 +261,7 @@ export const SendRequest = function () {
                 values: this.state.values.concat([yData1]),
               });
               flag1 = true;
-              scale_flag=true;
+              scale_flag = true;
             }
           }
 
@@ -273,8 +273,7 @@ export const SendRequest = function () {
                 values2: this.state.values2.concat([yData2]),
               });
               flag2 = true;
-              scale_flag=true;
-
+              scale_flag = true;
             }
           }
 
@@ -286,8 +285,7 @@ export const SendRequest = function () {
                 values3: this.state.values3.concat([yData3]),
               });
               flag3 = true;
-              scale_flag=true;
-
+              scale_flag = true;
             }
           }
 
@@ -299,8 +297,7 @@ export const SendRequest = function () {
                 values4: this.state.values4.concat([yData4]),
               });
               flag4 = true;
-              scale_flag=true;
-
+              scale_flag = true;
             }
           }
 
@@ -312,8 +309,7 @@ export const SendRequest = function () {
                 values5: this.state.values5.concat([yData5]),
               });
               flag5 = true;
-              scale_flag=true;
-              
+              scale_flag = true;
             }
           }
           if (flag1 == false) {
@@ -345,48 +341,107 @@ export const SendRequest = function () {
           let secondall1 = new Date().getSeconds();
           let hourall1 = new Date().getHours();
 
-          if((secondall1-secondall==40&&minuteall1==minuteall)||(minuteall1-minuteall==1&&secondall1+60-secondall==40)||(hourall1-hourall==1&&secondall1+60-secondall==40)){
-            start_scale1=true;
-      }
-      if((secondall1-secondall==59&&minuteall1==minuteall)||(minuteall1-minuteall==1&&secondall1+60-secondall==59)||(hourall1-hourall==1&&secondall1+60-secondall==59)){
-        start_scale2=true;
-      }
-      if((secondall1-secondall==30&&minuteall1-minuteall==1)||(minuteall1-minuteall==2&&secondall1-secondall==-30)){
-        start_scale3=true;
-      }
-      if((secondall1-secondall==30&&minuteall1-minuteall==2)||(minuteall1-minuteall==3&&secondall1-secondall==-30)){
-        start_scale4=true;
-      }
-      if((secondall1-secondall==30&&minuteall1-minuteall==3)||(minuteall1-minuteall==4&&secondall1-secondall==-30)){
-        start_scale5=true;
-      }
+          if (
+            (secondall1 - secondall == 40 && minuteall1 == minuteall) ||
+            (minuteall1 - minuteall == 1 &&
+              secondall1 + 60 - secondall == 40) ||
+            (hourall1 - hourall == 1 && secondall1 + 60 - secondall == 40)
+          ) {
+            start_scale1 = true;
+          }
+          if (
+            (secondall1 - secondall == 59 && minuteall1 == minuteall) ||
+            (minuteall1 - minuteall == 1 &&
+              secondall1 + 60 - secondall == 59) ||
+            (hourall1 - hourall == 1 && secondall1 + 60 - secondall == 59)
+          ) {
+            start_scale2 = true;
+          }
+          if (
+            (secondall1 - secondall == 30 && minuteall1 - minuteall == 1) ||
+            (minuteall1 - minuteall == 2 && secondall1 - secondall == -30)
+          ) {
+            start_scale3 = true;
+          }
+          if (
+            (secondall1 - secondall == 30 && minuteall1 - minuteall == 2) ||
+            (minuteall1 - minuteall == 3 && secondall1 - secondall == -30)
+          ) {
+            start_scale4 = true;
+          }
+          if (
+            (secondall1 - secondall == 30 && minuteall1 - minuteall == 3) ||
+            (minuteall1 - minuteall == 4 && secondall1 - secondall == -30)
+          ) {
+            start_scale5 = true;
+          }
 
-  
+          console.log(
+            'start_scale和scale_flag:' +
+              start_scale1 +
+              ' ' +
+              start_scale2 +
+              ' ' +
+              start_scale3 +
+              ' ' +
+              start_scale4 +
+              ' ' +
+              start_scale5 +
+              ' 分割' +
+              scale_flag,
+          );
 
-      console.log("start_scale和scale_flag:"+start_scale1+' '+start_scale2+' '+start_scale3+" "+start_scale4+' '+start_scale5+" 分割"+scale_flag);
-
-
-      if(start_scale1==true&&scale_flag==true&&start_scale2==false&&start_scale3==false&&start_scale4==false&&start_scale5==false){
-        let scale_switch=0.018;
-        this.resetZoom(scale_switch);
-      }
-      else if (start_scale1==true&&scale_flag==true&&start_scale2==true&&start_scale3==false&&start_scale4==false&&start_scale5==false){
-        let scale_switch=0.025;
-        this.resetZoom(scale_switch);
-      }
-      else if (start_scale1==true&&scale_flag==true&&start_scale2==true&&start_scale3==true&&start_scale4==false&&start_scale5==false){
-        let scale_switch=0.030;
-        this.resetZoom(scale_switch);
-      }
-      else if (start_scale1==true&&scale_flag==true&&start_scale2==true&&start_scale3==true&&start_scale4==true&&start_scale5==false){
-        let scale_switch=0.038;
-        this.resetZoom(scale_switch);
-      }
-      else if (start_scale1==true&&scale_flag==true&&start_scale2==true&&start_scale3==true&&start_scale4==true&&start_scale5==true){
-        let scale_switch=0.044;
-        this.resetZoom(scale_switch);
-      }
-
+          if (
+            start_scale1 == true &&
+            scale_flag == true &&
+            start_scale2 == false &&
+            start_scale3 == false &&
+            start_scale4 == false &&
+            start_scale5 == false
+          ) {
+            let scale_switch = 0.018;
+            this.resetZoom(scale_switch);
+          } else if (
+            start_scale1 == true &&
+            scale_flag == true &&
+            start_scale2 == true &&
+            start_scale3 == false &&
+            start_scale4 == false &&
+            start_scale5 == false
+          ) {
+            let scale_switch = 0.025;
+            this.resetZoom(scale_switch);
+          } else if (
+            start_scale1 == true &&
+            scale_flag == true &&
+            start_scale2 == true &&
+            start_scale3 == true &&
+            start_scale4 == false &&
+            start_scale5 == false
+          ) {
+            let scale_switch = 0.03;
+            this.resetZoom(scale_switch);
+          } else if (
+            start_scale1 == true &&
+            scale_flag == true &&
+            start_scale2 == true &&
+            start_scale3 == true &&
+            start_scale4 == true &&
+            start_scale5 == false
+          ) {
+            let scale_switch = 0.038;
+            this.resetZoom(scale_switch);
+          } else if (
+            start_scale1 == true &&
+            scale_flag == true &&
+            start_scale2 == true &&
+            start_scale3 == true &&
+            start_scale4 == true &&
+            start_scale5 == true
+          ) {
+            let scale_switch = 0.044;
+            this.resetZoom(scale_switch);
+          }
 
           xData = hourall1 * 10000 + minuteall1 * 100 + secondall1;
           if (minuteall1 < 10) {
@@ -440,7 +495,7 @@ export const SendRequest = function () {
           if (xhr5.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status5 = xhr5.status;
-            if(this.status5!=200){
+            if (this.status5 != 200) {
               this.error5++;
             }
             const t5 = new Date().valueOf();
@@ -531,7 +586,7 @@ export const SendRequest = function () {
           if (xhr4.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status4 = xhr4.status;
-            if(this.status4!=200){
+            if (this.status4 != 200) {
               this.error4++;
             }
             const t4 = new Date().valueOf();
@@ -623,7 +678,7 @@ export const SendRequest = function () {
           if (xhr3.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status3 = xhr3.status;
-            if(this.status3!=200){
+            if (this.status3 != 200) {
               this.error3++;
             }
             const t3 = new Date().valueOf();
@@ -715,7 +770,7 @@ export const SendRequest = function () {
           if (xhr2.readyState == RECEIVE_REQUEST_STATUS) {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             this.status2 = xhr2.status;
-            if(this.status2!=200){
+            if (this.status2 != 200) {
               this.error2++;
             }
             const t2 = new Date().valueOf();
@@ -806,7 +861,7 @@ export const SendRequest = function () {
             // readystate等于4是客户端收到响应头的时刻，获取当前时间，t2减t1即发送请求到收到响应的时间
             if (xhr.status != TABLE_INITIAL_VALUE) {
               this.status1 = xhr.status;
-              if(this.status1!=200){
+              if (this.status1 != 200) {
                 this.error1++;
               }
               const t2 = new Date().valueOf();
