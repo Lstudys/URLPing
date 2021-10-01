@@ -36,6 +36,7 @@ const Colors = [
 ];
 var a = '123';
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
+const gridColor = processColor('#E6E6E6');
 class Ping extends Component {
   constructor(props) {
     super(props);
@@ -299,7 +300,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor:gridColor,
         },
       };
     }
@@ -368,7 +370,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor:gridColor,
         },
       };
     }
@@ -424,7 +427,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor:gridColor,
         },
       };
     }
@@ -465,6 +469,7 @@ class Ping extends Component {
           drawLabels: true,
           position: 'BOTTOM',
           drawGridLines: true,
+          gridColor:gridColor,
         },
       };
     }
@@ -492,7 +497,8 @@ class Ping extends Component {
           axisLineWidth: 0,
           drawLabels: true,
           position: 'BOTTOM',
-          drawGridLines: false,
+          drawGridLines: true,
+          gridColor:gridColor,
         },
       };
     }
@@ -678,6 +684,8 @@ class Ping extends Component {
               yAxis={{
                 left: {
                   enabled: true,
+                  drawGridLines: true,
+                  gridColor:gridColor,
                 },
                 right: {
                   enabled: false,
