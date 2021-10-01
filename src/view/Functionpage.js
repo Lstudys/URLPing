@@ -20,10 +20,7 @@ import I18n from 'i18n-js';
 import TheData from '../modal/TheData';
 import {LanguageChange} from '../component/LanguageChange';
 
-import {
-  SetSpText,
-  ScaleSize,
-} from '../controller/Adaptation';
+import {SetSpText, ScaleSize} from '../controller/Adaptation';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -41,7 +38,9 @@ class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['MAX', 'MIN', 'AVG', 'N95'],
+      scaleX:1.05,
+      zoom: {scaleX: 1, scaleY: 1, xValue: 2},
+      tableHead: ['MAX', 'MIN', 'AVG', 'N95','ERROR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -150,6 +149,15 @@ class Ping extends Component {
     SendRequest.bind(this)();
   }
 
+  resetZoom=(scale_switch)=>{
+    console.log("调用了");
+    this.setState({
+    zoom :{scaleX: this.state.scaleX, scaleY: 1, xValue: 200, yValue: 500},
+    });
+    console.log("zoom改变"+this.state.zoom.scaleX);
+    this.state.scaleX=this.state.scaleX+scale_switch;
+    }
+
   pressnum = 0; // 表示安卓手机返回键按压次数，以控制返回上一界面
   firstpress = 0; // 第一次按返回键的时间戟
 
@@ -159,6 +167,8 @@ class Ping extends Component {
   n95 = ''; // 95%的数据
   status1 = '';
   sumReqTime = []; // 所有请求时间的数组，用来计算标准差
+  error1=0;
+
   /**
    * 下面是第二个图表的数据
    */
@@ -168,6 +178,7 @@ class Ping extends Component {
   n952 = ''; // 95%的数据
   status2 = '';
   sumReqTime2 = []; // 所有请求时间的数组，用来计算标准差
+  error2=0;
 
   maxTime3 = 0; // 最大时间
   minTime3 = ''; // 最小时间
@@ -175,6 +186,7 @@ class Ping extends Component {
   n953 = ''; // 95%的数据
   status3 = '';
   sumReqTime3 = []; // 所有请求时间的数组，用来计算标准差
+  error3=0;
 
   maxTime4 = 0; // 最大时间
   minTime4 = ''; // 最小时间
@@ -182,6 +194,7 @@ class Ping extends Component {
   n954 = ''; // 95%的数据
   status4 = '';
   sumReqTime4 = []; // 所有请求时间的数组，用来计算标准差
+  error4=0;
 
   maxTime5 = 0; // 最大时间
   minTime5 = ''; // 最小时间
@@ -189,16 +202,23 @@ class Ping extends Component {
   n955 = ''; // 95%的数据
   status5 = '';
   sumReqTime5 = []; // 所有请求时间的数组，用来计算标准差
+  error5=0;
 
   config = {};
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
+    this.stoptimer = setTimeout(() => {
+      this.setState(() => ({
+        isPing: false,
+      }));
+    }, 180000);
 
     /* 选择合适语言 */
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
+    clearTimeout(this.stoptimer);
   }
 
   // `${this.state.url}(${TheData.IP1})`
@@ -217,11 +237,6 @@ class Ping extends Component {
 
     chartLabels,
 
-    url,
-    url2,
-    url3,
-    url4,
-    url5,
   ) {
     if (
       this.state.url != '' &&
@@ -526,32 +541,41 @@ class Ping extends Component {
         this.minTime,
         Math.round(this.avgTime),
         Math.round(this.n95),
+        this.error1,
       ],
       [
         this.maxTime2,
         this.minTime2,
         Math.round(this.avgTime2),
         Math.round(this.n952),
+        this.error2,
+
       ],
       [
         this.maxTime3,
         this.minTime3,
         Math.round(this.avgTime3),
         Math.round(this.n953),
+        this.error3,
+
       ],
       [
         this.maxTime4,
         this.minTime4,
         Math.round(this.avgTime4),
         Math.round(this.n954),
+        this.error4,
       ],
       [
         this.maxTime5,
         this.minTime5,
         Math.round(this.avgTime5),
         Math.round(this.n955),
+        this.error5,
+
       ],
     ];
+
 
     if (urlArr[0] != '') {
       var tableData = [tableDataArr[0]];
@@ -675,7 +699,7 @@ class Ping extends Component {
         </View>
         <View style={styles.bottomStyle}>
           <ScrollView>
-            <LineChart
+          <LineChart
               width={Width * 0.9}
               height={Height * 0.45}
               bottom={0}
@@ -691,6 +715,12 @@ class Ping extends Component {
                   enabled: false,
                 },
               }}
+              zoom={this.state.zoom}
+              scaleYEnabled={true}
+              pinchZoom={true}
+              doubleTapToZoomEnabled={true}
+              dragDecelerationEnabled={true}
+              dragDecelerationFrictionCoef={0.99}
               marker={this.state.marker}
               legend={this.state.legend}
               chartDescription={{text: ''}}
