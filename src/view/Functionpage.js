@@ -152,7 +152,6 @@ class Ping extends Component {
     this.setState({
       zoom: {scaleX: this.state.scaleX, scaleY: 1, xValue: 200, yValue: 500},
     });
-    // console.log('zoom改变' + this.state.zoom.scaleX);
     this.state.scaleX = this.state.scaleX + scale_switch;
   };
 
@@ -210,23 +209,7 @@ class Ping extends Component {
       this.setState(() => ({
         isPing: false,
       }));
-      this.config.data = {
-        dataSets: [
-          {
-            values: [1212],
-            label: 'setting',
-
-            config: {
-              drawValues: false,
-              color: Colors[0],
-              mode: 'LINEAR',
-              drawCircles: false,
-              lineWidth: 2,
-            },
-          },
-        ],
-      };
-    }, 300000);
+    }, 180000);
 
     /* 选择合适语言 */
   }
@@ -235,7 +218,6 @@ class Ping extends Component {
     clearTimeout(this.stoptimer);
   }
 
-  // `${this.state.url}(${Data.IP1})`
   next(
     values,
     values2,
@@ -668,9 +650,6 @@ class Ping extends Component {
         url4,
         url5,
       );
-      // if (!this.state.isPing) {
-      //   this.config = this.config;
-      // }
     }
 
     return (
@@ -683,22 +662,7 @@ class Ping extends Component {
               this.setState({
                 isPing: false,
               });
-              this.config.data = {
-                dataSets: [
-                  {
-                    values: [1212],
-                    label: 'setting',
 
-                    config: {
-                      drawValues: false,
-                      color: Colors[0],
-                      mode: 'LINEAR',
-                      drawCircles: false,
-                      lineWidth: 2,
-                    },
-                  },
-                ],
-              };
               Data.IP1 = '';
               Data.IP2 = '';
               Data.IP3 = '';
@@ -742,9 +706,8 @@ class Ping extends Component {
               }}
               zoom={this.state.zoom}
               scaleYEnabled={true}
-              pinchZoom={true}
+              scaleXEnabled={true}
               doubleTapToZoomEnabled={true}
-              dragDecelerationEnabled={true}
               dragDecelerationFrictionCoef={0.99}
               marker={this.state.marker}
               legend={this.state.legend}
@@ -798,22 +761,6 @@ class Ping extends Component {
                 this.setState({
                   isPing: false,
                 });
-                this.config.data = {
-                  dataSets: [
-                    {
-                      values: [1212],
-                      label: 'setting',
-
-                      config: {
-                        drawValues: false,
-                        color: Colors[0],
-                        mode: 'LINEAR',
-                        drawCircles: false,
-                        lineWidth: 2,
-                      },
-                    },
-                  ],
-                };
               }}>
               {/* 这里要把纯中文改一下 */}
               <Text style={styles.stoptext}>{I18n.t('To_stop_testing')}</Text>
