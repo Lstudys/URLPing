@@ -376,8 +376,6 @@ export const SendRequest = function () {
             start_scale5 = true;
           }
 
-          
-
           // console.log(
           //   'start_scale和scale_flag:' +
           //     start_scale1 +
@@ -567,9 +565,9 @@ export const SendRequest = function () {
               this.setState({isPing: false});
               this.setState({ifOverlayAble: true});
               this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-              this.setState({url5: ''});
-              this.setState({values: []});
-              this.setState({chartLabels5: []});
+              // this.setState({url5: ''});
+              // this.setState({values: []});
+              // this.setState({chartLabels5: []});
               this.setState({backChart: true});
               if (nowTime > beginTime + reqTime * 60 * 1000) {
                 this.setState({backChart: true});
@@ -659,9 +657,9 @@ export const SendRequest = function () {
                 this.setState({isPing: false});
                 this.setState({ifOverlayAble: true});
                 this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-                this.setState({url4: ''});
-                this.setState({values: []});
-                this.setState({chartLabels4: []});
+                // this.setState({url4: ''});
+                // this.setState({values: []});
+                // this.setState({chartLabels4: []});
                 this.setState({backChart: true});
                 if (nowTime > beginTime + reqTime * 60 * 1000) {
                   this.setState({backChart: true});
@@ -752,9 +750,9 @@ export const SendRequest = function () {
                 this.setState({isPing: false});
                 this.setState({ifOverlayAble: true});
                 this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-                this.setState({url3: ''});
-                this.setState({values: []});
-                this.setState({chartLabels3: []});
+                // this.setState({url3: ''});
+                // this.setState({values: []});
+                // this.setState({chartLabels3: []});
                 this.setState({backChart: true});
                 if (nowTime > beginTime + reqTime * 60 * 1000) {
                   this.setState({backChart: true});
@@ -844,9 +842,9 @@ export const SendRequest = function () {
                 this.setState({isPing: false});
                 this.setState({ifOverlayAble: true});
                 this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-                this.setState({url2: ''});
-                this.setState({values: []});
-                this.setState({chartLabels2: []});
+                // this.setState({url2: ''});
+                // this.setState({values: []});
+                // this.setState({chartLabels2: []});
                 this.setState({backChart: true});
                 if (nowTime > beginTime + reqTime * 60 * 1000) {
                   this.setState({backChart: true});
@@ -938,11 +936,10 @@ export const SendRequest = function () {
                 } else {
                   this.setState({isPing: false});
                   this.setState({ifOverlayAble: true});
-                  this.setState({defaultvalue1: ''});
                   this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url和values之前设置
-                  this.setState({url: ''});
-                  this.setState({values: []});
-                  this.setState({chartLabels: []});
+                  // this.setState({url: ''});
+                  // this.setState({values: []});
+                  // this.setState({chartLabels: []});
                   this.setState({backChart: true});
                   return;
                 }
