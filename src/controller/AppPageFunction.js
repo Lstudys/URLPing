@@ -7,7 +7,7 @@
  import Orientation from 'react-native-orientation';
  import {Toast} from 'teaset';
  import store from 'react-native-simple-store';
- import data from '../modal/data';
+ import data from '../modal/Data';
 
  
  // 控制安卓设备的返回键

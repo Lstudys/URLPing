@@ -17,7 +17,7 @@ import {getIpAddressesForHostname} from 'react-native-dns-lookup';
 
 import {BackAction} from '../controller/AppPageFunction';
 import I18n from 'i18n-js';
-import TheData from '../modal/TheData';
+import Data from '../modal/Data';
 import {LanguageChange} from '../component/LanguageChange';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
@@ -31,7 +31,6 @@ const Colors = [
   processColor('#f67e1e'),
   processColor('purple'),
 ];
-var a = '123';
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
 const gridColor = processColor('#E6E6E6');
 class Ping extends Component {
@@ -120,24 +119,24 @@ class Ping extends Component {
     for (let i = 0; i < urlData.length; i++) {
       let str = '';
       for (let j = 0; j < urlData[i].url.length; j++) {
-        if (urlData[i].url[j] == 'w') {
-          str = urlData[i].url.substring(j);
+        if (urlData[i].url[j] == ':') {
+          str = urlData[i].url.substring(j + 3);
           getIpAddressesForHostname(str).then((ipAddresses) => {
             switch (i) {
               case 0:
-                TheData.IP1 = ipAddresses;
+                Data.IP1 = ipAddresses;
                 break;
               case 1:
-                TheData.IP2 = ipAddresses;
+                Data.IP2 = ipAddresses;
                 break;
               case 2:
-                TheData.IP3 = ipAddresses;
+                Data.IP3 = ipAddresses;
                 break;
               case 3:
-                TheData.IP4 = ipAddresses;
+                Data.IP4 = ipAddresses;
                 break;
               case 4:
-                TheData.IP5 = ipAddresses;
+                Data.IP5 = ipAddresses;
                 break;
             }
           });
@@ -150,11 +149,10 @@ class Ping extends Component {
   }
 
   resetZoom = (scale_switch) => {
-    console.log('调用了');
     this.setState({
       zoom: {scaleX: this.state.scaleX, scaleY: 1, xValue: 200, yValue: 500},
     });
-    console.log('zoom改变' + this.state.zoom.scaleX);
+    // console.log('zoom改变' + this.state.zoom.scaleX);
     this.state.scaleX = this.state.scaleX + scale_switch;
   };
 
@@ -212,7 +210,23 @@ class Ping extends Component {
       this.setState(() => ({
         isPing: false,
       }));
-    }, 180000);
+      this.config.data = {
+        dataSets: [
+          {
+            values: [1212],
+            label: 'setting',
+
+            config: {
+              drawValues: false,
+              color: Colors[0],
+              mode: 'LINEAR',
+              drawCircles: false,
+              lineWidth: 2,
+            },
+          },
+        ],
+      };
+    }, 300000);
 
     /* 选择合适语言 */
   }
@@ -221,7 +235,7 @@ class Ping extends Component {
     clearTimeout(this.stoptimer);
   }
 
-  // `${this.state.url}(${TheData.IP1})`
+  // `${this.state.url}(${Data.IP1})`
   next(
     values,
     values2,
@@ -249,7 +263,7 @@ class Ping extends Component {
           dataSets: [
             {
               values: values,
-              label: `${this.state.url}(${TheData.IP1})`,
+              label: `${this.state.url}(${Data.IP1})`,
 
               config: {
                 drawValues: false,
@@ -261,7 +275,7 @@ class Ping extends Component {
             },
             {
               values: values2,
-              label: `${this.state.url2}(${TheData.IP2})`,
+              label: `${this.state.url2}(${Data.IP2})`,
 
               config: {
                 drawValues: false,
@@ -273,7 +287,7 @@ class Ping extends Component {
             },
             {
               values: values3,
-              label: `${this.state.url3}(${TheData.IP3})`,
+              label: `${this.state.url3}(${Data.IP3})`,
 
               config: {
                 drawValues: false,
@@ -285,7 +299,7 @@ class Ping extends Component {
             },
             {
               values: values4,
-              label: `${this.state.url4}(${TheData.IP4})`,
+              label: `${this.state.url4}(${Data.IP4})`,
 
               config: {
                 drawValues: false,
@@ -297,7 +311,7 @@ class Ping extends Component {
             },
             {
               values: values5,
-              label: `${this.state.url5}(${TheData.IP5})`,
+              label: `${this.state.url5}(${Data.IP5})`,
 
               config: {
                 drawValues: false,
@@ -331,7 +345,7 @@ class Ping extends Component {
           dataSets: [
             {
               values: values,
-              label: `${this.state.url}(${TheData.IP1})`,
+              label: `${this.state.url}(${Data.IP1})`,
 
               config: {
                 drawValues: false,
@@ -343,7 +357,7 @@ class Ping extends Component {
             },
             {
               values: values2,
-              label: `${this.state.url2}(${TheData.IP2})`,
+              label: `${this.state.url2}(${Data.IP2})`,
 
               config: {
                 drawValues: false,
@@ -355,7 +369,7 @@ class Ping extends Component {
             },
             {
               values: values3,
-              label: `${this.state.url3}(${TheData.IP3})`,
+              label: `${this.state.url3}(${Data.IP3})`,
 
               config: {
                 drawValues: false,
@@ -367,7 +381,7 @@ class Ping extends Component {
             },
             {
               values: values4,
-              label: `${this.state.url4}(${TheData.IP4})`,
+              label: `${this.state.url4}(${Data.IP4})`,
 
               config: {
                 drawValues: false,
@@ -400,7 +414,7 @@ class Ping extends Component {
           dataSets: [
             {
               values: values,
-              label: `${this.state.url}(${TheData.IP1})`,
+              label: `${this.state.url}(${Data.IP1})`,
 
               config: {
                 drawValues: false,
@@ -412,7 +426,7 @@ class Ping extends Component {
             },
             {
               values: values2,
-              label: `${this.state.url2}(${TheData.IP2})`,
+              label: `${this.state.url2}(${Data.IP2})`,
 
               config: {
                 drawValues: false,
@@ -424,7 +438,7 @@ class Ping extends Component {
             },
             {
               values: values3,
-              label: `${this.state.url3}(${TheData.IP3})`,
+              label: `${this.state.url3}(${Data.IP3})`,
 
               config: {
                 drawValues: false,
@@ -453,7 +467,7 @@ class Ping extends Component {
           dataSets: [
             {
               values: values,
-              label: `${this.state.url}(${TheData.IP1})`,
+              label: `${this.state.url}(${Data.IP1})`,
 
               config: {
                 drawValues: false,
@@ -465,7 +479,7 @@ class Ping extends Component {
             },
             {
               values: values2,
-              label: `${this.state.url2}(${TheData.IP2})`,
+              label: `${this.state.url2}(${Data.IP2})`,
 
               config: {
                 drawValues: false,
@@ -494,7 +508,7 @@ class Ping extends Component {
           dataSets: [
             {
               values: values,
-              label: `${this.state.url}(${TheData.IP1})`,
+              label: `${this.state.url}(${Data.IP1})`,
 
               config: {
                 drawValues: false,
@@ -669,11 +683,27 @@ class Ping extends Component {
               this.setState({
                 isPing: false,
               });
-              TheData.IP1 = '';
-              TheData.IP2 = '';
-              TheData.IP3 = '';
-              TheData.IP4 = '';
-              TheData.IP5 = '';
+              this.config.data = {
+                dataSets: [
+                  {
+                    values: [1212],
+                    label: 'setting',
+
+                    config: {
+                      drawValues: false,
+                      color: Colors[0],
+                      mode: 'LINEAR',
+                      drawCircles: false,
+                      lineWidth: 2,
+                    },
+                  },
+                ],
+              };
+              Data.IP1 = '';
+              Data.IP2 = '';
+              Data.IP3 = '';
+              Data.IP4 = '';
+              Data.IP5 = '';
             }}>
             <Image source={require('../imgs/back.png')} style={styles.back} />
           </TouchableOpacity>
@@ -695,7 +725,7 @@ class Ping extends Component {
         <View style={styles.bottomStyle}>
           <ScrollView>
             <LineChart
-              width={Width * 0.9}
+              width={Width * 0.95}
               height={Height * 0.45}
               bottom={0}
               data={this.config.data}
@@ -768,9 +798,25 @@ class Ping extends Component {
                 this.setState({
                   isPing: false,
                 });
+                this.config.data = {
+                  dataSets: [
+                    {
+                      values: [1212],
+                      label: 'setting',
+
+                      config: {
+                        drawValues: false,
+                        color: Colors[0],
+                        mode: 'LINEAR',
+                        drawCircles: false,
+                        lineWidth: 2,
+                      },
+                    },
+                  ],
+                };
               }}>
               {/* 这里要把纯中文改一下 */}
-              <Text style={styles.stoptext}>停止测试</Text>
+              <Text style={styles.stoptext}>{I18n.t('To_stop_testing')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -860,7 +906,7 @@ const styles = StyleSheet.create({
 
   stoptext: {
     fontSize: SetSpText(40),
-    color: 'white',
+    color: '#2a82e4',
     fontWeight: '600',
   },
   stopwhole: {
@@ -874,8 +920,10 @@ const styles = StyleSheet.create({
     marginHorizontal: ScaleSize(2),
     alignItems: 'center',
     marginTop: ScaleSize(5),
-    borderRadius: ScaleSize(10),
-    backgroundColor: '#2a82e4',
+    borderRadius: ScaleSize(15),
+    backgroundColor: '#fff',
+    borderWidth: ScaleSize(2.5),
+    borderColor: '#2a82e4',
     height: ScaleSize(42),
     justifyContent: 'center',
   },

@@ -10,11 +10,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {getIpAddressesForHostname} from 'react-native-dns-lookup';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
-import TheData from '../modal/TheData';
+import Data from '../modal/Data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 
@@ -38,9 +37,9 @@ class My extends Component {
 
     LanguageChange.bind(this)();
 
-    store.get(TheData.pingIndex).then((res) => {
+    store.get(Data.pingIndex).then((res) => {
       if (res != null) {
-        TheData.Ping = res;
+        Data.Ping = res;
         this.setState({refresh: !this.state.refresh});
       }
     });
@@ -50,34 +49,9 @@ class My extends Component {
   componentWillMount() {
     store.get('historyPing').then((res) => {
       if (res != null) {
-        TheData.historyPing = res;
+        Data.historyPing = res;
         this.setState({refresh: !this.state.refresh});
       }
-    });
-
-    this.keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      this._keyboardDidShow.bind(this),
-    );
-    this.keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      this._keyboardDidHide.bind(this),
-    );
-  }
-  componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
-  }
-  _keyboardDidShow(e) {
-    this.setState({
-      keyBoardHeight: e.endCoordinates.height,
-    });
-    console.log('键盘高度为:', this.state.keyBoardHeight);
-    console.log('屏幕高度为:', Height);
-  }
-  _keyboardDidHide() {
-    this.setState({
-      keyBoardHeight: 0,
     });
   }
 
@@ -91,24 +65,17 @@ class My extends Component {
           }}>
           <TextInput
             onSelectionChange={(event) => {
-              (this.state.currentIndex = event.nativeEvent.selection.start),
-                console.log('光标位置', this.state.currentIndex);
+              this.state.currentIndex = event.nativeEvent.selection.start;
             }}
-            defaultValue={TheData.Ping[parseInt(item.key)].url}
+            defaultValue={Data.Ping[parseInt(item.key)].url}
             onFocus={(value) => {
               this.state.currentUrlindex = item.key;
-              console.log('currentUrlindex', this.state.currentUrlindex);
-              console.log('key:', this.state.currentUrlindex);
             }}
             onChangeText={(value) => {
-              TheData.Ping[parseInt(item.key)].url = value;
+              Data.Ping[parseInt(item.key)].url = value;
               this.setState({refresh: !this.state.refresh});
-              store.update(TheData.Ping[parseInt(item.key)].url, value);
-              console.log(TheData.Ping);
-              store.save(TheData.pingIndex, TheData.Ping);
-              store.get(TheData.pingIndex).then((res) => {
-                console.log('res:', res);
-              });
+              store.update(Data.Ping[parseInt(item.key)].url, value);
+              store.save(Data.pingIndex, Data.Ping);
             }}
             placeholder={I18n.t('input')}
             style={styles.input}></TextInput>
@@ -118,13 +85,12 @@ class My extends Component {
         <View style={styles.delete}>
           <TouchableOpacity
             onPress={() => {
-              TheData.Ping.splice(parseInt(item.key), 1);
-              for (let i = 0; i < TheData.Ping.length; i++) {
-                TheData.Ping[i].key = i;
+              Data.Ping.splice(parseInt(item.key), 1);
+              for (let i = 0; i < Data.Ping.length; i++) {
+                Data.Ping[i].key = i;
               }
               this.setState({refresh: !this.state.refresh});
-              console.log(TheData.Ping);
-              store.save(TheData.pingIndex, TheData.Ping);
+              store.save(Data.pingIndex, Data.Ping);
             }}>
             <Image
               source={require('../imgs/delete.png')}
@@ -139,8 +105,8 @@ class My extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          for (let i = 0; i < TheData.urlsArr.length; i++) {
-            if (TheData.urlsArr[i] == item) {
+          for (let i = 0; i < Data.urlsArr.length; i++) {
+            if (Data.urlsArr[i] == item) {
               var key = i;
               break;
             }
@@ -150,20 +116,18 @@ class My extends Component {
             return;
           }
 
-          // alert(TheData.urlsArr[item.key])
-          TheData.Ping[parseInt(this.state.currentUrlindex)].url =
-            TheData.Ping[parseInt(this.state.currentUrlindex)].url.slice(
+          // alert(Data.urlsArr[item.key])
+          Data.Ping[parseInt(this.state.currentUrlindex)].url =
+            Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
               0,
               this.state.currentIndex,
             ) +
-            TheData.urlsArr[key] +
-            TheData.Ping[parseInt(this.state.currentUrlindex)].url.slice(
+            Data.urlsArr[key] +
+            Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
               this.state.currentIndex,
             );
-          store.save(TheData.pingIndex, TheData.Ping);
-          store.get(TheData.pingIndex).then((res) => {
-            console.log('res:', res);
-          });
+          store.save(Data.pingIndex, Data.Ping);
+
           this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
         }}
@@ -193,15 +157,15 @@ class My extends Component {
                 <View style={{marginTop: ScaleSize(20)}}>
                   <FlatList
                     keyboardShouldPersistTaps={'handled'}
-                    data={TheData.Ping}
+                    data={Data.Ping}
                     renderItem={this.renderItem}
                     refreshing={this.state.FlatListIsRefreshing}
                     onRefresh={() => {
-                      this.setState((prevState) => ({
+                      this.setState(() => ({
                         FlatListIsRefreshing: true,
                       }));
                       setTimeout(() => {
-                        this.setState((prevState) => ({
+                        this.setState(() => ({
                           FlatListIsRefreshing: false,
                         }));
                       }, 1000);
@@ -212,22 +176,22 @@ class My extends Component {
                 <TouchableOpacity
                   style={styles.pingTouchable}
                   onPress={() => {
-                    if (TheData.Ping.length != 0) {
-                      let key = TheData.Ping.length;
+                    if (Data.Ping.length != 0) {
+                      let key = Data.Ping.length;
                       if (key >= 5) {
                         alert(I18n.t('maxfiveurl'));
                         return;
                       }
-                      TheData.Ping = [...TheData.Ping, {key: key, url: ''}];
-                      for (let i = 0; i < TheData.Ping.length; i++) {
-                        TheData.Ping[i].key = i;
+                      Data.Ping = [...Data.Ping, {key: key, url: ''}];
+                      for (let i = 0; i < Data.Ping.length; i++) {
+                        Data.Ping[i].key = i;
                       }
                       this.setState({refresh: !this.state.refresh});
                     } else {
-                      TheData.Ping = [{key: 0, url: ''}];
+                      Data.Ping = [{key: 0, url: ''}];
                       this.setState({refresh: !this.state.refresh});
                     }
-                    store.save(TheData.pingIndex, TheData.Ping);
+                    store.save(Data.pingIndex, Data.Ping);
                   }}>
                   <View style={styles.add}>
                     <Image
@@ -241,7 +205,7 @@ class My extends Component {
                     keyboardShouldPersistTaps={'handled'}
                     style={styles.urlsArrFlatlist}
                     horizontal={true}
-                    data={TheData.urlsArr}
+                    data={Data.urlsArr}
                     renderItem={this._renderRow}
                   />
                 </View>
@@ -252,10 +216,10 @@ class My extends Component {
           <View style={styles.pingwhole}>
             <TouchableOpacity
               onPress={() => {
-                for (let i = 0; i < TheData.Ping.length; i++) {
+                for (let i = 0; i < Data.Ping.length; i++) {
                   if (
-                    TheData.Ping[i].url == 'https://' ||
-                    TheData.Ping[i].url == ''
+                    Data.Ping[i].url == 'https://' ||
+                    Data.Ping[i].url == ''
                   ) {
                     this.identify = false;
                     break;
@@ -264,28 +228,28 @@ class My extends Component {
                   }
                 }
                 if (this.identify) {
-                  if (TheData.Ping.length != 0) {
-                    let Ping_length = TheData.Ping.length;
-                    let History_length = TheData.historyPing.length;
+                  if (Data.Ping.length != 0) {
+                    let Ping_length = Data.Ping.length;
+                    let History_length = Data.historyPing.length;
                     for (
                       let i = 0, j = History_length;
                       i < Ping_length;
                       i++, j++
                     ) {
-                      TheData.historyPing = [
-                        ...TheData.historyPing,
-                        {key: j, url: TheData.Ping[i].url},
+                      Data.historyPing = [
+                        ...Data.historyPing,
+                        {key: j, url: Data.Ping[i].url},
                       ];
                     }
                     this.setState({refresh: !this.state.refresh});
                     this.props.navigation.navigate('Ping', {
-                      urlData: [...TheData.Ping],
+                      urlData: [...Data.Ping],
                     });
                   } else {
                     Toast.message(I18n.t('nourladded'));
                   }
                 } else {
-                  Toast.message(I18n.t('urlempty'));
+                  Toast.message(I18n.t('To_stop_testing'));
                 }
               }}
               style={styles.pingbutton}>

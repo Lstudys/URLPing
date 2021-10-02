@@ -4,7 +4,7 @@
  */
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
-import TheData from '../modal/TheData';
+import Data from '../modal/Data';
 import {TestURL} from './AppPageFunction';
 let TABLE_INITIAL_VALUE = 0;
 let TIMER_PERIOD = 1000;
@@ -376,20 +376,22 @@ export const SendRequest = function () {
             start_scale5 = true;
           }
 
-          console.log(
-            'start_scale和scale_flag:' +
-              start_scale1 +
-              ' ' +
-              start_scale2 +
-              ' ' +
-              start_scale3 +
-              ' ' +
-              start_scale4 +
-              ' ' +
-              start_scale5 +
-              ' 分割' +
-              scale_flag,
-          );
+          
+
+          // console.log(
+          //   'start_scale和scale_flag:' +
+          //     start_scale1 +
+          //     ' ' +
+          //     start_scale2 +
+          //     ' ' +
+          //     start_scale3 +
+          //     ' ' +
+          //     start_scale4 +
+          //     ' ' +
+          //     start_scale5 +
+          //     ' 分割' +
+          //     scale_flag,
+          // );
 
           if (
             start_scale1 == true &&
@@ -497,58 +499,59 @@ export const SendRequest = function () {
             this.status5 = xhr5.status;
             if (this.status5 != 200) {
               this.error5++;
-            }
-            const t5 = new Date().valueOf();
-            value5.end = t5;
-            value5.time = value5.end - value5.begin;
-            if (value5.time != 0) {
-              let hour = new Date().getHours();
-              let minute = new Date().getMinutes();
-              let second = new Date().getSeconds();
-              let xData5 = hour * 10000 + minute * 100 + second;
+            } else {
+              const t5 = new Date().valueOf();
+              value5.end = t5;
+              value5.time = value5.end - value5.begin;
+              if (value5.time != 0) {
+                let hour = new Date().getHours();
+                let minute = new Date().getMinutes();
+                let second = new Date().getSeconds();
+                let xData5 = hour * 10000 + minute * 100 + second;
 
-              if (minute < 10) {
-                minute = '0' + minute;
-              }
-              if (second < 10) {
-                second = '0' + second;
-              }
-              var xtime = hour + ':' + minute + ':' + second;
-              const ytime = value5.time;
+                if (minute < 10) {
+                  minute = '0' + minute;
+                }
+                if (second < 10) {
+                  second = '0' + second;
+                }
+                var xtime = hour + ':' + minute + ':' + second;
+                const ytime = value5.time;
 
-              this.state.urlDatafive.push({
-                xTimeall: xData5,
-                xData: xtime,
-                yData: ytime,
-              });
-              this.sumReqTime5.push(value5.time);
-              value5.sumtime += value5.time; // 求和，算出总时间
-              this.avgTime5 = value5.sumtime / x5;
-              if (value5.time > this.maxTime5) {
-                this.maxTime5 = value5.time;
+                this.state.urlDatafive.push({
+                  xTimeall: xData5,
+                  xData: xtime,
+                  yData: ytime,
+                });
+                this.sumReqTime5.push(value5.time);
+                value5.sumtime += value5.time; // 求和，算出总时间
+                this.avgTime5 = value5.sumtime / x5;
+                if (value5.time > this.maxTime5) {
+                  this.maxTime5 = value5.time;
+                }
+                if (this.minTime5 == '') {
+                  this.minTime5 = value5.time;
+                } else if (this.minTime5 > value5.time) {
+                  this.minTime5 = value5.time;
+                }
+                // start
+                let sum = 0; // 存储每个数减去平均数的平方的和
+                this.sumReqTime5.forEach((num) => {
+                  const bzc = num - this.avgTime5;
+                  sum += bzc * bzc;
+                });
+                let num1 = sum / x5;
+                let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+                if (num2 > this.avgTime5) {
+                  this.n955 = num2 - this.avgTime5;
+                } else {
+                  this.n955 = this.avgTime5 - num2;
+                } // end
+                this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
+                x5++;
               }
-              if (this.minTime5 == '') {
-                this.minTime5 = value5.time;
-              } else if (this.minTime5 > value5.time) {
-                this.minTime5 = value5.time;
-              }
-              // start
-              let sum = 0; // 存储每个数减去平均数的平方的和
-              this.sumReqTime5.forEach((num) => {
-                const bzc = num - this.avgTime5;
-                sum += bzc * bzc;
-              });
-              let num1 = sum / x5;
-              let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-              if (num2 > this.avgTime5) {
-                this.n955 = num2 - this.avgTime5;
-              } else {
-                this.n955 = this.avgTime5 - num2;
-              } // end
-              this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
-              x5++;
+              nowTime5s = new Date().valueOf(); // 获取当前时间戟
             }
-            nowTime5s = new Date().valueOf(); // 获取当前时间戟
             if (
               nowTime5s < beginTime + reqTime * 60 * 1000 &&
               this.state.isPing
@@ -588,80 +591,81 @@ export const SendRequest = function () {
             this.status4 = xhr4.status;
             if (this.status4 != 200) {
               this.error4++;
-            }
-            const t4 = new Date().valueOf();
-            value4.end = t4;
-            value4.time = value4.end - value4.begin;
-            if (value4.time != TABLE_INITIAL_VALUE) {
-              let hour = new Date().getHours();
-
-              let minute = new Date().getMinutes();
-              let second = new Date().getSeconds();
-              let xData4 = hour * 10000 + minute * 100 + second;
-
-              if (minute < 10) {
-                minute = '0' + minute;
-              }
-              if (second < 10) {
-                second = '0' + second;
-              }
-              var xtime = `${new Date().getHours()}:` + minute + ':' + second;
-              const ytime = value4.time;
-
-              this.state.urlDatafour.push({
-                xTimeall: xData4,
-                xData: xtime,
-                yData: ytime,
-              });
-              this.sumReqTime4.push(value4.time);
-              value4.sumtime += value4.time; // 求和，算出总时间
-              this.avgTime4 = value4.sumtime / x4;
-              if (value4.time > this.maxTime4) {
-                this.maxTime4 = value4.time;
-              }
-              if (this.minTime4 == '') {
-                this.minTime4 = value4.time;
-              } else if (this.minTime4 > value4.time) {
-                this.minTime4 = value4.time;
-              }
-              // start
-              let sum = 0; // 存储每个数减去平均数的平方的和
-              this.sumReqTime4.forEach((num) => {
-                const bzc = num - this.avgTime4;
-                sum += bzc * bzc;
-              });
-              let num1 = sum / x4;
-              let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-              if (num2 > this.avgTime4) {
-                this.n954 = num2 - this.avgTime4;
-              } else {
-                this.n954 = this.avgTime4 - num2;
-              } // end
-              this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
-              x4++;
-            }
-            nowTime4s = new Date().valueOf(); // 获取当前时间戟
-            if (
-              nowTime4s < beginTime + reqTime * 60 * 1000 &&
-              this.state.isPing
-            ) {
-              xhr4.abort();
-              setTimeout(() => {
-                if (this.state.isPing) {
-                  xhr4.open('GET', this.state.url4, true);
-                  xhr4.send();
-                }
-              }, TIMER_PERIOD);
             } else {
-              this.setState({isPing: false});
-              this.setState({ifOverlayAble: true});
-              this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-              this.setState({url4: ''});
-              this.setState({values: []});
-              this.setState({chartLabels4: []});
-              this.setState({backChart: true});
-              if (nowTime > beginTime + reqTime * 60 * 1000) {
+              const t4 = new Date().valueOf();
+              value4.end = t4;
+              value4.time = value4.end - value4.begin;
+              if (value4.time != TABLE_INITIAL_VALUE) {
+                let hour = new Date().getHours();
+
+                let minute = new Date().getMinutes();
+                let second = new Date().getSeconds();
+                let xData4 = hour * 10000 + minute * 100 + second;
+
+                if (minute < 10) {
+                  minute = '0' + minute;
+                }
+                if (second < 10) {
+                  second = '0' + second;
+                }
+                var xtime = `${new Date().getHours()}:` + minute + ':' + second;
+                const ytime = value4.time;
+
+                this.state.urlDatafour.push({
+                  xTimeall: xData4,
+                  xData: xtime,
+                  yData: ytime,
+                });
+                this.sumReqTime4.push(value4.time);
+                value4.sumtime += value4.time; // 求和，算出总时间
+                this.avgTime4 = value4.sumtime / x4;
+                if (value4.time > this.maxTime4) {
+                  this.maxTime4 = value4.time;
+                }
+                if (this.minTime4 == '') {
+                  this.minTime4 = value4.time;
+                } else if (this.minTime4 > value4.time) {
+                  this.minTime4 = value4.time;
+                }
+                // start
+                let sum = 0; // 存储每个数减去平均数的平方的和
+                this.sumReqTime4.forEach((num) => {
+                  const bzc = num - this.avgTime4;
+                  sum += bzc * bzc;
+                });
+                let num1 = sum / x4;
+                let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+                if (num2 > this.avgTime4) {
+                  this.n954 = num2 - this.avgTime4;
+                } else {
+                  this.n954 = this.avgTime4 - num2;
+                } // end
+                this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
+                x4++;
+              }
+              nowTime4s = new Date().valueOf(); // 获取当前时间戟
+              if (
+                nowTime4s < beginTime + reqTime * 60 * 1000 &&
+                this.state.isPing
+              ) {
+                xhr4.abort();
+                setTimeout(() => {
+                  if (this.state.isPing) {
+                    xhr4.open('GET', this.state.url4, true);
+                    xhr4.send();
+                  }
+                }, TIMER_PERIOD);
+              } else {
+                this.setState({isPing: false});
+                this.setState({ifOverlayAble: true});
+                this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
+                this.setState({url4: ''});
+                this.setState({values: []});
+                this.setState({chartLabels4: []});
                 this.setState({backChart: true});
+                if (nowTime > beginTime + reqTime * 60 * 1000) {
+                  this.setState({backChart: true});
+                }
               }
             }
           }
@@ -680,80 +684,81 @@ export const SendRequest = function () {
             this.status3 = xhr3.status;
             if (this.status3 != 200) {
               this.error3++;
-            }
-            const t3 = new Date().valueOf();
-            value3.end = t3;
-            value3.time = value3.end - value3.begin;
-            if (value3.time != TABLE_INITIAL_VALUE) {
-              let minute = new Date().getMinutes();
-              let second = new Date().getSeconds();
-              let hour = new Date().getHours();
-              let xData3 = hour * 10000 + minute * 100 + second;
-
-              if (minute < 10) {
-                minute = '0' + minute;
-              }
-              if (second < 10) {
-                second = '0' + second;
-              }
-              var xtime = hour + ':' + minute + ':' + second;
-              const ytime = value3.time;
-
-              this.state.urlDatathrid.push({
-                xTimeall: xData3,
-                xData: xtime,
-                yData: ytime,
-              });
-
-              this.sumReqTime3.push(value3.time);
-              value3.sumtime += value3.time; // 求和，算出总时间
-              this.avgTime3 = value3.sumtime / x3;
-              if (value3.time > this.maxTime3) {
-                this.maxTime3 = value3.time;
-              }
-              if (this.minTime3 == '') {
-                this.minTime3 = value3.time;
-              } else if (this.minTime3 > value3.time) {
-                this.minTime3 = value3.time;
-              }
-              // start
-              let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
-              this.sumReqTime3.forEach((num) => {
-                const bzc = num - this.avgTime3;
-                sum += bzc * bzc;
-              });
-              let num1 = sum / x3;
-              let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-              if (num2 > this.avgTime3) {
-                this.n953 = num2 - this.avgTime3;
-              } else {
-                this.n953 = this.avgTime3 - num2;
-              } // end
-              this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
-              x3++;
-            }
-            nowTime3s = new Date().valueOf(); // 获取当前时间戟
-            if (
-              nowTime3s < beginTime + reqTime * 60 * 1000 &&
-              this.state.isPing
-            ) {
-              xhr3.abort();
-              setTimeout(() => {
-                if (this.state.isPing) {
-                  xhr3.open('GET', this.state.url3, true);
-                  xhr3.send();
-                }
-              }, TIMER_PERIOD);
             } else {
-              this.setState({isPing: false});
-              this.setState({ifOverlayAble: true});
-              this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-              this.setState({url3: ''});
-              this.setState({values: []});
-              this.setState({chartLabels3: []});
-              this.setState({backChart: true});
-              if (nowTime > beginTime + reqTime * 60 * 1000) {
+              const t3 = new Date().valueOf();
+              value3.end = t3;
+              value3.time = value3.end - value3.begin;
+              if (value3.time != TABLE_INITIAL_VALUE) {
+                let minute = new Date().getMinutes();
+                let second = new Date().getSeconds();
+                let hour = new Date().getHours();
+                let xData3 = hour * 10000 + minute * 100 + second;
+
+                if (minute < 10) {
+                  minute = '0' + minute;
+                }
+                if (second < 10) {
+                  second = '0' + second;
+                }
+                var xtime = hour + ':' + minute + ':' + second;
+                const ytime = value3.time;
+
+                this.state.urlDatathrid.push({
+                  xTimeall: xData3,
+                  xData: xtime,
+                  yData: ytime,
+                });
+
+                this.sumReqTime3.push(value3.time);
+                value3.sumtime += value3.time; // 求和，算出总时间
+                this.avgTime3 = value3.sumtime / x3;
+                if (value3.time > this.maxTime3) {
+                  this.maxTime3 = value3.time;
+                }
+                if (this.minTime3 == '') {
+                  this.minTime3 = value3.time;
+                } else if (this.minTime3 > value3.time) {
+                  this.minTime3 = value3.time;
+                }
+                // start
+                let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
+                this.sumReqTime3.forEach((num) => {
+                  const bzc = num - this.avgTime3;
+                  sum += bzc * bzc;
+                });
+                let num1 = sum / x3;
+                let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+                if (num2 > this.avgTime3) {
+                  this.n953 = num2 - this.avgTime3;
+                } else {
+                  this.n953 = this.avgTime3 - num2;
+                } // end
+                this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
+                x3++;
+              }
+              nowTime3s = new Date().valueOf(); // 获取当前时间戟
+              if (
+                nowTime3s < beginTime + reqTime * 60 * 1000 &&
+                this.state.isPing
+              ) {
+                xhr3.abort();
+                setTimeout(() => {
+                  if (this.state.isPing) {
+                    xhr3.open('GET', this.state.url3, true);
+                    xhr3.send();
+                  }
+                }, TIMER_PERIOD);
+              } else {
+                this.setState({isPing: false});
+                this.setState({ifOverlayAble: true});
+                this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
+                this.setState({url3: ''});
+                this.setState({values: []});
+                this.setState({chartLabels3: []});
                 this.setState({backChart: true});
+                if (nowTime > beginTime + reqTime * 60 * 1000) {
+                  this.setState({backChart: true});
+                }
               }
             }
           }
@@ -772,79 +777,80 @@ export const SendRequest = function () {
             this.status2 = xhr2.status;
             if (this.status2 != 200) {
               this.error2++;
-            }
-            const t2 = new Date().valueOf();
-            value2.end = t2;
-            value2.time = value2.end - value2.begin;
-            if (value2.time != TABLE_INITIAL_VALUE) {
-              let minute = new Date().getMinutes();
-              let second = new Date().getSeconds();
-              let hour = new Date().getHours();
-              let xData2 = hour * 10000 + minute * 100 + second;
-
-              if (minute < 10) {
-                minute = '0' + minute;
-              }
-              if (second < 10) {
-                second = '0' + second;
-              }
-              var xtime = hour + ':' + minute + ':' + second;
-              const ytime = value2.time;
-
-              this.state.urlDatasecond.push({
-                xTimeall: xData2,
-                xData: xtime,
-                yData: ytime,
-              });
-              this.sumReqTime2.push(value2.time);
-              value2.sumtime += value2.time; // 求和，算出总时间
-              this.avgTime2 = value2.sumtime / x2;
-              if (value2.time > this.maxTime2) {
-                this.maxTime2 = value2.time;
-              }
-              if (this.minTime2 == '') {
-                this.minTime2 = value2.time;
-              } else if (this.minTime2 > value2.time) {
-                this.minTime2 = value2.time;
-              }
-              // start
-              let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
-              this.sumReqTime2.forEach((num) => {
-                const bzc = num - this.avgTime2;
-                sum += bzc * bzc;
-              });
-              let num1 = sum / x2;
-              let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-              if (num2 > this.avgTime2) {
-                this.n952 = num2 - this.avgTime2;
-              } else {
-                this.n952 = this.avgTime2 - num2;
-              } // end
-              this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
-              x2++;
-            }
-            nowTime2s = new Date().valueOf(); // 获取当前时间戟
-            if (
-              nowTime2s < beginTime + reqTime * 60 * 1000 &&
-              this.state.isPing
-            ) {
-              xhr2.abort();
-              setTimeout(() => {
-                if (this.state.isPing) {
-                  xhr2.open('GET', this.state.url2, true);
-                  xhr2.send();
-                }
-              }, TIMER_PERIOD);
             } else {
-              this.setState({isPing: false});
-              this.setState({ifOverlayAble: true});
-              this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-              this.setState({url2: ''});
-              this.setState({values: []});
-              this.setState({chartLabels2: []});
-              this.setState({backChart: true});
-              if (nowTime > beginTime + reqTime * 60 * 1000) {
+              const t2 = new Date().valueOf();
+              value2.end = t2;
+              value2.time = value2.end - value2.begin;
+              if (value2.time != TABLE_INITIAL_VALUE) {
+                let minute = new Date().getMinutes();
+                let second = new Date().getSeconds();
+                let hour = new Date().getHours();
+                let xData2 = hour * 10000 + minute * 100 + second;
+
+                if (minute < 10) {
+                  minute = '0' + minute;
+                }
+                if (second < 10) {
+                  second = '0' + second;
+                }
+                var xtime = hour + ':' + minute + ':' + second;
+                const ytime = value2.time;
+
+                this.state.urlDatasecond.push({
+                  xTimeall: xData2,
+                  xData: xtime,
+                  yData: ytime,
+                });
+                this.sumReqTime2.push(value2.time);
+                value2.sumtime += value2.time; // 求和，算出总时间
+                this.avgTime2 = value2.sumtime / x2;
+                if (value2.time > this.maxTime2) {
+                  this.maxTime2 = value2.time;
+                }
+                if (this.minTime2 == '') {
+                  this.minTime2 = value2.time;
+                } else if (this.minTime2 > value2.time) {
+                  this.minTime2 = value2.time;
+                }
+                // start
+                let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
+                this.sumReqTime2.forEach((num) => {
+                  const bzc = num - this.avgTime2;
+                  sum += bzc * bzc;
+                });
+                let num1 = sum / x2;
+                let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+                if (num2 > this.avgTime2) {
+                  this.n952 = num2 - this.avgTime2;
+                } else {
+                  this.n952 = this.avgTime2 - num2;
+                } // end
+                this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
+                x2++;
+              }
+              nowTime2s = new Date().valueOf(); // 获取当前时间戟
+              if (
+                nowTime2s < beginTime + reqTime * 60 * 1000 &&
+                this.state.isPing
+              ) {
+                xhr2.abort();
+                setTimeout(() => {
+                  if (this.state.isPing) {
+                    xhr2.open('GET', this.state.url2, true);
+                    xhr2.send();
+                  }
+                }, TIMER_PERIOD);
+              } else {
+                this.setState({isPing: false});
+                this.setState({ifOverlayAble: true});
+                this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
+                this.setState({url2: ''});
+                this.setState({values: []});
+                this.setState({chartLabels2: []});
                 this.setState({backChart: true});
+                if (nowTime > beginTime + reqTime * 60 * 1000) {
+                  this.setState({backChart: true});
+                }
               }
             }
           }
@@ -863,82 +869,83 @@ export const SendRequest = function () {
               this.status1 = xhr.status;
               if (this.status1 != 200) {
                 this.error1++;
-              }
-              const t2 = new Date().valueOf();
-              value.end = t2;
-              value.time = value.end - value.begin;
-
-              if (value.time != TABLE_INITIAL_VALUE) {
-                let minute = new Date().getMinutes();
-                let second = new Date().getSeconds();
-                let hour = new Date().getHours();
-                let xData1 = hour * 10000 + minute * 100 + second;
-
-                if (minute < 10) {
-                  minute = '0' + minute;
-                }
-                if (second < 10) {
-                  second = '0' + second;
-                }
-                var xtime = hour + ':' + minute + ':' + second;
-
-                var ytime = value.time;
-
-                this.state.urlDatafirst.push({
-                  xTime_format: xtime,
-                  xTimeall: xData1,
-                  xData: xtime,
-                  yData: ytime,
-                });
-                this.sumReqTime.push(value.time);
-                value.sumtime += value.time; // 求和，算出总时间
-                this.avgTime = value.sumtime / x;
-                if (value.time > this.maxTime) {
-                  this.maxTime = value.time;
-                }
-                if (this.minTime == '') {
-                  this.minTime = value.time;
-                } else if (this.minTime > value.time) {
-                  this.minTime = value.time;
-                }
-                // start(计算n95的值)
-                let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
-                this.sumReqTime.forEach((num) => {
-                  const bzc = num - this.avgTime;
-                  sum += bzc * bzc;
-                });
-                let num1 = sum / x;
-                let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-                if (num2 > this.avgTime) {
-                  this.n95 = num2 - this.avgTime;
-                } else {
-                  this.n95 = this.avgTime - num2;
-                } // end
-                this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
-                x++;
-              }
-              nowTime = new Date().valueOf(); // 获取当前时间戟
-              if (
-                nowTime < beginTime + reqTime * 60 * 1000 &&
-                this.state.isPing
-              ) {
-                xhr.abort();
-                setTimeout(() => {
-                  if (this.state.isPing) {
-                    xhr.open('GET', this.state.url, true);
-                    xhr.send();
-                  }
-                }, TIMER_PERIOD);
               } else {
-                this.setState({isPing: false});
-                this.setState({ifOverlayAble: true});
-                this.setState({defaultvalue1: ''});
-                this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url和values之前设置
-                this.setState({url: ''});
-                this.setState({values: []});
-                this.setState({chartLabels: []});
-                this.setState({backChart: true});
-                return;
+                const t2 = new Date().valueOf();
+                value.end = t2;
+                value.time = value.end - value.begin;
+
+                if (value.time != TABLE_INITIAL_VALUE) {
+                  let minute = new Date().getMinutes();
+                  let second = new Date().getSeconds();
+                  let hour = new Date().getHours();
+                  let xData1 = hour * 10000 + minute * 100 + second;
+
+                  if (minute < 10) {
+                    minute = '0' + minute;
+                  }
+                  if (second < 10) {
+                    second = '0' + second;
+                  }
+                  var xtime = hour + ':' + minute + ':' + second;
+
+                  var ytime = value.time;
+
+                  this.state.urlDatafirst.push({
+                    xTime_format: xtime,
+                    xTimeall: xData1,
+                    xData: xtime,
+                    yData: ytime,
+                  });
+                  this.sumReqTime.push(value.time);
+                  value.sumtime += value.time; // 求和，算出总时间
+                  this.avgTime = value.sumtime / x;
+                  if (value.time > this.maxTime) {
+                    this.maxTime = value.time;
+                  }
+                  if (this.minTime == '') {
+                    this.minTime = value.time;
+                  } else if (this.minTime > value.time) {
+                    this.minTime = value.time;
+                  }
+                  // start(计算n95的值)
+                  let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
+                  this.sumReqTime.forEach((num) => {
+                    const bzc = num - this.avgTime;
+                    sum += bzc * bzc;
+                  });
+                  let num1 = sum / x;
+                  let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+                  if (num2 > this.avgTime) {
+                    this.n95 = num2 - this.avgTime;
+                  } else {
+                    this.n95 = this.avgTime - num2;
+                  } // end
+                  this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
+                  x++;
+                }
+                nowTime = new Date().valueOf(); // 获取当前时间戟
+                if (
+                  nowTime < beginTime + reqTime * 60 * 1000 &&
+                  this.state.isPing
+                ) {
+                  xhr.abort();
+                  setTimeout(() => {
+                    if (this.state.isPing) {
+                      xhr.open('GET', this.state.url, true);
+                      xhr.send();
+                    }
+                  }, TIMER_PERIOD);
+                } else {
+                  this.setState({isPing: false});
+                  this.setState({ifOverlayAble: true});
+                  this.setState({defaultvalue1: ''});
+                  this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url和values之前设置
+                  this.setState({url: ''});
+                  this.setState({values: []});
+                  this.setState({chartLabels: []});
+                  this.setState({backChart: true});
+                  return;
+                }
               }
             } else {
               Toast.message('服务器错误!');

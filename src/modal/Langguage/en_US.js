@@ -16,6 +16,6 @@ export default {
     nourladded:'No Url Added',
     urlempty:'The URL entered cannot be empty',
     maxfiveurl:'Ping 5 URLs At Most At A Time',
-    selectinputbox:'Please Select The Input Box First'
-    
+    selectinputbox:'Please Select The Input Box First',
+    To_stop_testing:"To stop testing"
 };
