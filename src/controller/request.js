@@ -376,6 +376,8 @@ export const SendRequest = function () {
             start_scale5 = true;
           }
 
+          
+
           // console.log(
           //   'start_scale和scale_flag:' +
           //     start_scale1 +
