@@ -28,7 +28,7 @@ const Colors = [
   processColor('purple'),
 ];
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
-const gridColor = processColor('#E6E6E6');
+const gridColor = processColor('#E6E6E6'); //网格线的颜色
 class Ping extends Component {
   constructor(props) {
     super(props);
@@ -112,6 +112,7 @@ class Ping extends Component {
         }
       }
     }
+    //获取IP地址
     for (let i = 0; i < urlData.length; i++) {
       let str = '';
       for (let j = 0; j < urlData[i].url.length; j++) {
@@ -203,313 +204,48 @@ class Ping extends Component {
   //   BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
 
   componentDidMount() {
+    //定时Ping三分钟自动结束
     this.stoptimer = setTimeout(() => {
-          this.setState(() => ({
-            isPing: false,
-          }));
-        }, 180000);
+      this.setState(() => ({
+        isPing: false,
+      }));
+    }, 180000);
   }
 
   componentWillUnmount() {
     clearTimeout(this.stoptimer);
   }
 
-
-
-  next(
-    values,
-    values2,
-    values3,
-    values4,
-    values5,
-
-    colorIndex,
-    colorIndex2,
-    colorIndex3,
-    colorIndex4,
-    colorIndex5,
-
-    chartLabels,
-  ) {
-    if (
-      this.state.url != '' &&
-      this.state.url2 != '' &&
-      this.state.url3 != '' &&
-      this.state.url4 != '' &&
-      this.state.url5 != ''
-    ) {
-      return {
-        data: {
-          dataSets: [
-            {
-              values: values,
-              label: `${this.state.url}(${Data.IP1})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values2,
-              label: `${this.state.url2}(${Data.IP2})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex2],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values3,
-              label: `${this.state.url3}(${Data.IP3})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex3],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values4,
-              label: `${this.state.url4}(${Data.IP4})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex4],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values5,
-              label: `${this.state.url5}(${Data.IP5})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex5],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-          ],
-        },
-        xAxis: {
-          valueFormatter: chartLabels,
-          axisLineWidth: 0,
-          drawLabels: true,
-          position: 'BOTTOM',
-          drawGridLines: true,
-          gridColor: gridColor,
-        },
-      };
+  //将数据及配置信息导入到图表中
+  next(chartLabels, urlArr, iptempArr, valuestempArr, colortempArr, dataSets) {
+    for (let i = 0; i < urlArr.length; i++) {
+      if (urlArr[i] != '') {
+        dataSets.push({
+          values: valuestempArr[i],
+          label: `${urlArr[i]}(${iptempArr[i]})`,
+          config: {
+            drawValues: false,
+            color: Colors[colortempArr[i]],
+            mode: 'LINEAR',
+            drawCircles: false,
+            lineWidth: 2,
+          },
+        });
+      }
     }
-
-    if (
-      this.state.url != '' &&
-      this.state.url2 != '' &&
-      this.state.url3 != '' &&
-      this.state.url4 != ''
-    ) {
-      return {
-        data: {
-          dataSets: [
-            {
-              values: values,
-              label: `${this.state.url}(${Data.IP1})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values2,
-              label: `${this.state.url2}(${Data.IP2})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex2],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values3,
-              label: `${this.state.url3}(${Data.IP3})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex3],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values4,
-              label: `${this.state.url4}(${Data.IP4})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex4],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-          ],
-        },
-        xAxis: {
-          valueFormatter: chartLabels,
-          axisLineWidth: 0,
-          drawLabels: true,
-          position: 'BOTTOM',
-          drawGridLines: true,
-          gridColor: gridColor,
-        },
-      };
-    }
-
-    if (
-      this.state.url != '' &&
-      this.state.url2 != '' &&
-      this.state.url3 != ''
-    ) {
-      return {
-        data: {
-          dataSets: [
-            {
-              values: values,
-              label: `${this.state.url}(${Data.IP1})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values2,
-              label: `${this.state.url2}(${Data.IP2})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex2],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values3,
-              label: `${this.state.url3}(${Data.IP3})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex3],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-          ],
-        },
-        xAxis: {
-          valueFormatter: chartLabels,
-          axisLineWidth: 0,
-          drawLabels: true,
-          position: 'BOTTOM',
-          drawGridLines: true,
-          gridColor: gridColor,
-        },
-      };
-    }
-
-    if (this.state.url != '' && this.state.url2 != '') {
-      return {
-        data: {
-          dataSets: [
-            {
-              values: values,
-              label: `${this.state.url}(${Data.IP1})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-            {
-              values: values2,
-              label: `${this.state.url2}(${Data.IP2})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex2],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-          ],
-        },
-        xAxis: {
-          valueFormatter: chartLabels,
-          axisLineWidth: 0,
-          drawLabels: true,
-          position: 'BOTTOM',
-          drawGridLines: true,
-          gridColor: gridColor,
-        },
-      };
-    }
-
-    if (this.state.url != '') {
-      return {
-        data: {
-          dataSets: [
-            {
-              values: values,
-              label: `${this.state.url}(${Data.IP1})`,
-
-              config: {
-                drawValues: false,
-                color: Colors[colorIndex],
-                mode: 'LINEAR',
-                drawCircles: false,
-                lineWidth: 2,
-              },
-            },
-          ],
-        },
-        xAxis: {
-          valueFormatter: chartLabels,
-          axisLineWidth: 0,
-          drawLabels: true,
-          position: 'BOTTOM',
-          drawGridLines: true,
-          gridColor: gridColor,
-        },
-      };
-    }
+    return {
+      data: {
+        dataSets,
+      },
+      xAxis: {
+        valueFormatter: chartLabels,
+        axisLineWidth: 0,
+        drawLabels: true,
+        position: 'BOTTOM',
+        drawGridLines: true,
+        gridColor: gridColor,
+      },
+    };
   }
 
   ifSecondPing = () => {
@@ -522,6 +258,7 @@ class Ping extends Component {
 
   render() {
     const urlArr = [
+      //存储要ping的url 方便调用
       this.state.url,
       this.state.url2,
       this.state.url3,
@@ -529,6 +266,7 @@ class Ping extends Component {
       this.state.url5,
     ];
     const tableDataArr = [
+      //存储页面下方表格中的每行数据 方便调用
       [
         this.maxTime,
         this.minTime,
@@ -565,35 +303,14 @@ class Ping extends Component {
         this.error5,
       ],
     ];
-
-    if (urlArr[0] != '') {
-      var tableData = [tableDataArr[0]];
-
-      if (urlArr[1] != '') {
-        tableData = [tableDataArr[0], tableDataArr[1]];
-        if (urlArr[2] != '') {
-          tableData = [tableDataArr[0], tableDataArr[1], tableDataArr[2]];
-          if (urlArr[3] != '') {
-            tableData = [
-              tableDataArr[0],
-              tableDataArr[1],
-              tableDataArr[2],
-              tableDataArr[3],
-            ];
-            if (urlArr[4] != '') {
-              tableData = [
-                tableDataArr[0],
-                tableDataArr[1],
-                tableDataArr[2],
-                tableDataArr[3],
-                tableDataArr[4],
-              ];
-            }
-          }
-        }
+    //将数据传入页面下方表格中
+    var tableData = [];
+    for (let i = 0; i < tableDataArr.length; i++) {
+      if (urlArr[i] != '') {
+        tableData.push(tableDataArr[i]);
       }
     }
-
+    //当页面停止测试时保存图表中的数据
     if (!this.state.isPing) {
       tableData = [].concat(tableData);
     }
@@ -620,33 +337,27 @@ class Ping extends Component {
         colorIndex5,
 
         chartLabels,
-
-        url,
-        url2,
-        url3,
-        url4,
-        url5,
       } = this.state;
-      this.config = this.next(
-        values,
-        values2,
-        values3,
-        values4,
-        values5,
 
+      var dataSets = [];
+      //存储一些必要的数据 方便for循环里调用
+      const iptempArr = [Data.IP1, Data.IP2, Data.IP3, Data.IP4, Data.IP5];
+      const valuestempArr = [values, values2, values3, values4, values5];
+      const colortempArr = [
         colorIndex,
         colorIndex2,
         colorIndex3,
         colorIndex4,
         colorIndex5,
+      ];
 
+      this.config = this.next(
         chartLabels,
-
-        url,
-        url2,
-        url3,
-        url4,
-        url5,
+        urlArr,
+        iptempArr,
+        valuestempArr,
+        colortempArr,
+        dataSets,
       );
     }
 
@@ -660,7 +371,7 @@ class Ping extends Component {
               this.setState({
                 isPing: false,
               });
-
+              //当退出Ping页面时把IP地址赋值为空
               Data.IP1 = '';
               Data.IP2 = '';
               Data.IP3 = '';
@@ -724,14 +435,14 @@ class Ping extends Component {
               />
             </Table>
             <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
+              {/* 给每一行row都一个key值 */}
               {tableData.map((tableData, index) => {
                 return (
                   <Row
                     key={index}
                     data={tableData}
-                    //flexArr={[1, 1, 1]}
                     style={styles.row}
-                    //只需要找到key值判断一下可以了
+                    // 下面的几行三表达式主要是为了更改文本颜色与页面上方折线的颜色对应
                     textStyle={
                       index == 0
                         ? styles.textformat
@@ -755,7 +466,6 @@ class Ping extends Component {
             <TouchableOpacity
               style={styles.stopbutton}
               onPress={() => {
-                //这里写函数stop
                 this.setState({
                   isPing: false,
                 });
