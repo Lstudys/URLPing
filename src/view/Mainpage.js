@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Keyboard} from 'react-native';
+import {Image} from 'react-native';
 import {Toast} from 'teaset';
 import {
   View,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import {TestURL} from '../controller/AppPageFunction';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
@@ -17,7 +18,7 @@ import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 
-import {BackHandler,Platform} from 'react-native';
+import {BackHandler, Platform} from 'react-native';
 import {ExitApp} from '../controller/AppPageFunction';
 
 const Height = Dimensions.get('window').height;
@@ -58,23 +59,21 @@ class Ordinary extends Component {
     });
 
     if (Platform.OS === 'android') {
-        BackHandler.addEventListener('hardwareBackPress',ExitApp.bind(this));
-    }
-}
-
-  componentWillUnmount() {   
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress',ExitApp.bind(this));
+      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
     }
   }
 
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind(this));
+    }
+  }
 
   renderItem = ({item}) => {
     return (
       <View style={styles.renderItem}>
         <View
           style={{
-            // paddingRight: ScaleSize(-20),
             marginRight: ScaleSize(0),
           }}>
           <TextInput
@@ -126,11 +125,9 @@ class Ordinary extends Component {
             }
           }
           if (this.state.currentUrlindex == -1) {
-            // alert(I18n.t('selectinputbox'));
             return;
           }
 
-          // alert(Data.urlsArr[item.key])
           Data.Ping[parseInt(this.state.currentUrlindex)].url =
             Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
               0,
@@ -155,8 +152,8 @@ class Ordinary extends Component {
       return;
     } else {
       return (
-        <View>
-          <View style={{height: Height - 100, position: 'relative'}}>
+        <View style={{backgroundColor: '#fff'}}>
+          <View style={{height: Height, position: 'relative'}}>
             <View
               ref={(ScrollView) => {
                 ScrollView = ScrollView;
@@ -231,10 +228,7 @@ class Ordinary extends Component {
             <TouchableOpacity
               onPress={() => {
                 for (let i = 0; i < Data.Ping.length; i++) {
-                  if (
-                    Data.Ping[i].url == 'https://' ||
-                    Data.Ping[i].url == ''
-                  ) {
+                  if (!TestURL(Data.Ping[i].url)) {
                     this.identify = false;
                     break;
                   } else {
@@ -263,7 +257,7 @@ class Ordinary extends Component {
                     Toast.message(I18n.t('nourladded'));
                   }
                 } else {
-                  Toast.message(I18n.t('To_stop_testing'));
+                  Toast.message(I18n.t('reject_Test'));
                 }
               }}
               style={styles.pingbutton}>
@@ -300,7 +294,7 @@ const styles = StyleSheet.create({
   pingbutton: {
     marginHorizontal: ScaleSize(2),
     alignItems: 'center',
-    marginTop: ScaleSize(5),
+    marginTop: -Height * 0.1,
     borderRadius: ScaleSize(10),
     backgroundColor: '#2a82e4',
     height: ScaleSize(42),
@@ -313,8 +307,8 @@ const styles = StyleSheet.create({
   },
   pingwhole: {
     marginHorizontal: ScaleSize(5),
-    marginBottom: ScaleSize(10),
-    marginTop: ScaleSize(10),
+    // marginBottom: ScaleSize(10),
+    // marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
     marginLeft: ScaleSize(3),

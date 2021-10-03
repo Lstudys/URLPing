@@ -1,13 +1,4 @@
 export default {
-    // title: 'GraphUrlPing',
-    // //About页面的英文显示
-    // developmentunit: 'Development Unit',
-    // hDDevteam: 'HDDevTeam',
-    // developer: 'Developer',
-    // members: 'Some 19&20 RN Group Members',
-    // versionupdatetime: 'Version Update Time',
-    // iftherearebugsduringuse: 'If there are bugs during use',
-    // pleasecontact: 'Please Contact',
 
     input:'Please Enter URL',
     delete:'Delete',
@@ -17,5 +8,6 @@ export default {
     urlempty:'The URL entered cannot be empty',
     maxfiveurl:'Ping 5 URLs At Most At A Time',
     selectinputbox:'Please Select The Input Box First',
-    To_stop_testing:"To stop testing"
+    To_stop_testing:"To stop testing",
+    reject_Test:"The url does not contain HTTPS or HTTP"
 };
