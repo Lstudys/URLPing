@@ -13,14 +13,17 @@ import {
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
-import Data from '../modal/Data';
+import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
+
+import {BackHandler,Platform} from 'react-native';
+import {ExitApp} from '../controller/AppPageFunction';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
-class My extends Component {
+class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,14 +49,25 @@ class My extends Component {
   }
   identify = true;
 
-  componentWillMount() {
+  componentDidMount() {
     store.get('historyPing').then((res) => {
       if (res != null) {
         Data.historyPing = res;
         this.setState({refresh: !this.state.refresh});
       }
     });
+
+    if (Platform.OS === 'android') {
+        BackHandler.addEventListener('hardwareBackPress',ExitApp.bind(this));
+    }
+}
+
+  componentWillUnmount() {   
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress',ExitApp.bind(this));
+    }
   }
+
 
   renderItem = ({item}) => {
     return (
@@ -261,7 +275,7 @@ class My extends Component {
     }
   }
 }
-export default My;
+export default Ordinary;
 
 const styles = StyleSheet.create({
   renderItem: {

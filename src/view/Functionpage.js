@@ -9,17 +9,13 @@ import {
   processColor,
   Image,
 } from 'react-native';
-import {BackHandler} from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {Table, Row} from 'react-native-table-component';
 import {getIpAddressesForHostname} from 'react-native-dns-lookup';
-
-import {BackAction} from '../controller/AppPageFunction';
 import I18n from 'i18n-js';
-import Data from '../modal/Data';
+import Data from '../modal/data';
 import {LanguageChange} from '../component/LanguageChange';
-
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 
 const Height = Dimensions.get('window').height;
@@ -203,20 +199,22 @@ class Ping extends Component {
 
   config = {};
 
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
-    this.stoptimer = setTimeout(() => {
-      this.setState(() => ({
-        isPing: false,
-      }));
-    }, 180000);
+  //   BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
+  //   BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
 
-    /* 选择合适语言 */
+  componentDidMount() {
+    this.stoptimer = setTimeout(() => {
+          this.setState(() => ({
+            isPing: false,
+          }));
+        }, 180000);
   }
+
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
     clearTimeout(this.stoptimer);
   }
+
+
 
   next(
     values,
@@ -762,7 +760,6 @@ class Ping extends Component {
                   isPing: false,
                 });
               }}>
-              {/* 这里要把纯中文改一下 */}
               <Text style={styles.stoptext}>{I18n.t('To_stop_testing')}</Text>
             </TouchableOpacity>
           </View>

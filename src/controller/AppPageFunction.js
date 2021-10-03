@@ -7,14 +7,11 @@
  import Orientation from 'react-native-orientation';
  import {Toast} from 'teaset';
  import store from 'react-native-simple-store';
- import data from '../modal/Data';
+ import data from '../modal/data';
 
  
  // 控制安卓设备的返回键
- export const BackAction = function () {
-     if (!this.state.linechart) {
-        
-         // false则当前显示图表
+ export const BackAction = function () {      
          if (this.state.isPing) {
              // 显示图表有两种情况：ping结束和正在ping
              this.pressnum++;
@@ -24,14 +21,11 @@
                     data.urls[i].mark=false
                 }
                 Toast.message('再按一次暂停Ping');
-                 return true;
+                return true;
              } else {
                  if (this.firstpress + 2000 > new Date().valueOf()) {
                      this.pressnum = 0;
                      this.firstpress = 0;
-                     this.setState({
-                         linechart: true,
-                     });
                      this.setState({
                          isPing: false,
                      });
@@ -45,23 +39,37 @@
                         data.urls[i].mark=false
                     }
                      Toast.message('再按一次暂停Ping');
-                     //Toast.message("时阿大撒大撒"+data.urls[0].mark);
                      return true;
                  }
              }
             } else {
-             Orientation.lockToPortrait();
-             this.setState({
-                 linechart: true,
-             });
-        
+            //  Orientation.lockToPortrait();
+            //  this.setState({
+            //      linechart: true,
+            //  });
+            this.props.navigation.navigate('Ordinary');
+            this.setState({
+              isPing: false,
+            });
              return true;
          }
-     } else {
-         if(this.state.linechart){}
-         else{BackHandler.exitApp();}
-     }
  };
+
+
+
+ export const ExitApp = function () {
+    if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+        //最近2秒内按过back键，可以退出应用。
+        BackHandler.exitApp()          
+        return false;        
+    }
+    this.lastBackPressed = Date.now();
+    Toast.message("再按一次退出应用");
+    return true;//默认行为
+ }  
+
+
+
  
  // 设置时间的点击事件
  export const SetReqTime = function () {

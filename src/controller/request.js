@@ -4,7 +4,7 @@
  */
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
-import Data from '../modal/Data';
+// import Data from '../modal/Data';
 import {TestURL} from './AppPageFunction';
 let TABLE_INITIAL_VALUE = 0;
 let TIMER_PERIOD = 1000;
