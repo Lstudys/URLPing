@@ -17,7 +17,7 @@ import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 
-import {BackHandler,Platform} from 'react-native';
+import {BackHandler, Platform} from 'react-native';
 import {ExitApp} from '../controller/AppPageFunction';
 
 const Height = Dimensions.get('window').height;
@@ -28,7 +28,7 @@ class Ordinary extends Component {
     super(props);
     this.state = {
       FlatListIsRefreshing: false,
-      isPing: false,
+      isPing: false, //判断是否正在Ping
       refresh: false,
       currentUrlindex: -1,
       focus: false,
@@ -56,35 +56,36 @@ class Ordinary extends Component {
         this.setState({refresh: !this.state.refresh});
       }
     });
-
+    //使安卓手机物理返回键生效
     if (Platform.OS === 'android') {
-        BackHandler.addEventListener('hardwareBackPress',ExitApp.bind(this));
-    }
-}
-
-  componentWillUnmount() {   
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress',ExitApp.bind(this));
+      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
     }
   }
 
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind(this));
+    }
+  }
 
   renderItem = ({item}) => {
     return (
       <View style={styles.renderItem}>
         <View
           style={{
-            // paddingRight: ScaleSize(-20),
             marginRight: ScaleSize(0),
           }}>
           <TextInput
+            //当在item中选择的位置发生变化时就会调用这个方法 简单点儿就是光标位置和上次不同,就会调用
             onSelectionChange={(event) => {
+              //将当前的光标定位到起点位置
               this.state.currentIndex = event.nativeEvent.selection.start;
             }}
             defaultValue={Data.Ping[parseInt(item.key)].url}
             onFocus={(value) => {
               this.state.currentUrlindex = item.key;
             }}
+            //保存输入文本框中的内容并全局共享
             onChangeText={(value) => {
               Data.Ping[parseInt(item.key)].url = value;
               this.setState({refresh: !this.state.refresh});
@@ -115,6 +116,8 @@ class Ordinary extends Component {
       </View>
     );
   };
+
+  //快捷输入框
   _renderRow = ({item}) => {
     return (
       <TouchableOpacity
@@ -126,11 +129,9 @@ class Ordinary extends Component {
             }
           }
           if (this.state.currentUrlindex == -1) {
-            // alert(I18n.t('selectinputbox'));
             return;
           }
-
-          // alert(Data.urlsArr[item.key])
+          //将快捷输入框中被点击的内容插入到光标位置
           Data.Ping[parseInt(this.state.currentUrlindex)].url =
             Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
               0,
@@ -161,7 +162,7 @@ class Ordinary extends Component {
               ref={(ScrollView) => {
                 ScrollView = ScrollView;
               }}
-              keyboardShouldPersistTaps={true}
+              keyboardShouldPersistTaps={true} //滚动视图不会响应点击操作，并且键盘不会自动消失
               style={{flex: 1, height: Height, position: 'relative'}}>
               <View>
                 <View style={styles.navigation}>
