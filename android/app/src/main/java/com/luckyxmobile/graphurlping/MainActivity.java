@@ -1,4 +1,4 @@
-package com.graphurlping;
+package com.luckyxmobile.graphurlping;
 
 import com.facebook.react.ReactActivity;
 
