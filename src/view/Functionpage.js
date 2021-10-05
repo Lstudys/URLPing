@@ -35,16 +35,11 @@ class Ping extends Component {
     this.state = {
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
-      tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERROR'],
+      tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
       newReqTime: 0,
-      url: '', // 用户输入的url
-      url2: '',
-      url3: '',
-      url4: '',
-      url5: '',
 
       values: [],
       values2: [],
@@ -58,19 +53,7 @@ class Ping extends Component {
       urlDatafour: [],
       urlDatafive: [],
 
-      colorIndex: 0,
-      colorIndex2: 1,
-      colorIndex3: 2,
-      colorIndex4: 3,
-      colorIndex5: 4,
-
       chartLabels: [],
-
-      chart1: false,
-      chart2: false,
-      chart3: false,
-      chart4: false,
-      chart5: false,
 
       isPing: true, // 控制是否正在ping
 
@@ -92,6 +75,7 @@ class Ping extends Component {
       chartDisplay: false,
       urlsWitch: true, //刷新页面
     };
+    urlCollection = ['', '', '', '', ''];
 
     LanguageChange.bind(this)();
 
@@ -99,15 +83,15 @@ class Ping extends Component {
 
     //修改url的值
     var urlData = this.props.route.params.urlData;
-    this.state.url = urlData[0].url;
+    urlCollection[0] = urlData[0].url;
     if (urlData.length > 1) {
-      this.state.url2 = urlData[1].url;
+      urlCollection[1] = urlData[1].url;
       if (urlData.length > 2) {
-        this.state.url3 = urlData[2].url;
+        urlCollection[2] = urlData[2].url;
         if (urlData.length > 3) {
-          this.state.url4 = urlData[3].url;
+          urlCollection[3] = urlData[3].url;
           if (urlData.length > 4) {
-            this.state.url5 = urlData[4].url;
+            urlCollection[4] = urlData[4].url;
           }
         }
       }
@@ -200,10 +184,8 @@ class Ping extends Component {
 
   config = {};
 
-  //   BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
-  //   BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
-
   componentDidMount() {
+    console.log(urlCollection);
     //定时Ping三分钟自动结束
     this.stoptimer = setTimeout(() => {
       this.setState(() => ({
@@ -217,12 +199,19 @@ class Ping extends Component {
   }
 
   //将数据及配置信息导入到图表中
-  next(chartLabels, urlArr, iptempArr, valuestempArr, colortempArr, dataSets) {
-    for (let i = 0; i < urlArr.length; i++) {
-      if (urlArr[i] != '') {
+  next(
+    chartLabels,
+    urlCollection,
+    iptempArr,
+    valuestempArr,
+    colortempArr,
+    dataSets,
+  ) {
+    for (let i = 0; i < urlCollection.length; i++) {
+      if (urlCollection[i] != '') {
         dataSets.push({
           values: valuestempArr[i],
-          label: `${urlArr[i]}(${iptempArr[i]})`,
+          label: `${urlCollection[i]}(${iptempArr[i]})`,
           config: {
             drawValues: false,
             color: Colors[colortempArr[i]],
@@ -248,23 +237,15 @@ class Ping extends Component {
     };
   }
 
-  ifSecondPing = () => {
-    if (this.state.url == '') {
-      this.state.secondDataHeight = 140;
-    } else {
-      this.state.secondDataHeight = 220;
-    }
-  };
-
   render() {
-    const urlArr = [
-      //存储要ping的url 方便调用
-      this.state.url,
-      this.state.url2,
-      this.state.url3,
-      this.state.url4,
-      this.state.url5,
-    ];
+    // const urlCollection = [
+    //   //存储要ping的url 方便调用
+    //   this.state.url,
+    //   this.state.url2,
+    //   this.state.url3,
+    //   this.state.url4,
+    //   this.state.url5,
+    // ];
     const tableDataArr = [
       //存储页面下方表格中的每行数据 方便调用
       [
@@ -306,7 +287,7 @@ class Ping extends Component {
     //将数据传入页面下方表格中
     var tableData = [];
     for (let i = 0; i < tableDataArr.length; i++) {
-      if (urlArr[i] != '') {
+      if (urlCollection[i] != '') {
         tableData.push(tableDataArr[i]);
       }
     }
@@ -317,11 +298,11 @@ class Ping extends Component {
 
     const state = this.state;
     if (
-      this.state.url != '' ||
-      this.state.url2 != '' ||
-      this.state.url3 != '' ||
-      this.state.url4 != '' ||
-      this.state.url5 != ''
+      urlCollection[0] != '' ||
+      urlCollection[1] != '' ||
+      urlCollection[2] != '' ||
+      urlCollection[3] != '' ||
+      urlCollection[4] != ''
     ) {
       const {
         values,
@@ -330,12 +311,6 @@ class Ping extends Component {
         values4,
         values5,
 
-        colorIndex,
-        colorIndex2,
-        colorIndex3,
-        colorIndex4,
-        colorIndex5,
-
         chartLabels,
       } = this.state;
 
@@ -343,17 +318,11 @@ class Ping extends Component {
       //存储一些必要的数据 方便for循环里调用
       const iptempArr = [Data.IP1, Data.IP2, Data.IP3, Data.IP4, Data.IP5];
       const valuestempArr = [values, values2, values3, values4, values5];
-      const colortempArr = [
-        colorIndex,
-        colorIndex2,
-        colorIndex3,
-        colorIndex4,
-        colorIndex5,
-      ];
+      const colortempArr = [1, 2, 3, 4];
 
       this.config = this.next(
         chartLabels,
-        urlArr,
+        urlCollection,
         iptempArr,
         valuestempArr,
         colortempArr,
@@ -434,6 +403,8 @@ class Ping extends Component {
                 textStyle={styles.textHead}
               />
             </Table>
+
+            
             <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
               {/* 给每一行row都一个key值 */}
               {tableData.map((tableData, index) => {
@@ -563,6 +534,7 @@ const styles = StyleSheet.create({
     color: '#2a82e4',
     fontWeight: '600',
   },
+
   stopwhole: {
     marginBottom: Width * 0.42,
     marginTop: -(Height * 0.4),
@@ -573,7 +545,7 @@ const styles = StyleSheet.create({
   stopbutton: {
     marginHorizontal: ScaleSize(2),
     alignItems: 'center',
-    marginTop: ScaleSize(5),
+    marginTop: ScaleSize(-15),
     borderRadius: ScaleSize(15),
     backgroundColor: '#fff',
     borderWidth: ScaleSize(2.5),

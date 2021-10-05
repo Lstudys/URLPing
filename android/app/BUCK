@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.graphurlping",
+    package = "com.luckyxmobile.graphurlping",
 )
 
 android_resource(
     name = "res",
-    package = "com.graphurlping",
+    package = "com.luckyxmobile.graphurlping",
     res = "src/main/res",
 )
 

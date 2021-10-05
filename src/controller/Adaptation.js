@@ -1,7 +1,7 @@
 import {Dimensions, PixelRatio} from 'react-native';
 
-let screenW = Dimensions.get('window').width;
-let screenH = Dimensions.get('window').height;
+const screenW = Dimensions.get('window').width;
+const screenH = Dimensions.get('window').height;
 let fontScale = PixelRatio.getFontScale();
 let pixelRatio = PixelRatio.get();
 // 高保真的宽度和高度
@@ -58,7 +58,6 @@ export function ScaleSizeR(scaleWidth, scaleHeight) {
   );
   return scaleR;
 }
-
 
 /*
   屏幕适配

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Keyboard} from 'react-native';
+import {Image} from 'react-native';
 import {Toast} from 'teaset';
 import {
   View,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import {TestURL} from '../controller/AppPageFunction';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
@@ -131,7 +132,6 @@ class Ordinary extends Component {
           if (this.state.currentUrlindex == -1) {
             return;
           }
-          //将快捷输入框中被点击的内容插入到光标位置
           Data.Ping[parseInt(this.state.currentUrlindex)].url =
             Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
               0,
@@ -156,14 +156,9 @@ class Ordinary extends Component {
       return;
     } else {
       return (
-        <View>
-          <View style={{height: Height - 100, position: 'relative'}}>
-            <View
-              ref={(ScrollView) => {
-                ScrollView = ScrollView;
-              }}
-              keyboardShouldPersistTaps={true} //滚动视图不会响应点击操作，并且键盘不会自动消失
-              style={{flex: 1, height: Height, position: 'relative'}}>
+        <View style={{backgroundColor: '#fff'}}>
+          <View style={{height: Height, position: 'relative'}}>
+            <View style={{flex: 1, height: Height, position: 'relative'}}>
               <View>
                 <View style={styles.navigation}>
                   <Text style={styles.navigationtext}>GraphURLPing</Text>
@@ -232,10 +227,7 @@ class Ordinary extends Component {
             <TouchableOpacity
               onPress={() => {
                 for (let i = 0; i < Data.Ping.length; i++) {
-                  if (
-                    Data.Ping[i].url == 'https://' ||
-                    Data.Ping[i].url == ''
-                  ) {
+                  if (!TestURL(Data.Ping[i].url)) {
                     this.identify = false;
                     break;
                   } else {
@@ -264,7 +256,7 @@ class Ordinary extends Component {
                     Toast.message(I18n.t('nourladded'));
                   }
                 } else {
-                  Toast.message(I18n.t('To_stop_testing'));
+                  Toast.message(I18n.t('reject_Test'));
                 }
               }}
               style={styles.pingbutton}>
@@ -301,7 +293,7 @@ const styles = StyleSheet.create({
   pingbutton: {
     marginHorizontal: ScaleSize(2),
     alignItems: 'center',
-    marginTop: ScaleSize(5),
+    marginTop: -Height * 0.15,
     borderRadius: ScaleSize(10),
     backgroundColor: '#2a82e4',
     height: ScaleSize(42),
@@ -314,15 +306,17 @@ const styles = StyleSheet.create({
   },
   pingwhole: {
     marginHorizontal: ScaleSize(5),
-    marginBottom: ScaleSize(10),
-    marginTop: ScaleSize(10),
+    // marginBottom: ScaleSize(10),
+    // marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
     marginLeft: ScaleSize(3),
     marginRight: ScaleSize(3),
     marginBottom: ScaleSize(4),
     borderRadius: ScaleSize(13),
-    backgroundColor: '#2a82e4',
+    backgroundColor: '#fff',
+    borderBottomWidth: ScaleSize(1),
+    borderBottomColor: '#2782e5',
   },
   add: {
     flexDirection: 'row',
@@ -353,25 +347,25 @@ const styles = StyleSheet.create({
   navigation: {
     flexDirection: 'row',
     width: ScaleSize(360),
-    height: Height * 0.058,
+    height: Height * 0.068,
     alignItems: 'center',
     borderBottomWidth: 1.4,
     borderColor: '#2a82e4',
-    marginTop: ScaleSize(20),
+    marginTop: ScaleSize(5),
   },
   renderRow: {
     marginLeft: ScaleSize(13),
     flexDirection: 'row',
     marginTop: ScaleSize(4),
     height: Height * 0.045,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#2782e5',
     marginRight: ScaleSize(9),
     borderRadius: ScaleSize(20),
   },
   _renderRowitem: {
     fontSize: SetSpText(35),
     margin: ScaleSize(2),
-    color: '#2782e5',
+    color: '#fff',
     fontWeight: '700',
   },
   deleteimage: {
