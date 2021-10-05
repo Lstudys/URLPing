@@ -155,10 +155,6 @@ class Ordinary extends Component {
         <View style={{backgroundColor: '#fff'}}>
           <View style={{height: Height, position: 'relative'}}>
             <View
-              ref={(ScrollView) => {
-                ScrollView = ScrollView;
-              }}
-              keyboardShouldPersistTaps={true}
               style={{flex: 1, height: Height, position: 'relative'}}>
               <View>
                 <View style={styles.navigation}>
@@ -294,7 +290,7 @@ const styles = StyleSheet.create({
   pingbutton: {
     marginHorizontal: ScaleSize(2),
     alignItems: 'center',
-    marginTop: -Height * 0.1,
+    marginTop: -Height * 0.15,
     borderRadius: ScaleSize(10),
     backgroundColor: '#2a82e4',
     height: ScaleSize(42),
@@ -315,7 +311,9 @@ const styles = StyleSheet.create({
     marginRight: ScaleSize(3),
     marginBottom: ScaleSize(4),
     borderRadius: ScaleSize(13),
-    backgroundColor: '#2a82e4',
+    backgroundColor: '#fff',
+    borderBottomWidth: ScaleSize(1),
+    borderBottomColor:'#2782e5'
   },
   add: {
     flexDirection: 'row',
@@ -348,25 +346,25 @@ const styles = StyleSheet.create({
   navigation: {
     flexDirection: 'row',
     width: ScaleSize(360),
-    height: Height * 0.058,
+    height: Height * 0.068,
     alignItems: 'center',
     borderBottomWidth: 1.4,
     borderColor: '#2a82e4',
-    marginTop: ScaleSize(20),
+    marginTop: ScaleSize(5),
   },
   renderRow: {
     marginLeft: ScaleSize(13),
     flexDirection: 'row',
     marginTop: ScaleSize(4),
     height: Height * 0.045,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#2782e5',
     marginRight: ScaleSize(9),
     borderRadius: ScaleSize(20),
   },
   _renderRowitem: {
     fontSize: SetSpText(35),
     margin: ScaleSize(2),
-    color: '#2782e5',
+    color: '#fff',
     fontWeight: '700',
   },
   deleteimage: {

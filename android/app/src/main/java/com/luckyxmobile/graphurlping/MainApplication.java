@@ -1,4 +1,4 @@
-package com.graphurlping;
+package com.luckyxmobile.graphurlping;
 
 import android.app.Application;
 import android.content.Context;

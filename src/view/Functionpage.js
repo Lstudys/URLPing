@@ -35,7 +35,7 @@ class Ping extends Component {
     this.state = {
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
-      tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERROR'],
+      tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
   stopbutton: {
     marginHorizontal: ScaleSize(2),
     alignItems: 'center',
-    marginTop: ScaleSize(5),
+    marginTop: ScaleSize(-15),
     borderRadius: ScaleSize(15),
     backgroundColor: '#fff',
     borderWidth: ScaleSize(2.5),
