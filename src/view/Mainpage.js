@@ -29,7 +29,7 @@ class Ordinary extends Component {
     super(props);
     this.state = {
       FlatListIsRefreshing: false,
-      isPing: false,
+      isPing: false, //判断是否正在Ping
       refresh: false,
       currentUrlindex: -1,
       focus: false,
@@ -57,7 +57,7 @@ class Ordinary extends Component {
         this.setState({refresh: !this.state.refresh});
       }
     });
-
+    //使安卓手机物理返回键生效
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
     }
@@ -77,13 +77,16 @@ class Ordinary extends Component {
             marginRight: ScaleSize(0),
           }}>
           <TextInput
+            //当在item中选择的位置发生变化时就会调用这个方法 简单点儿就是光标位置和上次不同,就会调用
             onSelectionChange={(event) => {
+              //将当前的光标定位到起点位置
               this.state.currentIndex = event.nativeEvent.selection.start;
             }}
             defaultValue={Data.Ping[parseInt(item.key)].url}
             onFocus={(value) => {
               this.state.currentUrlindex = item.key;
             }}
+            //保存输入文本框中的内容并全局共享
             onChangeText={(value) => {
               Data.Ping[parseInt(item.key)].url = value;
               this.setState({refresh: !this.state.refresh});
@@ -114,6 +117,8 @@ class Ordinary extends Component {
       </View>
     );
   };
+
+  //快捷输入框
   _renderRow = ({item}) => {
     return (
       <TouchableOpacity
@@ -127,7 +132,6 @@ class Ordinary extends Component {
           if (this.state.currentUrlindex == -1) {
             return;
           }
-
           Data.Ping[parseInt(this.state.currentUrlindex)].url =
             Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
               0,
@@ -154,8 +158,7 @@ class Ordinary extends Component {
       return (
         <View style={{backgroundColor: '#fff'}}>
           <View style={{height: Height, position: 'relative'}}>
-            <View
-              style={{flex: 1, height: Height, position: 'relative'}}>
+            <View style={{flex: 1, height: Height, position: 'relative'}}>
               <View>
                 <View style={styles.navigation}>
                   <Text style={styles.navigationtext}>GraphURLPing</Text>
@@ -209,6 +212,7 @@ class Ordinary extends Component {
                 </TouchableOpacity>
                 <View style={{height: Height * 0.062}}>
                   <FlatList
+                    scrollEnabled={false}
                     keyboardShouldPersistTaps={'handled'}
                     style={styles.urlsArrFlatlist}
                     horizontal={true}
@@ -307,13 +311,12 @@ const styles = StyleSheet.create({
     // marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
-    marginLeft: ScaleSize(3),
-    marginRight: ScaleSize(3),
+    marginLeft: ScaleSize(-4),
     marginBottom: ScaleSize(4),
     borderRadius: ScaleSize(13),
     backgroundColor: '#fff',
     borderBottomWidth: ScaleSize(1),
-    borderBottomColor:'#2782e5'
+    borderBottomColor: '#2782e5',
   },
   add: {
     flexDirection: 'row',
@@ -333,8 +336,6 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
   navigationtext: {
-
-    
     color: '#2782e5',
     position: 'absolute',
     left: Width * 0.26,

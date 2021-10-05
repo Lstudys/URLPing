@@ -1,10 +1,10 @@
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
-let TABLE_INITIAL_VALUE = 0;
-let TIMER_PERIOD = 1000;
-let SEND_REQUEST_STATUS = 1;
-let RECEIVE_REQUEST_STATUS = 4;
-
+const TABLE_INITIAL_VALUE = 0;
+const TIMER_PERIOD = 1250;
+const SEND_REQUEST_STATUS = 1;
+const RECEIVE_REQUEST_STATUS = 4;
+const TIMEOUT_LIMIT=2500;
 // 向URL发送请求的函数
 export const SendRequest = function () {
   //检查网络是否连接
@@ -408,7 +408,11 @@ export const SendRequest = function () {
           const t5 = new Date().valueOf();
           value5.end = t5;
           value5.time = value5.end - value5.begin;
-          if (value5.time != 0) {
+          if(value5.time>TIMEOUT_LIMIT){
+            this.error5++;
+          }
+          else if (value5.time != 0) {
+
             let hour = new Date().getHours();
             let minute = new Date().getMinutes();
             let second = new Date().getSeconds();
@@ -495,7 +499,10 @@ export const SendRequest = function () {
           const t4 = new Date().valueOf();
           value4.end = t4;
           value4.time = value4.end - value4.begin;
-          if (value4.time != TABLE_INITIAL_VALUE) {
+          if(value4.time>TIMEOUT_LIMIT){
+            this.error4++;
+          }
+          else if (value4.time != TABLE_INITIAL_VALUE) {
             let hour = new Date().getHours();
 
             let minute = new Date().getMinutes();
@@ -586,7 +593,10 @@ export const SendRequest = function () {
           const t3 = new Date().valueOf();
           value3.end = t3;
           value3.time = value3.end - value3.begin;
-          if (value3.time != TABLE_INITIAL_VALUE) {
+          if(value3.time>TIMEOUT_LIMIT){
+            this.error3++;
+          }
+          else if (value3.time != TABLE_INITIAL_VALUE) {
             let minute = new Date().getMinutes();
             let second = new Date().getSeconds();
             let hour = new Date().getHours();
@@ -677,7 +687,10 @@ export const SendRequest = function () {
           const t2 = new Date().valueOf();
           value2.end = t2;
           value2.time = value2.end - value2.begin;
-          if (value2.time != TABLE_INITIAL_VALUE) {
+          if(value2.time>TIMEOUT_LIMIT){
+            this.error2++;
+          }
+          else if (value2.time != TABLE_INITIAL_VALUE) {
             let minute = new Date().getMinutes();
             let second = new Date().getSeconds();
             let hour = new Date().getHours();
@@ -767,8 +780,10 @@ export const SendRequest = function () {
             const t2 = new Date().valueOf();
             value.end = t2;
             value.time = value.end - value.begin;
-
-            if (value.time != TABLE_INITIAL_VALUE) {
+            if(value.time>TIMEOUT_LIMIT){
+              this.error1++;
+            }
+            else if (value.time != TABLE_INITIAL_VALUE) {
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
               let hour = new Date().getHours();

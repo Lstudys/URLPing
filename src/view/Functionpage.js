@@ -34,7 +34,7 @@ class Ping extends Component {
     super(props);
     this.state = {
       scaleX: 1.05,
-      zoom: {scaleX: 1, scaleY: 1, xValue: 2},
+      zoom: {scaleX: 1, scaleY:1,xValue: 2},
       tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERR'],
       refresh: false,
       chartHeight: 0,
@@ -131,7 +131,7 @@ class Ping extends Component {
 
   resetZoom = (scale_switch) => {
     this.setState({
-      zoom: {scaleX: this.state.scaleX, scaleY: 1, xValue: 200, yValue: 500},
+      zoom: {scaleX: this.state.scaleX,scaleY:1, xValue: 800, yValue: 1500},
     });
     this.state.scaleX = this.state.scaleX + scale_switch;
   };
@@ -191,7 +191,7 @@ class Ping extends Component {
       this.setState(() => ({
         isPing: false,
       }));
-    }, 180000);
+    }, 300000);
   }
 
   componentWillUnmount() {
@@ -318,7 +318,7 @@ class Ping extends Component {
       //存储一些必要的数据 方便for循环里调用
       const iptempArr = [Data.IP1, Data.IP2, Data.IP3, Data.IP4, Data.IP5];
       const valuestempArr = [values, values2, values3, values4, values5];
-      const colortempArr = [1, 2, 3, 4];
+      const colortempArr = [0, 1, 2, 3, 4];
 
       this.config = this.next(
         chartLabels,
@@ -383,7 +383,7 @@ class Ping extends Component {
                 },
               }}
               zoom={this.state.zoom}
-              scaleYEnabled={true}
+              scaleYEnabled={false}
               scaleXEnabled={true}
               doubleTapToZoomEnabled={true}
               dragDecelerationFrictionCoef={0.99}
@@ -404,7 +404,6 @@ class Ping extends Component {
               />
             </Table>
 
-            
             <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
               {/* 给每一行row都一个key值 */}
               {tableData.map((tableData, index) => {
