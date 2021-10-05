@@ -335,6 +335,8 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
   navigationtext: {
+
+    
     color: '#2782e5',
     position: 'absolute',
     left: Width * 0.26,

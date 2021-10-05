@@ -403,6 +403,8 @@ class Ping extends Component {
                 textStyle={styles.textHead}
               />
             </Table>
+
+            
             <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
               {/* 给每一行row都一个key值 */}
               {tableData.map((tableData, index) => {
@@ -532,6 +534,7 @@ const styles = StyleSheet.create({
     color: '#2a82e4',
     fontWeight: '600',
   },
+
   stopwhole: {
     marginBottom: Width * 0.42,
     marginTop: -(Height * 0.4),
