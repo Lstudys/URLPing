@@ -191,7 +191,7 @@ class Ping extends Component {
       this.setState(() => ({
         isPing: false,
       }));
-    }, 180000);
+    }, 300000);
   }
 
   componentWillUnmount() {
@@ -318,7 +318,7 @@ class Ping extends Component {
       //存储一些必要的数据 方便for循环里调用
       const iptempArr = [Data.IP1, Data.IP2, Data.IP3, Data.IP4, Data.IP5];
       const valuestempArr = [values, values2, values3, values4, values5];
-      const colortempArr = [1, 2, 3, 4];
+      const colortempArr = [0, 1, 2, 3, 4];
 
       this.config = this.next(
         chartLabels,
@@ -404,7 +404,6 @@ class Ping extends Component {
               />
             </Table>
 
-            
             <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
               {/* 给每一行row都一个key值 */}
               {tableData.map((tableData, index) => {

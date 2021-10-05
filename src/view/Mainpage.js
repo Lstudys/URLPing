@@ -212,6 +212,7 @@ class Ordinary extends Component {
                 </TouchableOpacity>
                 <View style={{height: Height * 0.062}}>
                   <FlatList
+                    scrollEnabled={false}
                     keyboardShouldPersistTaps={'handled'}
                     style={styles.urlsArrFlatlist}
                     horizontal={true}
@@ -310,8 +311,7 @@ const styles = StyleSheet.create({
     // marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
-    marginLeft: ScaleSize(3),
-    marginRight: ScaleSize(3),
+    marginLeft: ScaleSize(-4),
     marginBottom: ScaleSize(4),
     borderRadius: ScaleSize(13),
     backgroundColor: '#fff',
