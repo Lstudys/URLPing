@@ -34,7 +34,7 @@ class Ping extends Component {
     super(props);
     this.state = {
       scaleX: 1.05,
-      zoom: {scaleX: 1, scaleY: 1, xValue: 2},
+      zoom: {scaleX: 1, scaleY:1,xValue: 2},
       tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERR'],
       refresh: false,
       chartHeight: 0,
@@ -131,7 +131,7 @@ class Ping extends Component {
 
   resetZoom = (scale_switch) => {
     this.setState({
-      zoom: {scaleX: this.state.scaleX, scaleY: 1, xValue: 200, yValue: 500},
+      zoom: {scaleX: this.state.scaleX,scaleY:1, xValue: 800, yValue: 1500},
     });
     this.state.scaleX = this.state.scaleX + scale_switch;
   };
@@ -383,7 +383,7 @@ class Ping extends Component {
                 },
               }}
               zoom={this.state.zoom}
-              scaleYEnabled={true}
+              scaleYEnabled={false}
               scaleXEnabled={true}
               doubleTapToZoomEnabled={true}
               dragDecelerationFrictionCoef={0.99}
