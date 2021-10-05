@@ -88,7 +88,7 @@ export const TextInputChange2 = function (newText) {
 
 // 验证输入的请求时间
 export const ConfirmRqTime = function () {
-  const t = this.state.newReqTime; // 先获取输入的请求时长
+  let t = this.state.newReqTime; // 先获取输入的请求时长
   if (t == 0) {
     // 没有输入或输入为0时提示
     Toast.message('请输入请求时间!');

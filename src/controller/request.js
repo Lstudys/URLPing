@@ -396,7 +396,7 @@ export const SendRequest = function () {
       // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
       if (xhr5.readyState == SEND_REQUEST_STATUS) {
         // readystate等于1是请求发送的时刻，获取当前时间
-        const t5 = new Date().valueOf();
+        let t5 = new Date().valueOf();
         value5.begin = t5;
       }
       if (xhr5.readyState == RECEIVE_REQUEST_STATUS) {
@@ -405,7 +405,7 @@ export const SendRequest = function () {
         if (this.status5 != 200) {
           this.error5++;
         } else {
-          const t5 = new Date().valueOf();
+          let t5 = new Date().valueOf();
           value5.end = t5;
           value5.time = value5.end - value5.begin;
           if(value5.time>TIMEOUT_LIMIT){
@@ -425,7 +425,7 @@ export const SendRequest = function () {
               second = '0' + second;
             }
             var xtime = hour + ':' + minute + ':' + second;
-            const ytime = value5.time;
+            let ytime = value5.time;
 
             this.state.urlDatafive.push({
               xTimeall: xData5,
@@ -446,7 +446,7 @@ export const SendRequest = function () {
             // start
             let sum = 0; // 存储每个数减去平均数的平方的和
             this.sumReqTime5.forEach((num) => {
-              const bzc = num - this.avgTime5;
+              let bzc = num - this.avgTime5;
               sum += bzc * bzc;
             });
             let num1 = sum / x5;
@@ -487,7 +487,7 @@ export const SendRequest = function () {
       // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
       if (xhr4.readyState == SEND_REQUEST_STATUS) {
         // readystate等于1是请求发送的时刻，获取当前时间
-        const t4 = new Date().valueOf();
+        let t4 = new Date().valueOf();
         value4.begin = t4;
       }
       if (xhr4.readyState == RECEIVE_REQUEST_STATUS) {
@@ -496,7 +496,7 @@ export const SendRequest = function () {
         if (this.status4 != 200) {
           this.error4++;
         } else {
-          const t4 = new Date().valueOf();
+          let t4 = new Date().valueOf();
           value4.end = t4;
           value4.time = value4.end - value4.begin;
           if(value4.time>TIMEOUT_LIMIT){
@@ -516,7 +516,7 @@ export const SendRequest = function () {
               second = '0' + second;
             }
             var xtime = `${new Date().getHours()}:` + minute + ':' + second;
-            const ytime = value4.time;
+            let ytime = value4.time;
 
             this.state.urlDatafour.push({
               xTimeall: xData4,
@@ -537,7 +537,7 @@ export const SendRequest = function () {
             // start
             let sum = 0; // 存储每个数减去平均数的平方的和
             this.sumReqTime4.forEach((num) => {
-              const bzc = num - this.avgTime4;
+              let bzc = num - this.avgTime4;
               sum += bzc * bzc;
             });
             let num1 = sum / x4;
@@ -581,7 +581,7 @@ export const SendRequest = function () {
       // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
       if (xhr3.readyState == SEND_REQUEST_STATUS) {
         // readystate等于1是请求发送的时刻，获取当前时间
-        const t1 = new Date().valueOf();
+        let t1 = new Date().valueOf();
         value3.begin = t1;
       }
       if (xhr3.readyState == RECEIVE_REQUEST_STATUS) {
@@ -590,7 +590,7 @@ export const SendRequest = function () {
         if (this.status3 != 200) {
           this.error3++;
         } else {
-          const t3 = new Date().valueOf();
+          let t3 = new Date().valueOf();
           value3.end = t3;
           value3.time = value3.end - value3.begin;
           if(value3.time>TIMEOUT_LIMIT){
@@ -609,7 +609,7 @@ export const SendRequest = function () {
               second = '0' + second;
             }
             var xtime = hour + ':' + minute + ':' + second;
-            const ytime = value3.time;
+            let ytime = value3.time;
 
             this.state.urlDatathrid.push({
               xTimeall: xData3,
@@ -631,7 +631,7 @@ export const SendRequest = function () {
             // start
             let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
             this.sumReqTime3.forEach((num) => {
-              const bzc = num - this.avgTime3;
+              let bzc = num - this.avgTime3;
               sum += bzc * bzc;
             });
             let num1 = sum / x3;
@@ -675,7 +675,7 @@ export const SendRequest = function () {
       // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
       if (xhr2.readyState == SEND_REQUEST_STATUS) {
         // readystate等于1是请求发送的时刻，获取当前时间
-        const t1 = new Date().valueOf();
+        let t1 = new Date().valueOf();
         value2.begin = t1;
       }
       if (xhr2.readyState == RECEIVE_REQUEST_STATUS) {
@@ -684,7 +684,7 @@ export const SendRequest = function () {
         if (this.status2 != 200) {
           this.error2++;
         } else {
-          const t2 = new Date().valueOf();
+          let t2 = new Date().valueOf();
           value2.end = t2;
           value2.time = value2.end - value2.begin;
           if(value2.time>TIMEOUT_LIMIT){
@@ -703,7 +703,7 @@ export const SendRequest = function () {
               second = '0' + second;
             }
             var xtime = hour + ':' + minute + ':' + second;
-            const ytime = value2.time;
+            let ytime = value2.time;
 
             this.state.urlDatasecond.push({
               xTimeall: xData2,
@@ -724,7 +724,7 @@ export const SendRequest = function () {
             // start
             let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
             this.sumReqTime2.forEach((num) => {
-              const bzc = num - this.avgTime2;
+              let bzc = num - this.avgTime2;
               sum += bzc * bzc;
             });
             let num1 = sum / x2;
@@ -767,7 +767,7 @@ export const SendRequest = function () {
       // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
       if (xhr.readyState == SEND_REQUEST_STATUS) {
         // readystate等于1是请求发送的时刻，获取当前时间
-        const t1 = new Date().valueOf();
+        let t1 = new Date().valueOf();
         value.begin = t1;
       }
       if (xhr.readyState == RECEIVE_REQUEST_STATUS) {
@@ -777,7 +777,7 @@ export const SendRequest = function () {
           if (this.status1 != 200) {
             this.error1++;
           } else {
-            const t2 = new Date().valueOf();
+            let t2 = new Date().valueOf();
             value.end = t2;
             value.time = value.end - value.begin;
             if(value.time>TIMEOUT_LIMIT){
@@ -819,7 +819,7 @@ export const SendRequest = function () {
               // start(计算n95的值)
               let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
               this.sumReqTime.forEach((num) => {
-                const bzc = num - this.avgTime;
+                let bzc = num - this.avgTime;
                 sum += bzc * bzc;
               });
               let num1 = sum / x;
