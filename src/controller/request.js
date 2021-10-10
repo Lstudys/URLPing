@@ -4,7 +4,6 @@ const TABLE_INITIAL_VALUE = 0;
 const TIMER_PERIOD = 1250;
 const SEND_REQUEST_STATUS = 1;
 const RECEIVE_REQUEST_STATUS = 4;
-const TIMEOUT_LIMIT=2500;
 // 向URL发送请求的函数
 export const SendRequest = function () {
   //检查网络是否连接
@@ -50,6 +49,7 @@ export const SendRequest = function () {
     this.avgTime3 = TABLE_INITIAL_VALUE;
     this.avgTime4 = TABLE_INITIAL_VALUE;
     this.avgTime5 = TABLE_INITIAL_VALUE;
+    this.outData = [10000, 10000, 10000, 10000, 10000];
 
     this.n95 = '';
     this.n952 = '';
@@ -408,11 +408,9 @@ export const SendRequest = function () {
           let t5 = new Date().valueOf();
           value5.end = t5;
           value5.time = value5.end - value5.begin;
-          if(value5.time>TIMEOUT_LIMIT){
+          if (value5.time > this.outData[4]) {
             this.error5++;
-          }
-          else if (value5.time != 0) {
-
+          } else if (value5.time != 0) {
             let hour = new Date().getHours();
             let minute = new Date().getMinutes();
             let second = new Date().getSeconds();
@@ -438,6 +436,12 @@ export const SendRequest = function () {
             if (value5.time > this.maxTime5) {
               this.maxTime5 = value5.time;
             }
+            // let diffenceData_count=0;
+            // for(let i=0;i<this.state.urlDatafirst.length;i++){
+            //   diffenceData_count+=Math.pow((this.state.urlDatafirst[i].yData-this.avgTime5),2);
+            // }
+            // this.outData[4]=this.avgTime5+ 2.5*sqrt(diffenceData_count/x);
+            // console.log("outData[4]:"+this.outData[4]);
             if (this.minTime5 == '') {
               this.minTime5 = value5.time;
             } else if (this.minTime5 > value5.time) {
@@ -451,6 +455,8 @@ export const SendRequest = function () {
             });
             let num1 = sum / x5;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+            if (x5 > 3) this.outData[4] = this.avgTime5 + 2.5 * num2;
+
             if (num2 > this.avgTime5) {
               this.n955 = num2 - this.avgTime5;
             } else {
@@ -499,10 +505,9 @@ export const SendRequest = function () {
           let t4 = new Date().valueOf();
           value4.end = t4;
           value4.time = value4.end - value4.begin;
-          if(value4.time>TIMEOUT_LIMIT){
+          if (value4.time > this.outData[3]) {
             this.error4++;
-          }
-          else if (value4.time != TABLE_INITIAL_VALUE) {
+          } else if (value4.time != TABLE_INITIAL_VALUE) {
             let hour = new Date().getHours();
 
             let minute = new Date().getMinutes();
@@ -542,6 +547,8 @@ export const SendRequest = function () {
             });
             let num1 = sum / x4;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+            if (x4 > 3) this.outData[3] = this.avgTime4 + 2.5 * num2;
+            // console.log("outData[3]:"+this.outData[3]);
             if (num2 > this.avgTime4) {
               this.n954 = num2 - this.avgTime4;
             } else {
@@ -566,7 +573,6 @@ export const SendRequest = function () {
             this.setState({isPing: false});
             this.setState({ifOverlayAble: true});
             this.setState({ifTwoChartShow: false}); // ifTwoChartShow要放在url2和values2之前设置
-
             this.setState({backChart: true});
             if (nowTime > beginTime + reqTime * 60 * 1000) {
               this.setState({backChart: true});
@@ -593,10 +599,9 @@ export const SendRequest = function () {
           let t3 = new Date().valueOf();
           value3.end = t3;
           value3.time = value3.end - value3.begin;
-          if(value3.time>TIMEOUT_LIMIT){
+          if (value3.time > this.outData[2]) {
             this.error3++;
-          }
-          else if (value3.time != TABLE_INITIAL_VALUE) {
+          } else if (value3.time != TABLE_INITIAL_VALUE) {
             let minute = new Date().getMinutes();
             let second = new Date().getSeconds();
             let hour = new Date().getHours();
@@ -636,6 +641,8 @@ export const SendRequest = function () {
             });
             let num1 = sum / x3;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+            if (x3 > 3) this.outData[2] = this.avgTime3 + 2.5 * num2;
+            // console.log("outData[2]:"+this.outData[2]);
             if (num2 > this.avgTime3) {
               this.n953 = num2 - this.avgTime3;
             } else {
@@ -687,10 +694,9 @@ export const SendRequest = function () {
           let t2 = new Date().valueOf();
           value2.end = t2;
           value2.time = value2.end - value2.begin;
-          if(value2.time>TIMEOUT_LIMIT){
+          if (value2.time > this.outData[1]) {
             this.error2++;
-          }
-          else if (value2.time != TABLE_INITIAL_VALUE) {
+          } else if (value2.time != TABLE_INITIAL_VALUE) {
             let minute = new Date().getMinutes();
             let second = new Date().getSeconds();
             let hour = new Date().getHours();
@@ -729,6 +735,8 @@ export const SendRequest = function () {
             });
             let num1 = sum / x2;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+            if (x2 > 3) this.outData[1] = this.avgTime2 + 2.5 * num2;
+            // console.log("outData[1]:"+this.outData[1]);
             if (num2 > this.avgTime2) {
               this.n952 = num2 - this.avgTime2;
             } else {
@@ -767,7 +775,7 @@ export const SendRequest = function () {
       // 当readystate变化时，触发onreadystatechange函数，在该函数中获取请求时间(该函数不会立即执行，当readystate值变化时才执行)
       if (xhr.readyState == SEND_REQUEST_STATUS) {
         // readystate等于1是请求发送的时刻，获取当前时间
-        let t1 = new Date().valueOf();
+        const t1 = new Date().valueOf();
         value.begin = t1;
       }
       if (xhr.readyState == RECEIVE_REQUEST_STATUS) {
@@ -777,13 +785,12 @@ export const SendRequest = function () {
           if (this.status1 != 200) {
             this.error1++;
           } else {
-            let t2 = new Date().valueOf();
+            const t2 = new Date().valueOf();
             value.end = t2;
             value.time = value.end - value.begin;
-            if(value.time>TIMEOUT_LIMIT){
+            if (value.time > this.outData[0]) {
               this.error1++;
-            }
-            else if (value.time != TABLE_INITIAL_VALUE) {
+            } else if (value.time != TABLE_INITIAL_VALUE) {
               let minute = new Date().getMinutes();
               let second = new Date().getSeconds();
               let hour = new Date().getHours();
@@ -819,11 +826,12 @@ export const SendRequest = function () {
               // start(计算n95的值)
               let sum = TABLE_INITIAL_VALUE; // 存储每个数减去平均数的平方的和
               this.sumReqTime.forEach((num) => {
-                let bzc = num - this.avgTime;
+                const bzc = num - this.avgTime;
                 sum += bzc * bzc;
               });
               let num1 = sum / x;
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+              if (x > 3) this.outData[0] = this.avgTime+ 2.5 *num2;
               if (num2 > this.avgTime) {
                 this.n95 = num2 - this.avgTime;
               } else {
@@ -853,8 +861,6 @@ export const SendRequest = function () {
               return;
             }
           }
-        } else {
-          Toast.message('服务器错误!');
         }
       }
     };

@@ -41,6 +41,8 @@ class Ping extends Component {
       reqTime: 5, // 控制请求发送持续时间的state
       newReqTime: 0,
 
+      outData:[10000,10000,10000,10000,10000],
+
       values: [],
       values2: [],
       values3: [],
@@ -331,7 +333,7 @@ class Ping extends Component {
     }
 
     return (
-      <View>
+      <View style={{position:"relative"}}>
         <View style={styles.navigation}>
           <TouchableOpacity
             style={styles.backbutton}
@@ -457,8 +459,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   table: {
-    flex: 1,
-    marginBottom: Width * 1.45,
+    top:-Height*.35,
+    flex:1,
     width: 0.9 * Width,
     marginLeft: Width * 0.05,
   },

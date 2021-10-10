@@ -315,8 +315,6 @@ const styles = StyleSheet.create({
     marginBottom: ScaleSize(4),
     borderRadius: ScaleSize(13),
     backgroundColor: '#fff',
-    borderBottomWidth: ScaleSize(1),
-    borderBottomColor: '#2782e5',
   },
   add: {
     flexDirection: 'row',
