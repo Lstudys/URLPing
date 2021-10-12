@@ -9,10 +9,11 @@ const Data = {
     // indexArr2:['a1','b1','c1','d1','e1','f1','g1','h1','i1','j1','k1','l1','m1','n1','o1','p1','q1','r1','s1','t1','u1','v1','w1','s1','y1','z1'],//用于存储个体数据，便于数据的更改
     // arr3:['a2','b2','c2','d2','e2','f2','g2','h2','i2','j2','k2','l2','m2','n2','o2','p2','q2','r2','s2','t2','u2','v2','w2','s2','y2','z2'],
     Ping:[{ key:0, url: '' }],//需要Ping的网址
+    pingurl:[],
     pingIndex:"HDDEVTEAM",
     historyPing:[],//历史Ping的地址
     urlsArr:["http://","https://","www.",".com",".cn"],
-    
+    InputUrl:'',
     IP1:'',
     IP2:'',
     IP3:'',

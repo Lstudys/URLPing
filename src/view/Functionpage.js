@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
   processColor,
-  Image,
 } from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
@@ -28,7 +27,7 @@ const Colors = [
   processColor('purple'),
 ];
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
-const gridColor = processColor('#E6E6E6'); //网格线的颜色
+const gridColor = processColor('pink'); //网格线的颜色
 class Ping extends Component {
   constructor(props) {
     super(props);
@@ -62,11 +61,12 @@ class Ping extends Component {
       marker: {
         enabled: true,
         digits: 2,
-        backgroundTint: processColor('teal'),
-        markerColor: processColor('#F0C0FF8C'),
-        textColor: processColor('white'),
+        backgroundTint: processColor('pink'),
+        markerColor: processColor('pink'),
+        textColor: processColor('red'),
       },
       legend: {
+        textColor:gridColor,
         wordWrapEnabled: true,
       },
       secondDataHeight: 120, // 第二个图表数据style属性的bottom值
@@ -85,15 +85,15 @@ class Ping extends Component {
 
     //修改url的值
     var urlData = this.props.route.params.urlData;
-    urlCollection[0] = urlData[0].url;
+    urlCollection[0] = urlData[0];
     if (urlData.length > 1) {
-      urlCollection[1] = urlData[1].url;
+      urlCollection[1] = urlData[1];
       if (urlData.length > 2) {
-        urlCollection[2] = urlData[2].url;
+        urlCollection[2] = urlData[2];
         if (urlData.length > 3) {
-          urlCollection[3] = urlData[3].url;
+          urlCollection[3] = urlData[3];
           if (urlData.length > 4) {
-            urlCollection[4] = urlData[4].url;
+            urlCollection[4] = urlData[4];
           }
         }
       }
@@ -101,9 +101,9 @@ class Ping extends Component {
     //获取IP地址
     for (let i = 0; i < urlData.length; i++) {
       let str = '';
-      for (let j = 0; j < urlData[i].url.length; j++) {
-        if (urlData[i].url[j] == ':') {
-          str = urlData[i].url.substring(j + 3);
+      for (let j = 0; j < urlData[i].length; j++) {
+        if (urlData[i][j] == ':') {
+          str = urlData[i].substring(j + 3);
           getIpAddressesForHostname(str).then((ipAddresses) => {
             switch (i) {
               case 0:
@@ -138,8 +138,6 @@ class Ping extends Component {
     this.state.scaleX = this.state.scaleX + scale_switch;
   };
 
-  pressnum = 0; // 表示安卓手机返回键按压次数，以控制返回上一界面
-  firstpress = 0; // 第一次按返回键的时间戟
 
   maxTime = 0; // 最大时间
   minTime = ''; // 最小时间
@@ -212,9 +210,12 @@ class Ping extends Component {
     for (let i = 0; i < urlCollection.length; i++) {
       if (urlCollection[i] != '') {
         dataSets.push({
+          textColor:gridColor,
+          axisLineColor:gridColor,
           values: valuestempArr[i],
           label: `${urlCollection[i]}(${iptempArr[i]})`,
           config: {
+            textColor:"pink",
             drawValues: false,
             color: Colors[colortempArr[i]],
             mode: 'LINEAR',
@@ -229,6 +230,7 @@ class Ping extends Component {
         dataSets,
       },
       xAxis: {
+        textColor:gridColor,
         valueFormatter: chartLabels,
         axisLineWidth: 0,
         drawLabels: true,
@@ -240,16 +242,7 @@ class Ping extends Component {
   }
 
   render() {
-    // const urlCollection = [
-    //   //存储要ping的url 方便调用
-    //   this.state.url,
-    //   this.state.url2,
-    //   this.state.url3,
-    //   this.state.url4,
-    //   this.state.url5,
-    // ];
     const tableDataArr = [
-      //存储页面下方表格中的每行数据 方便调用
       [
         this.maxTime,
         this.minTime,
@@ -334,7 +327,7 @@ class Ping extends Component {
 
     return (
       <View style={{position:"relative"}}>
-        <View style={styles.navigation}>
+        {/* <View style={styles.navigation}>
           <TouchableOpacity
             style={styles.backbutton}
             onPress={() => {
@@ -352,13 +345,14 @@ class Ping extends Component {
             <Image source={require('../imgs/back.png')} style={styles.back} />
           </TouchableOpacity>
           <Text style={styles.test}>{I18n.t('test')}...</Text>
-        </View>
+        </View> */}
         <View
           style={{
-            backgroundColor: '#fefefe',
+            backgroundColor: '#1f2342',
           }}>
           <Text
             style={{
+              color:"pink",
               opacity: 0.7,
               marginTop: ScaleSize(5),
               marginLeft: ScaleSize(3),
@@ -369,18 +363,20 @@ class Ping extends Component {
         <View style={styles.bottomStyle}>
           <ScrollView>
             <LineChart
-              width={Width * 0.95}
-              height={Height * 0.45}
+              width={Width * 0.98}
+              height={Height * 0.6}
               bottom={0}
               data={this.config.data}
               xAxis={this.config.xAxis}
               yAxis={{
                 left: {
+                  textColor: gridColor,
                   enabled: true,
                   drawGridLines: true,
                   gridColor: gridColor,
                 },
                 right: {
+
                   enabled: false,
                 },
               }}
@@ -397,7 +393,7 @@ class Ping extends Component {
           </ScrollView>
 
           <View style={styles.table}>
-            <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
+            <Table borderStyle={{borderWidth: 1, borderColor: 'pink'}}>
               <Row
                 data={state.tableHead}
                 flexArr={[1, 1, 1]}
@@ -406,7 +402,7 @@ class Ping extends Component {
               />
             </Table>
 
-            <Table borderStyle={{borderWidth: 1, borderColor: '#323233'}}>
+            <Table borderStyle={{borderWidth: 1, borderColor: 'pink'}}>
               {/* 给每一行row都一个key值 */}
               {tableData.map((tableData, index) => {
                 return (
@@ -456,7 +452,7 @@ export default Ping;
 const styles = StyleSheet.create({
   bottomStyle: {
     height: Height * 1.2,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#1f2342',
   },
   table: {
     top:-Height*.35,
@@ -464,12 +460,12 @@ const styles = StyleSheet.create({
     width: 0.9 * Width,
     marginLeft: Width * 0.05,
   },
-  head: {height: 40, backgroundColor: '#2a82e4'},
+  head: {height: 40, backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
   row: {height: ScaleSize(30)},
   textHead: {
     textAlign: 'center',
-    color: '#ffffff',
+    color: 'pink',
     fontWeight: 'bold',
     fontSize: ScaleSize(15),
   },
@@ -532,12 +528,12 @@ const styles = StyleSheet.create({
 
   stoptext: {
     fontSize: SetSpText(40),
-    color: '#2a82e4',
-    fontWeight: '600',
+    color: 'pink',
+    fontWeight: '700',
   },
 
   stopwhole: {
-    marginBottom: Width * 0.42,
+    marginBottom:60,
     marginTop: -(Height * 0.4),
     width: 0.975 * Width,
     marginLeft: Width * 0.0125,
@@ -549,8 +545,8 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-15),
     borderRadius: ScaleSize(15),
     backgroundColor: '#fff',
-    borderWidth: ScaleSize(2.5),
-    borderColor: '#2a82e4',
+    borderWidth: ScaleSize(3),
+    borderColor: 'pink',
     height: ScaleSize(42),
     justifyContent: 'center',
   },

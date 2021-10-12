@@ -1,5 +1,5 @@
 export default {
-
+    title:'GraphURLPing',
     input:'Please Enter URL',
     delete:'Delete',
     add:'Add',

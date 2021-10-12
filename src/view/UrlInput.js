@@ -1,28 +1,31 @@
 import React, {Component} from 'react';
 import {Image} from 'react-native';
+import {Toast} from 'teaset';
 import {
   View,
   TextInput,
   Text,
   Dimensions,
+  FlatList,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 
-import {SetSpText, ScaleSize, ScaleSizeH} from '../controller/Adaptation';
+import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 
 import {BackHandler, Platform} from 'react-native';
-import {ExitApp} from '../controller/AppPageFunction';
+import {ExitApp,BackAction} from '../controller/AppPageFunction';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
 class Ordinary extends Component {
   constructor(props) {
+
     super(props);
     this.state = {
       FlatListIsRefreshing: false,
@@ -33,7 +36,6 @@ class Ordinary extends Component {
       langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
       keyBoardHeight: 0,
       currentIndex: -1,
-      isNew: true, //判断是不是先进入简易模式
     };
 
     LanguageChange.bind(this)();
@@ -47,30 +49,18 @@ class Ordinary extends Component {
   }
   identify = true;
 
-  componentDidMount() { 
-  Data.IP1 = '';
-  Data.IP2 = '';
-  Data.IP3 = '';
-  Data.IP4 = '';
-  Data.IP5 = '';
-  Data.InputUrl=''
-  Data.pingurl=[]
-
-    store.get('history').then((res) => {
-      if (res != null) {
-        Data.historyPing = res;
-        this.setState({refresh: !this.state.refresh});
-      }
-    });
+  componentDidMount() {
+   
+   
     //使安卓手机物理返回键生效
     if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
+      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind('this'));
     }
   }
 
   componentWillUnmount() {
     if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind(this));
+      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind('this'));
     }
   }
 
@@ -122,6 +112,72 @@ class Ordinary extends Component {
       </View>
     );
   };
+  _renderitem2 = ({item,key}) => {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        
+
+        <TouchableOpacity
+          onPress={() => {
+            let length = Data.Ping.length;
+            Data.InputUrl = 
+              Data.InputUrl+
+              Data.historyPing[0]
+            
+            this.setState({refresh: !this.state.refresh});
+          }}
+          >
+          <View
+            style={{
+              width: ScaleSize(255),
+              height: ScaleSize(34),
+              justifyContent: 'center',
+            }}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode={'tail'}
+              style={{
+                color: '#fff',
+                fontSize: SetSpText(35),
+              }}>
+              {item}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            alignSelf:"center",
+            marginLeft: ScaleSize(15),
+            marginTop: ScaleSize(15),
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              Data.historyPing.splice(parseInt(item.key), 1);
+
+              for (let i = 0,j=Data.historyPing.length; i < Data.historyPing.length; i++,j--) {
+                Data.historyPing[i].key = j;
+              }
+              this.setState({refresh: !this.state.refresh});
+              console.log(Data.historyPing);
+            }}>
+            <View>
+          <Image
+            source={require('../imgs/delete_red.png')}
+            style={{
+
+              width: ScaleSize(20),
+              height: ScaleSize(20),
+              marginVertical: ScaleSize(0),
+              marginHorizontal: ScaleSize(10),
+            }}
+          />
+        </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
   //快捷输入框
   _renderRow = ({item}) => {
     return (
@@ -133,20 +189,21 @@ class Ordinary extends Component {
               break;
             }
           }
-          if (this.state.currentUrlindex == -1) {
-            return;
-          }
-          Data.Ping[parseInt(this.state.currentUrlindex)].url =
-            Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
-              0,
-              this.state.currentIndex,
-            ) +
+          Data.InputUrl =
+            Data.InputUrl.slice(0, this.state.currentIndex) +
             Data.urlsArr[key] +
-            Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
-              this.state.currentIndex,
-            );
-          store.save(Data.pingIndex, Data.Ping);
-
+            Data.InputUrl.slice(this.state.currentIndex);
+          // Data.Ping[parseInt(this.state.currentUrlindex)].url =
+          //   Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
+          //     0,
+          //     this.state.currentIndex,
+          //   ) +
+          //   Data.urlsArr[key] +
+          //   Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
+          //     this.state.currentIndex,
+          //   );
+          // store.save(Data.pingIndex, Data.Ping);
+          console.log('变了吗' + Data.InputUrl);
           this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
         }}
@@ -162,54 +219,147 @@ class Ordinary extends Component {
     } else {
       return (
         <View style={{backgroundColor: '#1f2342'}}>
+          
           <View style={{height: Height, position: 'relative'}}>
             <View style={{flex: 1, height: Height, position: 'relative'}}>
-              <View>
-                <Text
+              <View style={{position: 'relative'}}>
+                <View style={{marginTop: Height * 0.75}}>
+
+
+                <View style={{marginBottom:ScaleSize(10),width:Width*.9,marginLeft:Width*.08}}>
+                <FlatList
+                  onRefresh={() => {
+                    this.setState((prevState) => ({
+                      FlatListIsRefreshing: true,
+                    }));
+                    setTimeout(() => {
+                      this.setState((prevState) => ({
+                        FlatListIsRefreshing: false,
+                      }));
+                    }, 1000);
+                  }}
                   style={{
-                    color: 'pink',
-                    fontSize: SetSpText(90),
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    marginTop: ScaleSize(180),
-                    marginBottom: ScaleSizeH(100),
+                    marginLeft: ScaleSize(-4),
+                    borderRadius: ScaleSize(13),
+                  }}
+                  refreshing={this.state.FlatListIsRefreshing}
+                  renderItem={this._renderitem2}
+                  data={Data.historyPing}/>
+                  </View>
+                  <View style={{height: Height * 0.062}}>
+                    <FlatList
+                      scrollEnabled={false}
+                      keyboardShouldPersistTaps={'handled'}
+                      style={styles.urlsArrFlatlist}
+                      horizontal={true}
+                      data={Data.urlsArr}
+                      renderItem={this._renderRow}
+                    />
+                  </View>
+                  <View style={{
+                                      borderColor: 'pink',
+                                      borderWidth: ScaleSize(4),
+                                      borderBottomWidth: ScaleSize(2),
+                                      height:Height * 0.08,
+                                      backgroundColor:"#fff",
+                      borderRadius: ScaleSize(20),
+
                   }}>
-                  {I18n.t('title')}
-                </Text>
-                <View>
                   <TextInput
-                    style={{
-                      marginTop: ScaleSize(20),
-                      height:Height*.08,
-                      backgroundColor: '#fff',
-                      width: Width * 0.9,
-                      marginLeft: Width * 0.05,
-                      borderColor: 'pink',
-                      borderWidth: ScaleSize(4),
-                      borderBottomWidth: ScaleSize(2),
-                      borderRadius:ScaleSize(20),
-                      position: 'absolute',
-                     
+                    value={Data.InputUrl}
+                    autoFocus={true}
+                    placeholder={'https://www.geogle.com'}
+                    onSelectionChange={(event) => {
+                      //将当前的光标定位到起点位置
+                      this.state.currentIndex =
+                        event.nativeEvent.selection.start;
                     }}
-                    autoFocus={false}
+                    style={{
+                      marginTop: ScaleSize(3),
+                      height: Height * 0.06,
+                      backgroundColor: '#fff',
+                      width: Width * 0.7,
+                      marginLeft: Width * 0.05,
+                      // borderColor: 'pink',
+                      // borderWidth: ScaleSize(4),
+                      // borderBottomWidth: ScaleSize(2),
+                      // borderRadius: ScaleSize(20),
+                      position: 'absolute',
+                      fontSize: ScaleSize(20),
+                    }}
+                    onChangeText={(value) => {
+                      Data.InputUrl = value;
+
+                      console.log('来呗' + Data.InputUrl);
+                      this.setState({refresh: !this.state.refresh});
+                      // store.update(Data.Ping[parseInt(item.key)].url, value);
+                      // store.save(Data.pingIndex, Data.Ping);
+                    }}
                     // onKeyPress={
                     //   this.props.navigation.navigate('UrlInput')
                     // }
-                    ></TextInput>
+                  ></TextInput>
                   <View
                     style={{
                       width: Width * 0.18,
                       alignItems: 'center',
                       position: 'absolute',
-                      right: Width * 0.1,
-                      top: Height * 0.04,
+                      right: Width * 0.03,
+                      top: Height * 0.01,
                     }}>
                     <TouchableOpacity
-                      onPress={()=>{
-                        this.props.navigation.navigate('UrlInput');
+                      onPress={() => {
+                        let url = Data.InputUrl.trim().split(/\s+/);
+                        for (let i = 0; i < url.length; i++) {
+                          Data.pingurl.push(url[i]);
+                          // if (!TestURL(Data.pingurl[i].url)) {
+                          //   this.identify = false;
+                          //   break;
+                          // } else {
+                          //   this.identify = true;
+                          // }
+                        }
+                        this.identify = true;
+
+                        // for (let i = 0; i < Data.pingurl.length; i++) {
+                        //   if (!TestURL(Data.pingurl[i].url)) {
+                        //     this.identify = false;
+                        //     break;
+                        //   } else {
+                        //     this.identify = true;
+                        //   }
+                        // }
+                        if (this.identify) {
+                          if (Data.pingurl.length != 0) {
+                            Data.historyPing.push(Data.InputUrl);
+                            store.save('history',Data.historyPing)
+                            // let Ping_length = Data.pingurl.length;
+                            // let History_length = Data.historyPing.length;
+                            // for (
+                            //   let i = 0, j = History_length;
+                            //   i < Ping_length;
+                            //   i++, j++
+                            // ) {
+                            //   Data.historyPing = [
+                            //     ...Data.historyPing,
+                            //     {key: j, url: Data.pingurl[i].url},
+                            //   ];
+                            // }
+                            this.setState({refresh: !this.state.refresh});
+                            this.props.navigation.navigate('Ping', {
+                              urlData: [...Data.pingurl],
+                            });
+                            console.log("history:"+Data.historyPing);
+                          } else {
+                            Toast.message(I18n.t('nourladded'));
+                          }
+                        } else {
+                          Toast.message(I18n.t('reject_Test'));
+                        }
                       }}>
                       <Text style={styles.pingtext}>GO!</Text>
                     </TouchableOpacity>
+                  </View>
                   </View>
                 </View>
 
@@ -373,9 +523,8 @@ const styles = StyleSheet.create({
   },
   urlsArrFlatlist: {
     marginLeft: ScaleSize(-4),
-    marginBottom: ScaleSize(4),
     borderRadius: ScaleSize(13),
-    backgroundColor: '#fff',
+    backgroundColor: '#1e1e1e',
   },
   add: {
     flexDirection: 'row',
@@ -399,7 +548,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: ScaleSize(4),
     height: Height * 0.045,
-    backgroundColor: '#2782e5',
     marginRight: ScaleSize(9),
     borderRadius: ScaleSize(20),
   },
