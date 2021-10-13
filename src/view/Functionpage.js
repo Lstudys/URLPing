@@ -34,7 +34,7 @@ class Ping extends Component {
     this.state = {
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY:1,xValue: 2},
-      tableHead: ['MAX', 'MIN', 'AVG', 'N95', 'ERR'],
+      tableHead: ['MAX', 'MIN', 'AVG', 'P95', 'ERR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -438,7 +438,7 @@ class Ping extends Component {
                   isPing: false,
                 });
               }}>
-              <Text style={styles.stoptext}>{I18n.t('To_stop_testing')}</Text>
+              <Text style={styles.stoptext}>{I18n.t('Over')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -460,9 +460,9 @@ const styles = StyleSheet.create({
     width: 0.9 * Width,
     marginLeft: Width * 0.05,
   },
-  head: {height: 40, backgroundColor: '#1f2342'},
+  head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
-  row: {height: ScaleSize(30)},
+  row: {height: ScaleSize(26)},
   textHead: {
     textAlign: 'center',
     color: 'pink',

@@ -274,6 +274,7 @@ class Ordinary extends Component {
                       this.state.currentIndex =
                         event.nativeEvent.selection.start;
                     }}
+                    clearButtonMode={'always'}
                     style={{
                       marginTop: ScaleSize(3),
                       height: Height * 0.06,
@@ -310,6 +311,10 @@ class Ordinary extends Component {
                     <TouchableOpacity
                       onPress={() => {
                         let url = Data.InputUrl.trim().split(/\s+/);
+                        if(url.length>5){
+                          Toast.message(I18n.t('maxfiveurl'));
+                          return;
+                        }
                         for (let i = 0; i < url.length; i++) {
                           Data.pingurl.push(url[i]);
                           // if (!TestURL(Data.pingurl[i].url)) {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {Button, Image} from 'react-native';
 import {
   View,
   TextInput,
@@ -176,8 +176,26 @@ class Ordinary extends Component {
                   }}>
                   {I18n.t('title')}
                 </Text>
-                <View>
-                  <TextInput
+                <TouchableOpacity 
+                activeOpacity={0.9}
+                  onPress={()=>{
+                    this.props.navigation.navigate('UrlInput');
+                  }}
+                style={{
+                   marginTop: ScaleSize(20),
+                   height:Height*.08,
+                   backgroundColor: '#fff',
+                   width: Width * 0.9,
+                   marginLeft: Width * 0.05,
+                   borderColor: 'pink',
+                   borderWidth: ScaleSize(4),
+                   borderBottomWidth: ScaleSize(2),
+                   borderRadius:ScaleSize(20),
+                  //  position: 'absolute',
+                }}
+                
+                >
+                  {/* <View
                     style={{
                       marginTop: ScaleSize(20),
                       height:Height*.08,
@@ -191,19 +209,20 @@ class Ordinary extends Component {
                       position: 'absolute',
                      
                     }}
-                    autoFocus={false}
+                    
                     // onKeyPress={
                     //   this.props.navigation.navigate('UrlInput')
                     // }
-                    ></TextInput>
+                    ></View> */}
                   <View
                     style={{
                       width: Width * 0.18,
                       alignItems: 'center',
                       position: 'absolute',
-                      right: Width * 0.1,
-                      top: Height * 0.04,
-                    }}>
+                      right: Width * 0.03,
+                      top: Height * 0.006,
+                    }}
+                    >
                     <TouchableOpacity
                       onPress={()=>{
                         this.props.navigation.navigate('UrlInput');
@@ -211,7 +230,7 @@ class Ordinary extends Component {
                       <Text style={styles.pingtext}>GO!</Text>
                     </TouchableOpacity>
                   </View>
-                </View>
+                </TouchableOpacity>
 
                 {/* <View style={{marginTop: ScaleSize(20)}}>
                   <FlatList

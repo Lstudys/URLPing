@@ -8,6 +8,6 @@ export default {
     urlempty:'The URL entered cannot be empty',
     maxfiveurl:'Ping 5 URLs At Most At A Time',
     selectinputbox:'Please Select The Input Box First',
-    To_stop_testing:"To stop testing",
+    Over:"complete",
     reject_Test:"The url does not contain HTTPS or HTTP"
 };
