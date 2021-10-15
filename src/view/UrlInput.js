@@ -18,14 +18,13 @@ import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 
 import {BackHandler, Platform} from 'react-native';
-import {ExitApp,BackAction} from '../controller/AppPageFunction';
+import {ExitApp, BackAction} from '../controller/AppPageFunction';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
 class Ordinary extends Component {
   constructor(props) {
-
     super(props);
     this.state = {
       FlatListIsRefreshing: false,
@@ -48,21 +47,6 @@ class Ordinary extends Component {
     });
   }
   identify = true;
-
-  componentDidMount() {
-   
-   
-    //使安卓手机物理返回键生效
-    if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind('this'));
-    }
-  }
-
-  componentWillUnmount() {
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind('this'));
-    }
-  }
 
   renderItem = ({item}) => {
     return (
@@ -112,21 +96,16 @@ class Ordinary extends Component {
       </View>
     );
   };
-  _renderitem2 = ({item,key}) => {
+  _renderitem2 = ({item}) => {
     return (
       <View style={{flexDirection: 'row'}}>
-        
-
         <TouchableOpacity
           onPress={() => {
             let length = Data.Ping.length;
-            Data.InputUrl = 
-              Data.InputUrl+
-              Data.historyPing[0]
-            
+            Data.InputUrl = Data.InputUrl + Data.historyPing[0];
+
             this.setState({refresh: !this.state.refresh});
-          }}
-          >
+          }}>
           <View
             style={{
               width: ScaleSize(255),
@@ -146,7 +125,7 @@ class Ordinary extends Component {
         </TouchableOpacity>
         <View
           style={{
-            alignSelf:"center",
+            alignSelf: 'center',
             marginLeft: ScaleSize(15),
             marginTop: ScaleSize(15),
           }}>
@@ -154,24 +133,27 @@ class Ordinary extends Component {
             onPress={() => {
               Data.historyPing.splice(parseInt(item.key), 1);
 
-              for (let i = 0,j=Data.historyPing.length; i < Data.historyPing.length; i++,j--) {
+              for (
+                let i = 0, j = Data.historyPing.length;
+                i < Data.historyPing.length;
+                i++, j--
+              ) {
                 Data.historyPing[i].key = j;
               }
               this.setState({refresh: !this.state.refresh});
               console.log(Data.historyPing);
             }}>
             <View>
-          <Image
-            source={require('../imgs/delete_red.png')}
-            style={{
-
-              width: ScaleSize(20),
-              height: ScaleSize(20),
-              marginVertical: ScaleSize(0),
-              marginHorizontal: ScaleSize(10),
-            }}
-          />
-        </View>
+              <Image
+                source={require('../imgs/delete_red.png')}
+                style={{
+                  width: ScaleSize(20),
+                  height: ScaleSize(20),
+                  marginVertical: ScaleSize(0),
+                  marginHorizontal: ScaleSize(10),
+                }}
+              />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -218,268 +200,150 @@ class Ordinary extends Component {
       return;
     } else {
       return (
-        <View style={{backgroundColor: '#1f2342'}}>
-          
-          <View style={{height: Height, position: 'relative'}}>
-            <View style={{flex: 1, height: Height, position: 'relative'}}>
-              <View style={{position: 'relative'}}>
-                <View style={{marginTop: Height * 0.75}}>
-
-
-                <View style={{marginBottom:ScaleSize(10),width:Width*.9,marginLeft:Width*.08}}>
-                <FlatList
-                  onRefresh={() => {
+        <View
+          style={{
+            backgroundColor: '#1f2342',
+            height: Height,
+            position: 'relative',
+          }}>
+          <View
+            style={{
+              backgroundColor: '#1f2342',
+              position: 'absolute',
+              bottom: ScaleSize(20),
+            }}>
+            <View
+              style={{
+                marginBottom: ScaleSize(10),
+                width: Width * 0.9,
+                marginLeft: Width * 0.08,
+              }}>
+              <FlatList
+                onRefresh={() => {
+                  this.setState((prevState) => ({
+                    FlatListIsRefreshing: true,
+                  }));
+                  setTimeout(() => {
                     this.setState((prevState) => ({
-                      FlatListIsRefreshing: true,
+                      FlatListIsRefreshing: false,
                     }));
-                    setTimeout(() => {
-                      this.setState((prevState) => ({
-                        FlatListIsRefreshing: false,
-                      }));
-                    }, 1000);
-                  }}
-                  style={{
-                    marginLeft: ScaleSize(-4),
-                    borderRadius: ScaleSize(13),
-                  }}
-                  refreshing={this.state.FlatListIsRefreshing}
-                  renderItem={this._renderitem2}
-                  data={Data.historyPing}/>
-                  </View>
-                  <View style={{height: Height * 0.062}}>
-                    <FlatList
-                      scrollEnabled={false}
-                      keyboardShouldPersistTaps={'handled'}
-                      style={styles.urlsArrFlatlist}
-                      horizontal={true}
-                      data={Data.urlsArr}
-                      renderItem={this._renderRow}
-                    />
-                  </View>
-                  <View style={{
-                                      borderColor: 'pink',
-                                      borderWidth: ScaleSize(4),
-                                      borderBottomWidth: ScaleSize(2),
-                                      height:Height * 0.08,
-                                      backgroundColor:"#fff",
-                      borderRadius: ScaleSize(20),
+                  }, 1000);
+                }}
+                style={{
+                  marginLeft: ScaleSize(-4),
+                  borderRadius: ScaleSize(13),
+                }}
+                refreshing={this.state.FlatListIsRefreshing}
+                renderItem={this._renderitem2}
+                data={Data.historyPing}
+              />
+            </View>
+            <View
+              style={{
+                height: Height * 0.062,
+                width: Width * 0.95,
+                marginLeft: Width * 0.025,
+              }}>
+              <FlatList
+                scrollEnabled={false}
+                keyboardShouldPersistTaps={'handled'}
+                style={styles.urlsArrFlatlist}
+                horizontal={true}
+                data={Data.urlsArr}
+                renderItem={this._renderRow}
+              />
+            </View>
+            <View
+              style={{
+                borderColor: 'pink',
+                borderWidth: ScaleSize(4),
+                borderBottomWidth: ScaleSize(2),
+                height: Height * 0.08,
+                backgroundColor: '#fff',
+                borderRadius: ScaleSize(20),
+              }}>
+              <TextInput
+                value={Data.InputUrl}
+                autoFocus={true}
+                placeholder={'https://www.geogle.com'}
+                onSelectionChange={(event) => {
+                  //将当前的光标定位到起点位置
+                  this.state.currentIndex = event.nativeEvent.selection.start;
+                }}
+                style={{
+                  marginTop: ScaleSize(3),
+                  height: Height * 0.06,
+                  backgroundColor: '#fff',
+                  width: Width * 0.7,
+                  marginLeft: Width * 0.05,
+                  position: 'absolute',
+                  fontSize: ScaleSize(16),
+                }}
+                onChangeText={(value) => {
+                  Data.InputUrl = value;
 
-                  }}>
-                  <TextInput
-                    value={Data.InputUrl}
-                    autoFocus={true}
-                    placeholder={'https://www.geogle.com'}
-                    onSelectionChange={(event) => {
-                      //将当前的光标定位到起点位置
-                      this.state.currentIndex =
-                        event.nativeEvent.selection.start;
-                    }}
-                    clearButtonMode={'always'}
-                    style={{
-                      marginTop: ScaleSize(3),
-                      height: Height * 0.06,
-                      backgroundColor: '#fff',
-                      width: Width * 0.7,
-                      marginLeft: Width * 0.05,
-                      // borderColor: 'pink',
-                      // borderWidth: ScaleSize(4),
-                      // borderBottomWidth: ScaleSize(2),
-                      // borderRadius: ScaleSize(20),
-                      position: 'absolute',
-                      fontSize: ScaleSize(20),
-                    }}
-                    onChangeText={(value) => {
-                      Data.InputUrl = value;
-
-                      console.log('来呗' + Data.InputUrl);
-                      this.setState({refresh: !this.state.refresh});
-                      // store.update(Data.Ping[parseInt(item.key)].url, value);
-                      // store.save(Data.pingIndex, Data.Ping);
-                    }}
-                    // onKeyPress={
-                    //   this.props.navigation.navigate('UrlInput')
-                    // }
-                  ></TextInput>
-                  <View
-                    style={{
-                      width: Width * 0.18,
-                      alignItems: 'center',
-                      position: 'absolute',
-                      right: Width * 0.03,
-                      top: Height * 0.01,
-                    }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        let url = Data.InputUrl.trim().split(/\s+/);
-                        if(url.length>5){
-                          Toast.message(I18n.t('maxfiveurl'));
-                          return;
-                        }
-                        for (let i = 0; i < url.length; i++) {
-                          Data.pingurl.push(url[i]);
-                          // if (!TestURL(Data.pingurl[i].url)) {
-                          //   this.identify = false;
-                          //   break;
-                          // } else {
-                          //   this.identify = true;
-                          // }
-                        }
-                        this.identify = true;
-
-                        // for (let i = 0; i < Data.pingurl.length; i++) {
-                        //   if (!TestURL(Data.pingurl[i].url)) {
-                        //     this.identify = false;
-                        //     break;
-                        //   } else {
-                        //     this.identify = true;
-                        //   }
-                        // }
-                        if (this.identify) {
-                          if (Data.pingurl.length != 0) {
-                            Data.historyPing.push(Data.InputUrl);
-                            store.save('history',Data.historyPing)
-                            // let Ping_length = Data.pingurl.length;
-                            // let History_length = Data.historyPing.length;
-                            // for (
-                            //   let i = 0, j = History_length;
-                            //   i < Ping_length;
-                            //   i++, j++
-                            // ) {
-                            //   Data.historyPing = [
-                            //     ...Data.historyPing,
-                            //     {key: j, url: Data.pingurl[i].url},
-                            //   ];
-                            // }
-                            this.setState({refresh: !this.state.refresh});
-                            this.props.navigation.navigate('Ping', {
-                              urlData: [...Data.pingurl],
-                            });
-                            console.log("history:"+Data.historyPing);
-                          } else {
-                            Toast.message(I18n.t('nourladded'));
-                          }
-                        } else {
-                          Toast.message(I18n.t('reject_Test'));
-                        }
-                      }}>
-                      <Text style={styles.pingtext}>GO!</Text>
-                    </TouchableOpacity>
-                  </View>
-                  </View>
-                </View>
-
-                {/* <View style={{marginTop: ScaleSize(20)}}>
-                  <FlatList
-                    keyboardShouldPersistTaps={'handled'}
-                    data={Data.Ping}
-                    renderItem={this.renderItem}
-                    refreshing={this.state.FlatListIsRefreshing}
-                    onRefresh={() => {
-                      this.setState(() => ({
-                        FlatListIsRefreshing: true,
-                      }));
-                      setTimeout(() => {
-                        this.setState(() => ({
-                          FlatListIsRefreshing: false,
-                        }));
-                      }, 1000);
-                    }}
-                  />
-                </View> */}
-                {/* <KeyboardAccessory>
-                  <View style={{height: Height * 0.062}}>
-                    <FlatList
-                      scrollEnabled={false}
-                      keyboardShouldPersistTaps={'handled'}
-                      style={styles.urlsArrFlatlist}
-                      horizontal={true}
-                      data={Data.urlsArr}
-                      renderItem={this._renderRow}
-                    />
-                  </View>
-                </KeyboardAccessory> */}
-
-                {/* <TouchableOpacity
-                  style={styles.pingTouchable}
+                  console.log('来呗' + Data.InputUrl);
+                  this.setState({refresh: !this.state.refresh});
+                  // store.update(Data.Ping[parseInt(item.key)].url, value);
+                  // store.save(Data.pingIndex, Data.Ping);
+                }}
+                // onKeyPress={
+                //   this.props.navigation.navigate('UrlInput')
+                // }
+              ></TextInput>
+              <View
+                style={{
+                  width: Width * 0.18,
+                  alignItems: 'center',
+                  position: 'absolute',
+                  right: Width * 0.03,
+                  top: Height * 0.01,
+                }}>
+                <TouchableOpacity
                   onPress={() => {
-                    if (Data.Ping.length != 0) {
-                      let key = Data.Ping.length;
-                      if (key >= 5) {
-                        alert(I18n.t('maxfiveurl'));
-                        return;
-                      }
-                      Data.Ping = [...Data.Ping, {key: key, url: ''}];
-                      for (let i = 0; i < Data.Ping.length; i++) {
-                        Data.Ping[i].key = i;
-                      }
-                      this.setState({refresh: !this.state.refresh});
-                    } else {
-                      Data.Ping = [{key: 0, url: ''}];
-                      this.setState({refresh: !this.state.refresh});
+                    let url = Data.InputUrl.trim().split(/\s+/);
+                    if (url.length > 5) {
+                      Toast.message(I18n.t('maxfiveurl'));
+                      return;
                     }
-                    store.save(Data.pingIndex, Data.Ping);
+                    for (let i = 0; i < url.length; i++) {
+                      Data.pingurl.push(url[i]);
+                    }
+                    this.identify = true;
+
+                    if (this.identify) {
+                      if (Data.pingurl.length != 0) {
+                        Data.historyPing.push(Data.InputUrl);
+                        store.save('history', Data.historyPing);
+                        // let Ping_length = Data.pingurl.length;
+                        // let History_length = Data.historyPing.length;
+                        // for (
+                        //   let i = 0, j = History_length;
+                        //   i < Ping_length;
+                        //   i++, j++
+                        // ) {
+                        //   Data.historyPing = [
+                        //     ...Data.historyPing,
+                        //     {key: j, url: Data.pingurl[i].url},
+                        //   ];
+                        // }
+                        this.setState({refresh: !this.state.refresh});
+                        this.props.navigation.navigate('Ping', {
+                          urlData: [...Data.pingurl],
+                        });
+                        console.log('history:' + Data.historyPing);
+                      } else {
+                        Toast.message(I18n.t('nourladded'));
+                      }
+                    } else {
+                      Toast.message(I18n.t('reject_Test'));
+                    }
                   }}>
-                  <View style={styles.add}>
-                    <Image
-                      source={require('../imgs/add.png')}
-                      style={styles.addimage}
-                    />
-                  </View>
-                </TouchableOpacity> */}
-                {/* <View style={{height: Height * 0.062}}>
-                  <FlatList
-                    scrollEnabled={false}
-                    keyboardShouldPersistTaps={'handled'}
-                    style={styles.urlsArrFlatlist}
-                    horizontal={true}
-                    data={Data.urlsArr}
-                    renderItem={this._renderRow}
-                  />
-                </View> */}
+                  <Text style={styles.pingtext}>GO!</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
-          {/* 
-          <View style={styles.pingwhole}>
-            <TouchableOpacity
-              onPress={() => {
-                for (let i = 0; i < Data.Ping.length; i++) {
-                  if (!TestURL(Data.Ping[i].url)) {
-                    this.identify = false;
-                    break;
-                  } else {
-                    this.identify = true;
-                  }
-                }
-                if (this.identify) {
-                  if (Data.Ping.length != 0) {
-                    let Ping_length = Data.Ping.length;
-                    let History_length = Data.historyPing.length;
-                    for (
-                      let i = 0, j = History_length;
-                      i < Ping_length;
-                      i++, j++
-                    ) {
-                      Data.historyPing = [
-                        ...Data.historyPing,
-                        {key: j, url: Data.Ping[i].url},
-                      ];
-                    }
-                    this.setState({refresh: !this.state.refresh});
-                    this.props.navigation.navigate('Ping', {
-                      urlData: [...Data.Ping],
-                    });
-                  } else {
-                    Toast.message(I18n.t('nourladded'));
-                  }
-                } else {
-                  Toast.message(I18n.t('reject_Test'));
-                }
-              }}
-              style={styles.pingbutton}>
-              <Text style={styles.pingtext}>Ping</Text>
-            </TouchableOpacity>
-          </View> */}
         </View>
       );
     }
@@ -574,3 +438,124 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
 });
+
+{
+  /* <View style={{marginTop: ScaleSize(20)}}>
+                  <FlatList
+                    keyboardShouldPersistTaps={'handled'}
+                    data={Data.Ping}
+                    renderItem={this.renderItem}
+                    refreshing={this.state.FlatListIsRefreshing}
+                    onRefresh={() => {
+                      this.setState(() => ({
+                        FlatListIsRefreshing: true,
+                      }));
+                      setTimeout(() => {
+                        this.setState(() => ({
+                          FlatListIsRefreshing: false,
+                        }));
+                      }, 1000);
+                    }}
+                  />
+                </View> */
+}
+{
+  /* <KeyboardAccessory>
+                  <View style={{height: Height * 0.062}}>
+                    <FlatList
+                      scrollEnabled={false}
+                      keyboardShouldPersistTaps={'handled'}
+                      style={styles.urlsArrFlatlist}
+                      horizontal={true}
+                      data={Data.urlsArr}
+                      renderItem={this._renderRow}
+                    />
+                  </View>
+                </KeyboardAccessory> */
+}
+
+{
+  /* <TouchableOpacity
+                  style={styles.pingTouchable}
+                  onPress={() => {
+                    if (Data.Ping.length != 0) {
+                      let key = Data.Ping.length;
+                      if (key >= 5) {
+                        alert(I18n.t('maxfiveurl'));
+                        return;
+                      }
+                      Data.Ping = [...Data.Ping, {key: key, url: ''}];
+                      for (let i = 0; i < Data.Ping.length; i++) {
+                        Data.Ping[i].key = i;
+                      }
+                      this.setState({refresh: !this.state.refresh});
+                    } else {
+                      Data.Ping = [{key: 0, url: ''}];
+                      this.setState({refresh: !this.state.refresh});
+                    }
+                    store.save(Data.pingIndex, Data.Ping);
+                  }}>
+                  <View style={styles.add}>
+                    <Image
+                      source={require('../imgs/add.png')}
+                      style={styles.addimage}
+                    />
+                  </View>
+                </TouchableOpacity> */
+}
+{
+  /* <View style={{height: Height * 0.062}}>
+                  <FlatList
+                    scrollEnabled={false}
+                    keyboardShouldPersistTaps={'handled'}
+                    style={styles.urlsArrFlatlist}
+                    horizontal={true}
+                    data={Data.urlsArr}
+                    renderItem={this._renderRow}
+                  />
+                </View> */
+}
+
+{
+  /* 
+          <View style={styles.pingwhole}>
+            <TouchableOpacity
+              onPress={() => {
+                for (let i = 0; i < Data.Ping.length; i++) {
+                  if (!TestURL(Data.Ping[i].url)) {
+                    this.identify = false;
+                    break;
+                  } else {
+                    this.identify = true;
+                  }
+                }
+                if (this.identify) {
+                  if (Data.Ping.length != 0) {
+                    let Ping_length = Data.Ping.length;
+                    let History_length = Data.historyPing.length;
+                    for (
+                      let i = 0, j = History_length;
+                      i < Ping_length;
+                      i++, j++
+                    ) {
+                      Data.historyPing = [
+                        ...Data.historyPing,
+                        {key: j, url: Data.Ping[i].url},
+                      ];
+                    }
+                    this.setState({refresh: !this.state.refresh});
+                    this.props.navigation.navigate('Ping', {
+                      urlData: [...Data.Ping],
+                    });
+                  } else {
+                    Toast.message(I18n.t('nourladded'));
+                  }
+                } else {
+                  Toast.message(I18n.t('reject_Test'));
+                }
+              }}
+              style={styles.pingbutton}>
+              <Text style={styles.pingtext}>Ping</Text>
+            </TouchableOpacity>
+          </View> */
+}
