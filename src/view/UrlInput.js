@@ -17,9 +17,6 @@ import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 
-import {BackHandler, Platform} from 'react-native';
-import {ExitApp, BackAction} from '../controller/AppPageFunction';
-
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
@@ -36,7 +33,8 @@ class Ordinary extends Component {
       keyBoardHeight: 0,
       currentIndex: -1,
     };
-
+    Data.InputUrl='';
+    Data.pingurl=[''];
     LanguageChange.bind(this)();
 
     store.get(Data.pingIndex).then((res) => {
@@ -96,13 +94,12 @@ class Ordinary extends Component {
       </View>
     );
   };
-  _renderitem2 = ({item}) => {
+  renderitem_history = ({item,index}) => {
     return (
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row',height:Height* .05,width:Width*.95,marginTop:ScaleSize(20)}}>
         <TouchableOpacity
           onPress={() => {
-            let length = Data.Ping.length;
-            Data.InputUrl = Data.InputUrl + Data.historyPing[0];
+            Data.InputUrl = Data.InputUrl +' '+ Data.historyPing[index];
 
             this.setState({refresh: !this.state.refresh});
           }}>
@@ -126,30 +123,29 @@ class Ordinary extends Component {
         <View
           style={{
             alignSelf: 'center',
-            marginLeft: ScaleSize(15),
+            marginLeft: ScaleSize(5),
             marginTop: ScaleSize(15),
           }}>
           <TouchableOpacity
             onPress={() => {
-              Data.historyPing.splice(parseInt(item.key), 1);
-
-              for (
-                let i = 0, j = Data.historyPing.length;
-                i < Data.historyPing.length;
-                i++, j--
-              ) {
-                Data.historyPing[i].key = j;
-              }
+              Data.historyPing.splice(parseInt(index), 1);
+              // for (
+              //   let i = 0, j = Data.historyPing.length;
+              //   i < Data.historyPing.length;
+              //   i++, j--
+              // ) {
+              //   Data.historyPing[i].key = j;
+              // }
               this.setState({refresh: !this.state.refresh});
               console.log(Data.historyPing);
             }}>
             <View>
               <Image
-                source={require('../imgs/delete_red.png')}
+                source={require('../imgs/delete.png')}
                 style={{
                   width: ScaleSize(20),
                   height: ScaleSize(20),
-                  marginVertical: ScaleSize(0),
+                  marginBottom:ScaleSize(15),
                   marginHorizontal: ScaleSize(10),
                 }}
               />
@@ -165,6 +161,7 @@ class Ordinary extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
+          // console.log("history"+Data.historyPing);
           for (let i = 0; i < Data.urlsArr.length; i++) {
             if (Data.urlsArr[i] == item) {
               var key = i;
@@ -219,6 +216,8 @@ class Ordinary extends Component {
                 marginLeft: Width * 0.08,
               }}>
               <FlatList
+
+                keyboardShouldPersistTaps={'handled'}
                 onRefresh={() => {
                   this.setState((prevState) => ({
                     FlatListIsRefreshing: true,
@@ -234,7 +233,7 @@ class Ordinary extends Component {
                   borderRadius: ScaleSize(13),
                 }}
                 refreshing={this.state.FlatListIsRefreshing}
-                renderItem={this._renderitem2}
+                renderItem={this.renderitem_history}
                 data={Data.historyPing}
               />
             </View>
@@ -243,6 +242,8 @@ class Ordinary extends Component {
                 height: Height * 0.062,
                 width: Width * 0.95,
                 marginLeft: Width * 0.025,
+                marginBottom:ScaleSize(15)
+            
               }}>
               <FlatList
                 scrollEnabled={false}
@@ -271,13 +272,15 @@ class Ordinary extends Component {
                   this.state.currentIndex = event.nativeEvent.selection.start;
                 }}
                 style={{
+                  paddingBottom: Height*0.01,
+
                   marginTop: ScaleSize(3),
                   height: Height * 0.06,
                   backgroundColor: '#fff',
-                  width: Width * 0.7,
+                  width: Width * 0.65,
                   marginLeft: Width * 0.05,
                   position: 'absolute',
-                  fontSize: ScaleSize(16),
+                  fontSize: ScaleSize(18),
                 }}
                 onChangeText={(value) => {
                   Data.InputUrl = value;
@@ -293,12 +296,37 @@ class Ordinary extends Component {
               ></TextInput>
               <View
                 style={{
+                  flexDirection: 'row',
+
                   width: Width * 0.18,
                   alignItems: 'center',
                   position: 'absolute',
-                  right: Width * 0.03,
-                  top: Height * 0.01,
+                  right: Width * 0.1,
                 }}>
+                
+                <TouchableOpacity
+            onPress={() => {
+              Data.InputUrl='';
+              this.setState({refresh: !this.state.refresh});
+            }}>
+            <View>
+              <Image
+                source={require('../imgs/small_delete.png')}
+                style={{
+                  marginTop:ScaleSize(16),
+                  width: ScaleSize(20),
+                  height: ScaleSize(20),
+                  marginBottom:ScaleSize(15),
+                  marginHorizontal: ScaleSize(10),
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+
+
+
+
+
                 <TouchableOpacity
                   onPress={() => {
                     let url = Data.InputUrl.trim().split(/\s+/);
@@ -307,13 +335,13 @@ class Ordinary extends Component {
                       return;
                     }
                     for (let i = 0; i < url.length; i++) {
-                      Data.pingurl.push(url[i]);
+                      Data.pingurl[i]=url[i];
                     }
                     this.identify = true;
 
                     if (this.identify) {
                       if (Data.pingurl.length != 0) {
-                        Data.historyPing.push(Data.InputUrl);
+                        Data.historyPing.push([Data.InputUrl]);
                         store.save('history', Data.historyPing);
                         // let Ping_length = Data.pingurl.length;
                         // let History_length = Data.historyPing.length;

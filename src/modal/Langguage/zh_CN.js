@@ -18,5 +18,10 @@ export default {
     maxfiveurl:'一次最多ping5个网址',
     selectinputbox:'请先选择输入框',
     Over:"完成",
-    reject_Test:"存在网址未包含https或者http协议，请仔细核验"
+    reject_Test:"存在网址未包含https或者http协议，请仔细核验",
+    home: '主页',
+    about:'关于',
+    setting: '设置',
+    history:'历史',
+
 };
