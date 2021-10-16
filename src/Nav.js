@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Ordinary from './view/Mainpage';
 import Ping from './view/Functionpage';
 import UrlInput from './view/UrlInput';
+import About from './view/About';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ function Nav() {
         <Stack.Screen name="Ordinary" component={Ordinary} />
         <Stack.Screen name="Ping" component={Ping} />
         <Stack.Screen name="UrlInput" component={UrlInput} />
+        <Stack.Screen name="About" component={About} />
       </Stack.Navigator>
     </NavigationContainer>
   );

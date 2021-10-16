@@ -33,8 +33,8 @@ class Ordinary extends Component {
       keyBoardHeight: 0,
       currentIndex: -1,
     };
-    Data.InputUrl='';
-    Data.pingurl=[''];
+    Data.InputUrl = '';
+    Data.pingurl = [''];
     LanguageChange.bind(this)();
 
     store.get(Data.pingIndex).then((res) => {
@@ -94,12 +94,18 @@ class Ordinary extends Component {
       </View>
     );
   };
-  renderitem_history = ({item,index}) => {
+  renderitem_history = ({item, index}) => {
     return (
-      <View style={{flexDirection: 'row',height:Height* .05,width:Width*.95,marginTop:ScaleSize(20)}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          height: Height * 0.05,
+          width: Width * 0.95,
+          marginTop: ScaleSize(20),
+        }}>
         <TouchableOpacity
           onPress={() => {
-            Data.InputUrl = Data.InputUrl +' '+ Data.historyPing[index];
+            Data.InputUrl = Data.InputUrl + ' ' + Data.historyPing[index];
 
             this.setState({refresh: !this.state.refresh});
           }}>
@@ -145,7 +151,7 @@ class Ordinary extends Component {
                 style={{
                   width: ScaleSize(20),
                   height: ScaleSize(20),
-                  marginBottom:ScaleSize(15),
+                  marginBottom: ScaleSize(15),
                   marginHorizontal: ScaleSize(10),
                 }}
               />
@@ -216,7 +222,6 @@ class Ordinary extends Component {
                 marginLeft: Width * 0.08,
               }}>
               <FlatList
-
                 keyboardShouldPersistTaps={'handled'}
                 onRefresh={() => {
                   this.setState((prevState) => ({
@@ -242,8 +247,7 @@ class Ordinary extends Component {
                 height: Height * 0.062,
                 width: Width * 0.95,
                 marginLeft: Width * 0.025,
-                marginBottom:ScaleSize(15)
-            
+                marginBottom: ScaleSize(15),
               }}>
               <FlatList
                 scrollEnabled={false}
@@ -272,12 +276,12 @@ class Ordinary extends Component {
                   this.state.currentIndex = event.nativeEvent.selection.start;
                 }}
                 style={{
-                  paddingBottom: Height*0.01,
+                  paddingBottom: Height * 0.01,
 
                   marginTop: ScaleSize(3),
                   height: Height * 0.06,
                   backgroundColor: '#fff',
-                  width: Width * 0.65,
+                  width: Width * 0.6,
                   marginLeft: Width * 0.05,
                   position: 'absolute',
                   fontSize: ScaleSize(18),
@@ -303,29 +307,24 @@ class Ordinary extends Component {
                   position: 'absolute',
                   right: Width * 0.1,
                 }}>
-                
                 <TouchableOpacity
-            onPress={() => {
-              Data.InputUrl='';
-              this.setState({refresh: !this.state.refresh});
-            }}>
-            <View>
-              <Image
-                source={require('../imgs/small_delete.png')}
-                style={{
-                  marginTop:ScaleSize(16),
-                  width: ScaleSize(20),
-                  height: ScaleSize(20),
-                  marginBottom:ScaleSize(15),
-                  marginHorizontal: ScaleSize(10),
-                }}
-              />
-            </View>
-          </TouchableOpacity>
-
-
-
-
+                  onPress={() => {
+                    Data.InputUrl = '';
+                    this.setState({refresh: !this.state.refresh});
+                  }}>
+                  <View>
+                    <Image
+                      source={require('../imgs/small_delete.png')}
+                      style={{
+                        marginTop: ScaleSize(16),
+                        width: ScaleSize(20),
+                        height: ScaleSize(20),
+                        marginBottom: ScaleSize(15),
+                        marginHorizontal: ScaleSize(10),
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => {
@@ -335,7 +334,7 @@ class Ordinary extends Component {
                       return;
                     }
                     for (let i = 0; i < url.length; i++) {
-                      Data.pingurl[i]=url[i];
+                      Data.pingurl[i] = url[i];
                     }
                     this.identify = true;
 

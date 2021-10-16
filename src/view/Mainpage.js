@@ -7,14 +7,14 @@ import {
   Dimensions,
   TouchableOpacity,
   StyleSheet,
+  DrawerLayoutAndroid,
 } from 'react-native';
 
 import {SetSpText, ScaleSize, ScaleSizeH} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
-import I18n from 'i18n-js';
+import I18n, {toHumanSize} from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
-
 import {BackHandler, Platform} from 'react-native';
 import {ExitApp} from '../controller/AppPageFunction';
 
@@ -25,6 +25,7 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isAbout: false,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
       refresh: false,
@@ -33,7 +34,7 @@ class Ordinary extends Component {
       langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
       keyBoardHeight: 0,
       currentIndex: -1,
-      isNew: true, //判断是不是先进入简易模式
+      isLoading: true,
     };
 
     LanguageChange.bind(this)();
@@ -45,16 +46,23 @@ class Ordinary extends Component {
       }
     });
   }
+  open = () => {
+    this.drawer.openDrawer();
+  };
+
+  close = () => {
+    this.drawer.closeDrawer();
+  };
   identify = true;
 
-  componentDidMount() { 
-  Data.IP1 = '';
-  Data.IP2 = '';
-  Data.IP3 = '';
-  Data.IP4 = '';
-  Data.IP5 = '';
-  Data.InputUrl=''
-  Data.pingurl=[]
+  componentDidMount() {
+    Data.IP1 = '';
+    Data.IP2 = '';
+    Data.IP3 = '';
+    Data.IP4 = '';
+    Data.IP5 = '';
+    Data.InputUrl = '';
+    Data.pingurl = [];
 
     store.get('history').then((res) => {
       if (res != null) {
@@ -65,6 +73,9 @@ class Ordinary extends Component {
     //使安卓手机物理返回键生效
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
+    }
+    if (this.state.isAbout) {
+      this.props.navigation.navigate('About');
     }
   }
 
@@ -157,45 +168,189 @@ class Ordinary extends Component {
   };
 
   render() {
+    let navigationView = (
+      <View style={{flex: 1, backgroundColor: '#fff'}}>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={this.close}
+          style={{
+            marginTop: ScaleSize(20),
+            height: Height * 0.08,
+            backgroundColor: '#fff',
+            width: Width * 0.5,
+            marginLeft: Width * 0.02,
+            borderColor: 'pink',
+            borderWidth: ScaleSize(4),
+            borderBottomWidth: ScaleSize(2),
+            borderRadius: ScaleSize(2),
+            borderBottomRightRadius: ScaleSize(20),
+            borderTopRightRadius: ScaleSize(20),
+            //  position: 'absolute',
+          }}>
+          <View
+            style={{
+              position: 'absolute',
+              right: Width * 0.15,
+              top: Height * 0.015,
+            }}>
+            <Text
+              style={{
+                color: 'pink',
+                fontSize: ScaleSize(20),
+                fontWeight: '700',
+              }}>
+              {I18n.t('home')}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: Width * 0.1,
+              height: Width * 0.15,
+              alignItems: 'center',
+              position: 'absolute',
+              left: Width * 0.01,
+              top: Height * -0.008,
+            }}>
+            <Image
+              source={require('../imgs/home.png')}
+              style={{
+                marginTop: ScaleSize(16),
+                width: ScaleSize(30),
+                height: ScaleSize(30),
+                marginBottom: ScaleSize(15),
+                marginHorizontal: ScaleSize(10),
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <View style={{position: 'absolute', bottom: ScaleSize(30)}}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => {
+              this.props.navigation.navigate('About');
+            }}
+            style={{
+              marginTop: ScaleSize(20),
+              height: Height * 0.08,
+              backgroundColor: '#fff',
+              width: Width * 0.5,
+              marginLeft: Width * 0.02,
+              borderColor: 'pink',
+              borderWidth: ScaleSize(4),
+              borderBottomWidth: ScaleSize(2),
+              borderRadius: ScaleSize(2),
+              borderBottomRightRadius: ScaleSize(20),
+              borderTopRightRadius: ScaleSize(20),
+              //  position: 'absolute',
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                right: Width * 0.08,
+                top: Height * 0.015,
+              }}>
+              <Text
+                style={{
+                  color: 'pink',
+                  fontSize: ScaleSize(20),
+                  fontWeight: '700',
+                }}>
+                {I18n.t('about')}
+              </Text>
+            </View>
+            <View
+              style={{
+                width: Width * 0.1,
+                height: Width * 0.15,
+                alignItems: 'center',
+                position: 'absolute',
+                left: Width * 0.01,
+                top: Height * -0.01,
+              }}>
+              <Image
+                source={require('../imgs/about.png')}
+                style={{
+                  marginTop: ScaleSize(16),
+                  width: ScaleSize(35),
+                  height: ScaleSize(35),
+                  marginBottom: ScaleSize(15),
+                  marginHorizontal: ScaleSize(10),
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
     if (this.state.isPing) {
       return;
     } else {
       return (
-        <View style={{backgroundColor: '#1f2342'}}>
-          <View style={{height: Height, position: 'relative'}}>
-            <View style={{flex: 1, height: Height, position: 'relative'}}>
-              <View>
-                <Text
-                  style={{
-                    color: 'pink',
-                    fontSize: SetSpText(90),
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    marginTop: ScaleSize(180),
-                    marginBottom: ScaleSizeH(100),
-                  }}>
-                  {I18n.t('title')}
-                </Text>
-                <TouchableOpacity 
-                activeOpacity={0.9}
-                  onPress={()=>{
-                    this.props.navigation.navigate('UrlInput');
-                  }}
+        <DrawerLayoutAndroid
+          ref={(drawer) => {
+            this.drawer = drawer;
+          }}
+          //
+          drawerWidth={ScaleSize(200)}
+          // 设置导航视图从窗口边缘拉入的视图的宽度。
+          drawerPosition={DrawerLayoutAndroid.positions.Left}
+          // 设置导航视图从屏幕的哪一边拉入。
+          renderNavigationView={() => navigationView}
+          // 被拉入的导航视图的内容。
+
+          onDrawerClose={() => {}}
+          // 导航视图被关闭后的回调函数。
+          keyboardDismissMode="none"
+          // 设置拖动过程中是否隐藏软键盘,'none' (默认)，拖动时不隐藏软键盘。'on-drag'，拖动时隐藏软键盘。
+          onDrawerOpen={() => {}}
+          // 导航视图被打开后的回调函数。
+        >
+          <View style={{backgroundColor: '#1f2342'}}>
+            <View style={{height: Height, position: 'relative'}}>
+              <TouchableOpacity onPress={this.open}>
+                <View>
+                  <Image
+                    source={require('../imgs/draw.png')}
+                    style={{
+                      marginTop: ScaleSize(16),
+                      width: ScaleSize(30),
+                      height: ScaleSize(30),
+                      marginBottom: ScaleSize(15),
+                      marginHorizontal: ScaleSize(10),
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <Text
                 style={{
-                   marginTop: ScaleSize(20),
-                   height:Height*.08,
-                   backgroundColor: '#fff',
-                   width: Width * 0.9,
-                   marginLeft: Width * 0.05,
-                   borderColor: 'pink',
-                   borderWidth: ScaleSize(4),
-                   borderBottomWidth: ScaleSize(2),
-                   borderRadius:ScaleSize(20),
-                  //  position: 'absolute',
+                  color: 'pink',
+                  fontSize: SetSpText(90),
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  marginTop: ScaleSize(160),
+                  marginBottom: ScaleSizeH(100),
+                }}>
+                {I18n.t('title')}
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => {
+                  this.props.navigation.navigate('UrlInput');
                 }}
-                
-                >
-                  {/* <View
+                style={{
+                  marginTop: ScaleSize(20),
+                  height: Height * 0.08,
+                  backgroundColor: '#fff',
+                  width: Width * 0.9,
+                  marginLeft: Width * 0.05,
+                  borderColor: 'pink',
+                  borderWidth: ScaleSize(4),
+                  borderBottomWidth: ScaleSize(2),
+                  borderRadius: ScaleSize(20),
+                  //  position: 'absolute',
+                }}>
+                {/* <View
                     style={{
                       marginTop: ScaleSize(20),
                       height:Height*.08,
@@ -214,25 +369,24 @@ class Ordinary extends Component {
                     //   this.props.navigation.navigate('UrlInput')
                     // }
                     ></View> */}
-                  <View
-                    style={{
-                      width: Width * 0.18,
-                      alignItems: 'center',
-                      position: 'absolute',
-                      right: Width * 0.03,
-                      top: Height * 0.006,
-                    }}
-                    >
-                    <TouchableOpacity
-                      onPress={()=>{
-                        this.props.navigation.navigate('UrlInput');
-                      }}>
-                      <Text style={styles.pingtext}>GO!</Text>
-                    </TouchableOpacity>
-                  </View>
-                </TouchableOpacity>
+                <View
+                  style={{
+                    width: Width * 0.18,
+                    alignItems: 'center',
+                    position: 'absolute',
+                    right: Width * 0.03,
+                    top: Height * 0.006,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('UrlInput');
+                    }}>
+                    <Text style={styles.pingtext}>GO!</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
 
-                {/* <View style={{marginTop: ScaleSize(20)}}>
+              {/* <View style={{marginTop: ScaleSize(20)}}>
                   <FlatList
                     keyboardShouldPersistTaps={'handled'}
                     data={Data.Ping}
@@ -250,7 +404,7 @@ class Ordinary extends Component {
                     }}
                   />
                 </View> */}
-                {/* <KeyboardAccessory>
+              {/* <KeyboardAccessory>
                   <View style={{height: Height * 0.062}}>
                     <FlatList
                       scrollEnabled={false}
@@ -263,7 +417,7 @@ class Ordinary extends Component {
                   </View>
                 </KeyboardAccessory> */}
 
-                {/* <TouchableOpacity
+              {/* <TouchableOpacity
                   style={styles.pingTouchable}
                   onPress={() => {
                     if (Data.Ping.length != 0) {
@@ -290,7 +444,7 @@ class Ordinary extends Component {
                     />
                   </View>
                 </TouchableOpacity> */}
-                {/* <View style={{height: Height * 0.062}}>
+              {/* <View style={{height: Height * 0.062}}>
                   <FlatList
                     scrollEnabled={false}
                     keyboardShouldPersistTaps={'handled'}
@@ -300,10 +454,8 @@ class Ordinary extends Component {
                     renderItem={this._renderRow}
                   />
                 </View> */}
-              </View>
             </View>
-          </View>
-          {/* 
+            {/* 
           <View style={styles.pingwhole}>
             <TouchableOpacity
               onPress={() => {
@@ -344,7 +496,8 @@ class Ordinary extends Component {
               <Text style={styles.pingtext}>Ping</Text>
             </TouchableOpacity>
           </View> */}
-        </View>
+          </View>
+        </DrawerLayoutAndroid>
       );
     }
   }
@@ -440,3 +593,108 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
 });
+
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ * zhuoyuan93@gmail.com
+ *
+ */
+
+//  import React, {Component} from 'react';
+//  import {
+//      Platform,
+//      StyleSheet,
+//      Text,
+//      View,
+//      Dimensions
+//  } from 'react-native';
+//  import SideMenu from 'react-native-side-menu';
+
+//  const instructions = Platform.select({
+//      ios: 'Press Cmd+R to reload,\n' +
+//      'Cmd+D or shake for dev menu',
+//      android: 'Double tap R on your keyboard to reload,\n' +
+//      'Shake or press menu button for dev menu',
+//  });
+//  const {width, height} = Dimensions.get('window');
+
+//  export default class App extends Component {
+
+//      constructor(props) {
+//          super(props);
+//          this.state = {
+//              isOpen: false
+//          }
+//      }
+
+//      render() {
+//          const menu = <Text style={{marginTop: 22}} onPress={() => alert('点击了aaa')}>aaa</Text>;
+//          return (
+
+//              <SideMenu
+//                  menu={menu}                    //抽屉内的组件
+//                  isOpen={this.state.isOpen}     //抽屉打开/关闭
+//                  openMenuOffset={width / 2}     //抽屉的宽度
+//                  hiddenMenuOffset={20}          //抽屉关闭状态时,显示多少宽度 默认0 抽屉完全隐藏
+//                  edgeHitWidth={60}              //距离屏幕多少距离可以滑出抽屉,默认60
+//                  disableGestures={false}        //是否禁用手势滑动抽屉 默认false 允许手势滑动
+//                  /*onStartShouldSetResponderCapture={
+//                      () => console.log('开始滑动')}*/
+//                  onChange={                   //抽屉状态变化的监听函数
+//                      (isOpen) => {
+//                          isOpen ? console.log('抽屉当前状态为开着')
+//                              :
+//                              console.log('抽屉当前状态为关着')
+
+//                      }}
+
+//                  onMove={                     //抽屉移动时的监听函数 , 参数为抽屉拉出来的距离 抽屉在左侧时参数为正,右侧则为负
+//                      (marginLeft) => {
+//                          console.log(marginLeft)
+//                      }}
+
+//                  menuPosition={'left'}     //抽屉在左侧还是右侧
+//                  autoClosing={false}         //默认为true 如果为true 一有事件发生抽屉就会关闭
+//              >
+//                  <View style={styles.container}>
+//                      <Text style={styles.welcome} onPress={() => {
+//                          this.setState({
+//                              isOpen: true
+//                          })
+//                      }}>
+//                          Open Draw!
+//                      </Text>
+//                      <Text style={styles.instructions}>
+//                          To get started, edit App.js
+//                      </Text>
+//                      <Text style={styles.instructions}>
+//                          {instructions}
+//                      </Text>
+//                  </View>
+//              </SideMenu>
+
+//          );
+//      }
+//  }
+
+//  const styles = StyleSheet.create({
+//      container: {
+//          flex: 1,
+//          justifyContent: 'center',
+//          alignItems: 'center',
+//          backgroundColor: '#F5FCFF',
+//          marginTop: 22
+//      },
+//      welcome: {
+//          fontSize: 20,
+//          textAlign: 'center',
+//          margin: 10,
+//      },
+//      instructions: {
+//          textAlign: 'center',
+//          color: '#333333',
+//          marginBottom: 5,
+//      },
+//  });

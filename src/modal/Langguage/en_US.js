@@ -14,5 +14,12 @@ export default {
     setting: 'Setting',
     about:'About',
     history:'History',
-
+    developmentunit: 'Development Unit',
+    hDDevteam: 'HDDevTeam',
+    developer: 'Developer',
+    members: 'Some 19&20 RN Group Members',
+    versionupdatetime: 'Version Update Time',
+    iftherearebugsduringuse: 'If there are bugs during use',
+    pleasecontact: 'Please Contact',
+    version:"version: 0.9"
 };

@@ -33,14 +33,14 @@ class Ping extends Component {
     super(props);
     this.state = {
       scaleX: 1.05,
-      zoom: {scaleX: 1, scaleY:1,xValue: 2},
+      zoom: {scaleX: 1, scaleY: 1, xValue: 2},
       tableHead: ['MAX', 'MIN', 'AVG', 'P95', 'ERR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
       newReqTime: 0,
 
-      outData:[10000,10000,10000,10000,10000],
+      outData: [10000, 10000, 10000, 10000, 10000],
 
       values: [],
       values2: [],
@@ -66,7 +66,7 @@ class Ping extends Component {
         textColor: processColor('red'),
       },
       legend: {
-        textColor:gridColor,
+        textColor: gridColor,
         wordWrapEnabled: true,
       },
       secondDataHeight: 120, // 第二个图表数据style属性的bottom值
@@ -133,11 +133,10 @@ class Ping extends Component {
 
   resetZoom = (scale_switch) => {
     this.setState({
-      zoom: {scaleX: this.state.scaleX,scaleY:1, xValue: 800, yValue: 1500},
+      zoom: {scaleX: this.state.scaleX, scaleY: 1, xValue: 800, yValue: 1500},
     });
     this.state.scaleX = this.state.scaleX + scale_switch;
   };
-
 
   maxTime = 0; // 最大时间
   minTime = ''; // 最小时间
@@ -210,12 +209,12 @@ class Ping extends Component {
     for (let i = 0; i < urlCollection.length; i++) {
       if (urlCollection[i] != '') {
         dataSets.push({
-          textColor:gridColor,
-          axisLineColor:gridColor,
+          textColor: gridColor,
+          axisLineColor: gridColor,
           values: valuestempArr[i],
           label: `${urlCollection[i]}(${iptempArr[i]})`,
           config: {
-            textColor:"pink",
+            textColor: 'pink',
             drawValues: false,
             color: Colors[colortempArr[i]],
             mode: 'LINEAR',
@@ -230,7 +229,7 @@ class Ping extends Component {
         dataSets,
       },
       xAxis: {
-        textColor:gridColor,
+        textColor: gridColor,
         valueFormatter: chartLabels,
         axisLineWidth: 0,
         drawLabels: true,
@@ -326,7 +325,7 @@ class Ping extends Component {
     }
 
     return (
-      <View style={{position:"relative"}}>
+      <View style={{position: 'relative'}}>
         {/* <View style={styles.navigation}>
           <TouchableOpacity
             style={styles.backbutton}
@@ -352,7 +351,7 @@ class Ping extends Component {
           }}>
           <Text
             style={{
-              color:"pink",
+              color: 'pink',
               opacity: 0.7,
               marginTop: ScaleSize(5),
               marginLeft: ScaleSize(3),
@@ -376,7 +375,6 @@ class Ping extends Component {
                   gridColor: gridColor,
                 },
                 right: {
-
                   enabled: false,
                 },
               }}
@@ -455,8 +453,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#1f2342',
   },
   table: {
-    top:-Height*.35,
-    flex:1,
+    top: -Height * 0.35,
+    flex: 1,
     width: 0.9 * Width,
     marginLeft: Width * 0.05,
   },
@@ -533,7 +531,7 @@ const styles = StyleSheet.create({
   },
 
   stopwhole: {
-    marginBottom:60,
+    marginBottom: 60,
     marginTop: -(Height * 0.4),
     width: 0.975 * Width,
     marginLeft: Width * 0.0125,
