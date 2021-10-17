@@ -95,22 +95,24 @@ class Ordinary extends Component {
     );
   };
   renderitem_history = ({item,index}) => {
+    let n=item[0].match(/\n/g)==null?1:item[0].match(/\n/g).length;
+    let h=Height*0.03*n;
     return (
-      <View style={{flexDirection: 'row',height:Height* .05,width:Width*.95,marginTop:ScaleSize(20)}}>
+      <View style={{flexDirection: 'row',height:h,width:Width*.95,marginTop:ScaleSize(20)}}>
         <TouchableOpacity
           onPress={() => {
-            Data.InputUrl = Data.InputUrl +' '+ Data.historyPing[index];
+            Data.InputUrl = Data.InputUrl + Data.historyPing[index];
 
             this.setState({refresh: !this.state.refresh});
           }}>
           <View
             style={{
               width: ScaleSize(255),
-              height: ScaleSize(34),
+              // height: ScaleSize(34),
               justifyContent: 'center',
             }}>
             <Text
-              numberOfLines={1}
+              // numberOfLines={1}
               ellipsizeMode={'tail'}
               style={{
                 color: '#fff',
@@ -192,6 +194,16 @@ class Ordinary extends Component {
     );
   };
 
+  checkHistory=(value)=>{
+    let flag=true;
+    for(let i=0;i<Data.historyPing.length;i++){
+      if(value.trim()==Data.historyPing[i][0].trim()){
+        flag=false;
+        break;
+      }
+    }
+    if(flag)Data.historyPing.push([value]);
+  };
   render() {
     if (this.state.isPing) {
       return;
@@ -216,7 +228,7 @@ class Ordinary extends Component {
                 marginLeft: Width * 0.08,
               }}>
               <FlatList
-
+                scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
                 onRefresh={() => {
                   this.setState((prevState) => ({
@@ -229,7 +241,10 @@ class Ordinary extends Component {
                   }, 1000);
                 }}
                 style={{
-                  marginLeft: ScaleSize(-4),
+                  height: Height * 0.80,
+                  width: Width * 0.95,
+                  paddingLeft: ScaleSize(20),
+                  marginLeft: ScaleSize(-20),
                   borderRadius: ScaleSize(13),
                 }}
                 refreshing={this.state.FlatListIsRefreshing}
@@ -246,7 +261,7 @@ class Ordinary extends Component {
             
               }}>
               <FlatList
-                scrollEnabled={false}
+                scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
                 style={styles.urlsArrFlatlist}
                 horizontal={true}
@@ -276,9 +291,9 @@ class Ordinary extends Component {
 
                   marginTop: ScaleSize(3),
                   height: Height * 0.06,
-                  backgroundColor: '#fff',
+                  // backgroundColor: '#fff',
                   width: Width * 0.65,
-                  marginLeft: Width * 0.05,
+                  // marginLeft: Width * 0.05,
                   position: 'absolute',
                   fontSize: ScaleSize(18),
                 }}
@@ -329,19 +344,38 @@ class Ordinary extends Component {
 
                 <TouchableOpacity
                   onPress={() => {
-                    let url = Data.InputUrl.trim().split(/\s+/);
+                    //正则分割字符串
+                    let last="com|edu|cn|gov|org";
+                    let reg = new RegExp("(?<=\.("+last+"))(?<!www\.("+last+"))\s*(?!\.("+last+"))\n*","g");
+                    let url = Data.InputUrl.replace(reg,",").split(",");
+                    url.pop();
                     if (url.length > 5) {
                       Toast.message(I18n.t('maxfiveurl'));
                       return;
                     }
+                    if(url.length<=0){
+                      Toast.message(I18n.t('urlempty'));
+                      return;
+                    }
                     for (let i = 0; i < url.length; i++) {
                       Data.pingurl[i]=url[i];
-                    }
+                    }                
+                    //检测url合法性
                     this.identify = true;
-
+                    for(let i=0;i<Data.pingurl.length;i++){
+                      let reg2=new RegExp("^https?:\/\/(www\.)?\\w+(\.("+last+"))+$","g");
+                      if(Data.pingurl[i].search(reg2)<0){
+                        this.identify = false;
+                      }
+                    }
+                    
                     if (this.identify) {
-                      if (Data.pingurl.length != 0) {
-                        Data.historyPing.push([Data.InputUrl]);
+                      if (Data.pingurl.length != 0) {  
+                        //查重并拆分  
+                        this.checkHistory(Data.InputUrl.replace(reg,"\n"));
+                        for(let i=0;i<Data.pingurl.length;i++){
+                          this.checkHistory(Data.pingurl[i]);
+                        }
                         store.save('history', Data.historyPing);
                         // let Ping_length = Data.pingurl.length;
                         // let History_length = Data.historyPing.length;
@@ -356,10 +390,11 @@ class Ordinary extends Component {
                         //   ];
                         // }
                         this.setState({refresh: !this.state.refresh});
+                        console.log(Data.historyPing);
                         this.props.navigation.navigate('Ping', {
                           urlData: [...Data.pingurl],
                         });
-                        console.log('history:' + Data.historyPing);
+                        
                       } else {
                         Toast.message(I18n.t('nourladded'));
                       }

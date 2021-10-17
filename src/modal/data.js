@@ -12,7 +12,7 @@ const Data = {
     pingurl:[],
     pingIndex:"HDDEVTEAM",
     historyPing:[],//历史Ping的地址
-    urlsArr:["http://","https://","www.",".com",".cn"],
+    urlsArr:["http://","https://","www.",".com",".cn",".edu",".org",".gov",],
     InputUrl:'',
     IP1:'',
     IP2:'',
