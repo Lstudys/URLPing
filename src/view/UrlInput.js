@@ -197,7 +197,7 @@ class Ordinary extends Component {
   checkHistory=(value)=>{
     let flag=true;
     for(let i=0;i<Data.historyPing.length;i++){
-      if(value.trim()==Data.historyPing[i][0].trim()){
+      if(value==Data.historyPing[i]){
         flag=false;
         break;
       }
@@ -241,7 +241,7 @@ class Ordinary extends Component {
                   }, 1000);
                 }}
                 style={{
-                  height: Height * 0.80,
+                  height: Height * 0.40,
                   width: Width * 0.95,
                   paddingLeft: ScaleSize(20),
                   marginLeft: ScaleSize(-20),
@@ -250,6 +250,7 @@ class Ordinary extends Component {
                 refreshing={this.state.FlatListIsRefreshing}
                 renderItem={this.renderitem_history}
                 data={Data.historyPing}
+                
               />
             </View>
             <View
@@ -344,27 +345,28 @@ class Ordinary extends Component {
 
                 <TouchableOpacity
                   onPress={() => {
+                    Platform.OS
                     //正则分割字符串
                     let last="com|edu|cn|gov|org";
-                    let reg = new RegExp("(?<=\.("+last+"))(?<!www\.("+last+"))\s*(?!\.("+last+"))\n*","g");
-                    let url = Data.InputUrl.replace(reg,",").split(",");
-                    url.pop();
+                    // let reg = new RegExp("(?<=\.("+last+"))(?<!www\.("+last+"))\\s*(?!\.("+last+"))\n*","g");
+                    let reg=new RegExp("\n*https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
+                    let url = Data.InputUrl.match(reg)
+                    console.log(url); 
+                    if(url==null){
+                      Toast.message(I18n.t('urlempty'));
+                      return;
+                    }
                     if (url.length > 5) {
                       Toast.message(I18n.t('maxfiveurl'));
                       return;
                     }
-                    if(url.length<=0){
-                      Toast.message(I18n.t('urlempty'));
-                      return;
-                    }
                     for (let i = 0; i < url.length; i++) {
-                      Data.pingurl[i]=url[i];
+                      Data.pingurl[i]=url[i].trim();
                     }                
                     //检测url合法性
                     this.identify = true;
-                    for(let i=0;i<Data.pingurl.length;i++){
-                      let reg2=new RegExp("^https?:\/\/(www\.)?\\w+(\.("+last+"))+$","g");
-                      if(Data.pingurl[i].search(reg2)<0){
+                    for(let i=0;i<Data.pingurl.length;i++){   
+                      if(Data.pingurl[i].search(reg)<0){
                         this.identify = false;
                       }
                     }
@@ -372,10 +374,12 @@ class Ordinary extends Component {
                     if (this.identify) {
                       if (Data.pingurl.length != 0) {  
                         //查重并拆分  
-                        this.checkHistory(Data.InputUrl.replace(reg,"\n"));
+                        let inputUrl="";
                         for(let i=0;i<Data.pingurl.length;i++){
+                          inputUrl=inputUrl+Data.pingurl[i]+"\n";
                           this.checkHistory(Data.pingurl[i]);
                         }
+                        this.checkHistory(inputUrl);
                         store.save('history', Data.historyPing);
                         // let Ping_length = Data.pingurl.length;
                         // let History_length = Data.historyPing.length;
