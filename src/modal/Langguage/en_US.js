@@ -1,5 +1,5 @@
 export default {
-    title:'GraphURLPing',
+    title:'Graph URL Ping',
     input:'Please Enter URL',
     delete:'Delete',
     add:'Add',

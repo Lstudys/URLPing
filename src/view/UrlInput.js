@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import {KeyboardAccessoryNavigation} from 'react-native-keyboard-accessory';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
@@ -135,13 +136,6 @@ class Ordinary extends Component {
           <TouchableOpacity
             onPress={() => {
               Data.historyPing.splice(parseInt(index), 1);
-              // for (
-              //   let i = 0, j = Data.historyPing.length;
-              //   i < Data.historyPing.length;
-              //   i++, j--
-              // ) {
-              //   Data.historyPing[i].key = j;
-              // }
               this.setState({refresh: !this.state.refresh});
               console.log(Data.historyPing);
             }}>
@@ -167,7 +161,6 @@ class Ordinary extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          // console.log("history"+Data.historyPing);
           for (let i = 0; i < Data.urlsArr.length; i++) {
             if (Data.urlsArr[i] == item) {
               var key = i;
@@ -178,16 +171,6 @@ class Ordinary extends Component {
             Data.InputUrl.slice(0, this.state.currentIndex) +
             Data.urlsArr[key] +
             Data.InputUrl.slice(this.state.currentIndex);
-          // Data.Ping[parseInt(this.state.currentUrlindex)].url =
-          //   Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
-          //     0,
-          //     this.state.currentIndex,
-          //   ) +
-          //   Data.urlsArr[key] +
-          //   Data.Ping[parseInt(this.state.currentUrlindex)].url.slice(
-          //     this.state.currentIndex,
-          //   );
-          // store.save(Data.pingIndex, Data.Ping);
           console.log('变了吗' + Data.InputUrl);
           this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
@@ -208,6 +191,7 @@ class Ordinary extends Component {
             backgroundColor: '#1f2342',
             height: Height,
             position: 'relative',
+            flex: 1,
           }}>
           <View
             style={{
@@ -342,18 +326,6 @@ class Ordinary extends Component {
                       if (Data.pingurl.length != 0) {
                         Data.historyPing.push([Data.InputUrl]);
                         store.save('history', Data.historyPing);
-                        // let Ping_length = Data.pingurl.length;
-                        // let History_length = Data.historyPing.length;
-                        // for (
-                        //   let i = 0, j = History_length;
-                        //   i < Ping_length;
-                        //   i++, j++
-                        // ) {
-                        //   Data.historyPing = [
-                        //     ...Data.historyPing,
-                        //     {key: j, url: Data.pingurl[i].url},
-                        //   ];
-                        // }
                         this.setState({refresh: !this.state.refresh});
                         this.props.navigation.navigate('Ping', {
                           urlData: [...Data.pingurl],
@@ -371,6 +343,7 @@ class Ordinary extends Component {
               </View>
             </View>
           </View>
+          <KeyboardAccessoryNavigation />
         </View>
       );
     }
@@ -465,124 +438,3 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
 });
-
-{
-  /* <View style={{marginTop: ScaleSize(20)}}>
-                  <FlatList
-                    keyboardShouldPersistTaps={'handled'}
-                    data={Data.Ping}
-                    renderItem={this.renderItem}
-                    refreshing={this.state.FlatListIsRefreshing}
-                    onRefresh={() => {
-                      this.setState(() => ({
-                        FlatListIsRefreshing: true,
-                      }));
-                      setTimeout(() => {
-                        this.setState(() => ({
-                          FlatListIsRefreshing: false,
-                        }));
-                      }, 1000);
-                    }}
-                  />
-                </View> */
-}
-{
-  /* <KeyboardAccessory>
-                  <View style={{height: Height * 0.062}}>
-                    <FlatList
-                      scrollEnabled={false}
-                      keyboardShouldPersistTaps={'handled'}
-                      style={styles.urlsArrFlatlist}
-                      horizontal={true}
-                      data={Data.urlsArr}
-                      renderItem={this._renderRow}
-                    />
-                  </View>
-                </KeyboardAccessory> */
-}
-
-{
-  /* <TouchableOpacity
-                  style={styles.pingTouchable}
-                  onPress={() => {
-                    if (Data.Ping.length != 0) {
-                      let key = Data.Ping.length;
-                      if (key >= 5) {
-                        alert(I18n.t('maxfiveurl'));
-                        return;
-                      }
-                      Data.Ping = [...Data.Ping, {key: key, url: ''}];
-                      for (let i = 0; i < Data.Ping.length; i++) {
-                        Data.Ping[i].key = i;
-                      }
-                      this.setState({refresh: !this.state.refresh});
-                    } else {
-                      Data.Ping = [{key: 0, url: ''}];
-                      this.setState({refresh: !this.state.refresh});
-                    }
-                    store.save(Data.pingIndex, Data.Ping);
-                  }}>
-                  <View style={styles.add}>
-                    <Image
-                      source={require('../imgs/add.png')}
-                      style={styles.addimage}
-                    />
-                  </View>
-                </TouchableOpacity> */
-}
-{
-  /* <View style={{height: Height * 0.062}}>
-                  <FlatList
-                    scrollEnabled={false}
-                    keyboardShouldPersistTaps={'handled'}
-                    style={styles.urlsArrFlatlist}
-                    horizontal={true}
-                    data={Data.urlsArr}
-                    renderItem={this._renderRow}
-                  />
-                </View> */
-}
-
-{
-  /* 
-          <View style={styles.pingwhole}>
-            <TouchableOpacity
-              onPress={() => {
-                for (let i = 0; i < Data.Ping.length; i++) {
-                  if (!TestURL(Data.Ping[i].url)) {
-                    this.identify = false;
-                    break;
-                  } else {
-                    this.identify = true;
-                  }
-                }
-                if (this.identify) {
-                  if (Data.Ping.length != 0) {
-                    let Ping_length = Data.Ping.length;
-                    let History_length = Data.historyPing.length;
-                    for (
-                      let i = 0, j = History_length;
-                      i < Ping_length;
-                      i++, j++
-                    ) {
-                      Data.historyPing = [
-                        ...Data.historyPing,
-                        {key: j, url: Data.Ping[i].url},
-                      ];
-                    }
-                    this.setState({refresh: !this.state.refresh});
-                    this.props.navigation.navigate('Ping', {
-                      urlData: [...Data.Ping],
-                    });
-                  } else {
-                    Toast.message(I18n.t('nourladded'));
-                  }
-                } else {
-                  Toast.message(I18n.t('reject_Test'));
-                }
-              }}
-              style={styles.pingbutton}>
-              <Text style={styles.pingtext}>Ping</Text>
-            </TouchableOpacity>
-          </View> */
-}

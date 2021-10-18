@@ -325,7 +325,7 @@ class Ordinary extends Component {
               <Text
                 style={{
                   color: 'pink',
-                  fontSize: SetSpText(90),
+                  fontSize: SetSpText(85),
                   fontWeight: 'bold',
                   textAlign: 'center',
                   marginTop: ScaleSize(160),
@@ -339,7 +339,7 @@ class Ordinary extends Component {
                   this.props.navigation.navigate('UrlInput');
                 }}
                 style={{
-                  marginTop: ScaleSize(20),
+                  marginTop: ScaleSize(10),
                   height: Height * 0.08,
                   backgroundColor: '#fff',
                   width: Width * 0.9,
@@ -348,27 +348,7 @@ class Ordinary extends Component {
                   borderWidth: ScaleSize(4),
                   borderBottomWidth: ScaleSize(2),
                   borderRadius: ScaleSize(20),
-                  //  position: 'absolute',
                 }}>
-                {/* <View
-                    style={{
-                      marginTop: ScaleSize(20),
-                      height:Height*.08,
-                      backgroundColor: '#fff',
-                      width: Width * 0.9,
-                      marginLeft: Width * 0.05,
-                      borderColor: 'pink',
-                      borderWidth: ScaleSize(4),
-                      borderBottomWidth: ScaleSize(2),
-                      borderRadius:ScaleSize(20),
-                      position: 'absolute',
-                     
-                    }}
-                    
-                    // onKeyPress={
-                    //   this.props.navigation.navigate('UrlInput')
-                    // }
-                    ></View> */}
                 <View
                   style={{
                     width: Width * 0.18,
@@ -385,117 +365,7 @@ class Ordinary extends Component {
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
-
-              {/* <View style={{marginTop: ScaleSize(20)}}>
-                  <FlatList
-                    keyboardShouldPersistTaps={'handled'}
-                    data={Data.Ping}
-                    renderItem={this.renderItem}
-                    refreshing={this.state.FlatListIsRefreshing}
-                    onRefresh={() => {
-                      this.setState(() => ({
-                        FlatListIsRefreshing: true,
-                      }));
-                      setTimeout(() => {
-                        this.setState(() => ({
-                          FlatListIsRefreshing: false,
-                        }));
-                      }, 1000);
-                    }}
-                  />
-                </View> */}
-              {/* <KeyboardAccessory>
-                  <View style={{height: Height * 0.062}}>
-                    <FlatList
-                      scrollEnabled={false}
-                      keyboardShouldPersistTaps={'handled'}
-                      style={styles.urlsArrFlatlist}
-                      horizontal={true}
-                      data={Data.urlsArr}
-                      renderItem={this._renderRow}
-                    />
-                  </View>
-                </KeyboardAccessory> */}
-
-              {/* <TouchableOpacity
-                  style={styles.pingTouchable}
-                  onPress={() => {
-                    if (Data.Ping.length != 0) {
-                      let key = Data.Ping.length;
-                      if (key >= 5) {
-                        alert(I18n.t('maxfiveurl'));
-                        return;
-                      }
-                      Data.Ping = [...Data.Ping, {key: key, url: ''}];
-                      for (let i = 0; i < Data.Ping.length; i++) {
-                        Data.Ping[i].key = i;
-                      }
-                      this.setState({refresh: !this.state.refresh});
-                    } else {
-                      Data.Ping = [{key: 0, url: ''}];
-                      this.setState({refresh: !this.state.refresh});
-                    }
-                    store.save(Data.pingIndex, Data.Ping);
-                  }}>
-                  <View style={styles.add}>
-                    <Image
-                      source={require('../imgs/add.png')}
-                      style={styles.addimage}
-                    />
-                  </View>
-                </TouchableOpacity> */}
-              {/* <View style={{height: Height * 0.062}}>
-                  <FlatList
-                    scrollEnabled={false}
-                    keyboardShouldPersistTaps={'handled'}
-                    style={styles.urlsArrFlatlist}
-                    horizontal={true}
-                    data={Data.urlsArr}
-                    renderItem={this._renderRow}
-                  />
-                </View> */}
             </View>
-            {/* 
-          <View style={styles.pingwhole}>
-            <TouchableOpacity
-              onPress={() => {
-                for (let i = 0; i < Data.Ping.length; i++) {
-                  if (!TestURL(Data.Ping[i].url)) {
-                    this.identify = false;
-                    break;
-                  } else {
-                    this.identify = true;
-                  }
-                }
-                if (this.identify) {
-                  if (Data.Ping.length != 0) {
-                    let Ping_length = Data.Ping.length;
-                    let History_length = Data.historyPing.length;
-                    for (
-                      let i = 0, j = History_length;
-                      i < Ping_length;
-                      i++, j++
-                    ) {
-                      Data.historyPing = [
-                        ...Data.historyPing,
-                        {key: j, url: Data.Ping[i].url},
-                      ];
-                    }
-                    this.setState({refresh: !this.state.refresh});
-                    this.props.navigation.navigate('Ping', {
-                      urlData: [...Data.Ping],
-                    });
-                  } else {
-                    Toast.message(I18n.t('nourladded'));
-                  }
-                } else {
-                  Toast.message(I18n.t('reject_Test'));
-                }
-              }}
-              style={styles.pingbutton}>
-              <Text style={styles.pingtext}>Ping</Text>
-            </TouchableOpacity>
-          </View> */}
           </View>
         </DrawerLayoutAndroid>
       );
@@ -540,8 +410,6 @@ const styles = StyleSheet.create({
   },
   pingwhole: {
     marginHorizontal: ScaleSize(5),
-    // marginBottom: ScaleSize(10),
-    // marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
     marginLeft: ScaleSize(-4),
@@ -593,108 +461,3 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
 });
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- * zhuoyuan93@gmail.com
- *
- */
-
-//  import React, {Component} from 'react';
-//  import {
-//      Platform,
-//      StyleSheet,
-//      Text,
-//      View,
-//      Dimensions
-//  } from 'react-native';
-//  import SideMenu from 'react-native-side-menu';
-
-//  const instructions = Platform.select({
-//      ios: 'Press Cmd+R to reload,\n' +
-//      'Cmd+D or shake for dev menu',
-//      android: 'Double tap R on your keyboard to reload,\n' +
-//      'Shake or press menu button for dev menu',
-//  });
-//  const {width, height} = Dimensions.get('window');
-
-//  export default class App extends Component {
-
-//      constructor(props) {
-//          super(props);
-//          this.state = {
-//              isOpen: false
-//          }
-//      }
-
-//      render() {
-//          const menu = <Text style={{marginTop: 22}} onPress={() => alert('点击了aaa')}>aaa</Text>;
-//          return (
-
-//              <SideMenu
-//                  menu={menu}                    //抽屉内的组件
-//                  isOpen={this.state.isOpen}     //抽屉打开/关闭
-//                  openMenuOffset={width / 2}     //抽屉的宽度
-//                  hiddenMenuOffset={20}          //抽屉关闭状态时,显示多少宽度 默认0 抽屉完全隐藏
-//                  edgeHitWidth={60}              //距离屏幕多少距离可以滑出抽屉,默认60
-//                  disableGestures={false}        //是否禁用手势滑动抽屉 默认false 允许手势滑动
-//                  /*onStartShouldSetResponderCapture={
-//                      () => console.log('开始滑动')}*/
-//                  onChange={                   //抽屉状态变化的监听函数
-//                      (isOpen) => {
-//                          isOpen ? console.log('抽屉当前状态为开着')
-//                              :
-//                              console.log('抽屉当前状态为关着')
-
-//                      }}
-
-//                  onMove={                     //抽屉移动时的监听函数 , 参数为抽屉拉出来的距离 抽屉在左侧时参数为正,右侧则为负
-//                      (marginLeft) => {
-//                          console.log(marginLeft)
-//                      }}
-
-//                  menuPosition={'left'}     //抽屉在左侧还是右侧
-//                  autoClosing={false}         //默认为true 如果为true 一有事件发生抽屉就会关闭
-//              >
-//                  <View style={styles.container}>
-//                      <Text style={styles.welcome} onPress={() => {
-//                          this.setState({
-//                              isOpen: true
-//                          })
-//                      }}>
-//                          Open Draw!
-//                      </Text>
-//                      <Text style={styles.instructions}>
-//                          To get started, edit App.js
-//                      </Text>
-//                      <Text style={styles.instructions}>
-//                          {instructions}
-//                      </Text>
-//                  </View>
-//              </SideMenu>
-
-//          );
-//      }
-//  }
-
-//  const styles = StyleSheet.create({
-//      container: {
-//          flex: 1,
-//          justifyContent: 'center',
-//          alignItems: 'center',
-//          backgroundColor: '#F5FCFF',
-//          marginTop: 22
-//      },
-//      welcome: {
-//          fontSize: 20,
-//          textAlign: 'center',
-//          margin: 10,
-//      },
-//      instructions: {
-//          textAlign: 'center',
-//          color: '#333333',
-//          marginBottom: 5,
-//      },
-//  });

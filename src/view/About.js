@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react';
-import {Dimensions, View, Text, Button, processColor} from 'react-native';
+import {Dimensions, View, Text} from 'react-native';
 import Data from '../modal/data';
 import store from 'react-native-simple-store';
 import I18n from 'i18n-js';

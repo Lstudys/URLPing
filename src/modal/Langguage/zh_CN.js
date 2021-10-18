@@ -8,7 +8,7 @@ export default {
     // versionupdatetime: '版本更新时间',
     // iftherearebugsduringuse: '使用过程中，如果出现bugs',
     // pleasecontact: '请联系',
-    title:'GraphURLPing',
+    title:'Graph URL Ping',
     input:'请输入URL',
     delete:'删除',
     add:'添加',

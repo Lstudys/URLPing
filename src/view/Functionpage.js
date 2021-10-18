@@ -326,25 +326,6 @@ class Ping extends Component {
 
     return (
       <View style={{position: 'relative'}}>
-        {/* <View style={styles.navigation}>
-          <TouchableOpacity
-            style={styles.backbutton}
-            onPress={() => {
-              this.props.navigation.navigate('Ordinary');
-              this.setState({
-                isPing: false,
-              });
-              //当退出Ping页面时把IP地址赋值为空
-              Data.IP1 = '';
-              Data.IP2 = '';
-              Data.IP3 = '';
-              Data.IP4 = '';
-              Data.IP5 = '';
-            }}>
-            <Image source={require('../imgs/back.png')} style={styles.back} />
-          </TouchableOpacity>
-          <Text style={styles.test}>{I18n.t('test')}...</Text>
-        </View> */}
         <View
           style={{
             backgroundColor: '#1f2342',
