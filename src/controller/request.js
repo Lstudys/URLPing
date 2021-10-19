@@ -19,12 +19,17 @@ export const SendRequest = function () {
 
     this.setState({backChart: false});
     this.setState({linechart: false}); // 设置状态以显示图表
-
     this.linechartDates = []; // 清空折线图的数据源数组
     this.linechartDates2 = [];
     this.linechartDates3 = [];
     this.linechartDates4 = [];
     this.linechartDates5 = [];
+
+    this.state.p95_arr1=[],
+    this.state.p95_arr2=[],
+    this.state.p95_arr3=[],
+    this.state.p95_arr4=[],
+    this.state.p95_arr5=[],
 
     this.sumReqTime = []; // 清空请求时间的数组
     this.sumReqTime2 = [];
@@ -148,16 +153,6 @@ export const SendRequest = function () {
       urlDatathrid: [],
       urlDatafour: [],
       urlDatafive: [],
-    });
-    this.setState({
-      chartLabels: this.state.chartLabels.concat([
-        hourall + ':' + minuteall + ':' + secondall_small_1,
-      ]),
-      values: this.state.values.concat([200]),
-      values2: this.state.values.concat([200]),
-      values3: this.state.values.concat([200]),
-      values4: this.state.values.concat([200]),
-      values5: this.state.values.concat([200]),
     });
     var start_scale1 = false;
     var start_scale2 = false;
@@ -425,23 +420,20 @@ export const SendRequest = function () {
             var xtime = hour + ':' + minute + ':' + second;
             let ytime = value5.time;
 
+            
+            this.state.p95_arr5.push(ytime);
             this.state.urlDatafive.push({
               xTimeall: xData5,
               xData: xtime,
-              yData: ytime,
+              yData: ytime
             });
+          
             this.sumReqTime5.push(value5.time);
             value5.sumtime += value5.time; // 求和，算出总时间
             this.avgTime5 = value5.sumtime / x5;
             if (value5.time > this.maxTime5) {
               this.maxTime5 = value5.time;
             }
-            // let diffenceData_count=0;
-            // for(let i=0;i<this.state.urlDatafirst.length;i++){
-            //   diffenceData_count+=Math.pow((this.state.urlDatafirst[i].yData-this.avgTime5),2);
-            // }
-            // this.outData[4]=this.avgTime5+ 2.5*sqrt(diffenceData_count/x);
-            // console.log("outData[4]:"+this.outData[4]);
             if (this.minTime5 == '') {
               this.minTime5 = value5.time;
             } else if (this.minTime5 > value5.time) {
@@ -456,12 +448,10 @@ export const SendRequest = function () {
             let num1 = sum / x5;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
             if (x5 > 3) this.outData[4] = this.avgTime5 + 2.5 * num2;
-
-            if (num2 > this.avgTime5) {
-              this.n955 = num2 - this.avgTime5;
-            } else {
-              this.n955 = this.avgTime5 - num2;
-            } // end
+            this.state.p95_arr5.sort(function(a, b){return a - b});
+              let division=(x5/20)*19;
+              if(x5>2)
+              this.n955=this.state.p95_arr5[parseInt(division)-1]+(this.state.p95_arr5[parseInt(division)]-this.state.p95_arr5[parseInt(division)-1])*(division-parseInt(division));
             this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
             x5++;
           }
@@ -523,11 +513,15 @@ export const SendRequest = function () {
             var xtime = `${new Date().getHours()}:` + minute + ':' + second;
             let ytime = value4.time;
 
+            
+            this.state.p95_arr4.push(ytime);
+
             this.state.urlDatafour.push({
               xTimeall: xData4,
               xData: xtime,
               yData: ytime,
             });
+          
             this.sumReqTime4.push(value4.time);
             value4.sumtime += value4.time; // 求和，算出总时间
             this.avgTime4 = value4.sumtime / x4;
@@ -548,12 +542,10 @@ export const SendRequest = function () {
             let num1 = sum / x4;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
             if (x4 > 3) this.outData[3] = this.avgTime4 + 2.5 * num2;
-            // console.log("outData[3]:"+this.outData[3]);
-            if (num2 > this.avgTime4) {
-              this.n954 = num2 - this.avgTime4;
-            } else {
-              this.n954 = this.avgTime4 - num2;
-            } // end
+            this.state.p95_arr4.sort(function(a, b){return a - b});
+              let division=(x4/20)*19;
+              if(x4>2)
+              this.n954=this.state.p95_arr4[parseInt(division)-1]+(this.state.p95_arr4[parseInt(division)]-this.state.p95_arr4[parseInt(division)-1])*(division-parseInt(division));
             this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
             x4++;
           }
@@ -616,6 +608,9 @@ export const SendRequest = function () {
             var xtime = hour + ':' + minute + ':' + second;
             let ytime = value3.time;
 
+            
+            this.state.p95_arr3.push(ytime);
+
             this.state.urlDatathrid.push({
               xTimeall: xData3,
               xData: xtime,
@@ -642,12 +637,10 @@ export const SendRequest = function () {
             let num1 = sum / x3;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
             if (x3 > 3) this.outData[2] = this.avgTime3 + 2.5 * num2;
-            // console.log("outData[2]:"+this.outData[2]);
-            if (num2 > this.avgTime3) {
-              this.n953 = num2 - this.avgTime3;
-            } else {
-              this.n953 = this.avgTime3 - num2;
-            } // end
+            this.state.p95_arr3.sort(function(a, b){return a - b});
+            let division=(x3/20)*19;
+            if(x3>2)
+            this.n953=this.state.p95_arr3[parseInt(division)-1]+(this.state.p95_arr3[parseInt(division)]-this.state.p95_arr3[parseInt(division)-1])*(division-parseInt(division));
             this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
             x3++;
           }
@@ -711,11 +704,16 @@ export const SendRequest = function () {
             var xtime = hour + ':' + minute + ':' + second;
             let ytime = value2.time;
 
+            
+            this.state.p95_arr2.push(ytime);
+
             this.state.urlDatasecond.push({
               xTimeall: xData2,
               xData: xtime,
               yData: ytime,
             });
+          
+         
             this.sumReqTime2.push(value2.time);
             value2.sumtime += value2.time; // 求和，算出总时间
             this.avgTime2 = value2.sumtime / x2;
@@ -736,12 +734,10 @@ export const SendRequest = function () {
             let num1 = sum / x2;
             let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
             if (x2 > 3) this.outData[1] = this.avgTime2 + 2.5 * num2;
-            // console.log("outData[1]:"+this.outData[1]);
-            if (num2 > this.avgTime2) {
-              this.n952 = num2 - this.avgTime2;
-            } else {
-              this.n952 = this.avgTime2 - num2;
-            } // end
+            this.state.p95_arr2.sort(function(a, b){return a - b});
+              let division=(x2/20)*19;
+              if(x2>2)
+              this.n952=this.state.p95_arr2[parseInt(division)-1]+(this.state.p95_arr2[parseInt(division)]-this.state.p95_arr2[parseInt(division)-1])*(division-parseInt(division));
             this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
             x2++;
           }
@@ -806,12 +802,17 @@ export const SendRequest = function () {
 
               var ytime = value.time;
 
+              
+              this.state.p95_arr1.push(ytime);
+
               this.state.urlDatafirst.push({
                 xTime_format: xtime,
                 xTimeall: xData1,
                 xData: xtime,
                 yData: ytime,
               });
+            
+            // else return;
               this.sumReqTime.push(value.time);
               value.sumtime += value.time; // 求和，算出总时间
               this.avgTime = value.sumtime / x;
@@ -832,11 +833,13 @@ export const SendRequest = function () {
               let num1 = sum / x;
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
               if (x > 3) this.outData[0] = this.avgTime+ 2.5 *num2;
-              if (num2 > this.avgTime) {
-                this.n95 = num2 - this.avgTime;
-              } else {
-                this.n95 = this.avgTime - num2;
-              } // end
+
+              this.state.p95_arr1.sort(function(a, b){return a - b});
+              let division=(x/20)*19;
+              if(x>2)
+              this.n95=this.state.p95_arr1[parseInt(division)-1]+(this.state.p95_arr1[parseInt(division)]-this.state.p95_arr1[parseInt(division)-1])*(division-parseInt(division));
+              // console.log(this.state.p95_arr1);
+              // console.log("p95"+this.n95);
               this.setState({chartDate: this.chartDate}); // 仅仅用来刷新UI
               x++;
             }
