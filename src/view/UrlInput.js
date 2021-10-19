@@ -258,7 +258,7 @@ class Ordinary extends Component {
                 borderColor: 'pink',
                 borderWidth: ScaleSize(4),
                 borderBottomWidth: ScaleSize(2),
-                height: Height * (0.05+0.03*(this.state.numberOfUrlinTextInput+1)),
+                height: Height * (0.06+0.03*(this.state.numberOfUrlinTextInput+1)),
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
@@ -270,7 +270,7 @@ class Ordinary extends Component {
                 onSelectionChange={(event) => {
                   //将当前的光标定位到起点位置
                   let last="com|edu|cn|gov|org";
-                  let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
+                  let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n+","g");
                   let n=Data.InputUrl.match(reg)==null?0:Data.InputUrl.match(reg).length;
                   this.setState({
                     numberOfUrlinTextInput:n,
@@ -281,7 +281,7 @@ class Ordinary extends Component {
                   paddingBottom: Height * 0.01,
 
                   marginTop: ScaleSize(3),
-                  height: Height * (0.03+0.03*(this.state.numberOfUrlinTextInput+1)),                
+                  height: Height * (0.04+0.03*(this.state.numberOfUrlinTextInput+1)),                
                   width: Width * 0.65,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
