@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {KeyboardAccessoryNavigation} from 'react-native-keyboard-accessory';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
@@ -185,7 +184,7 @@ class Ordinary extends Component {
     if (this.state.isPing) {
       return;
     } else {
-      return (
+      return (     
         <View
           style={{
             backgroundColor: '#1f2342',
@@ -201,6 +200,7 @@ class Ordinary extends Component {
             }}>
             <View
               style={{
+                
                 marginBottom: ScaleSize(10),
                 width: Width * 0.9,
                 marginLeft: Width * 0.08,
@@ -281,7 +281,7 @@ class Ordinary extends Component {
                 // onKeyPress={
                 //   this.props.navigation.navigate('UrlInput')
                 // }
-              ></TextInput>
+              />
               <View
                 style={{
                   flexDirection: 'row',
@@ -343,7 +343,6 @@ class Ordinary extends Component {
               </View>
             </View>
           </View>
-          <KeyboardAccessoryNavigation />
         </View>
       );
     }
