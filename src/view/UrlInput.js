@@ -32,6 +32,7 @@ class Ordinary extends Component {
       langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
       keyBoardHeight: 0,
       currentIndex: -1,
+      numberOfUrlinTextInput: 0,
     };
     Data.InputUrl='';
     Data.pingurl=[''];
@@ -184,7 +185,7 @@ class Ordinary extends Component {
           //     this.state.currentIndex,
           //   );
           // store.save(Data.pingIndex, Data.Ping);
-          console.log('变了吗' + Data.InputUrl);
+          // console.log('变了吗' + Data.InputUrl);
           this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
         }}
@@ -197,7 +198,7 @@ class Ordinary extends Component {
   checkHistory=(value)=>{
     let flag=true;
     for(let i=0;i<Data.historyPing.length;i++){
-      if(value==Data.historyPing[i]){
+      if(value.trim()==Data.historyPing[i][0].trim()){
         flag=false;
         break;
       }
@@ -275,24 +276,31 @@ class Ordinary extends Component {
                 borderColor: 'pink',
                 borderWidth: ScaleSize(4),
                 borderBottomWidth: ScaleSize(2),
-                height: Height * 0.08,
+                height: Height * (0.05+0.03*(this.state.numberOfUrlinTextInput+1)),
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
               <TextInput
                 value={Data.InputUrl}
                 autoFocus={true}
+                multiline = {true}
                 placeholder={'https://www.geogle.com'}
                 onSelectionChange={(event) => {
                   //将当前的光标定位到起点位置
+                  let last="com|edu|cn|gov|org";
+                  let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
+                  let n=Data.InputUrl.match(reg)==null?0:Data.InputUrl.match(reg).length;
+                  this.setState({
+                    numberOfUrlinTextInput:n,
+                  });
                   this.state.currentIndex = event.nativeEvent.selection.start;
                 }}
                 style={{
                   paddingBottom: Height*0.01,
 
                   marginTop: ScaleSize(3),
-                  height: Height * 0.06,
-                  // backgroundColor: '#fff',
+                  height: Height * (0.03+0.03*(this.state.numberOfUrlinTextInput+1)),
+                  
                   width: Width * 0.65,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
@@ -300,8 +308,7 @@ class Ordinary extends Component {
                 }}
                 onChangeText={(value) => {
                   Data.InputUrl = value;
-
-                  console.log('来呗' + Data.InputUrl);
+                  // console.log('来呗' + Data.InputUrl);
                   this.setState({refresh: !this.state.refresh});
                   // store.update(Data.Ping[parseInt(item.key)].url, value);
                   // store.save(Data.pingIndex, Data.Ping);
@@ -349,9 +356,9 @@ class Ordinary extends Component {
                     //正则分割字符串
                     let last="com|edu|cn|gov|org";
                     // let reg = new RegExp("(?<=\.("+last+"))(?<!www\.("+last+"))\\s*(?!\.("+last+"))\n*","g");
-                    let reg=new RegExp("\n*https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
+                    let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
                     let url = Data.InputUrl.match(reg)
-                    console.log(url); 
+                    console.log(Data.InputUrl);
                     if(url==null){
                       Toast.message(I18n.t('urlempty'));
                       return;
@@ -375,9 +382,9 @@ class Ordinary extends Component {
                       if (Data.pingurl.length != 0) {  
                         //查重并拆分  
                         let inputUrl="";
-                        for(let i=0;i<Data.pingurl.length;i++){
-                          inputUrl=inputUrl+Data.pingurl[i]+"\n";
-                          this.checkHistory(Data.pingurl[i]);
+                        for(let i=0;i<url.length;i++){
+                          inputUrl=inputUrl+url[i];
+                          this.checkHistory(url[i]);
                         }
                         this.checkHistory(inputUrl);
                         store.save('history', Data.historyPing);
