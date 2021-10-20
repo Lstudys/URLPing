@@ -56,12 +56,12 @@ class Ping extends Component {
 
       chartLabels: [],
 
-      p95_arr1:[],
-      p95_arr2:[],
-      p95_arr3:[],
-      p95_arr4:[],
-      p95_arr5:[],
-      
+      p95_arr1: [],
+      p95_arr2: [],
+      p95_arr3: [],
+      p95_arr4: [],
+      p95_arr5: [],
+
       isPing: true, // 控制是否正在ping
 
       marker: {
@@ -414,7 +414,6 @@ class Ping extends Component {
               })}
             </Table>
           </View>
-
         </View>
       </View>
     );
