@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {KeyboardAccessoryNavigation} from 'react-native-keyboard-accessory';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
@@ -33,6 +32,7 @@ class Ordinary extends Component {
       langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
       keyBoardHeight: 0,
       currentIndex: -1,
+      numberOfUrlinTextInput: 0,
     };
     Data.InputUrl = '';
     Data.pingurl = [''];
@@ -95,29 +95,25 @@ class Ordinary extends Component {
       </View>
     );
   };
-  renderitem_history = ({item, index}) => {
+
+  renderitem_history = ({item,index}) => {
+    let n=item[0].match(/\n/g)==null?1:item[0].match(/\n/g).length;
+    let h=Height*0.03*n;
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          height: Height * 0.05,
-          width: Width * 0.95,
-          marginTop: ScaleSize(20),
-        }}>
+      <View style={{flexDirection: 'row',height:h,width:Width*.95,marginTop:ScaleSize(20)}}>
         <TouchableOpacity
           onPress={() => {
-            Data.InputUrl = Data.InputUrl + ' ' + Data.historyPing[index];
-
-            this.setState({refresh: !this.state.refresh});
+            Data.InputUrl = Data.InputUrl + Data.historyPing[index];
+            this.setState({numberOfUrlinTextInput:this.state.numberOfUrlinTextInput+n,});
           }}>
           <View
             style={{
               width: ScaleSize(255),
-              height: ScaleSize(34),
+              // height: ScaleSize(34),
               justifyContent: 'center',
             }}>
             <Text
-              numberOfLines={1}
+              // numberOfLines={1}
               ellipsizeMode={'tail'}
               style={{
                 color: '#fff',
@@ -171,7 +167,6 @@ class Ordinary extends Component {
             Data.InputUrl.slice(0, this.state.currentIndex) +
             Data.urlsArr[key] +
             Data.InputUrl.slice(this.state.currentIndex);
-          console.log('变了吗' + Data.InputUrl);
           this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
         }}
@@ -181,11 +176,21 @@ class Ordinary extends Component {
     );
   };
 
+  checkHistory=(value)=>{
+    let flag=true;
+    for(let i=0;i<Data.historyPing.length;i++){
+      if(value.trim()==Data.historyPing[i][0].trim()){
+        flag=false;
+        break;
+      }
+    }
+    if(flag)Data.historyPing.push([value]);
+  };
   render() {
     if (this.state.isPing) {
       return;
     } else {
-      return (
+      return (     
         <View
           style={{
             backgroundColor: '#1f2342',
@@ -201,11 +206,13 @@ class Ordinary extends Component {
             }}>
             <View
               style={{
+                
                 marginBottom: ScaleSize(10),
                 width: Width * 0.9,
                 marginLeft: Width * 0.08,
               }}>
               <FlatList
+                scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
                 onRefresh={() => {
                   this.setState((prevState) => ({
@@ -218,12 +225,16 @@ class Ordinary extends Component {
                   }, 1000);
                 }}
                 style={{
-                  marginLeft: ScaleSize(-4),
+                  height: Height * 0.40,
+                  width: Width * 0.95,
+                  paddingLeft: ScaleSize(20),
+                  marginLeft: ScaleSize(-20),
                   borderRadius: ScaleSize(13),
                 }}
                 refreshing={this.state.FlatListIsRefreshing}
                 renderItem={this.renderitem_history}
                 data={Data.historyPing}
+                
               />
             </View>
             <View
@@ -234,7 +245,7 @@ class Ordinary extends Component {
                 marginBottom: ScaleSize(15),
               }}>
               <FlatList
-                scrollEnabled={false}
+                scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
                 style={styles.urlsArrFlatlist}
                 horizontal={true}
@@ -247,33 +258,38 @@ class Ordinary extends Component {
                 borderColor: 'pink',
                 borderWidth: ScaleSize(4),
                 borderBottomWidth: ScaleSize(2),
-                height: Height * 0.08,
+                height: Height * (0.06+0.03*(this.state.numberOfUrlinTextInput+1)),
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
               <TextInput
                 value={Data.InputUrl}
                 autoFocus={true}
+                multiline = {true}
                 placeholder={'https://www.geogle.com'}
                 onSelectionChange={(event) => {
                   //将当前的光标定位到起点位置
+                  let last="com|edu|cn|gov|org";
+                  let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n+","g");
+                  let n=Data.InputUrl.match(reg)==null?0:Data.InputUrl.match(reg).length;
+                  this.setState({
+                    numberOfUrlinTextInput:n,
+                  });
                   this.state.currentIndex = event.nativeEvent.selection.start;
                 }}
                 style={{
                   paddingBottom: Height * 0.01,
 
                   marginTop: ScaleSize(3),
-                  height: Height * 0.06,
-                  backgroundColor: '#fff',
-                  width: Width * 0.6,
-                  marginLeft: Width * 0.05,
+                  height: Height * (0.04+0.03*(this.state.numberOfUrlinTextInput+1)),                
+                  width: Width * 0.65,
+                  // marginLeft: Width * 0.05,
                   position: 'absolute',
                   fontSize: ScaleSize(18),
                 }}
                 onChangeText={(value) => {
                   Data.InputUrl = value;
-
-                  console.log('来呗' + Data.InputUrl);
+                  // console.log('来呗' + Data.InputUrl);
                   this.setState({refresh: !this.state.refresh});
                   // store.update(Data.Ping[parseInt(item.key)].url, value);
                   // store.save(Data.pingIndex, Data.Ping);
@@ -281,7 +297,7 @@ class Ordinary extends Component {
                 // onKeyPress={
                 //   this.props.navigation.navigate('UrlInput')
                 // }
-              ></TextInput>
+              />
               <View
                 style={{
                   flexDirection: 'row',
@@ -294,7 +310,7 @@ class Ordinary extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     Data.InputUrl = '';
-                    this.setState({refresh: !this.state.refresh});
+                    this.setState({numberOfUrlinTextInput:0});
                   }}>
                   <View>
                     <Image
@@ -312,25 +328,48 @@ class Ordinary extends Component {
 
                 <TouchableOpacity
                   onPress={() => {
-                    let url = Data.InputUrl.trim().split(/\s+/);
+                    Platform.OS
+                    //正则分割字符串
+                    let last="com|edu|cn|gov|org";
+                    // let reg = new RegExp("(?<=\.("+last+"))(?<!www\.("+last+"))\\s*(?!\.("+last+"))\n*","g");
+                    let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
+                    let url = Data.InputUrl.match(reg)
+                    if(url==null){
+                      Toast.message(I18n.t('urlempty'));
+                      return;
+                    }
                     if (url.length > 5) {
                       Toast.message(I18n.t('maxfiveurl'));
                       return;
                     }
                     for (let i = 0; i < url.length; i++) {
-                      Data.pingurl[i] = url[i];
-                    }
+                      Data.pingurl[i]=url[i].trim();
+                    }                
+                    //检测url合法性
                     this.identify = true;
-
+                    for(let i=0;i<Data.pingurl.length;i++){   
+                      if(Data.pingurl[i].search(reg)<0){
+                        this.identify = false;
+                      }
+                    }
+                    
                     if (this.identify) {
-                      if (Data.pingurl.length != 0) {
-                        Data.historyPing.push([Data.InputUrl]);
+                      if (Data.pingurl.length != 0) {  
+                        //查重并拆分  
+                        let inputUrl="";
+                        for(let i=0;i<url.length;i++){
+                          let urlStr=url[i].trim()+'\n';
+                          inputUrl=inputUrl+urlStr;
+                          this.checkHistory(url[i]);
+                        }
+                        this.checkHistory(inputUrl);
                         store.save('history', Data.historyPing);
                         this.setState({refresh: !this.state.refresh});
+                        console.log(Data.historyPing);
                         this.props.navigation.navigate('Ping', {
                           urlData: [...Data.pingurl],
                         });
-                        console.log('history:' + Data.historyPing);
+                        
                       } else {
                         Toast.message(I18n.t('nourladded'));
                       }
@@ -343,7 +382,6 @@ class Ordinary extends Component {
               </View>
             </View>
           </View>
-          <KeyboardAccessoryNavigation />
         </View>
       );
     }
