@@ -432,6 +432,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 0.9 * Width,
     marginLeft: Width * 0.05,
+
+    
   },
   head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
