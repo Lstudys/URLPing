@@ -415,17 +415,6 @@ class Ping extends Component {
             </Table>
           </View>
 
-          <View style={styles.stopwhole}>
-            <TouchableOpacity
-              style={styles.stopbutton}
-              onPress={() => {
-                this.setState({
-                  isPing: false,
-                });
-              }}>
-              <Text style={styles.stoptext}>{I18n.t('Over')}</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     );
@@ -440,7 +429,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1f2342',
   },
   table: {
-    top: -Height * 0.35,
+    top: -Height * 0.28,
     flex: 1,
     width: 0.9 * Width,
     marginLeft: Width * 0.05,

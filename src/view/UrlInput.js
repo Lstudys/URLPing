@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Keyboard
 } from 'react-native';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
@@ -24,6 +25,7 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      history_height:Height*.4,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
       refresh: false,
@@ -46,6 +48,29 @@ class Ordinary extends Component {
     });
   }
   identify = true;
+
+  componentWillMount() {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+  _keyboardDidShow(e) {
+    this.setState({
+      history_height:Height*.4,
+
+      keyBoardHeight: e.endCoordinates.height 
+    });
+  }
+  _keyboardDidHide() {
+    this.setState({
+      history_height:Height*.75,
+      keyBoardHeight: 0
+    });
+  }
 
   renderItem = ({item}) => {
     return (
@@ -100,7 +125,8 @@ class Ordinary extends Component {
     let n=item[0].match(/\n/g)==null?1:item[0].match(/\n/g).length;
     let h=Height*0.03*n;
     return (
-      <View style={{flexDirection: 'row',height:h,width:Width*.95,marginTop:ScaleSize(20)}}>
+      <View>
+      <View style={{flexDirection: 'row',height:h+ScaleSize(5),borderRadius:ScaleSize(20),width:Width*.95,marginTop:ScaleSize(20)}}>
         <TouchableOpacity
           onPress={() => {
             Data.InputUrl = Data.InputUrl + Data.historyPing[index];
@@ -108,8 +134,9 @@ class Ordinary extends Component {
           }}>
           <View
             style={{
-              width: ScaleSize(255),
-              // height: ScaleSize(34),
+              width: ScaleSize(285),
+              paddingLeft:Width*.1,
+              paddingTop:Width*.02,
               justifyContent: 'center',
             }}>
             <Text
@@ -148,6 +175,8 @@ class Ordinary extends Component {
             </View>
           </TouchableOpacity>
         </View>
+      </View>
+      <View style={{height:ScaleSize(2),borderBottomWidth:ScaleSize(2),width:Width*.8,marginLeft:Width*.1,borderBottomColor:"pink"}}></View>
       </View>
     );
   };
@@ -209,7 +238,6 @@ class Ordinary extends Component {
                 
                 marginBottom: ScaleSize(10),
                 width: Width * 0.9,
-                marginLeft: Width * 0.08,
               }}>
               <FlatList
                 scrollEnabled={true}
@@ -225,10 +253,8 @@ class Ordinary extends Component {
                   }, 1000);
                 }}
                 style={{
-                  height: Height * 0.40,
+                  height: this.state.history_height,
                   width: Width * 0.95,
-                  paddingLeft: ScaleSize(20),
-                  marginLeft: ScaleSize(-20),
                   borderRadius: ScaleSize(13),
                 }}
                 refreshing={this.state.FlatListIsRefreshing}
@@ -240,8 +266,7 @@ class Ordinary extends Component {
             <View
               style={{
                 height: Height * 0.062,
-                width: Width * 0.95,
-                marginLeft: Width * 0.025,
+                width: Width,
                 marginBottom: ScaleSize(15),
               }}>
               <FlatList
@@ -266,7 +291,7 @@ class Ordinary extends Component {
                 value={Data.InputUrl}
                 autoFocus={true}
                 multiline = {true}
-                placeholder={'https://www.geogle.com'}
+                placeholder={'https://www.baidu.com'}
                 onSelectionChange={(event) => {
                   //将当前的光标定位到起点位置
                   let last="com|edu|cn|gov|org";
@@ -301,7 +326,6 @@ class Ordinary extends Component {
               <View
                 style={{
                   flexDirection: 'row',
-
                   width: Width * 0.18,
                   alignItems: 'center',
                   position: 'absolute',
@@ -429,9 +453,7 @@ const styles = StyleSheet.create({
     // marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
-    marginLeft: ScaleSize(-4),
-    borderRadius: ScaleSize(13),
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#383a57',
   },
   add: {
     flexDirection: 'row',
@@ -455,12 +477,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: ScaleSize(4),
     height: Height * 0.045,
-    marginRight: ScaleSize(9),
+    marginRight: Width*.05,
     borderRadius: ScaleSize(20),
   },
   _renderRowitem: {
     fontSize: SetSpText(35),
-    margin: ScaleSize(2),
+    marginTop: ScaleSize(5),
     color: '#fff',
     fontWeight: '700',
   },

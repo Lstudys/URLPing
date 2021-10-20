@@ -8,6 +8,7 @@ import Orientation from 'react-native-orientation';
 import {Toast} from 'teaset';
 import store from 'react-native-simple-store';
 import data from '../modal/data';
+import Data from '../modal/data';
 
 // 控制安卓设备的返回键
 export const BackAction = function () {
@@ -19,9 +20,13 @@ export const BackAction = function () {
       for (let i = 0; i < data.urls.length; i++) {
         data.urls[i].mark = false;
       }
+      Data.InputUrl='';
+
       Toast.message('再按一次暂停Ping');
       return true;
     } else {
+      Data.InputUrl='';
+
       if (this.firstpress + 2000 > new Date().valueOf()) {
         this.pressnum = 0;
         this.firstpress = 0;
@@ -41,13 +46,17 @@ export const BackAction = function () {
         return true;
       }
     }
+
   } else {
+    Data.InputUrl='';
+
     this.props.navigation.navigate('Ordinary');
     this.setState({
       isPing: false,
     });
     return true;
   }
+
 };
 
 export const ExitApp = function () {

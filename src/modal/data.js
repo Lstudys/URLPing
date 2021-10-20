@@ -12,7 +12,8 @@ const Data = {
     pingurl:[],
     pingIndex:"HDDEVTEAM",
     historyPing:[],//历史Ping的地址
-    urlsArr:["http://","https://","www.",".com",".cn",".edu",".org",".gov",],
+    // ,".edu",".org",".gov"
+    urlsArr:["http://","https://","www.",".com",".cn"],
     InputUrl:'',
     IP1:'',
     IP2:'',

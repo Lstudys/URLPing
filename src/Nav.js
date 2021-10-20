@@ -1,3 +1,6 @@
+//页面路由
+//2021/9/20
+//created by GM
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
