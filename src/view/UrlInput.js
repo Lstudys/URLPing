@@ -32,7 +32,6 @@ class Ordinary extends Component {
       currentUrlindex: -1,
       focus: false,
       
-      langvis: false, // 选择语言后刷新页面(控制语言选择overlay显示的state)
       keyBoardHeight: 0,
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
