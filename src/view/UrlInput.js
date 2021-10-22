@@ -31,6 +31,7 @@ class Ordinary extends Component {
       refresh: false,
       currentUrlindex: -1,
       focus: false,
+
       
       keyBoardHeight: 0,
       currentIndex: -1,
@@ -304,7 +305,7 @@ class Ordinary extends Component {
                 }}
                 style={{
                   paddingBottom: Height * 0.01,
-
+                  marginLeft:ScaleSize(10),
                   marginTop: ScaleSize(3),
                   height: Height * (0.04+0.03*(this.state.numberOfUrlinTextInput+1)),                
                   width: Width * 0.65,
@@ -314,14 +315,8 @@ class Ordinary extends Component {
                 }}
                 onChangeText={(value) => {
                   Data.InputUrl = value;
-                  // console.log('来呗' + Data.InputUrl);
                   this.setState({refresh: !this.state.refresh});
-                  // store.update(Data.Ping[parseInt(item.key)].url, value);
-                  // store.save(Data.pingIndex, Data.Ping);
                 }}
-                // onKeyPress={
-                //   this.props.navigation.navigate('UrlInput')
-                // }
               />
               <View
                 style={{
@@ -355,7 +350,6 @@ class Ordinary extends Component {
                     Platform.OS
                     //正则分割字符串
                     let last="com|edu|cn|gov|org";
-                    // let reg = new RegExp("(?<=\.("+last+"))(?<!www\.("+last+"))\\s*(?!\.("+last+"))\n*","g");
                     let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
                     let url = Data.InputUrl.match(reg)
                     if(url==null){
@@ -366,9 +360,15 @@ class Ordinary extends Component {
                       Toast.message(I18n.t('maxfiveurl'));
                       return;
                     }
+                    console.log("清空之前",Data.pingurl);
+                    Data.pingurl=[''];
+                    console.log("清空之后",Data.pingurl);
+
                     for (let i = 0; i < url.length; i++) {
                       Data.pingurl[i]=url[i].trim();
-                    }                
+                    }         
+                    console.log("赋值之后",Data.pingurl);
+
                     //检测url合法性
                     this.identify = true;
                     for(let i=0;i<Data.pingurl.length;i++){   

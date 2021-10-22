@@ -201,6 +201,12 @@ class Ping extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.stoptimer);
+    clearTimeout(this.send_request5);
+    clearTimeout(this.send_request4);
+    clearTimeout(this.send_request3);
+    clearTimeout(this.send_request2);
+    clearTimeout(this.send_request1);
+    clearInterval(this.chart_refresh)
   }
 
   //将数据及配置信息导入到图表中
@@ -372,6 +378,8 @@ class Ping extends Component {
               dragDecelerationFrictionCoef={0.99}
               marker={this.state.marker}
               legend={this.state.legend}
+              extraOffsets={{bottom: 10}}
+
               chartDescription={{text: ''}}
               ref="chart"
             />

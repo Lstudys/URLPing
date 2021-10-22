@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {Button, Image} from 'react-native';
+import {Image} from 'react-native';
 import {
   View,
-  TextInput,
   Text,
   Dimensions,
   TouchableOpacity,
@@ -13,7 +12,7 @@ import {
 import {SetSpText, ScaleSize, ScaleSizeH} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
-import I18n, {toHumanSize} from 'i18n-js';
+import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 import {BackHandler, Platform} from 'react-native';
 import {ExitApp} from '../controller/AppPageFunction';
@@ -56,6 +55,7 @@ class Ordinary extends Component {
   identify = true;
 
   componentDidMount() {
+
     Data.IP1 = '';
     Data.IP2 = '';
     Data.IP3 = '';
@@ -90,7 +90,7 @@ class Ordinary extends Component {
       <View style={{flex: 1, backgroundColor: '#fff'}}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={this.close}
+          // onPress={this.close}
           style={{
             marginTop: ScaleSize(20),
             height: Height * 0.08,
@@ -103,7 +103,6 @@ class Ordinary extends Component {
             borderRadius: ScaleSize(2),
             borderBottomRightRadius: ScaleSize(20),
             borderTopRightRadius: ScaleSize(20),
-            //  position: 'absolute',
           }}>
           <View
             style={{
@@ -145,9 +144,9 @@ class Ordinary extends Component {
         <View style={{position: 'absolute', bottom: ScaleSize(30)}}>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => {
-              this.props.navigation.navigate('About');
-            }}
+            // onPress={() => {
+            //   // this.props.navigation.navigate('About');
+            // }}
             style={{
               marginTop: ScaleSize(20),
               height: Height * 0.08,
