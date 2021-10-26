@@ -198,6 +198,9 @@ class Ping extends Component {
       }));
     }, 300000);
   }
+  
+  
+  
 
   componentWillUnmount() {
     clearTimeout(this.stoptimer);

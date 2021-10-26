@@ -9,7 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
@@ -25,14 +25,13 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      history_height:Height*.4,
+      history_height: Height * 0.3,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
       refresh: false,
       currentUrlindex: -1,
       focus: false,
 
-      
       keyBoardHeight: 0,
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
@@ -51,8 +50,14 @@ class Ordinary extends Component {
   identify = true;
 
   componentWillMount() {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow.bind(this),
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide.bind(this),
+    );
   }
 
   componentWillUnmount() {
@@ -61,15 +66,15 @@ class Ordinary extends Component {
   }
   _keyboardDidShow(e) {
     this.setState({
-      history_height:Height*.4,
+      history_height: Height * 0.3,
 
-      keyBoardHeight: e.endCoordinates.height 
+      keyBoardHeight: e.endCoordinates.height,
     });
   }
   _keyboardDidHide() {
     this.setState({
-      history_height:Height*.75,
-      keyBoardHeight: 0
+      history_height: Height * 0.7,
+      keyBoardHeight: 0,
     });
   }
 
@@ -122,62 +127,78 @@ class Ordinary extends Component {
     );
   };
 
-  renderitem_history = ({item,index}) => {
-    let n=item[0].match(/\n/g)==null?1:item[0].match(/\n/g).length;
-    let h=Height*0.03*n;
+  renderitem_history = ({item, index}) => {
+    let n = item[0].match(/\n/g) == null ? 1 : item[0].match(/\n/g).length;
+    let h = Height * 0.03 * n;
     return (
       <View>
-      <View style={{flexDirection: 'row',height:h+ScaleSize(5),borderRadius:ScaleSize(20),width:Width*.95,marginTop:ScaleSize(20)}}>
-        <TouchableOpacity
-          onPress={() => {
-            Data.InputUrl = Data.InputUrl + Data.historyPing[index];
-            this.setState({numberOfUrlinTextInput:this.state.numberOfUrlinTextInput+n,});
-          }}>
-          <View
-            style={{
-              width: ScaleSize(285),
-              paddingLeft:Width*.1,
-              paddingTop:Width*.02,
-              justifyContent: 'center',
-            }}>
-            <Text
-              // numberOfLines={1}
-              ellipsizeMode={'tail'}
-              style={{
-                color: '#fff',
-                fontSize: SetSpText(35),
-              }}>
-              {item}
-            </Text>
-          </View>
-        </TouchableOpacity>
         <View
           style={{
-            alignSelf: 'center',
-            marginLeft: ScaleSize(5),
-            marginTop: ScaleSize(15),
+            flexDirection: 'row',
+            height: h + ScaleSize(5),
+            borderRadius: ScaleSize(20),
+            width: Width * 0.95,
+            marginTop: ScaleSize(20),
           }}>
           <TouchableOpacity
             onPress={() => {
-              Data.historyPing.splice(parseInt(index), 1);
-              this.setState({refresh: !this.state.refresh});
-              console.log(Data.historyPing);
+              Data.InputUrl = Data.InputUrl + Data.historyPing[index];
+              this.setState({
+                numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
+              });
             }}>
-            <View>
-              <Image
-                source={require('../imgs/delete.png')}
+            <View
+              style={{
+                width: ScaleSize(285),
+                paddingLeft: Width * 0.1,
+                paddingTop: Width * 0.02,
+                justifyContent: 'center',
+              }}>
+              <Text
+                // numberOfLines={1}
+                ellipsizeMode={'tail'}
                 style={{
-                  width: ScaleSize(20),
-                  height: ScaleSize(20),
-                  marginBottom: ScaleSize(15),
-                  marginHorizontal: ScaleSize(10),
-                }}
-              />
+                  color: '#fff',
+                  fontSize: SetSpText(35),
+                }}>
+                {item}
+              </Text>
             </View>
           </TouchableOpacity>
+          <View
+            style={{
+              alignSelf: 'center',
+              marginLeft: ScaleSize(5),
+              marginTop: ScaleSize(15),
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                Data.historyPing.splice(parseInt(index), 1);
+                this.setState({refresh: !this.state.refresh});
+                console.log(Data.historyPing);
+              }}>
+              <View>
+                <Image
+                  source={require('../imgs/delete.png')}
+                  style={{
+                    width: ScaleSize(20),
+                    height: ScaleSize(20),
+                    marginBottom: ScaleSize(15),
+                    marginHorizontal: ScaleSize(10),
+                  }}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <View style={{height:ScaleSize(2),borderBottomWidth:ScaleSize(2),width:Width*.8,marginLeft:Width*.1,borderBottomColor:"pink"}}></View>
+        <View
+          style={{
+            height: ScaleSize(1),
+            borderBottomWidth: ScaleSize(2),
+            width: Width * 0.8,
+            marginLeft: Width * 0.1,
+            borderBottomColor: 'pink',
+          }}></View>
       </View>
     );
   };
@@ -206,21 +227,21 @@ class Ordinary extends Component {
     );
   };
 
-  checkHistory=(value)=>{
-    let flag=true;
-    for(let i=0;i<Data.historyPing.length;i++){
-      if(value.trim()==Data.historyPing[i][0].trim()){
-        flag=false;
+  checkHistory = (value) => {
+    let flag = true;
+    for (let i = 0; i < Data.historyPing.length; i++) {
+      if (value.trim() == Data.historyPing[i][0].trim()) {
+        flag = false;
         break;
       }
     }
-    if(flag)Data.historyPing.push([value]);
+    if (flag) Data.historyPing.push([value]);
   };
   render() {
     if (this.state.isPing) {
       return;
     } else {
-      return (     
+      return (
         <View
           style={{
             backgroundColor: '#1f2342',
@@ -236,7 +257,6 @@ class Ordinary extends Component {
             }}>
             <View
               style={{
-                
                 marginBottom: ScaleSize(10),
                 width: Width * 0.9,
               }}>
@@ -261,7 +281,6 @@ class Ordinary extends Component {
                 refreshing={this.state.FlatListIsRefreshing}
                 renderItem={this.renderitem_history}
                 data={Data.historyPing}
-                
               />
             </View>
             <View
@@ -284,31 +303,41 @@ class Ordinary extends Component {
                 borderColor: 'pink',
                 borderWidth: ScaleSize(4),
                 borderBottomWidth: ScaleSize(2),
-                height: Height * (0.06+0.03*(this.state.numberOfUrlinTextInput+1)),
+                height:
+                  Height *
+                  (0.06 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
               <TextInput
                 value={Data.InputUrl}
                 autoFocus={true}
-                multiline = {true}
+                multiline={true}
                 placeholder={'https://www.baidu.com'}
                 onSelectionChange={(event) => {
                   //将当前的光标定位到起点位置
-                  let last="com|edu|cn|gov|org";
-                  let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n+","g");
-                  let n=Data.InputUrl.match(reg)==null?0:Data.InputUrl.match(reg).length;
+                  let last = 'com|edu|cn|gov|org';
+                  let reg = new RegExp(
+                    'https?://(www.)?\\w+(.(' + last + '))+\n+',
+                    'g',
+                  );
+                  let n =
+                    Data.InputUrl.match(reg) == null
+                      ? 0
+                      : Data.InputUrl.match(reg).length;
                   this.setState({
-                    numberOfUrlinTextInput:n,
+                    numberOfUrlinTextInput: n,
                   });
                   this.state.currentIndex = event.nativeEvent.selection.start;
                 }}
                 style={{
                   paddingBottom: Height * 0.01,
-                  marginLeft:ScaleSize(10),
+                  marginLeft: ScaleSize(10),
                   marginTop: ScaleSize(3),
-                  height: Height * (0.04+0.03*(this.state.numberOfUrlinTextInput+1)),                
-                  width: Width * 0.65,
+                  height:
+                    Height *
+                    (0.04 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
+                  width: Width * 0.9,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
                   fontSize: ScaleSize(18),
@@ -318,92 +347,111 @@ class Ordinary extends Component {
                   this.setState({refresh: !this.state.refresh});
                 }}
               />
-              <View
+            </View>
+            <View
+              style={{
+                marginLeft: Width * 0.01,
+
+                marginTop: ScaleSize(15),
+                flexDirection: 'row',
+                width: Width * 0.18,
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity
                 style={{
-                  flexDirection: 'row',
-                  width: Width * 0.18,
-                  alignItems: 'center',
-                  position: 'absolute',
-                  right: Width * 0.1,
+                  width: Width * 0.48,
+                  height: Height * 0.06,
+                  backgroundColor: '#fff',
+                  borderRadius: ScaleSize(10),
+                  borderColor: 'pink',
+                  borderWidth: ScaleSize(2),
+                }}
+                onPress={() => {
+                  Data.InputUrl = '';
+                  this.setState({numberOfUrlinTextInput: 0});
                 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    Data.InputUrl = '';
-                    this.setState({numberOfUrlinTextInput:0});
-                  }}>
-                  <View>
-                    <Image
-                      source={require('../imgs/small_delete.png')}
-                      style={{
-                        marginTop: ScaleSize(16),
-                        width: ScaleSize(20),
-                        height: ScaleSize(20),
-                        marginBottom: ScaleSize(15),
-                        marginHorizontal: ScaleSize(10),
-                      }}
-                    />
-                  </View>
-                </TouchableOpacity>
+                <View style={{alignItems: 'center'}}>
+                  <Text style={styles.pingtext}>empty</Text>
+                </View>
+              </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    Platform.OS
-                    //正则分割字符串
-                    let last="com|edu|cn|gov|org";
-                    let reg=new RegExp("https?:\/\/(www\.)?\\w+(\.("+last+"))+\n*","g");
-                    let url = Data.InputUrl.match(reg)
-                    if(url==null){
-                      Toast.message(I18n.t('urlempty'));
-                      return;
+              <TouchableOpacity
+                style={{
+                  marginLeft: Width * 0.02,
+                  width: Width * 0.48,
+                  height: Height * 0.06,
+                  backgroundColor: '#fff',
+                  borderRadius: ScaleSize(10),
+                  borderColor: 'pink',
+                  borderWidth: ScaleSize(2),
+                }}
+                onPress={() => {
+                  Platform.OS;
+                  //正则分割字符串
+                  let last = 'com|edu|cn|gov|org';
+                  let reg = new RegExp(
+                    'https?://(www.)?\\w+(.(' + last + '))+\n*',
+                    'g',
+                  );
+                  let url = Data.InputUrl.match(reg);
+                  console.log("lalala"+url);
+                  if (url == null) {
+                    Toast.message(I18n.t('urlempty'));
+                    return;
+                  }
+                  if (url.length > 5) {
+                    Toast.message(I18n.t('maxfiveurl'));
+                    return;
+                  }
+                  console.log('清空之前', Data.pingurl);
+                  Data.pingurl = [''];
+                  console.log('清空之后', Data.pingurl);
+
+                  for (let i = 0; i < url.length; i++) {
+                    // if(url[i].trim().substring(1,4)=='www')
+                    // {
+
+                    // }
+                    // console.log("是吗"+url[i].trim().substring(1,4));
+                    Data.pingurl[i] = url[i].trim();
+                  }
+                  console.log('赋值之后', Data.pingurl);
+
+                  //检测url合法性
+                  this.identify = true;
+                  for (let i = 0; i < Data.pingurl.length; i++) {
+                    if (Data.pingurl[i].search(reg) < 0) {
+                      this.identify = false;
                     }
-                    if (url.length > 5) {
-                      Toast.message(I18n.t('maxfiveurl'));
-                      return;
-                    }
-                    console.log("清空之前",Data.pingurl);
-                    Data.pingurl=[''];
-                    console.log("清空之后",Data.pingurl);
+                  }
 
-                    for (let i = 0; i < url.length; i++) {
-                      Data.pingurl[i]=url[i].trim();
-                    }         
-                    console.log("赋值之后",Data.pingurl);
-
-                    //检测url合法性
-                    this.identify = true;
-                    for(let i=0;i<Data.pingurl.length;i++){   
-                      if(Data.pingurl[i].search(reg)<0){
-                        this.identify = false;
+                  if (this.identify) {
+                    if (Data.pingurl.length != 0) {
+                      //查重并拆分
+                      let inputUrl = '';
+                      for (let i = 0; i < url.length; i++) {
+                        let urlStr = url[i].trim() + '\n';
+                        inputUrl = inputUrl + urlStr;
+                        this.checkHistory(url[i]);
                       }
-                    }
-                    
-                    if (this.identify) {
-                      if (Data.pingurl.length != 0) {  
-                        //查重并拆分  
-                        let inputUrl="";
-                        for(let i=0;i<url.length;i++){
-                          let urlStr=url[i].trim()+'\n';
-                          inputUrl=inputUrl+urlStr;
-                          this.checkHistory(url[i]);
-                        }
-                        this.checkHistory(inputUrl);
-                        store.save('history', Data.historyPing);
-                        this.setState({refresh: !this.state.refresh});
-                        console.log(Data.historyPing);
-                        this.props.navigation.navigate('Ping', {
-                          urlData: [...Data.pingurl],
-                        });
-                        
-                      } else {
-                        Toast.message(I18n.t('nourladded'));
-                      }
+                      this.checkHistory(inputUrl);
+                      store.save('history', Data.historyPing);
+                      this.setState({refresh: !this.state.refresh});
+                      console.log(Data.historyPing);
+                      this.props.navigation.navigate('Ping', {
+                        urlData: [...Data.pingurl],
+                      });
                     } else {
-                      Toast.message(I18n.t('reject_Test'));
+                      Toast.message(I18n.t('nourladded'));
                     }
-                  }}>
+                  } else {
+                    Toast.message(I18n.t('reject_Test'));
+                  }
+                }}>
+                <View style={{alignItems: 'center', height: Height * 0.06}}>
                   <Text style={styles.pingtext}>GO!</Text>
-                </TouchableOpacity>
-              </View>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -443,7 +491,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pingtext: {
-    fontSize: SetSpText(60),
+    fontSize: SetSpText(50),
     color: 'pink',
     fontWeight: '700',
   },
@@ -473,11 +521,11 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
   renderRow: {
-    marginLeft: ScaleSize(13),
+    marginLeft: ScaleSize(10),
     flexDirection: 'row',
     marginTop: ScaleSize(4),
     height: Height * 0.045,
-    marginRight: Width*.05,
+    marginRight: Width * 0.05,
     borderRadius: ScaleSize(20),
   },
   _renderRowitem: {

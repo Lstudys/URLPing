@@ -7589,6 +7589,13 @@ react-native-action-button@^2.8.5:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-awesome-alerts@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.npmmirror.com/react-native-awesome-alerts/download/react-native-awesome-alerts-1.5.2.tgz#eb8e05a8bc22ac304c59f82eab6be19308942c32"
+  integrity sha1-644FqLwirDBMWfguq2vhkwiULDI=
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-charts-wrapper@^0.5.7:
   version "0.5.7"
   resolved "https://registry.nlark.com/react-native-charts-wrapper/download/react-native-charts-wrapper-0.5.7.tgz"
@@ -7782,9 +7789,9 @@ react-native-vector-icons@^8.1.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native@0.63.4:
+react-native@^0.63.4:
   version "0.63.4"
-  resolved "https://registry.npm.taobao.org/react-native/download/react-native-0.63.4.tgz"
+  resolved "https://registry.npmmirror.com/react-native/download/react-native-0.63.4.tgz#2210fdd404c94a5fa6b423c6de86f8e48810ec36"
   integrity sha1-IhD91ATJSl+mtCPG3ob45IgQ7DY=
   dependencies:
     "@babel/runtime" "^7.0.0"

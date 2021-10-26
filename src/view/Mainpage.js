@@ -6,9 +6,8 @@ import {
   Dimensions,
   TouchableOpacity,
   StyleSheet,
-  DrawerLayoutAndroid,
 } from 'react-native';
-
+import Drawer from 'react-native-drawer';
 import {SetSpText, ScaleSize, ScaleSizeH} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
@@ -16,15 +15,23 @@ import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 import {BackHandler, Platform} from 'react-native';
 import {ExitApp} from '../controller/AppPageFunction';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
 class Ordinary extends Component {
+  closeControlPanel = () => {
+    this._drawer.close()
+  };
+  openControlPanel = () => {
+    this._drawer.open()
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      isAbout: false,
+      showAlert: false,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
       refresh: false,
@@ -45,17 +52,21 @@ class Ordinary extends Component {
       }
     });
   }
-  open = () => {
-    this.drawer.openDrawer();
-  };
-
-  close = () => {
-    this.drawer.closeDrawer();
-  };
   identify = true;
 
-  componentDidMount() {
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
 
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
+
+  componentDidMount() {
     Data.IP1 = '';
     Data.IP2 = '';
     Data.IP3 = '';
@@ -85,12 +96,19 @@ class Ordinary extends Component {
     }
   }
 
+ 
+
   render() {
+    const {showAlert} = this.state;
+
     let navigationView = (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
         <TouchableOpacity
           activeOpacity={0.9}
-          // onPress={this.close}
+          onPress={()=>{
+            this.hideAlert();
+          }
+            }
           style={{
             marginTop: ScaleSize(20),
             height: Height * 0.08,
@@ -144,9 +162,11 @@ class Ordinary extends Component {
         <View style={{position: 'absolute', bottom: ScaleSize(30)}}>
           <TouchableOpacity
             activeOpacity={0.9}
-            // onPress={() => {
-            //   // this.props.navigation.navigate('About');
-            // }}
+            onPress={
+              () => {
+                this.showAlert()
+            }
+          }
             style={{
               marginTop: ScaleSize(20),
               height: Height * 0.08,
@@ -165,7 +185,7 @@ class Ordinary extends Component {
               style={{
                 position: 'absolute',
                 right: Width * 0.08,
-                top: Height * 0.015,
+                top: Height * 0.006,
               }}>
               <Text
                 style={{
@@ -174,6 +194,14 @@ class Ordinary extends Component {
                   fontWeight: '700',
                 }}>
                 {I18n.t('about')}
+              </Text>
+              <Text
+                style={{
+                  color: 'pink',
+                  fontSize: ScaleSize(12),
+                  fontWeight: '700',
+                }}>
+                {I18n.t('version')}
               </Text>
             </View>
             <View
@@ -204,28 +232,61 @@ class Ordinary extends Component {
       return;
     } else {
       return (
-        <DrawerLayoutAndroid
-          ref={(drawer) => {
-            this.drawer = drawer;
-          }}
-          //
-          drawerWidth={ScaleSize(200)}
-          // 设置导航视图从窗口边缘拉入的视图的宽度。
-          drawerPosition={DrawerLayoutAndroid.positions.Left}
-          // 设置导航视图从屏幕的哪一边拉入。
-          renderNavigationView={() => navigationView}
-          // 被拉入的导航视图的内容。
+        <Drawer
+        ref={(ref) => this._drawer = ref}
+        content={navigationView}
+        openDrawerOffset={0.45} // 20% gap on the right side of drawer
+        closedDrawerOffset={-3}
+        tweenHandler={(ratio) => ({
+          main: { opacity:(2-ratio)/2+0.4 }
+        })}
+        type="overlay"
 
-          onDrawerClose={() => {}}
-          // 导航视图被关闭后的回调函数。
-          keyboardDismissMode="none"
-          // 设置拖动过程中是否隐藏软键盘,'none' (默认)，拖动时不隐藏软键盘。'on-drag'，拖动时隐藏软键盘。
-          onDrawerOpen={() => {}}
-          // 导航视图被打开后的回调函数。
+
+        tapToClose={true}
+
         >
+          <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Graph URL Ping"
+          message="APP version : v0.9.2        Update Time: 2021/10/23
+
+          "
+          titleStyle={{fontSize:ScaleSize(20),fontWeight:"700",color:"pink"}}
+          messageStyle={{
+            // backgroundColor:"pink",
+            width:Width*.55,
+            marginTop:ScaleSize(20),
+            marginBottom:ScaleSize(20)
+            ,fontSize:ScaleSize(16)
+          }}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={true}
+          showCancelButton={true}
+          // showConfirmButton={true}
+          cancelText="OK"
+          // confirmText="Yes, delete it"
+          cancelButtonStyle={{
+            backgroundColor:"pink",
+            height:Height*.05,
+            width:Width*.65,
+            alignItems:"center",
+          }}
+          cancelButtonTextStyle={{
+            fontSize:ScaleSize(20),
+            fontWeight:"700"
+          }}
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          // onConfirmPressed={() => {
+          //   this.hideAlert();
+          // }}
+        />
           <View style={{backgroundColor: '#1f2342'}}>
             <View style={{height: Height, position: 'relative'}}>
-              <TouchableOpacity onPress={this.open}>
+              <TouchableOpacity onPress={()=>{this._drawer.open();}}>
                 <View>
                   <Image
                     source={require('../imgs/draw.png')}
@@ -284,13 +345,12 @@ class Ordinary extends Component {
               </TouchableOpacity>
             </View>
           </View>
-        </DrawerLayoutAndroid>
+        </Drawer>
       );
     }
   }
 }
 export default Ordinary;
-
 const styles = StyleSheet.create({
   renderItem: {
     marginBottom: ScaleSize(20),
