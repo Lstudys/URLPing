@@ -16,6 +16,7 @@ import I18n from 'i18n-js';
 import Data from '../modal/data';
 import {LanguageChange} from '../component/LanguageChange';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
+import KeepAwake from 'react-native-keep-awake';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -426,6 +427,8 @@ class Ping extends Component {
             </Table>
           </View>
         </View>
+        <KeepAwake />
+
       </View>
     );
   }

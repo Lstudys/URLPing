@@ -235,7 +235,7 @@ class Ordinary extends Component {
         break;
       }
     }
-    if (flag) Data.historyPing.push([value]);
+    if (flag) Data.historyPing.push(value);
   };
   render() {
     if (this.state.isPing) {
@@ -371,7 +371,7 @@ class Ordinary extends Component {
                   this.setState({numberOfUrlinTextInput: 0});
                 }}>
                 <View style={{alignItems: 'center'}}>
-                  <Text style={styles.pingtext}>empty</Text>
+                  <Text style={styles.pingtext}>Clear！</Text>
                 </View>
               </TouchableOpacity>
 
@@ -434,7 +434,7 @@ class Ordinary extends Component {
                         inputUrl = inputUrl + urlStr;
                         this.checkHistory(url[i]);
                       }
-                      this.checkHistory(inputUrl);
+                      // this.checkHistory(inputUrl);
                       store.save('history', Data.historyPing);
                       this.setState({refresh: !this.state.refresh});
                       console.log(Data.historyPing);
