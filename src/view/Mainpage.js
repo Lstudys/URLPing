@@ -22,10 +22,10 @@ const Width = Dimensions.get('window').width;
 
 class Ordinary extends Component {
   closeControlPanel = () => {
-    this._drawer.close()
+    this._drawer.close();
   };
   openControlPanel = () => {
-    this._drawer.open()
+    this._drawer.open();
   };
 
   constructor(props) {
@@ -56,13 +56,13 @@ class Ordinary extends Component {
 
   showAlert = () => {
     this.setState({
-      showAlert: true
+      showAlert: true,
     });
   };
 
   hideAlert = () => {
     this.setState({
-      showAlert: false
+      showAlert: false,
     });
   };
 
@@ -96,8 +96,6 @@ class Ordinary extends Component {
     }
   }
 
- 
-
   render() {
     const {showAlert} = this.state;
 
@@ -105,10 +103,9 @@ class Ordinary extends Component {
       <View style={{flex: 1, backgroundColor: '#fff'}}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=>{
+          onPress={() => {
             this.hideAlert();
-          }
-            }
+          }}
           style={{
             marginTop: ScaleSize(20),
             height: Height * 0.08,
@@ -162,11 +159,9 @@ class Ordinary extends Component {
         <View style={{position: 'absolute', bottom: ScaleSize(30)}}>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={
-              () => {
-                this.showAlert()
-            }
-          }
+            onPress={() => {
+              this.showAlert();
+            }}
             style={{
               marginTop: ScaleSize(20),
               height: Height * 0.08,
@@ -233,60 +228,63 @@ class Ordinary extends Component {
     } else {
       return (
         <Drawer
-        ref={(ref) => this._drawer = ref}
-        content={navigationView}
-        openDrawerOffset={0.45} // 20% gap on the right side of drawer
-        closedDrawerOffset={-3}
-        tweenHandler={(ratio) => ({
-          main: { opacity:(2-ratio)/2+0.4 }
-        })}
-        type="overlay"
-
-
-        tapToClose={true}
-
-        >
+          ref={(ref) => (this._drawer = ref)}
+          content={navigationView}
+          openDrawerOffset={0.45} // 20% gap on the right side of drawer
+          closedDrawerOffset={-3}
+          tweenHandler={(ratio) => ({
+            main: {opacity: (2 - ratio) / 2 + 0.4},
+          })}
+          type="overlay"
+          tapToClose={true}>
           <AwesomeAlert
-          show={showAlert}
-          showProgress={false}
-          title="Graph URL Ping"
-          message="APP version : v0.9.2        Update Time: 2021/10/23
+            show={showAlert}
+            showProgress={false}
+            title="Graph URL Ping"
+            message="APP version : v0.9.2        Update Time: 2021/10/23
 
           "
-          titleStyle={{fontSize:ScaleSize(20),fontWeight:"700",color:"pink"}}
-          messageStyle={{
-            // backgroundColor:"pink",
-            width:Width*.55,
-            marginTop:ScaleSize(20),
-            marginBottom:ScaleSize(20)
-            ,fontSize:ScaleSize(16)
-          }}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={true}
-          showCancelButton={true}
-          // showConfirmButton={true}
-          cancelText="OK"
-          // confirmText="Yes, delete it"
-          cancelButtonStyle={{
-            backgroundColor:"pink",
-            height:Height*.05,
-            width:Width*.65,
-            alignItems:"center",
-          }}
-          cancelButtonTextStyle={{
-            fontSize:ScaleSize(20),
-            fontWeight:"700"
-          }}
-          onCancelPressed={() => {
-            this.hideAlert();
-          }}
-          // onConfirmPressed={() => {
-          //   this.hideAlert();
-          // }}
-        />
+            titleStyle={{
+              fontSize: ScaleSize(20),
+              fontWeight: '700',
+              color: 'pink',
+            }}
+            messageStyle={{
+              // backgroundColor:"pink",
+              width: Width * 0.55,
+              marginTop: ScaleSize(20),
+              marginBottom: ScaleSize(20),
+              fontSize: ScaleSize(16),
+            }}
+            closeOnTouchOutside={true}
+            closeOnHardwareBackPress={true}
+            showCancelButton={true}
+            // showConfirmButton={true}
+            cancelText="OK"
+            // confirmText="Yes, delete it"
+            cancelButtonStyle={{
+              backgroundColor: 'pink',
+              height: Height * 0.05,
+              width: Width * 0.65,
+              alignItems: 'center',
+            }}
+            cancelButtonTextStyle={{
+              fontSize: ScaleSize(20),
+              fontWeight: '700',
+            }}
+            onCancelPressed={() => {
+              this.hideAlert();
+            }}
+            // onConfirmPressed={() => {
+            //   this.hideAlert();
+            // }}
+          />
           <View style={{backgroundColor: '#1f2342'}}>
             <View style={{height: Height, position: 'relative'}}>
-              <TouchableOpacity onPress={()=>{this._drawer.open();}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this._drawer.open();
+                }}>
                 <View>
                   <Image
                     source={require('../imgs/draw.png')}

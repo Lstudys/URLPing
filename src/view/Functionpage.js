@@ -199,9 +199,6 @@ class Ping extends Component {
       }));
     }, 300000);
   }
-  
-  
-  
 
   componentWillUnmount() {
     clearTimeout(this.stoptimer);
@@ -210,7 +207,7 @@ class Ping extends Component {
     clearTimeout(this.send_request3);
     clearTimeout(this.send_request2);
     clearTimeout(this.send_request1);
-    clearInterval(this.chart_refresh)
+    clearInterval(this.chart_refresh);
   }
 
   //将数据及配置信息导入到图表中
@@ -383,7 +380,6 @@ class Ping extends Component {
               marker={this.state.marker}
               legend={this.state.legend}
               extraOffsets={{bottom: 10}}
-
               chartDescription={{text: ''}}
               ref="chart"
             />
@@ -428,7 +424,6 @@ class Ping extends Component {
           </View>
         </View>
         <KeepAwake />
-
       </View>
     );
   }
@@ -446,8 +441,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 0.9 * Width,
     marginLeft: Width * 0.05,
-
-    
   },
   head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
