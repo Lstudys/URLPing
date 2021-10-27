@@ -7658,6 +7658,11 @@ react-native-iphone-x-helper@^1.0.3:
   resolved "https://registry.npmjs.org/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
+react-native-keep-awake@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.nlark.com/react-native-keep-awake/download/react-native-keep-awake-4.0.0.tgz#d89fdc3fb60b3cffa979ef37dc5816196df998a2"
+  integrity sha1-2J/cP7YLPP+pee833FgWGW35mKI=
+
 react-native-keyboard-accessory@^0.1.15:
   version "0.1.15"
   resolved "https://registry.npmmirror.com/react-native-keyboard-accessory/download/react-native-keyboard-accessory-0.1.15.tgz#7ea57a00380b13935fe2fd85b0604beac92d4d3e"

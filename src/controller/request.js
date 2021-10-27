@@ -121,6 +121,13 @@ export const SendRequest = function () {
       time: TABLE_INITIAL_VALUE, // 响应时长
       sumtime: TABLE_INITIAL_VALUE, // 每次请求的响应时长的总和
     };
+    this.setState({
+      values: this.state.values.concat([0]),
+      values2: this.state.values2.concat([0]),
+      values3: this.state.values3.concat([0]),
+      values4: this.state.values4.concat([0]),
+      values5: this.state.values5.concat([0]),
+    });
 
     xhr.timeout = 5000; // 设置超时时间（5秒）
     xhr2.timeout = 5000;

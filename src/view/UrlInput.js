@@ -135,14 +135,19 @@ class Ordinary extends Component {
         <View
           style={{
             flexDirection: 'row',
-            height: h + ScaleSize(5),
+            height: h + ScaleSize(15),
             borderRadius: ScaleSize(20),
             width: Width * 0.95,
             marginTop: ScaleSize(20),
+            backgroundColor:"#494b6d"
           }}>
           <TouchableOpacity
             onPress={() => {
+              if(Data.InputUrl=='')
               Data.InputUrl = Data.InputUrl + Data.historyPing[index];
+              else{
+                Data.InputUrl = Data.InputUrl.trim() +'\n'+ Data.historyPing[index];
+              }
               this.setState({
                 numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
               });
@@ -191,14 +196,7 @@ class Ordinary extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View
-          style={{
-            height: ScaleSize(1),
-            borderBottomWidth: ScaleSize(2),
-            width: Width * 0.8,
-            marginLeft: Width * 0.1,
-            borderBottomColor: 'pink',
-          }}></View>
+        
       </View>
     );
   };
@@ -230,12 +228,12 @@ class Ordinary extends Component {
   checkHistory = (value) => {
     let flag = true;
     for (let i = 0; i < Data.historyPing.length; i++) {
-      if (value.trim() == Data.historyPing[i][0].trim()) {
+      if (value.trim() == Data.historyPing[i].trim()) {
         flag = false;
         break;
       }
     }
-    if (flag) Data.historyPing.push(value);
+    if (flag) Data.historyPing.unshift(value);
   };
   render() {
     if (this.state.isPing) {
@@ -257,10 +255,11 @@ class Ordinary extends Component {
             }}>
             <View
               style={{
-                marginBottom: ScaleSize(10),
+                marginBottom: ScaleSize(20),
                 width: Width * 0.9,
               }}>
               <FlatList
+                inverted={true}
                 scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
                 onRefresh={() => {
@@ -501,7 +500,7 @@ const styles = StyleSheet.create({
     // marginTop: ScaleSize(10),
   },
   urlsArrFlatlist: {
-    backgroundColor: '#383a57',
+    backgroundColor: '#494b6d',
   },
   add: {
     flexDirection: 'row',
