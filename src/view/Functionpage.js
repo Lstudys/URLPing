@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
-import {Table, Row} from 'react-native-table-component';
+import {Table, Row, TableWrapper, Cell} from 'react-native-table-component';
 import {getIpAddressesForHostname} from 'react-native-dns-lookup';
 import I18n from 'i18n-js';
 import Data from '../modal/data';
@@ -67,7 +67,6 @@ class Ping extends Component {
 
       marker: {
         enabled: true,
-        digits: 2,
         backgroundTint: processColor('pink'),
         markerColor: processColor('pink'),
         textColor: processColor('red'),
@@ -253,6 +252,24 @@ class Ping extends Component {
     };
   }
 
+   //高亮每一列最小数据所在cell的函数
+   minCellHighLight(rowIndex, cellIndex, tableDataArr, cellData) {
+    //当前数据
+    if(cellData==0&&cellIndex!=4) return false;
+    let currentValue = cellData;
+    let i;
+    //当前数据小于等于本列全部数据时就返回true，否则返回false。
+    for (i = 0; i < tableDataArr.length; i++) {
+      if(cellIndex!=4){
+      if (currentValue > tableDataArr[i][cellIndex]&&tableDataArr[i][cellIndex]!=0) return false;
+      }
+      else{
+        if (currentValue > tableDataArr[i][cellIndex]) return false;
+      }
+    }
+
+    return true;
+  }
   render() {
     const tableDataArr = [
       [
@@ -291,11 +308,14 @@ class Ping extends Component {
         this.error5,
       ],
     ];
-    //将数据传入页面下方表格中
+    //高亮表格对比所用的源数组compareData;
+    var compareData = [];
+    //将数据传入页面下方表格和compareData中
     var tableData = [];
     for (let i = 0; i < tableDataArr.length; i++) {
       if (urlCollection[i] != '') {
         tableData.push(tableDataArr[i]);
+        compareData.push(tableDataArr[i]);
       }
     }
     //当页面停止测试时保存图表中的数据
@@ -336,6 +356,7 @@ class Ping extends Component {
         dataSets,
       );
     }
+    
 
     return (
       <View style={{position: 'relative'}}>
@@ -386,7 +407,7 @@ class Ping extends Component {
           </ScrollView>
 
           <View style={styles.table}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'pink'}}>
+          <Table borderStyle={{borderWidth: 1, borderColor: 'pink'}}>
               <Row
                 data={state.tableHead}
                 flexArr={[1, 1, 1]}
@@ -396,28 +417,41 @@ class Ping extends Component {
             </Table>
 
             <Table borderStyle={{borderWidth: 1, borderColor: 'pink'}}>
-              {/* 给每一行row都一个key值 */}
-              {tableData.map((tableData, index) => {
+              {tableData.map((rowData, rowIndex) => {
                 return (
-                  <Row
-                    key={index}
-                    data={tableData}
-                    style={styles.row}
-                    // 下面的几行三表达式主要是为了更改文本颜色与页面上方折线的颜色对应
-                    textStyle={
-                      index == 0
-                        ? styles.textformat
-                        : index == 1
-                        ? styles.textformat2
-                        : index == 2
-                        ? styles.textformat3
-                        : index == 3
-                        ? styles.textformat4
-                        : index == 4
-                        ? styles.textformat5
-                        : {}
-                    }
-                  />
+                  <TableWrapper key={rowIndex} style={styles.row}>
+                    {rowData.map((cellData, cellIndex) => {
+                      return (
+                        <Cell
+                          key={cellIndex}
+                          data={cellData}
+                          style={
+                            this.minCellHighLight(
+                              rowIndex,
+                              cellIndex,
+                              compareData,
+                              cellData,
+                            )
+                              ? styles.cellHighLight
+                              : styles.cell
+                          }
+                          textStyle={
+                            rowIndex == 0
+                              ? styles.textformat
+                              : rowIndex == 1
+                              ? styles.textformat2
+                              : rowIndex == 2
+                              ? styles.textformat3
+                              : rowIndex == 3
+                              ? styles.textformat4
+                              : rowIndex == 4
+                              ? styles.textformat5
+                              : {}
+                          }
+                        />
+                      );
+                    })}
+                  </TableWrapper>
                 );
               })}
             </Table>
@@ -430,7 +464,6 @@ class Ping extends Component {
 }
 
 export default Ping;
-
 const styles = StyleSheet.create({
   bottomStyle: {
     height: Height * 1.2,
@@ -444,7 +477,9 @@ const styles = StyleSheet.create({
   },
   head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
-  row: {height: ScaleSize(26)},
+  row: {height: ScaleSize(26), flexDirection: 'row'},
+  cell: {width: Width * 0.18},
+  cellHighLight: {width: Width * 0.18, backgroundColor: '#fff',opacity:.8},
   textHead: {
     textAlign: 'center',
     color: 'pink',
