@@ -41,6 +41,12 @@ export const SendRequest = function () {
     this.maxTime3 = TABLE_INITIAL_VALUE;
     this.maxTime4 = TABLE_INITIAL_VALUE;
     this.maxTime5 = TABLE_INITIAL_VALUE;
+    
+    this.Median = TABLE_INITIAL_VALUE;
+    this.Median2 = TABLE_INITIAL_VALUE;
+    this.Median3 = TABLE_INITIAL_VALUE;
+    this.Median4 = TABLE_INITIAL_VALUE;
+    this.Median5 = TABLE_INITIAL_VALUE;
 
     this.minTime = TABLE_INITIAL_VALUE;
     this.minTime2 = TABLE_INITIAL_VALUE;
@@ -459,6 +465,15 @@ export const SendRequest = function () {
               this.state.p95_arr5.sort(function (a, b) {
                 return a - b;
               });
+              if(x5<2){
+                this.Median5=0
+              }
+              else if(x5%2!=0){
+                this.Median5=this.state.p95_arr5[(x5-1)/2]
+              }
+              else{
+                this.Median5=(this.state.p95_arr5[x5/2]+this.state.p95_arr5[(x5-2)/2])/2
+              }
               let division = ((x5 - 1) / 20) * 19;
               if (x5 - 1 > 2)
                 this.n955 =
@@ -562,6 +577,15 @@ export const SendRequest = function () {
               this.state.p95_arr4.sort(function (a, b) {
                 return a - b;
               });
+              if(x4<2){
+                this.Median4=0
+              }
+              else if(x4%2!=0){
+                this.Median4=this.state.p95_arr4[(x4-1)/2]
+              }
+              else{
+                this.Median4=(this.state.p95_arr4[x4/2]+this.state.p95_arr4[(x4-2)/2])/2
+              }
               let division = ((x4 - 1) / 20) * 19;
               if (x4 - 1 > 2)
                 this.n954 =
@@ -666,6 +690,15 @@ export const SendRequest = function () {
               this.state.p95_arr3.sort(function (a, b) {
                 return a - b;
               });
+              if(x3<2){
+                this.Median3=0
+              }
+              else if(x3%2!=0){
+                this.Median3=this.state.p95_arr3[(x3-1)/2]
+              }
+              else{
+                this.Median3=(this.state.p95_arr3[x3/2]+this.state.p95_arr3[(x3-2)/2])/2
+              }
               let division = ((x3 - 1) / 20) * 19;
               if (x3 - 1 > 2)
                 this.n953 =
@@ -770,6 +803,15 @@ export const SendRequest = function () {
               this.state.p95_arr2.sort(function (a, b) {
                 return a - b;
               });
+              if(x2<2){
+                this.Median2=0
+              }
+              else if(x2%2!=0){
+                this.Median2=this.state.p95_arr2[(x2-1)/2]
+              }
+              else{
+                this.Median2=(this.state.p95_arr2[x2/2]+this.state.p95_arr2[(x2/2)-1])/2
+              }
               let division = ((x2 - 1) / 20) * 19;
               if (x2 - 1 > 2)
                 this.n952 =
@@ -879,6 +921,15 @@ export const SendRequest = function () {
                 this.state.p95_arr1.sort(function (a, b) {
                   return a - b;
                 });
+                if(x<2){
+                  this.Median=0
+                }
+                else if(x%2!=0){
+                  this.Median=this.state.p95_arr1[(x-1)/2]
+                }
+                else{
+                  this.Median=(this.state.p95_arr1[x/2]+this.state.p95_arr1[(x-2)/2])/2
+                }
                 console.log('p95_arr1' + this.state.p95_arr1);
                 let division = ((x - 1) / 20) * 19;
                 console.log('division' + division);

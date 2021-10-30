@@ -145,9 +145,11 @@ class Ordinary extends Component {
             onPress={() => {
               if(Data.InputUrl=='')
               Data.InputUrl = Data.InputUrl + Data.historyPing[index];
+              
               else{
                 Data.InputUrl = Data.InputUrl.trim() +'\n'+ Data.historyPing[index];
               }
+              Data.InputUrl=Data.InputUrl.trim()
               this.setState({
                 numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
               });

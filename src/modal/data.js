@@ -20,5 +20,6 @@ const Data = {
     IP3:'',
     IP4:'',
     IP5:'',
+    urlData_length:0,
 };
 export default Data;

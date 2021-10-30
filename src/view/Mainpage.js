@@ -241,7 +241,7 @@ class Ordinary extends Component {
             show={showAlert}
             showProgress={false}
             title="Graph URL Ping"
-            message="APP version : v0.10.0        Update Time: 2021/10/27
+            message="APP version : v0.10.1        Update Time: 2021/10/27
 
           "
             titleStyle={{
