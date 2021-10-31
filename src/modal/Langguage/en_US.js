@@ -21,5 +21,5 @@ export default {
   versionupdatetime: 'Version Update Time',
   iftherearebugsduringuse: 'If there are bugs during use',
   pleasecontact: 'Please Contact',
-  version: 'version: 0.10.1',
+  version: 'version: 1.0.0',
 };

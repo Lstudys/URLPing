@@ -36,6 +36,7 @@ class Ordinary extends Component {
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
+
     Data.InputUrl = '';
     Data.pingurl = [''];
     LanguageChange.bind(this)();
@@ -73,7 +74,7 @@ class Ordinary extends Component {
   }
   _keyboardDidHide() {
     this.setState({
-      history_height: Height * 0.7,
+      history_height: Height * 0.6,
       keyBoardHeight: 0,
     });
   }
@@ -131,13 +132,13 @@ class Ordinary extends Component {
     let n = item[0].match(/\n/g) == null ? 1 : item[0].match(/\n/g).length;
     let h = Height * 0.03 * n;
     return (
-      <View>
         <View
           style={{
             flexDirection: 'row',
             height: h + ScaleSize(15),
-            borderRadius: ScaleSize(20),
-            width: Width * 0.95,
+            borderRadius: ScaleSize(10),
+            width: Width*.95,
+            marginLeft:Width*.025,
             marginTop: ScaleSize(20),
             backgroundColor:"#494b6d"
           }}>
@@ -199,7 +200,6 @@ class Ordinary extends Component {
           </View>
         </View>
         
-      </View>
     );
   };
 
@@ -258,7 +258,6 @@ class Ordinary extends Component {
             <View
               style={{
                 marginBottom: ScaleSize(20),
-                width: Width * 0.9,
               }}>
               <FlatList
                 inverted={true}
@@ -276,7 +275,7 @@ class Ordinary extends Component {
                 }}
                 style={{
                   height: this.state.history_height,
-                  width: Width * 0.95,
+                  width: Width,
                   borderRadius: ScaleSize(13),
                 }}
                 refreshing={this.state.FlatListIsRefreshing}
@@ -288,7 +287,8 @@ class Ordinary extends Component {
               style={{
                 height: Height * 0.062,
                 width: Width,
-                marginBottom: ScaleSize(15),
+                marginBottom: ScaleSize(10),
+                marginTop: ScaleSize(5),
               }}>
               <FlatList
                 scrollEnabled={true}
@@ -301,12 +301,15 @@ class Ordinary extends Component {
             </View>
             <View
               style={{
-                borderColor: 'pink',
+                marginBottom:ScaleSize(-15),
+                width:Width*.9,
+                marginLeft:Width*.05,
+                borderColor: '#fff',
                 borderWidth: ScaleSize(4),
                 borderBottomWidth: ScaleSize(2),
                 height:
                   Height *
-                  (0.06 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
+                  (0.04 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
@@ -333,38 +336,45 @@ class Ordinary extends Component {
                 }}
                 style={{
                   paddingBottom: Height * 0.01,
-                  marginLeft: ScaleSize(10),
-                  marginTop: ScaleSize(3),
+                  marginLeft: ScaleSize(20),
+                  marginTop: ScaleSize(0),
                   height:
                     Height *
-                    (0.04 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
+                    (0.03 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
                   width: Width * 0.9,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
                   fontSize: ScaleSize(18),
                 }}
                 onChangeText={(value) => {
+                  console.log("次数"+this.state.numberOfUrlinTextInput);
                   Data.InputUrl = value;
                   this.setState({refresh: !this.state.refresh});
                 }}
               />
             </View>
-            <View
+            {!this.state.keyBoardHeight?
+            
+             <View
               style={{
-                marginLeft: Width * 0.01,
 
-                marginTop: ScaleSize(15),
+
+                marginTop: ScaleSize(25),
                 flexDirection: 'row',
-                width: Width * 0.18,
+                width: Width,
+                height:Height*.07,
+                backgroundColor:"#494b6d",
                 alignItems: 'center',
               }}>
               <TouchableOpacity
                 style={{
-                  width: Width * 0.48,
+                marginLeft: Width * 0.08,
+
+                  width: Width * 0.4,
                   height: Height * 0.06,
-                  backgroundColor: '#fff',
+                  backgroundColor: '#76779b',
                   borderRadius: ScaleSize(10),
-                  borderColor: 'pink',
+                  borderColor: '#fff',
                   borderWidth: ScaleSize(2),
                 }}
                 onPress={() => {
@@ -372,18 +382,18 @@ class Ordinary extends Component {
                   this.setState({numberOfUrlinTextInput: 0});
                 }}>
                 <View style={{alignItems: 'center'}}>
-                  <Text style={styles.pingtext}>Clear！</Text>
+                  <Text style={styles.pingtext}>Clear</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={{
                   marginLeft: Width * 0.02,
-                  width: Width * 0.48,
+                  width: Width * 0.4,
                   height: Height * 0.06,
-                  backgroundColor: '#fff',
+                  backgroundColor: '#1f2342',
                   borderRadius: ScaleSize(10),
-                  borderColor: 'pink',
+                  borderColor: '#fff',
                   borderWidth: ScaleSize(2),
                 }}
                 onPress={() => {
@@ -454,6 +464,8 @@ class Ordinary extends Component {
                 </View>
               </TouchableOpacity>
             </View>
+    :<View/>}
+
           </View>
         </View>
       );
@@ -493,7 +505,7 @@ const styles = StyleSheet.create({
   },
   pingtext: {
     fontSize: SetSpText(50),
-    color: 'pink',
+    color: '#fff',
     fontWeight: '700',
   },
   pingwhole: {
