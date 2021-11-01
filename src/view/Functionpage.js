@@ -6,10 +6,9 @@ import {
   Text,
   ScrollView,
   processColor,
+  BackHandler,
 } from 'react-native';
 import {SendRequest} from '../controller/request';
-import {ExitApp,BackAction} from '../controller/AppPageFunction';
-
 import {LineChart} from 'react-native-charts-wrapper';
 import {Table, Row, TableWrapper, Cell} from 'react-native-table-component';
 import {getIpAddressesForHostname} from 'react-native-dns-lookup';
@@ -17,6 +16,7 @@ import Data from '../modal/data';
 import {LanguageChange} from '../component/LanguageChange';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import KeepAwake from 'react-native-keep-awake';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -33,6 +33,7 @@ class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAlert: false,
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
       tableHead: ['#', 'MIN', 'P50', 'AVG', 'P95', 'MAX', 'ERR'],
@@ -66,7 +67,6 @@ class Ping extends Component {
       isPing: true, // 控制是否正在ping
 
       marker: {
-      
         enabled: true,
         backgroundTint: processColor('#fff'),
         markerColor: processColor('#fff'),
@@ -75,7 +75,7 @@ class Ping extends Component {
       legend: {
         textColor: gridColor,
         wordWrapEnabled: true,
-        enabled:true,
+        enabled: true,
         // xEntrySpace:true,
         form: 'CIRCLE',
       },
@@ -144,7 +144,6 @@ class Ping extends Component {
     SendRequest.bind(this)();
   }
 
-
   resetZoom = (scale_switch) => {
     this.setState({
       zoom: {scaleX: this.state.scaleX, scaleY: 1, xValue: 800, yValue: 1500},
@@ -153,7 +152,7 @@ class Ping extends Component {
   };
 
   maxTime = 0; // 最大时间
-  Median=0;
+  Median = 0;
   minTime = ''; // 最小时间
   avgTime = 0; // 平均时间
   n95 = ''; // 95%的数据
@@ -165,7 +164,7 @@ class Ping extends Component {
    * 下面是第二个图表的数据
    */
   maxTime2 = 0; // 最大时间
-  Median2=0;
+  Median2 = 0;
 
   minTime2 = ''; // 最小时间
   avgTime2 = 0; // 平均时间
@@ -175,7 +174,7 @@ class Ping extends Component {
   error2 = 0;
 
   maxTime3 = 0; // 最大时间
-  Median3=0;
+  Median3 = 0;
 
   minTime3 = ''; // 最小时间
   avgTime3 = 0; // 平均时间
@@ -185,7 +184,7 @@ class Ping extends Component {
   error3 = 0;
 
   maxTime4 = 0; // 最大时间
-  Median4=0;
+  Median4 = 0;
 
   minTime4 = ''; // 最小时间
   avgTime4 = 0; // 平均时间
@@ -195,7 +194,7 @@ class Ping extends Component {
   error4 = 0;
 
   maxTime5 = 0; // 最大时间
-  Median5=0;
+  Median5 = 0;
 
   minTime5 = ''; // 最小时间
   avgTime5 = 0; // 平均时间
@@ -205,6 +204,18 @@ class Ping extends Component {
   error5 = 0;
 
   config = {};
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true,
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false,
+    });
+  };
 
   componentDidMount() {
     clearTimeout(this.stoptimer);
@@ -221,6 +232,9 @@ class Ping extends Component {
         isPing: false,
       }));
     }, 300000);
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', this.showAlert);
+    }
   }
 
   componentWillUnmount() {
@@ -231,6 +245,9 @@ class Ping extends Component {
     clearTimeout(this.send_request2);
     clearTimeout(this.send_request1);
     clearInterval(this.chart_refresh);
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', this.showAlert);
+    }
   }
 
   //将数据及配置信息导入到图表中
@@ -268,12 +285,12 @@ class Ping extends Component {
         textColor: gridColor,
         valueFormatter: chartLabels,
         axisLineWidth: 2,
-        axisLineColor:gridColor,
+        axisLineColor: gridColor,
         drawLabels: true,
         position: 'BOTTOM',
         drawGridLines: true,
-        gridColor:processColor('#1f2342'),
-        gridLineWidth:false,
+        gridColor: processColor('#1f2342'),
+        gridLineWidth: false,
       },
     };
   }
@@ -281,40 +298,38 @@ class Ping extends Component {
   //高亮每一列最小数据所在cell的函数
   minCellHighLight(rowIndex, cellIndex, tableDataArr, cellData) {
     //当前数据
-    if(cellIndex==0) return true
+    if (cellIndex == 0) return true;
     // if (
     //   (cellData == 0 && cellIndex != 6) ||
-    //   Data.pingurl.length == 1 
+    //   Data.pingurl.length == 1
     // )
     //   return false;
     let currentValue = cellData;
     let i;
-    if(tableDataArr[rowIndex][1]==tableDataArr[rowIndex][5])
-    return false
-    
+    if (tableDataArr[rowIndex][1] == tableDataArr[rowIndex][5]) return false;
+
     //当前数据小于等于本列全部数据时就返回true，否则返回false。
     for (i = 0; i < tableDataArr.length; i++) {
-      if(cellIndex!=6){
+      if (cellIndex != 6) {
         if (
-          currentValue > tableDataArr[i][cellIndex]&&
-          tableDataArr[i][cellIndex]!=0 
+          currentValue > tableDataArr[i][cellIndex] &&
+          tableDataArr[i][cellIndex] != 0
         )
           return false;
-        }
-    else{
-      if (
-        currentValue > tableDataArr[i][cellIndex]&&
-        tableDataArr[i][5]!=0
-
-          )
-        return false;
-    }      
-      
+      } else {
+        if (
+          currentValue > tableDataArr[i][cellIndex] &&
+          tableDataArr[i][5] != 0
+        )
+          return false;
+      }
     }
 
     return true;
   }
+
   render() {
+    const {showAlert} = this.state;
     const tableDataArr = [
       [
         'A',
@@ -328,7 +343,7 @@ class Ping extends Component {
       ],
       [
         'B',
-       
+
         this.minTime2,
         Math.round(this.Median2),
         Math.round(this.avgTime2),
@@ -419,6 +434,50 @@ class Ping extends Component {
 
     return (
       <View style={{flex: 1, position: 'relative'}}>
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Stop Ping?"
+          titleStyle={{
+            fontSize: ScaleSize(40),
+            fontWeight: '700',
+            color: '#494b6d',
+          }}
+          animatedValue={0.9}
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="Cancel"
+          confirmText="Confirm"
+          cancelButtonStyle={{
+            backgroundColor: '#494b6d',
+            height: Height * 0.05,
+            width: Width * 0.25,
+            alignItems: 'center',
+          }}
+          confirmButtonStyle={{
+            backgroundColor: '#494b6d',
+            height: Height * 0.05,
+            width: Width * 0.25,
+            alignItems: 'center',
+          }}
+          cancelButtonTextStyle={{
+            fontSize: ScaleSize(18),
+            fontWeight: '700',
+          }}
+          confirmButtonTextStyle={{
+            fontSize: ScaleSize(18),
+            fontWeight: '700',
+          }}
+          onConfirmPressed={() => {
+            this.hideAlert();
+            this.props.navigation.navigate('UrlInput');
+          }}
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+        />
         <View style={styles.bottomStyle}>
           <View
             style={{
@@ -457,6 +516,7 @@ class Ping extends Component {
               ( time )
             </Text>
           </View>
+
           <ScrollView style={{marginLeft: Width * 0.07}}>
             <LineChart
               width={Width * 0.92}
@@ -467,7 +527,7 @@ class Ping extends Component {
               yAxis={{
                 left: {
                   axisLineWidth: 2,
-                  axisLineColor:gridColor,
+                  axisLineColor: gridColor,
 
                   textColor: gridColor,
                   enabled: true,
@@ -490,11 +550,13 @@ class Ping extends Component {
               ref="chart"
             />
           </ScrollView>
+          {/* 弹窗 */}
+
           <View style={{position: 'absolute', top: Height * 0.47}}>
             {Data.urlData_length > 0 ? (
               <View
                 style={{
-                  width: Width*5,
+                  width: Width * 5,
                   height: Height * 0.04,
                   backgroundColor: 'red',
                   marginBottom: ScaleSize(3),
@@ -510,7 +572,7 @@ class Ping extends Component {
             {Data.urlData_length > 1 ? (
               <View
                 style={{
-                  width: Width*5,
+                  width: Width * 5,
                   height: Height * 0.04,
                   backgroundColor: '#2a82e4',
                   marginBottom: ScaleSize(3),
@@ -526,7 +588,7 @@ class Ping extends Component {
             {Data.urlData_length > 2 ? (
               <View
                 style={{
-                  width: Width*5,
+                  width: Width * 5,
                   height: Height * 0.04,
                   backgroundColor: 'green',
                   marginBottom: ScaleSize(3),
@@ -542,7 +604,7 @@ class Ping extends Component {
             {Data.urlData_length > 3 ? (
               <View
                 style={{
-                  width: Width*5,
+                  width: Width * 5,
                   height: Height * 0.04,
                   backgroundColor: '#f67e1e',
                   marginBottom: ScaleSize(3),
@@ -558,7 +620,7 @@ class Ping extends Component {
             {Data.urlData_length > 4 ? (
               <View
                 style={{
-                  width: Width*5,
+                  width: Width * 5,
                   height: Height * 0.04,
                   backgroundColor: 'purple',
                   marginBottom: ScaleSize(3),
@@ -618,9 +680,7 @@ class Ping extends Component {
                                 cellData,
                               )
                                 ? styles.textformatHighLight
-                                : 
-                                 styles.textformat
-                                
+                                : styles.textformat
                             }
                           />
                         );
@@ -651,17 +711,17 @@ const styles = StyleSheet.create({
   table: {
     marginTop: ScaleSize(30),
     flex: 1,
-    width:  Width,
+    width: Width,
     // marginLeft: Width * 0.05,
   },
   head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
   row: {height: ScaleSize(26), flexDirection: 'row'},
-  cell1: {width: Width * 0.1425,backgroundColor:"red"},
-  cell2: {width: Width * 0.1425,backgroundColor:"#2a82e4"},
-  cell3: {width: Width * 0.1425,backgroundColor:"green"},
-  cell4: {width: Width * 0.1425,backgroundColor:"#f67e1e"},
-  cell5: {width: Width * 0.1425,backgroundColor:"purple"},
+  cell1: {width: Width * 0.1425, backgroundColor: 'red'},
+  cell2: {width: Width * 0.1425, backgroundColor: '#2a82e4'},
+  cell3: {width: Width * 0.1425, backgroundColor: 'green'},
+  cell4: {width: Width * 0.1425, backgroundColor: '#f67e1e'},
+  cell5: {width: Width * 0.1425, backgroundColor: 'purple'},
 
   cellHighLight: {width: Width * 0.1425, backgroundColor: '#fff', opacity: 0.8},
   textHead: {
@@ -670,17 +730,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: ScaleSize(15),
   },
-  textformatHighLight:{
+  textformatHighLight: {
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: ScaleSize(14),
-    color: "black",
+    color: 'black',
   },
   textformat: {
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: ScaleSize(14),
-    color: "#fff",
+    color: '#fff',
   },
   textformat2: {
     textAlign: 'center',
