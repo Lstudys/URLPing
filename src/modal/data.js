@@ -11,7 +11,7 @@ const Data = {
     Ping:[{ key:0, url: '' }],//需要Ping的网址
     pingurl:[],
     pingIndex:"HDDEVTEAM",
-    historyPing:[],//历史Ping的地址
+    historyPing:['https://www.bing.com','https://www.google.com'],//历史Ping的地址
     // ,".edu",".org",".gov"
     urlsArr:["http://","https://","www.",".com",".cn"],
     InputUrl:'',

@@ -77,7 +77,7 @@ class Ping extends Component {
         wordWrapEnabled: true,
         enabled: true,
         // xEntrySpace:true,
-        form: 'CIRCLE',
+        form: 'NONE',
       },
       secondDataHeight: 120, // 第二个图表数据style属性的bottom值
 
@@ -498,24 +498,7 @@ class Ping extends Component {
               ( ms )
             </Text>
           </View>
-          <View
-            style={{
-              // backgroundColor:"blue",
-              // width:10,
-              flexDirection: 'column',
-              top: Height * 0.42,
-              right: Width * 0.2, // transform: [{rotate:'-90deg'}],
-              position: 'absolute',
-              // backgroundColor: '#1f2342',
-            }}>
-            <Text
-              style={{
-                color: '#fff',
-                // width:ScaleSize(20)
-              }}>
-              ( time )
-            </Text>
-          </View>
+         
 
           <ScrollView style={{marginLeft: Width * 0.07}}>
             <LineChart
