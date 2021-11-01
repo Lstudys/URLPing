@@ -20,12 +20,10 @@ export const BackAction = function () {
       for (let i = 0; i < data.urls.length; i++) {
         data.urls[i].mark = false;
       }
-      Data.InputUrl='';
 
       Toast.message('再按一次暂停Ping');
       return true;
     } else {
-      Data.InputUrl='';
 
       if (this.firstpress + 2000 > new Date().valueOf()) {
         this.pressnum = 0;

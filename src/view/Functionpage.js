@@ -4,19 +4,19 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
   processColor,
+  BackHandler,
 } from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
 import {Table, Row, TableWrapper, Cell} from 'react-native-table-component';
 import {getIpAddressesForHostname} from 'react-native-dns-lookup';
-import I18n from 'i18n-js';
 import Data from '../modal/data';
 import {LanguageChange} from '../component/LanguageChange';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import KeepAwake from 'react-native-keep-awake';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -28,14 +28,15 @@ const Colors = [
   processColor('purple'),
 ];
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
-const gridColor = processColor('pink'); //网格线的颜色
+const gridColor = processColor('#fff'); //网格线的颜色
 class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAlert: false,
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
-      tableHead: ['MAX', 'MIN', 'AVG', 'P95', 'ERR'],
+      tableHead: ['#', 'MIN', 'P50', 'AVG', 'P95', 'MAX', 'ERR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -67,13 +68,16 @@ class Ping extends Component {
 
       marker: {
         enabled: true,
-        backgroundTint: processColor('pink'),
-        markerColor: processColor('pink'),
+        backgroundTint: processColor('#fff'),
+        markerColor: processColor('#fff'),
         textColor: processColor('red'),
       },
       legend: {
         textColor: gridColor,
         wordWrapEnabled: true,
+        enabled: true,
+        // xEntrySpace:true,
+        form: 'NONE',
       },
       secondDataHeight: 120, // 第二个图表数据style属性的bottom值
 
@@ -88,8 +92,8 @@ class Ping extends Component {
     LanguageChange.bind(this)();
 
     this.setState({refresh: !this.state.refresh});
-
     //修改url的值
+
     var urlData = this.props.route.params.urlData;
     urlCollection[0] = urlData[0];
     if (urlData.length > 1) {
@@ -104,6 +108,9 @@ class Ping extends Component {
         }
       }
     }
+    console.log('urldataii', urlData.length);
+    Data.urlData_length = urlData.length;
+    console.log('还能怎样' + Data.urlData_length);
     //获取IP地址
     for (let i = 0; i < urlData.length; i++) {
       let str = '';
@@ -145,6 +152,7 @@ class Ping extends Component {
   };
 
   maxTime = 0; // 最大时间
+  Median = 0;
   minTime = ''; // 最小时间
   avgTime = 0; // 平均时间
   n95 = ''; // 95%的数据
@@ -156,6 +164,8 @@ class Ping extends Component {
    * 下面是第二个图表的数据
    */
   maxTime2 = 0; // 最大时间
+  Median2 = 0;
+
   minTime2 = ''; // 最小时间
   avgTime2 = 0; // 平均时间
   n952 = ''; // 95%的数据
@@ -164,6 +174,8 @@ class Ping extends Component {
   error2 = 0;
 
   maxTime3 = 0; // 最大时间
+  Median3 = 0;
+
   minTime3 = ''; // 最小时间
   avgTime3 = 0; // 平均时间
   n953 = ''; // 95%的数据
@@ -172,6 +184,8 @@ class Ping extends Component {
   error3 = 0;
 
   maxTime4 = 0; // 最大时间
+  Median4 = 0;
+
   minTime4 = ''; // 最小时间
   avgTime4 = 0; // 平均时间
   n954 = ''; // 95%的数据
@@ -180,6 +194,8 @@ class Ping extends Component {
   error4 = 0;
 
   maxTime5 = 0; // 最大时间
+  Median5 = 0;
+
   minTime5 = ''; // 最小时间
   avgTime5 = 0; // 平均时间
   n955 = ''; // 95%的数据
@@ -189,7 +205,26 @@ class Ping extends Component {
 
   config = {};
 
+  showAlert = () => {
+    this.setState({
+      showAlert: true,
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false,
+    });
+  };
+
   componentDidMount() {
+    clearTimeout(this.stoptimer);
+    clearTimeout(this.send_request5);
+    clearTimeout(this.send_request4);
+    clearTimeout(this.send_request3);
+    clearTimeout(this.send_request2);
+    clearTimeout(this.send_request1);
+    clearInterval(this.chart_refresh);
     console.log(urlCollection);
     //定时Ping三分钟自动结束
     this.stoptimer = setTimeout(() => {
@@ -197,6 +232,9 @@ class Ping extends Component {
         isPing: false,
       }));
     }, 300000);
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', this.showAlert);
+    }
   }
 
   componentWillUnmount() {
@@ -207,6 +245,9 @@ class Ping extends Component {
     clearTimeout(this.send_request2);
     clearTimeout(this.send_request1);
     clearInterval(this.chart_refresh);
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', this.showAlert);
+    }
   }
 
   //将数据及配置信息导入到图表中
@@ -222,16 +263,16 @@ class Ping extends Component {
       if (urlCollection[i] != '') {
         dataSets.push({
           textColor: gridColor,
-          axisLineColor: gridColor,
+          // axisLineColor: gridColor,
           values: valuestempArr[i],
-          label: `${urlCollection[i]}(${iptempArr[i]})`,
+          // label: `${urlCollection[i]}(${iptempArr[i]})`,
           config: {
-            textColor: 'pink',
+            textColor: '#fff',
             drawValues: false,
             color: Colors[colortempArr[i]],
             mode: 'LINEAR',
             drawCircles: false,
-            lineWidth: 2,
+            lineWidth: 2.2,
           },
         });
       }
@@ -243,68 +284,102 @@ class Ping extends Component {
       xAxis: {
         textColor: gridColor,
         valueFormatter: chartLabels,
-        axisLineWidth: 0,
+        axisLineWidth: 2,
+        axisLineColor: gridColor,
         drawLabels: true,
         position: 'BOTTOM',
         drawGridLines: true,
-        gridColor: gridColor,
+        gridColor: processColor('#1f2342'),
+        gridLineWidth: false,
       },
     };
   }
 
-   //高亮每一列最小数据所在cell的函数
-   minCellHighLight(rowIndex, cellIndex, tableDataArr, cellData) {
+  //高亮每一列最小数据所在cell的函数
+  minCellHighLight(rowIndex, cellIndex, tableDataArr, cellData) {
     //当前数据
-    if(cellData==0&&cellIndex!=4) return false;
+    if (cellIndex == 0) return true;
+    // if (
+    //   (cellData == 0 && cellIndex != 6) ||
+    //   Data.pingurl.length == 1
+    // )
+    //   return false;
     let currentValue = cellData;
     let i;
+    if (tableDataArr[rowIndex][1] == tableDataArr[rowIndex][5]) return false;
+
     //当前数据小于等于本列全部数据时就返回true，否则返回false。
     for (i = 0; i < tableDataArr.length; i++) {
-      if(cellIndex!=4){
-      if (currentValue > tableDataArr[i][cellIndex]&&tableDataArr[i][cellIndex]!=0) return false;
-      }
-      else{
-        if (currentValue > tableDataArr[i][cellIndex]) return false;
+      if (cellIndex != 6) {
+        if (
+          currentValue > tableDataArr[i][cellIndex] &&
+          tableDataArr[i][cellIndex] != 0
+        )
+          return false;
+      } else {
+        if (
+          currentValue > tableDataArr[i][cellIndex] &&
+          tableDataArr[i][5] != 0
+        )
+          return false;
       }
     }
 
     return true;
   }
+
   render() {
+    const {showAlert} = this.state;
     const tableDataArr = [
       [
-        this.maxTime,
+        'A',
         this.minTime,
+        Math.round(this.Median),
         Math.round(this.avgTime),
         Math.round(this.n95),
+        this.maxTime,
+
         this.error1,
       ],
       [
-        this.maxTime2,
+        'B',
+
         this.minTime2,
+        Math.round(this.Median2),
         Math.round(this.avgTime2),
         Math.round(this.n952),
+        this.maxTime2,
+
         this.error2,
       ],
       [
-        this.maxTime3,
+        'C',
         this.minTime3,
+        Math.round(this.Median3),
         Math.round(this.avgTime3),
         Math.round(this.n953),
+        this.maxTime3,
+
         this.error3,
       ],
       [
-        this.maxTime4,
+        'D',
         this.minTime4,
+        Math.round(this.Median4),
         Math.round(this.avgTime4),
         Math.round(this.n954),
+        this.maxTime4,
+
         this.error4,
       ],
       [
-        this.maxTime5,
+        'E',
         this.minTime5,
+        Math.round(this.Median5),
         Math.round(this.avgTime5),
         Math.round(this.n955),
+        this.maxTime5,
+
         this.error5,
       ],
     ];
@@ -356,34 +431,87 @@ class Ping extends Component {
         dataSets,
       );
     }
-    
 
     return (
-      <View style={{position: 'relative'}}>
-        <View
-          style={{
-            backgroundColor: '#1f2342',
-          }}>
-          <Text
-            style={{
-              color: 'pink',
-              opacity: 0.7,
-              marginTop: ScaleSize(5),
-              marginLeft: ScaleSize(3),
-            }}>
-            (ms)
-          </Text>
-        </View>
+      <View style={{flex: 1, position: 'relative'}}>
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Stop Ping?"
+          titleStyle={{
+            fontSize: ScaleSize(40),
+            fontWeight: '700',
+            color: '#494b6d',
+          }}
+          animatedValue={0.9}
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="Cancel"
+          confirmText="Confirm"
+          cancelButtonStyle={{
+            backgroundColor: '#494b6d',
+            height: Height * 0.05,
+            width: Width * 0.25,
+            alignItems: 'center',
+          }}
+          confirmButtonStyle={{
+            backgroundColor: '#494b6d',
+            height: Height * 0.05,
+            width: Width * 0.25,
+            alignItems: 'center',
+          }}
+          cancelButtonTextStyle={{
+            fontSize: ScaleSize(18),
+            fontWeight: '700',
+          }}
+          confirmButtonTextStyle={{
+            fontSize: ScaleSize(18),
+            fontWeight: '700',
+          }}
+          onConfirmPressed={() => {
+            this.hideAlert();
+            this.props.navigation.navigate('UrlInput');
+          }}
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+        />
         <View style={styles.bottomStyle}>
-          <ScrollView>
+          <View
+            style={{
+              // backgroundColor:"blue",
+              // width:10,
+              flexDirection: 'column',
+              top: Height * 0.2,
+              left: ScaleSize(2),
+              transform: [{rotate: '-90deg'}],
+              position: 'absolute',
+              // backgroundColor: '#1f2342',
+            }}>
+            <Text
+              style={{
+                color: '#fff',
+                // width:ScaleSize(20)
+              }}>
+              ( ms )
+            </Text>
+          </View>
+         
+
+          <ScrollView style={{marginLeft: Width * 0.07}}>
             <LineChart
-              width={Width * 0.98}
-              height={Height * 0.6}
+              width={Width * 0.92}
+              height={Width * 0.86}
               bottom={0}
               data={this.config.data}
               xAxis={this.config.xAxis}
               yAxis={{
                 left: {
+                  axisLineWidth: 2,
+                  axisLineColor: gridColor,
+
                   textColor: gridColor,
                   enabled: true,
                   drawGridLines: true,
@@ -405,56 +533,146 @@ class Ping extends Component {
               ref="chart"
             />
           </ScrollView>
+          {/* 弹窗 */}
 
-          <View style={styles.table}>
-          <Table borderStyle={{borderWidth: 1, borderColor: 'pink'}}>
-              <Row
-                data={state.tableHead}
-                flexArr={[1, 1, 1]}
-                style={styles.head}
-                textStyle={styles.textHead}
-              />
-            </Table>
+          <View style={{position: 'absolute', top: Height * 0.47}}>
+            {Data.urlData_length > 0 ? (
+              <View
+                style={{
+                  width: Width * 5,
+                  height: Height * 0.04,
+                  backgroundColor: 'red',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text style={styles.rowlegend}>
+                  {' '}
+                  A : {urlCollection[0]} ({Data.IP1})
+                </Text>
+              </View>
+            ) : (
+              <View />
+            )}
+            {Data.urlData_length > 1 ? (
+              <View
+                style={{
+                  width: Width * 5,
+                  height: Height * 0.04,
+                  backgroundColor: '#2a82e4',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text style={styles.rowlegend}>
+                  {' '}
+                  B : {urlCollection[1]} ({Data.IP2})
+                </Text>
+              </View>
+            ) : (
+              <View />
+            )}
+            {Data.urlData_length > 2 ? (
+              <View
+                style={{
+                  width: Width * 5,
+                  height: Height * 0.04,
+                  backgroundColor: 'green',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text style={styles.rowlegend}>
+                  {' '}
+                  C : {urlCollection[2]} ({Data.IP3})
+                </Text>
+              </View>
+            ) : (
+              <View />
+            )}
+            {Data.urlData_length > 3 ? (
+              <View
+                style={{
+                  width: Width * 5,
+                  height: Height * 0.04,
+                  backgroundColor: '#f67e1e',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text style={styles.rowlegend}>
+                  {' '}
+                  D : {urlCollection[3]} ({Data.IP4})
+                </Text>
+              </View>
+            ) : (
+              <View />
+            )}
+            {Data.urlData_length > 4 ? (
+              <View
+                style={{
+                  width: Width * 5,
+                  height: Height * 0.04,
+                  backgroundColor: 'purple',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text style={styles.rowlegend}>
+                  {' '}
+                  E : {urlCollection[4]} ({Data.IP5})
+                </Text>
+              </View>
+            ) : (
+              <View />
+            )}
+            <View style={styles.table}>
+              <Table borderStyle={{borderWidth: 1, borderColor: '#fff'}}>
+                <Row
+                  data={state.tableHead}
+                  flexArr={[1, 1, 1]}
+                  style={styles.head}
+                  textStyle={styles.textHead}
+                />
+              </Table>
 
-            <Table borderStyle={{borderWidth: 1, borderColor: 'pink'}}>
-              {tableData.map((rowData, rowIndex) => {
-                return (
-                  <TableWrapper key={rowIndex} style={styles.row}>
-                    {rowData.map((cellData, cellIndex) => {
-                      return (
-                        <Cell
-                          key={cellIndex}
-                          data={cellData}
-                          style={
-                            this.minCellHighLight(
-                              rowIndex,
-                              cellIndex,
-                              compareData,
-                              cellData,
-                            )
-                              ? styles.cellHighLight
-                              : styles.cell
-                          }
-                          textStyle={
-                            rowIndex == 0
-                              ? styles.textformat
-                              : rowIndex == 1
-                              ? styles.textformat2
-                              : rowIndex == 2
-                              ? styles.textformat3
-                              : rowIndex == 3
-                              ? styles.textformat4
-                              : rowIndex == 4
-                              ? styles.textformat5
-                              : {}
-                          }
-                        />
-                      );
-                    })}
-                  </TableWrapper>
-                );
-              })}
-            </Table>
+              <Table borderStyle={{borderWidth: 1, borderColor: '#fff'}}>
+                {tableData.map((rowData, rowIndex) => {
+                  return (
+                    <TableWrapper key={rowIndex} style={styles.row}>
+                      {rowData.map((cellData, cellIndex) => {
+                        return (
+                          <Cell
+                            key={cellIndex}
+                            data={cellData}
+                            style={
+                              !this.minCellHighLight(
+                                rowIndex,
+                                cellIndex,
+                                compareData,
+                                cellData,
+                              )
+                                ? styles.cellHighLight
+                                : rowIndex == 0
+                                ? styles.cell1
+                                : rowIndex == 1
+                                ? styles.cell2
+                                : rowIndex == 2
+                                ? styles.cell3
+                                : rowIndex == 3
+                                ? styles.cell4
+                                : rowIndex == 4
+                                ? styles.cell5
+                                : {}
+                            }
+                            textStyle={
+                              !this.minCellHighLight(
+                                rowIndex,
+                                cellIndex,
+                                compareData,
+                                cellData,
+                              )
+                                ? styles.textformatHighLight
+                                : styles.textformat
+                            }
+                          />
+                        );
+                      })}
+                    </TableWrapper>
+                  );
+                })}
+              </Table>
+            </View>
           </View>
         </View>
         <KeepAwake />
@@ -465,32 +683,47 @@ class Ping extends Component {
 
 export default Ping;
 const styles = StyleSheet.create({
+  rowlegend: {
+    color: '#fff',
+    lineHeight: Height * 0.04,
+  },
   bottomStyle: {
     height: Height * 1.2,
     backgroundColor: '#1f2342',
   },
   table: {
-    top: -Height * 0.28,
+    marginTop: ScaleSize(30),
     flex: 1,
-    width: 0.9 * Width,
-    marginLeft: Width * 0.05,
+    width: Width,
+    // marginLeft: Width * 0.05,
   },
   head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
   row: {height: ScaleSize(26), flexDirection: 'row'},
-  cell: {width: Width * 0.18},
-  cellHighLight: {width: Width * 0.18, backgroundColor: '#fff',opacity:.8},
+  cell1: {width: Width * 0.1425, backgroundColor: 'red'},
+  cell2: {width: Width * 0.1425, backgroundColor: '#2a82e4'},
+  cell3: {width: Width * 0.1425, backgroundColor: 'green'},
+  cell4: {width: Width * 0.1425, backgroundColor: '#f67e1e'},
+  cell5: {width: Width * 0.1425, backgroundColor: 'purple'},
+
+  cellHighLight: {width: Width * 0.1425, backgroundColor: '#fff', opacity: 0.8},
   textHead: {
     textAlign: 'center',
-    color: 'pink',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: ScaleSize(15),
+  },
+  textformatHighLight: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: ScaleSize(14),
+    color: 'black',
   },
   textformat: {
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: ScaleSize(14),
-    color: textColors[0],
+    color: '#fff',
   },
   textformat2: {
     textAlign: 'center',
@@ -545,7 +778,7 @@ const styles = StyleSheet.create({
 
   stoptext: {
     fontSize: SetSpText(40),
-    color: 'pink',
+    color: '#fff',
     fontWeight: '700',
   },
 
@@ -563,7 +796,7 @@ const styles = StyleSheet.create({
     borderRadius: ScaleSize(15),
     backgroundColor: '#fff',
     borderWidth: ScaleSize(3),
-    borderColor: 'pink',
+    borderColor: '#fff',
     height: ScaleSize(42),
     justifyContent: 'center',
   },

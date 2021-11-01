@@ -11,7 +11,9 @@ import {
   StyleSheet,
   Keyboard,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
+import {TestURL} from '../controller/AppPageFunction';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
@@ -36,6 +38,7 @@ class Ordinary extends Component {
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
+
     Data.InputUrl = '';
     Data.pingurl = [''];
     LanguageChange.bind(this)();
@@ -50,6 +53,7 @@ class Ordinary extends Component {
   identify = true;
 
   componentWillMount() {
+    // Data.errorIndex=[]
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       this._keyboardDidShow.bind(this),
@@ -73,10 +77,244 @@ class Ordinary extends Component {
   }
   _keyboardDidHide() {
     this.setState({
-      history_height: Height * 0.7,
+      history_height: Height * 0.6,
       keyBoardHeight: 0,
     });
   }
+  PING = () => {
+    Platform.OS;
+    //正则分割字符串
+    let last = 'com|edu|cn|gov|org';
+    let reg = new RegExp('https?://(www.)?\\w+(.(' + last + '))+\n*', 'g');
+    let url = Data.InputUrl.match(reg) ? Data.InputUrl.match(reg) : [];
+
+    let InputUrl = Data.InputUrl.split('\n');
+    console.log('lalalaurl ' + url);
+    console.log('lalalainput ' + Data.InputUrl.split('\n'));
+    let flag = false;
+    Data.errorIndex = [];
+    let errorIndex = Data.errorIndex;
+    for (let i = 0, j = 0; j < InputUrl.length; ) {
+      if (url[i] != Data.InputUrl.split('\n')[j] + '\n') {
+        flag = true;
+
+        Data.errorIndex.push(j);
+        let errorIndex = Data.errorIndex;
+
+        console.log('这来了么' + Data.errorIndex);
+        alert(Data.errorIndex)
+        j++;
+      } else {
+        i++;
+        j++;
+      }
+    }
+    // return
+    if (TestURL(InputUrl[errorIndex[errorIndex.length - 1]])) {
+      console.log('合法了');
+      errorIndex.pop();
+      Data.errorIndex = errorIndex;
+
+    }
+    if (flag) {
+      alert(errorIndex);
+      // return
+
+      if (errorIndex.length == 1 && Data.InputUrl != '') {
+        let errorLength = 0;
+        for (let i = 0; i <= Data.errorIndex[0]; i++) {
+          errorLength += InputUrl[i].length;
+        }
+        alert("到这了")
+
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength + errorIndex[0]) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength + errorIndex[0]);
+        this.setState({refresh: !this.state.refresh});
+        return;
+      } else if (errorIndex.length == 2) {
+        let errorLength1 = 0;
+        let errorLength2 = 0;
+        for (let i = 0; i <= errorIndex[0]; i++) {
+          errorLength1 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[1]; i++) {
+          errorLength2 += InputUrl[i].length;
+        }
+
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
+        this.setState({refresh: !this.state.refresh});
+        return;
+      } 
+      else if (errorIndex.length == 3) {
+        // let errorLength1 = 0;
+        // let errorLength2 = 0;
+        // for (let i = 0; i <= errorIndex[0]; i++) {
+        //   errorLength1 += InputUrl[i].length;
+        // }
+        // for (let i = 0; i <= errorIndex[1]; i++) {
+        //   errorLength2 += InputUrl[i].length;
+        // }
+
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
+        this.setState({refresh: !this.state.refresh});
+        return;
+      } else if (errorIndex.length == 4) {
+        let errorLength1 = 0;
+        let errorLength2 = 0;
+        let errorLength3 = 0;
+        let errorLength4 = 0;
+        for (let i = 0; i <= errorIndex[0]; i++) {
+          errorLength1 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[1]; i++) {
+          errorLength2 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[2]; i++) {
+          errorLength3 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[3]; i++) {
+          errorLength4 += InputUrl[i].length;
+        }
+
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength3 + errorIndex[2] + 30) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength3 + errorIndex[2] + 30);
+        // this.setState({refresh: !this.state.refresh});
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength4 + errorIndex[3] + 45) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength4 + errorIndex[3] + 45);
+        this.setState({refresh: !this.state.refresh});
+        return;
+      } else if (errorIndex.length == 5) {
+        let errorLength1 = 0;
+        let errorLength2 = 0;
+        let errorLength3 = 0;
+        let errorLength4 = 0;
+        let errorLength5 = 0;
+        for (let i = 0; i <= errorIndex[0]; i++) {
+          errorLength1 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[1]; i++) {
+          errorLength2 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[2]; i++) {
+          errorLength3 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[3]; i++) {
+          errorLength4 += InputUrl[i].length;
+        }
+        for (let i = 0; i <= errorIndex[4]; i++) {
+          errorLength5 += InputUrl[i].length;
+        }
+
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength3 + errorIndex[2] + 30) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength3 + errorIndex[2] + 30);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength4 + errorIndex[3] + 45) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength4 + errorIndex[3] + 45);
+        // Data.InputUrl =
+        //   Data.InputUrl.slice(0, errorLength5 + errorIndex[4] + 60) +
+        //   '     <=== ERROR' +
+        //   Data.InputUrl.slice(errorLength5 + errorIndex[4] + 60);
+        this.setState({refresh: !this.state.refresh});
+        return;
+      }
+    }
+    this.setState({refresh: !this.state.refresh});
+
+    // Data.InputUrl.slice(0, this.state.currentIndex) +
+    // Data.urlsArr[key] +
+    // Data.InputUrl.slice(this.state.currentIndex);
+    if (url == null) {
+      Toast.message(I18n.t('urlempty'));
+      return;
+    }
+    if (url.length > 5) {
+      Toast.message(I18n.t('maxfiveurl'));
+      return;
+    }
+    console.log('清空之前', Data.pingurl);
+    Data.pingurl = [''];
+    console.log('清空之后', Data.pingurl);
+
+    for (let i = 0; i < url.length; i++) {
+      // if(url[i].trim().substring(1,4)=='www')
+      // {
+
+      // }
+      // console.log("是吗"+url[i].trim().substring(1,4));
+      Data.pingurl[i] = url[i].trim();
+    }
+    console.log('赋值之后', Data.pingurl);
+
+    //检测url合法性
+    this.identify = true;
+    for (let i = 0; i < Data.pingurl.length; i++) {
+      if (Data.pingurl[i].search(reg) < 0) {
+        this.identify = false;
+      }
+    }
+
+    if (this.identify) {
+      if (Data.pingurl.length != 0) {
+        //查重并拆分
+        let inputUrl = '';
+        for (let i = 0; i < url.length; i++) {
+          let urlStr = url[i].trim() + '\n';
+          inputUrl = inputUrl + urlStr;
+          this.checkHistory(url[i]);
+        }
+        // this.checkHistory(inputUrl);
+        store.save('history', Data.historyPing);
+        this.setState({refresh: !this.state.refresh});
+        console.log(Data.historyPing);
+        this.props.navigation.navigate('Ping', {
+          urlData: [...Data.pingurl],
+        });
+      } else {
+        Toast.message(I18n.t('nourladded'));
+      }
+    } else {
+      Toast.message(I18n.t('reject_Test'));
+    }
+  };
 
   renderItem = ({item}) => {
     return (
@@ -131,72 +369,81 @@ class Ordinary extends Component {
     let n = item[0].match(/\n/g) == null ? 1 : item[0].match(/\n/g).length;
     let h = Height * 0.03 * n;
     return (
-      <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          height: h + ScaleSize(15),
+          borderRadius: ScaleSize(10),
+          width: Width * 0.95,
+          marginLeft: Width * 0.025,
+          marginTop: ScaleSize(20),
+          backgroundColor: '#494b6d',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            let a = Data.InputUrl.split('\n');
+
+            if(a[a.length-1]==''){
+                    a.pop();
+                    Data.InputUrl = a.join('\n');
+            }
+            if(Data.InputUrl.split())
+            if (Data.InputUrl.split('\n').length > 4) {
+              Toast.message('最多ping五个');
+              return;
+            }
+            Data.InputUrl =
+              Data.InputUrl.trim() + '\n' + Data.historyPing[index];
+
+            Data.InputUrl = Data.InputUrl.trim();
+
+            this.setState({
+              numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
+            });
+          }}>
+          <View
+            style={{
+              width: ScaleSize(285),
+              paddingLeft: Width * 0.1,
+              paddingTop: Width * 0.02,
+              justifyContent: 'center',
+            }}>
+            <Text
+              // numberOfLines={1}
+              ellipsizeMode={'tail'}
+              style={{
+                color: '#fff',
+                fontSize: SetSpText(35),
+              }}>
+              {item}
+            </Text>
+          </View>
+        </TouchableOpacity>
         <View
           style={{
-            flexDirection: 'row',
-            height: h + ScaleSize(15),
-            borderRadius: ScaleSize(20),
-            width: Width * 0.95,
-            marginTop: ScaleSize(20),
-            backgroundColor:"#494b6d"
+            alignSelf: 'center',
+            marginLeft: ScaleSize(5),
+            marginTop: ScaleSize(15),
           }}>
           <TouchableOpacity
             onPress={() => {
-              if(Data.InputUrl=='')
-              Data.InputUrl = Data.InputUrl + Data.historyPing[index];
-              else{
-                Data.InputUrl = Data.InputUrl.trim() +'\n'+ Data.historyPing[index];
-              }
-              this.setState({
-                numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
-              });
+              Data.historyPing.splice(parseInt(index), 1);
+              this.setState({refresh: !this.state.refresh});
+              console.log(Data.historyPing);
             }}>
-            <View
-              style={{
-                width: ScaleSize(285),
-                paddingLeft: Width * 0.1,
-                paddingTop: Width * 0.02,
-                justifyContent: 'center',
-              }}>
-              <Text
-                // numberOfLines={1}
-                ellipsizeMode={'tail'}
+            <View>
+              <Image
+                source={require('../imgs/delete.png')}
                 style={{
-                  color: '#fff',
-                  fontSize: SetSpText(35),
-                }}>
-                {item}
-              </Text>
+                  width: ScaleSize(20),
+                  height: ScaleSize(20),
+                  marginBottom: ScaleSize(15),
+                  marginHorizontal: ScaleSize(10),
+                }}
+              />
             </View>
           </TouchableOpacity>
-          <View
-            style={{
-              alignSelf: 'center',
-              marginLeft: ScaleSize(5),
-              marginTop: ScaleSize(15),
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                Data.historyPing.splice(parseInt(index), 1);
-                this.setState({refresh: !this.state.refresh});
-                console.log(Data.historyPing);
-              }}>
-              <View>
-                <Image
-                  source={require('../imgs/delete.png')}
-                  style={{
-                    width: ScaleSize(20),
-                    height: ScaleSize(20),
-                    marginBottom: ScaleSize(15),
-                    marginHorizontal: ScaleSize(10),
-                  }}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
         </View>
-        
       </View>
     );
   };
@@ -206,6 +453,7 @@ class Ordinary extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
+          alert(Data.errorIndex);
           for (let i = 0; i < Data.urlsArr.length; i++) {
             if (Data.urlsArr[i] == item) {
               var key = i;
@@ -256,7 +504,6 @@ class Ordinary extends Component {
             <View
               style={{
                 marginBottom: ScaleSize(20),
-                width: Width * 0.9,
               }}>
               <FlatList
                 inverted={true}
@@ -274,7 +521,7 @@ class Ordinary extends Component {
                 }}
                 style={{
                   height: this.state.history_height,
-                  width: Width * 0.95,
+                  width: Width,
                   borderRadius: ScaleSize(13),
                 }}
                 refreshing={this.state.FlatListIsRefreshing}
@@ -286,7 +533,8 @@ class Ordinary extends Component {
               style={{
                 height: Height * 0.062,
                 width: Width,
-                marginBottom: ScaleSize(15),
+                marginBottom: ScaleSize(10),
+                marginTop: ScaleSize(5),
               }}>
               <FlatList
                 scrollEnabled={true}
@@ -299,15 +547,116 @@ class Ordinary extends Component {
             </View>
             <View
               style={{
-                borderColor: 'pink',
+                position: 'relative',
+                marginBottom: ScaleSize(-15),
+                width: Width * 0.9,
+                marginLeft: Width * 0.05,
+                borderColor: '#fff',
                 borderWidth: ScaleSize(4),
                 borderBottomWidth: ScaleSize(2),
                 height:
                   Height *
-                  (0.06 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
+                  (0.04 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
+              <View>
+                {Data.errorIndex.indexOf(0) == 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.02,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: 'red',
+                      opacity:.8
+                    }}>
+                      <View style={{marginLeft:Width*.72}}>
+                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
+                      </View>
+                    </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(1) >= 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.05,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: 'red',
+                      opacity:.8
+                    }}>
+                      <View style={{marginLeft:Width*.72}}>
+                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
+                      </View>
+                    </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(2)>=0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.08,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: 'red',
+                      opacity:.8
+                    }}>
+                      <View style={{marginLeft:Width*.72,marginTop:Height*.001}}>
+                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
+                      </View>
+                    </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(3)>=0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.11,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: 'red',
+                      opacity:.8
+                    }}>
+                      <View style={{marginLeft:Width*.72}}>
+                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
+                      </View>
+                    </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(4)>= 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.14,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.032,
+                      backgroundColor: 'red',
+                      opacity:.8
+                    }}>
+                      <View style={{marginLeft:Width*.72}}>
+                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
+                      </View>
+                    </View>
+                ) : (
+                  <View />
+                )}
+              </View>
               <TextInput
                 value={Data.InputUrl}
                 autoFocus={true}
@@ -324,134 +673,109 @@ class Ordinary extends Component {
                     Data.InputUrl.match(reg) == null
                       ? 0
                       : Data.InputUrl.match(reg).length;
+                  // if(Data.InputUrl.split('\n').length>4) {
+                  //   Toast.message("最多ping五个")
+                  //   return ;
+                  // }
                   this.setState({
-                    numberOfUrlinTextInput: n,
+                    numberOfUrlinTextInput:
+                      Data.InputUrl.split('\n').length - 1,
                   });
+
                   this.state.currentIndex = event.nativeEvent.selection.start;
                 }}
                 style={{
                   paddingBottom: Height * 0.01,
-                  marginLeft: ScaleSize(10),
-                  marginTop: ScaleSize(3),
+                  marginLeft: ScaleSize(20),
+                  marginTop: ScaleSize(0),
                   height:
                     Height *
-                    (0.04 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
-                  width: Width * 0.9,
+                    (0.03 + 0.03 * (this.state.numberOfUrlinTextInput + 1)),
+                  width: Width * 0.8,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
                   fontSize: ScaleSize(18),
                 }}
                 onChangeText={(value) => {
+                  let index;
+                  for(let i=0;i<Data.InputUrl.split("\n").length;i++){
+                    if(Data.InputUrl.split('\n')[i]!=value.split('\n')[i]&&Data.errorIndex.indexOf(i)>=0){
+                      index=i;
+                      Data.errorIndex.splice(Data.errorIndex.indexOf(i),1)
+                    }
+                    if(Data.InputUrl.split('\n')[i]!=value.split('\n')[i]){
+                      index=i;
+                    }
+                  }
+                  console.log("这里"+index);
+
+                  if (Data.InputUrl.split('\n').length > 5) {
+                    Toast.message('最多ping五个');
+                    let a = Data.InputUrl.split('\n');
+                    a.splice(index,1)
+                    Data.InputUrl = a.join('\n');
+                    
+                    this.setState({refresh: !this.state.refresh});
+
+                    return;
+                  }
+                  console.log('次数' + this.state.numberOfUrlinTextInput);
                   Data.InputUrl = value;
+
                   this.setState({refresh: !this.state.refresh});
                 }}
               />
             </View>
-            <View
-              style={{
-                marginLeft: Width * 0.01,
-
-                marginTop: ScaleSize(15),
-                flexDirection: 'row',
-                width: Width * 0.18,
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity
+            {!this.state.keyBoardHeight ? (
+              <View
                 style={{
-                  width: Width * 0.48,
-                  height: Height * 0.06,
-                  backgroundColor: '#fff',
-                  borderRadius: ScaleSize(10),
-                  borderColor: 'pink',
-                  borderWidth: ScaleSize(2),
-                }}
-                onPress={() => {
-                  Data.InputUrl = '';
-                  this.setState({numberOfUrlinTextInput: 0});
+                  marginTop: ScaleSize(25),
+                  flexDirection: 'row',
+                  width: Width,
+                  height: Height * 0.07,
+                  backgroundColor: '#494b6d',
+                  alignItems: 'center',
                 }}>
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.pingtext}>Clear！</Text>
-                </View>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    marginLeft: Width * 0.08,
 
-              <TouchableOpacity
-                style={{
-                  marginLeft: Width * 0.02,
-                  width: Width * 0.48,
-                  height: Height * 0.06,
-                  backgroundColor: '#fff',
-                  borderRadius: ScaleSize(10),
-                  borderColor: 'pink',
-                  borderWidth: ScaleSize(2),
-                }}
-                onPress={() => {
-                  Platform.OS;
-                  //正则分割字符串
-                  let last = 'com|edu|cn|gov|org';
-                  let reg = new RegExp(
-                    'https?://(www.)?\\w+(.(' + last + '))+\n*',
-                    'g',
-                  );
-                  let url = Data.InputUrl.match(reg);
-                  console.log("lalala"+url);
-                  if (url == null) {
-                    Toast.message(I18n.t('urlempty'));
-                    return;
-                  }
-                  if (url.length > 5) {
-                    Toast.message(I18n.t('maxfiveurl'));
-                    return;
-                  }
-                  console.log('清空之前', Data.pingurl);
-                  Data.pingurl = [''];
-                  console.log('清空之后', Data.pingurl);
+                    width: Width * 0.4,
+                    height: Height * 0.06,
+                    backgroundColor: '#76779b',
+                    borderRadius: ScaleSize(10),
+                    borderColor: '#fff',
+                    borderWidth: ScaleSize(2),
+                  }}
+                  onPress={() => {
+                    Data.InputUrl = '';
+                    Data.errorIndex=[]
+                    this.setState({numberOfUrlinTextInput: 0});
+                  }}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={styles.pingtext}>Clear</Text>
+                  </View>
+                </TouchableOpacity>
 
-                  for (let i = 0; i < url.length; i++) {
-                    // if(url[i].trim().substring(1,4)=='www')
-                    // {
-
-                    // }
-                    // console.log("是吗"+url[i].trim().substring(1,4));
-                    Data.pingurl[i] = url[i].trim();
-                  }
-                  console.log('赋值之后', Data.pingurl);
-
-                  //检测url合法性
-                  this.identify = true;
-                  for (let i = 0; i < Data.pingurl.length; i++) {
-                    if (Data.pingurl[i].search(reg) < 0) {
-                      this.identify = false;
-                    }
-                  }
-
-                  if (this.identify) {
-                    if (Data.pingurl.length != 0) {
-                      //查重并拆分
-                      let inputUrl = '';
-                      for (let i = 0; i < url.length; i++) {
-                        let urlStr = url[i].trim() + '\n';
-                        inputUrl = inputUrl + urlStr;
-                        this.checkHistory(url[i]);
-                      }
-                      // this.checkHistory(inputUrl);
-                      store.save('history', Data.historyPing);
-                      this.setState({refresh: !this.state.refresh});
-                      console.log(Data.historyPing);
-                      this.props.navigation.navigate('Ping', {
-                        urlData: [...Data.pingurl],
-                      });
-                    } else {
-                      Toast.message(I18n.t('nourladded'));
-                    }
-                  } else {
-                    Toast.message(I18n.t('reject_Test'));
-                  }
-                }}>
-                <View style={{alignItems: 'center', height: Height * 0.06}}>
-                  <Text style={styles.pingtext}>GO!</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  style={{
+                    marginLeft: Width * 0.02,
+                    width: Width * 0.4,
+                    height: Height * 0.06,
+                    backgroundColor: '#1f2342',
+                    borderRadius: ScaleSize(10),
+                    borderColor: '#fff',
+                    borderWidth: ScaleSize(2),
+                  }}
+                  onPress={this.PING}>
+                  <View style={{alignItems: 'center', height: Height * 0.06}}>
+                    <Text style={styles.pingtext}>PING!</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View />
+            )}
           </View>
         </View>
       );
@@ -491,7 +815,7 @@ const styles = StyleSheet.create({
   },
   pingtext: {
     fontSize: SetSpText(50),
-    color: 'pink',
+    color: '#fff',
     fontWeight: '700',
   },
   pingwhole: {

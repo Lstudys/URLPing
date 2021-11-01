@@ -14,7 +14,7 @@ import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 import {BackHandler, Platform} from 'react-native';
-import {ExitApp} from '../controller/AppPageFunction';
+import {ExitApp,BackAction} from '../controller/AppPageFunction';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Height = Dimensions.get('window').height;
@@ -100,7 +100,7 @@ class Ordinary extends Component {
     const {showAlert} = this.state;
 
     let navigationView = (
-      <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <View style={{flex: 1, backgroundColor: '#494b6d'}}>
         <TouchableOpacity
           activeOpacity={0.9}
           onPress={() => {
@@ -110,24 +110,24 @@ class Ordinary extends Component {
             marginTop: ScaleSize(20),
             height: Height * 0.08,
             backgroundColor: '#fff',
-            width: Width * 0.5,
-            marginLeft: Width * 0.02,
-            borderColor: 'pink',
+            width: Width * 0.57,
+            // marginLeft: Width * 0.02,
+            borderColor: '#fff',
             borderWidth: ScaleSize(4),
             borderBottomWidth: ScaleSize(2),
-            borderRadius: ScaleSize(2),
-            borderBottomRightRadius: ScaleSize(20),
-            borderTopRightRadius: ScaleSize(20),
+            // borderRadius: ScaleSize(2),
+            // borderBottomRightRadius: ScaleSize(20),
+            // borderTopRightRadius: ScaleSize(20),
           }}>
           <View
             style={{
               position: 'absolute',
-              right: Width * 0.15,
-              top: Height * 0.015,
+              right: Width * 0.2,
+              top: Height * 0.017,
             }}>
             <Text
               style={{
-                color: 'pink',
+                color: '#494b6d',
                 fontSize: ScaleSize(20),
                 fontWeight: '700',
               }}>
@@ -166,14 +166,14 @@ class Ordinary extends Component {
               marginTop: ScaleSize(20),
               height: Height * 0.08,
               backgroundColor: '#fff',
-              width: Width * 0.5,
-              marginLeft: Width * 0.02,
-              borderColor: 'pink',
+              width: Width * 0.55,
+              // marginLeft: Width * 0.02,
+              borderColor: '#fff',
               borderWidth: ScaleSize(4),
               borderBottomWidth: ScaleSize(2),
-              borderRadius: ScaleSize(2),
-              borderBottomRightRadius: ScaleSize(20),
-              borderTopRightRadius: ScaleSize(20),
+              // borderRadius: ScaleSize(2),
+              // borderBottomRightRadius: ScaleSize(20),
+              // borderTopRightRadius: ScaleSize(20),
               //  position: 'absolute',
             }}>
             <View
@@ -184,7 +184,7 @@ class Ordinary extends Component {
               }}>
               <Text
                 style={{
-                  color: 'pink',
+                  color: '#494b6d',
                   fontSize: ScaleSize(20),
                   fontWeight: '700',
                 }}>
@@ -192,7 +192,7 @@ class Ordinary extends Component {
               </Text>
               <Text
                 style={{
-                  color: 'pink',
+                  color: '#494b6d',
                   fontSize: ScaleSize(12),
                   fontWeight: '700',
                 }}>
@@ -235,22 +235,22 @@ class Ordinary extends Component {
           tweenHandler={(ratio) => ({
             main: {opacity: (2 - ratio) / 2 + 0.4},
           })}
-          type="overlay"
+          type="static"
           tapToClose={true}>
           <AwesomeAlert
             show={showAlert}
             showProgress={false}
             title="Graph URL Ping"
-            message="APP version : v0.10.0        Update Time: 2021/10/27
+            message="APP version : v1.0.0        Update Time: 2021/10/31
 
           "
             titleStyle={{
               fontSize: ScaleSize(20),
               fontWeight: '700',
-              color: 'pink',
+              color: '#494b6d',
             }}
             messageStyle={{
-              // backgroundColor:"pink",
+              // backgroundColor:"#fff",
               width: Width * 0.55,
               marginTop: ScaleSize(20),
               marginBottom: ScaleSize(20),
@@ -263,7 +263,7 @@ class Ordinary extends Component {
             cancelText="OK"
             // confirmText="Yes, delete it"
             cancelButtonStyle={{
-              backgroundColor: 'pink',
+              backgroundColor: '#494b6d',
               height: Height * 0.05,
               width: Width * 0.65,
               alignItems: 'center',
@@ -275,9 +275,6 @@ class Ordinary extends Component {
             onCancelPressed={() => {
               this.hideAlert();
             }}
-            // onConfirmPressed={() => {
-            //   this.hideAlert();
-            // }}
           />
           <View style={{backgroundColor: '#1f2342'}}>
             <View style={{height: Height, position: 'relative'}}>
@@ -290,8 +287,8 @@ class Ordinary extends Component {
                     source={require('../imgs/draw.png')}
                     style={{
                       marginTop: ScaleSize(16),
-                      width: ScaleSize(30),
-                      height: ScaleSize(30),
+                      width: ScaleSize(35),
+                      height: ScaleSize(35),
                       marginBottom: ScaleSize(15),
                       marginHorizontal: ScaleSize(10),
                     }}
@@ -300,7 +297,7 @@ class Ordinary extends Component {
               </TouchableOpacity>
               <Text
                 style={{
-                  color: 'pink',
+                  color: '#fff',
                   fontSize: SetSpText(85),
                   fontWeight: 'bold',
                   textAlign: 'center',
@@ -320,7 +317,7 @@ class Ordinary extends Component {
                   backgroundColor: '#fff',
                   width: Width * 0.9,
                   marginLeft: Width * 0.05,
-                  borderColor: 'pink',
+                  borderColor: '#fff',
                   borderWidth: ScaleSize(4),
                   borderBottomWidth: ScaleSize(2),
                   borderRadius: ScaleSize(20),
@@ -380,7 +377,7 @@ const styles = StyleSheet.create({
   },
   pingtext: {
     fontSize: SetSpText(60),
-    color: 'pink',
+    color: '#1f2342',
     fontWeight: '700',
   },
   pingwhole: {
