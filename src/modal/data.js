@@ -14,12 +14,13 @@ const Data = {
     historyPing:['https://www.bing.com','https://www.google.com'],//历史Ping的地址
     // ,".edu",".org",".gov"
     urlsArr:["http://","https://","www.",".com",".cn"],
-    InputUrl:'',
+    InputUrl:' ',
     IP1:'',
     IP2:'',
     IP3:'',
     IP4:'',
     IP5:'',
     urlData_length:0,
+    errorIndex:[],
 };
 export default Data;
