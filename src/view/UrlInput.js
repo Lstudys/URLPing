@@ -102,7 +102,7 @@ class Ordinary extends Component {
         let errorIndex = Data.errorIndex;
 
         console.log('这来了么' + Data.errorIndex);
-        alert(Data.errorIndex)
+        alert(Data.errorIndex);
         j++;
       } else {
         i++;
@@ -114,7 +114,6 @@ class Ordinary extends Component {
       console.log('合法了');
       errorIndex.pop();
       Data.errorIndex = errorIndex;
-
     }
     if (flag) {
       alert(errorIndex);
@@ -125,7 +124,7 @@ class Ordinary extends Component {
         for (let i = 0; i <= Data.errorIndex[0]; i++) {
           errorLength += InputUrl[i].length;
         }
-        alert("到这了")
+        alert('到这了');
 
         // Data.InputUrl =
         //   Data.InputUrl.slice(0, errorLength + errorIndex[0]) +
@@ -153,8 +152,7 @@ class Ordinary extends Component {
         //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
         this.setState({refresh: !this.state.refresh});
         return;
-      } 
-      else if (errorIndex.length == 3) {
+      } else if (errorIndex.length == 3) {
         // let errorLength1 = 0;
         // let errorLength2 = 0;
         // for (let i = 0; i <= errorIndex[0]; i++) {
@@ -383,15 +381,15 @@ class Ordinary extends Component {
           onPress={() => {
             let a = Data.InputUrl.split('\n');
 
-            if(a[a.length-1]==''){
-                    a.pop();
-                    Data.InputUrl = a.join('\n');
+            if (a[a.length - 1] == '') {
+              a.pop();
+              Data.InputUrl = a.join('\n');
             }
-            if(Data.InputUrl.split())
-            if (Data.InputUrl.split('\n').length > 4) {
-              Toast.message('最多ping五个');
-              return;
-            }
+            if (Data.InputUrl.split())
+              if (Data.InputUrl.split('\n').length > 4) {
+                Toast.message('最多ping五个');
+                return;
+              }
             Data.InputUrl =
               Data.InputUrl.trim() + '\n' + Data.historyPing[index];
 
@@ -571,12 +569,19 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
@@ -590,16 +595,23 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(2)>=0 ? (
+                {Data.errorIndex.indexOf(2) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -609,16 +621,27 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72,marginTop:Height*.001}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View
+                      style={{
+                        marginLeft: Width * 0.72,
+                        marginTop: Height * 0.001,
+                      }}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(3)>=0 ? (
+                {Data.errorIndex.indexOf(3) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -628,16 +651,23 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(4)>= 0 ? (
+                {Data.errorIndex.indexOf(4) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -647,12 +677,19 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.032,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
@@ -698,23 +735,26 @@ class Ordinary extends Component {
                 }}
                 onChangeText={(value) => {
                   let index;
-                  for(let i=0;i<Data.InputUrl.split("\n").length;i++){
-                    if(Data.InputUrl.split('\n')[i]!=value.split('\n')[i]&&Data.errorIndex.indexOf(i)>=0){
-                      index=i;
-                      Data.errorIndex.splice(Data.errorIndex.indexOf(i),1)
+                  for (let i = 0; i < Data.InputUrl.split('\n').length; i++) {
+                    if (
+                      Data.InputUrl.split('\n')[i] != value.split('\n')[i] &&
+                      Data.errorIndex.indexOf(i) >= 0
+                    ) {
+                      index = i;
+                      Data.errorIndex.splice(Data.errorIndex.indexOf(i), 1);
                     }
-                    if(Data.InputUrl.split('\n')[i]!=value.split('\n')[i]){
-                      index=i;
+                    if (Data.InputUrl.split('\n')[i] != value.split('\n')[i]) {
+                      index = i;
                     }
                   }
-                  console.log("这里"+index);
+                  console.log('这里' + index);
 
                   if (Data.InputUrl.split('\n').length > 5) {
                     Toast.message('最多ping五个');
                     let a = Data.InputUrl.split('\n');
-                    a.splice(index,1)
+                    a.splice(index, 1);
                     Data.InputUrl = a.join('\n');
-                    
+
                     this.setState({refresh: !this.state.refresh});
 
                     return;
@@ -749,7 +789,7 @@ class Ordinary extends Component {
                   }}
                   onPress={() => {
                     Data.InputUrl = '';
-                    Data.errorIndex=[]
+                    Data.errorIndex = [];
                     this.setState({numberOfUrlinTextInput: 0});
                   }}>
                   <View style={{alignItems: 'center'}}>
