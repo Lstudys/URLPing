@@ -87,181 +87,47 @@ class Ordinary extends Component {
     let last = 'com|edu|cn|gov|org';
     let reg = new RegExp('https?://(www.)?\\w+(.(' + last + '))+\n*', 'g');
     let url = Data.InputUrl.match(reg) ? Data.InputUrl.match(reg) : [];
+    //url:从输入框正则出来的标准url格式数组
+
 
     let InputUrl = Data.InputUrl.split('\n');
-    console.log('lalalaurl ' + url);
-    console.log('lalalainput ' + Data.InputUrl.split('\n'));
+    //InputUrl:
+    // console.log('lalalaurl ' + url);
+    // console.log('lalalainput ' + Data.InputUrl.split('\n'));
     let flag = false;
     Data.errorIndex = [];
-    let errorIndex = Data.errorIndex;
     for (let i = 0, j = 0; j < InputUrl.length; ) {
       if (url[i] != Data.InputUrl.split('\n')[j] + '\n') {
-        flag = true;
-
+        if (i == (InputUrl.length-1) && url[(InputUrl.length-1)] == Data.InputUrl.split('\n')[(InputUrl.length-1)]) {
+          break;
+        }
+        else{
+        if (InputUrl[j].slice(0, 3) == 'www') {
+          InputUrl[j] = 'http://' + InputUrl[j];
+          Data.InputUrl = InputUrl.join('\n');
+          console.log('变了么？' + InputUrl);
+          this.setState({refresh: !this.state.refresh});
+        }
+        else
         Data.errorIndex.push(j);
-        let errorIndex = Data.errorIndex;
-
-        console.log('这来了么' + Data.errorIndex);
-        alert(Data.errorIndex)
+      }
         j++;
       } else {
         i++;
         j++;
       }
     }
-    // return
-    if (TestURL(InputUrl[errorIndex[errorIndex.length - 1]])) {
-      console.log('合法了');
-      errorIndex.pop();
-      Data.errorIndex = errorIndex;
+    // if (InputUrl[errorIndex[errorIndex.length - 1]].match(reg)) {
+    //   console.log('合法了');
+    //   errorIndex.pop();
+    //   Data.errorIndex = errorIndex;
+    // }
 
-    }
     if (flag) {
-      alert(errorIndex);
-      // return
-
-      if (errorIndex.length == 1 && Data.InputUrl != '') {
-        let errorLength = 0;
-        for (let i = 0; i <= Data.errorIndex[0]; i++) {
-          errorLength += InputUrl[i].length;
-        }
-        alert("到这了")
-
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength + errorIndex[0]) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength + errorIndex[0]);
-        this.setState({refresh: !this.state.refresh});
-        return;
-      } else if (errorIndex.length == 2) {
-        let errorLength1 = 0;
-        let errorLength2 = 0;
-        for (let i = 0; i <= errorIndex[0]; i++) {
-          errorLength1 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[1]; i++) {
-          errorLength2 += InputUrl[i].length;
-        }
-
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
-        this.setState({refresh: !this.state.refresh});
-        return;
-      } 
-      else if (errorIndex.length == 3) {
-        // let errorLength1 = 0;
-        // let errorLength2 = 0;
-        // for (let i = 0; i <= errorIndex[0]; i++) {
-        //   errorLength1 += InputUrl[i].length;
-        // }
-        // for (let i = 0; i <= errorIndex[1]; i++) {
-        //   errorLength2 += InputUrl[i].length;
-        // }
-
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
-        this.setState({refresh: !this.state.refresh});
-        return;
-      } else if (errorIndex.length == 4) {
-        let errorLength1 = 0;
-        let errorLength2 = 0;
-        let errorLength3 = 0;
-        let errorLength4 = 0;
-        for (let i = 0; i <= errorIndex[0]; i++) {
-          errorLength1 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[1]; i++) {
-          errorLength2 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[2]; i++) {
-          errorLength3 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[3]; i++) {
-          errorLength4 += InputUrl[i].length;
-        }
-
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength3 + errorIndex[2] + 30) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength3 + errorIndex[2] + 30);
-        // this.setState({refresh: !this.state.refresh});
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength4 + errorIndex[3] + 45) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength4 + errorIndex[3] + 45);
-        this.setState({refresh: !this.state.refresh});
-        return;
-      } else if (errorIndex.length == 5) {
-        let errorLength1 = 0;
-        let errorLength2 = 0;
-        let errorLength3 = 0;
-        let errorLength4 = 0;
-        let errorLength5 = 0;
-        for (let i = 0; i <= errorIndex[0]; i++) {
-          errorLength1 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[1]; i++) {
-          errorLength2 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[2]; i++) {
-          errorLength3 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[3]; i++) {
-          errorLength4 += InputUrl[i].length;
-        }
-        for (let i = 0; i <= errorIndex[4]; i++) {
-          errorLength5 += InputUrl[i].length;
-        }
-
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength1 + errorIndex[0]) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength1 + errorIndex[0]);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength2 + errorIndex[1] + 15) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength2 + errorIndex[1] + 15);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength3 + errorIndex[2] + 30) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength3 + errorIndex[2] + 30);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength4 + errorIndex[3] + 45) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength4 + errorIndex[3] + 45);
-        // Data.InputUrl =
-        //   Data.InputUrl.slice(0, errorLength5 + errorIndex[4] + 60) +
-        //   '     <=== ERROR' +
-        //   Data.InputUrl.slice(errorLength5 + errorIndex[4] + 60);
-        this.setState({refresh: !this.state.refresh});
-        return;
-      }
+      this.setState({refresh: !this.state.refresh});
+      return;
     }
     this.setState({refresh: !this.state.refresh});
-
-    // Data.InputUrl.slice(0, this.state.currentIndex) +
-    // Data.urlsArr[key] +
-    // Data.InputUrl.slice(this.state.currentIndex);
     if (url == null) {
       Toast.message(I18n.t('urlempty'));
       return;
@@ -275,24 +141,19 @@ class Ordinary extends Component {
     console.log('清空之后', Data.pingurl);
 
     for (let i = 0; i < url.length; i++) {
-      // if(url[i].trim().substring(1,4)=='www')
-      // {
-
-      // }
-      // console.log("是吗"+url[i].trim().substring(1,4));
       Data.pingurl[i] = url[i].trim();
     }
     console.log('赋值之后', Data.pingurl);
 
-    //检测url合法性
-    this.identify = true;
-    for (let i = 0; i < Data.pingurl.length; i++) {
-      if (Data.pingurl[i].search(reg) < 0) {
-        this.identify = false;
-      }
+    console.log('我不信了' + this.identify);
+    console.log('为什么', Data.errorIndex);
+    let flag2 = false;
+    if (Data.errorIndex == []) {
+      console.log('啦啦啦');
     }
 
-    if (this.identify) {
+    if (!(Data.errorIndex[0]>=0)) {
+      console.log('???');
       if (Data.pingurl.length != 0) {
         //查重并拆分
         let inputUrl = '';
@@ -305,8 +166,9 @@ class Ordinary extends Component {
         store.save('history', Data.historyPing);
         this.setState({refresh: !this.state.refresh});
         console.log(Data.historyPing);
+        console.log('没到这？');
         this.props.navigation.navigate('Ping', {
-          urlData: [...Data.pingurl],
+          urlData: [...InputUrl],
         });
       } else {
         Toast.message(I18n.t('nourladded'));
@@ -383,15 +245,15 @@ class Ordinary extends Component {
           onPress={() => {
             let a = Data.InputUrl.split('\n');
 
-            if(a[a.length-1]==''){
-                    a.pop();
-                    Data.InputUrl = a.join('\n');
+            if (a[a.length - 1] == '') {
+              a.pop();
+              Data.InputUrl = a.join('\n');
             }
-            if(Data.InputUrl.split())
-            if (Data.InputUrl.split('\n').length > 4) {
-              Toast.message('最多ping五个');
-              return;
-            }
+            if (Data.InputUrl.split())
+              if (Data.InputUrl.split('\n').length > 4) {
+                Toast.message('最多ping五个');
+                return;
+              }
             Data.InputUrl =
               Data.InputUrl.trim() + '\n' + Data.historyPing[index];
 
@@ -560,8 +422,144 @@ class Ordinary extends Component {
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
+                <View>
+                {Data.errorIndex.indexOf(0) >= 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.02,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: '#2a82e4',
+                      opacity: 0.8,
+                    }}>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        EMPTY
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(1) >= 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.05,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: '#2a82e4',
+                      opacity: 0.8,
+                    }}>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        EMPTY
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(2) >= 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.08,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: '#2a82e4',
+                      opacity: 0.8,
+                    }}>
+                    <View
+                      style={{
+                        marginLeft: Width * 0.72,
+                        marginTop: Height * 0.001,
+                      }}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        EMPTY
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(3) >= 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.11,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.028,
+                      backgroundColor: '#2a82e4',
+                      opacity: 0.8,
+                    }}>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        EMPTY
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.errorIndex.indexOf(4) >= 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.14,
+                      width: Width * 0.9,
+                      borderRadius: ScaleSize(5),
+                      marginLeft: -ScaleSize(4),
+                      height: Height * 0.032,
+                      backgroundColor: '#2a82e4',
+                      opacity: 0.8,
+                    }}>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        EMPTY
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+              </View>
               <View>
-                {Data.errorIndex.indexOf(0) == 0 ? (
+                {Data.errorIndex.indexOf(0) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -571,12 +569,19 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
@@ -590,16 +595,23 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(2)>=0 ? (
+                {Data.errorIndex.indexOf(2) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -609,16 +621,27 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72,marginTop:Height*.001}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View
+                      style={{
+                        marginLeft: Width * 0.72,
+                        marginTop: Height * 0.001,
+                      }}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(3)>=0 ? (
+                {Data.errorIndex.indexOf(3) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -628,16 +651,23 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(4)>= 0 ? (
+                {Data.errorIndex.indexOf(4) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -647,12 +677,165 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.032,
                       backgroundColor: 'red',
-                      opacity:.8
+                      opacity: 0.8,
                     }}>
-                      <View style={{marginLeft:Width*.72}}>
-                      <Text style={{color:"#fff",fontWeight:"700",fontSize:ScaleSize(16)}}>ERROR</Text>
-                      </View>
+                    <View style={{marginLeft: Width * 0.72}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        ERROR
+                      </Text>
                     </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+              </View>
+              <View>
+                {Data.InputUrl.split('\n').length > 0 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.021,
+                      width: Height * 0.03,
+                      borderRadius: Height * 0.032,
+                      marginLeft: ScaleSize(10),
+                      height: Height * 0.028,
+                      backgroundColor: 'red',
+                      opacity: 0.8,
+                      alignItems: 'center',
+                    }}>
+                    <View style={{}}>
+                      <Text
+                        style={{
+                          marginTop:-ScaleSize(2.5),
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        A
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.InputUrl.split('\n').length > 1 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.051,
+                      width: Height * 0.03,
+                      borderRadius: Height * 0.032,
+                      marginLeft: ScaleSize(10),
+                      height: Height * 0.028,
+                      backgroundColor: '#2a82e4',
+                      opacity: 0.8,
+                      alignItems: 'center',
+                    }}>
+                    <View style={{}}>
+                      <Text
+                        style={{
+                          marginTop:-ScaleSize(2.5),
+
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        B
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.InputUrl.split('\n').length > 2 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.08,
+                      width: Height * 0.03,
+                      borderRadius: Height * 0.032,
+                      marginLeft: ScaleSize(10),
+                      height: Height * 0.028,
+                      backgroundColor: 'green',
+                      opacity: 0.8,
+                      alignItems: 'center',
+                    }}>
+                    <View style={{}}>
+                      <Text
+                        style={{
+                          marginTop:-ScaleSize(2.5),
+
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        C
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.InputUrl.split('\n').length > 3 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.11,
+                      width: Height * 0.03,
+                      borderRadius: Height * 0.032,
+                      marginLeft: ScaleSize(10),
+                      height: Height * 0.028,
+                      backgroundColor: '#f67e1e',
+                      opacity: 0.8,
+                      alignItems: 'center',
+                    }}>
+                    <View style={{}}>
+                      <Text
+                        style={{
+                          marginTop:-ScaleSize(2.5),
+
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        D
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                {Data.InputUrl.split('\n').length > 4 ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: Height * 0.142,
+                      width: Height * 0.03,
+                      borderRadius: Height * 0.032,
+                      marginLeft: ScaleSize(10),
+                      height: Height * 0.028,
+                      backgroundColor: 'purple',
+                      opacity: 0.8,
+                      alignItems: 'center',
+                    }}>
+                    <View style={{}}>
+                      <Text
+                        style={{
+                          marginTop:-ScaleSize(2.5),
+
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: ScaleSize(16),
+                        }}>
+                        E
+                      </Text>
+                    </View>
+                  </View>
                 ) : (
                   <View />
                 )}
@@ -686,7 +869,7 @@ class Ordinary extends Component {
                 }}
                 style={{
                   paddingBottom: Height * 0.01,
-                  marginLeft: ScaleSize(20),
+                  marginLeft: ScaleSize(40),
                   marginTop: ScaleSize(0),
                   height:
                     Height *
@@ -698,23 +881,29 @@ class Ordinary extends Component {
                 }}
                 onChangeText={(value) => {
                   let index;
-                  for(let i=0;i<Data.InputUrl.split("\n").length;i++){
-                    if(Data.InputUrl.split('\n')[i]!=value.split('\n')[i]&&Data.errorIndex.indexOf(i)>=0){
-                      index=i;
-                      Data.errorIndex.splice(Data.errorIndex.indexOf(i),1)
+                  for (let i = 0; i < Data.InputUrl.split('\n').length; i++) {
+                    if (
+                      Data.InputUrl.split('\n')[i] != value.split('\n')[i] &&
+                      Data.errorIndex.indexOf(i) >= 0
+                    ) {
+                      index = i;
+                      Data.errorIndex.splice(Data.errorIndex.indexOf(i), 1);
                     }
-                    if(Data.InputUrl.split('\n')[i]!=value.split('\n')[i]){
-                      index=i;
+                    if (Data.InputUrl.split('\n')[i] != value.split('\n')[i]) {
+                      index = i;
                     }
                   }
-                  console.log("这里"+index);
+                  console.log('这里' + index);
+                  // for(let i=0;i<Data.InputUrl.split('\n').length;i++){
+
+                  // }
 
                   if (Data.InputUrl.split('\n').length > 5) {
                     Toast.message('最多ping五个');
                     let a = Data.InputUrl.split('\n');
-                    a.splice(index,1)
+                    a.splice(index, 1);
                     Data.InputUrl = a.join('\n');
-                    
+
                     this.setState({refresh: !this.state.refresh});
 
                     return;
@@ -749,7 +938,7 @@ class Ordinary extends Component {
                   }}
                   onPress={() => {
                     Data.InputUrl = '';
-                    Data.errorIndex=[]
+                    Data.errorIndex = [];
                     this.setState({numberOfUrlinTextInput: 0});
                   }}>
                   <View style={{alignItems: 'center'}}>
