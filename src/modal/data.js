@@ -14,6 +14,7 @@ const Data = {
     urlData_length:0,
     errorIndex:[],
     emptyIndex:[],
-    url_suffix:".com.cn.net.edu.mil.org.gov.int"
+    url_suffix:".com.cn.net.edu.mil.org.gov.int",
+    config:{}
 };
 export default Data;

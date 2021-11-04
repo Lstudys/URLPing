@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Ordinary from './view/Mainpage';
 import Ping from './view/Functionpage';
 import UrlInput from './view/UrlInput';
+import Summarize from './view/Summarize';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ function Nav() {
         <Stack.Screen name="Ordinary" component={Ordinary} />
         <Stack.Screen name="Ping" component={Ping} />
         <Stack.Screen name="UrlInput" component={UrlInput} />
+        <Stack.Screen name="Summarize" component={Summarize} />
       </Stack.Navigator>
     </NavigationContainer>
   );

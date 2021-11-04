@@ -1,7 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
 const TABLE_INITIAL_VALUE = 0;
-const TIMER_PERIOD = 1250;
+const TIMER_PERIOD = 1000;
 const SEND_REQUEST_STATUS = 1;
 const RECEIVE_REQUEST_STATUS = 4;
 // 向URL发送请求的函数

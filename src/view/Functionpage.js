@@ -7,6 +7,7 @@ import {
   ScrollView,
   processColor,
   BackHandler,
+  TouchableOpacity
 } from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
@@ -289,7 +290,7 @@ class Ping extends Component {
       xAxis: {
         textColor: gridColor,
         valueFormatter: chartLabels,
-        axisLineWidth: 2,
+        axisLineWidth: 1.5,
         axisLineColor: gridColor,
         drawLabels: true,
         position: 'BOTTOM',
@@ -491,7 +492,7 @@ class Ping extends Component {
               // width:10,
               flexDirection: 'column',
               top: Height * 0.2,
-              left: -Width*.025,
+              left: Width*.01,
               transform: [{rotate: '-90deg'}],
               position: 'absolute',
               // backgroundColor: '#1f2342',
@@ -501,7 +502,7 @@ class Ping extends Component {
                 color: '#fff',
                 // width:ScaleSize(20)
               }}>
-              ( ms )
+              ms
             </Text>
           </View>
          
@@ -515,7 +516,7 @@ class Ping extends Component {
               xAxis={this.config.xAxis}
               yAxis={{
                 left: {
-                  axisLineWidth: 2,
+                  axisLineWidth: 1.5,
                   axisLineColor: gridColor,
 
                   textColor: gridColor,
@@ -524,7 +525,7 @@ class Ping extends Component {
                   gridColor: gridColor,
                 },
                 right: {
-                  axisLineWidth: 2,
+                  axisLineWidth: 1.5,
                   axisLineColor: gridColor,
 
                   textColor: gridColor,
@@ -548,11 +549,12 @@ class Ping extends Component {
           </ScrollView>
           {/* 弹窗 */}
 
-          <View style={{position: 'absolute', top: Height * 0.45}}>
+          <View style={{position: 'absolute', top: Height * 0.44}}>
             {Data.urlData_length > 0 ? (
               <View
                 style={{
-                  width: Width,
+                  width: Width*.9,
+                  marginLeft:Width*.05,
                   height: Height * 0.04,
                   backgroundColor: 'red',
                   marginBottom: ScaleSize(3),
@@ -570,8 +572,8 @@ class Ping extends Component {
             {Data.urlData_length > 1 ? (
               <View
                 style={{
-                  width: Width ,
-                  height: Height * 0.04,
+                  width: Width*.9,
+                  marginLeft:Width*.05,                  height: Height * 0.04,
                   backgroundColor: '#2a82e4',
                   marginBottom: ScaleSize(3),
                 }}>
@@ -587,8 +589,8 @@ class Ping extends Component {
             {Data.urlData_length > 2 ? (
               <View
                 style={{
-                  width: Width ,
-                  height: Height * 0.04,
+                  width: Width*.9,
+                  marginLeft:Width*.05,                  height: Height * 0.04,
                   backgroundColor: 'green',
                   marginBottom: ScaleSize(3),
                 }}>
@@ -604,8 +606,8 @@ class Ping extends Component {
             {Data.urlData_length > 3 ? (
               <View
                 style={{
-                  width: Width ,
-                  height: Height * 0.04,
+                  width: Width*.9,
+                  marginLeft:Width*.05,                  height: Height * 0.04,
                   backgroundColor: '#f67e1e',
                   marginBottom: ScaleSize(3),
                 }}>
@@ -621,8 +623,8 @@ class Ping extends Component {
             {Data.urlData_length > 4 ? (
               <View
                 style={{
-                  width: Width ,
-                  height: Height * 0.04,
+                  width: Width*.9,
+                  marginLeft:Width*.05,                  height: Height * 0.04,
                   backgroundColor: 'purple',
                   marginBottom: ScaleSize(3),
                 }}>
@@ -692,7 +694,63 @@ class Ping extends Component {
                 })}
               </Table>
             </View>
+            
           </View>
+          <View
+                style={{
+                  position:"absolute",
+                  top:Height*.93,
+                  // bottom:-Height*.1,
+                  flexDirection: 'row',
+                  width: Width,
+                  height: Height * 0.07,
+                  backgroundColor: '#494b6d',
+                  alignItems: 'center',
+                }}>
+                {/* <TouchableOpacity
+                  style={{
+                    marginLeft: Width * 0.08,
+
+                    width: Width * 0.4,
+                    height: Height * 0.06,
+                    backgroundColor: '#76779b',
+                    borderRadius: ScaleSize(10),
+                    borderColor: '#fff',
+                    borderWidth: ScaleSize(2),
+                  }}
+                  onPress={() => {
+                   
+                  }}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={styles.pingtext}>Clear</Text>
+                  </View>
+                </TouchableOpacity> */}
+
+                <TouchableOpacity
+                  style={{
+                    marginLeft: Width * 0.15,
+                    width: Width * 0.7,
+                    height: Height * 0.06,
+                    backgroundColor: '#1f2342',
+                    borderRadius: ScaleSize(10),
+                    borderColor: '#fff',
+                    borderWidth: ScaleSize(2),
+                  }}
+                  onPress={() => {
+                    
+                    Data.config=this.config;
+                    this.setState(() => ({
+                      isPing: false,
+                    }));
+                    this.props.navigation.navigate('Summarize');
+                  }}
+                  >
+                  <View style={{alignItems: 'center', height: Height * 0.06}}>
+                    <Text style={styles.pingtext}>OVER</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+          
         </View>
         <KeepAwake />
       </View>
@@ -702,6 +760,11 @@ class Ping extends Component {
 
 export default Ping;
 const styles = StyleSheet.create({
+  pingtext: {
+    fontSize: SetSpText(50),
+    color: '#fff',
+    fontWeight: '700',
+  },
   rowlegend: {
     color: '#fff',
     lineHeight: Height * 0.04,
@@ -711,21 +774,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#1f2342',
   },
   table: {
-    marginTop: ScaleSize(30),
+    marginTop: ScaleSize(20),
     flex: 1,
-    width: Width,
-    // marginLeft: Width * 0.05,
+    width: Width*.9,
+    marginLeft:Width*.05,
   },
   head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
   row: {height: ScaleSize(26), flexDirection: 'row'},
-  cell1: {width: Width * 0.1425, backgroundColor: 'red'},
-  cell2: {width: Width * 0.1425, backgroundColor: '#2a82e4'},
-  cell3: {width: Width * 0.1425, backgroundColor: 'green'},
-  cell4: {width: Width * 0.1425, backgroundColor: '#f67e1e'},
-  cell5: {width: Width * 0.1425, backgroundColor: 'purple'},
+  cell1: {width: Width * 0.1282, backgroundColor: 'red'},
+  cell2: {width: Width * 0.1282, backgroundColor: '#2a82e4'},
+  cell3: {width: Width * 0.1282, backgroundColor: 'green'},
+  cell4: {width: Width * 0.1282, backgroundColor: '#f67e1e'},
+  cell5: {width: Width * 0.1282, backgroundColor: 'purple'},
 
-  cellHighLight: {width: Width * 0.1425, backgroundColor: '#fff', opacity: 0.8},
+  cellHighLight: {width: Width * 0.1282, backgroundColor: '#fff', opacity: 0.8},
   textHead: {
     textAlign: 'center',
     color: '#fff',
