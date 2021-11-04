@@ -7,29 +7,29 @@ import {
   TouchableOpacity,
   StyleSheet,
   processColor,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import Drawer from 'react-native-drawer';
-import {LineChart} from 'react-native-charts-wrapper';
+import {LineChart, BarChart, PieChart} from 'react-native-charts-wrapper';
 import {SetSpText, ScaleSize, ScaleSizeH} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 import {BackHandler, Platform} from 'react-native';
-import {ExitApp,BackAction} from '../controller/AppPageFunction';
+import {ExitApp, BackAction} from '../controller/AppPageFunction';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import {ReloadInstructions} from 'react-native/Libraries/NewAppScreen';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const gridColor = processColor('#fff'); //网格线的颜色
 
 class Summarize extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      config:Data.config,
+      config: Data.config,
       showAlert: false,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
@@ -50,14 +50,11 @@ class Summarize extends Component {
         this.setState({refresh: !this.state.refresh});
       }
     });
-    console.log("传过来了吗？ ",Data.config);
-
+    console.log('传过来了吗？ ', Data.config);
   }
   identify = true;
 
-
   componentDidMount() {
-
     Data.InputUrl = '';
     Data.pingurl = [];
 
@@ -82,141 +79,144 @@ class Summarize extends Component {
     }
   }
 
-  render() {  
-
-      return (
-          <View style={{backgroundColor: '#1f2342',height: Height*1.2}}>
-              <View style={{height:Height*.08,borderBottomColor:"#fff",borderBottomWidth:ScaleSize(2),marginBottom:Height*.04}}>
-              <TouchableOpacity
-                onPress={() => {
-                    this.props.navigation.navigate('Ordinary');
-                }}>
-                <View>
-                  <Image
-                    source={require('../imgs/back.png')}
-                    style={{
-                      marginTop: ScaleSize(16),
-                      width: ScaleSize(30),
-                      height: ScaleSize(30),
-                      marginBottom: ScaleSize(15),
-                      marginHorizontal: ScaleSize(10),
-                    }}
-                  />
-                </View>
-                
-              </TouchableOpacity>
-              <View style={
-                  {
-                      marginTop:-Height*.066,
-                      marginLeft:Width*.3,
-                    //   backgroundColor:"pink"
-                  }
-              }>
-                  <Text
-                    style={{
-                        color:"#fff",
-                        fontSize:ScaleSize(22)
-                    }}
-                  >
-                      2021/11/4 17:45
-                      </Text>
-                      
-                </View>
+  render() {
+    return (
+      <View style={{backgroundColor: '#1f2342', height: Height * 1.2}}>
+        <ScrollView>
+          <View
+            style={{
+              height: Height * 0.08,
+              borderBottomColor: '#fff',
+              borderBottomWidth: ScaleSize(2),
+              marginBottom: Height * 0.04,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Ordinary');
+              }}>
+              <View>
+                <Image
+                  source={require('../imgs/back.png')}
+                  style={{
+                    marginTop: ScaleSize(16),
+                    width: ScaleSize(30),
+                    height: ScaleSize(30),
+                    marginBottom: ScaleSize(15),
+                    marginHorizontal: ScaleSize(10),
+                  }}
+                />
               </View>
-              {Data.urlData_length > 0 ? (
-              <View
-                style={{
-                  width: Width*.9,
-                  marginLeft:Width*.05,
-                  height: Height * 0.04,
-                  backgroundColor: 'red',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}
-                ellipsizeMode='tail'>
-                  {' '}
-                  A : {urlCollection[0]} ({Data.IP1})
-                </Text>
-              </View>
-            ) : (
-              <View />
-            )}
-            {Data.urlData_length > 1 ? (
-              <View
-                style={{
-                  width: Width*.9,
-                  marginLeft:Width*.05,                  height: Height * 0.04,
-                  backgroundColor: '#2a82e4',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
-                  {' '}
-                  B : {urlCollection[1]} ({Data.IP2})
-                </Text>
-              </View>
-            ) : (
-              <View />
-            )}
-            {Data.urlData_length > 2 ? (
-              <View
-                style={{
-                  width: Width*.9,
-                  marginLeft:Width*.05,                  height: Height * 0.04,
-                  backgroundColor: 'green',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
-                  {' '}
-                  C : {urlCollection[2]} ({Data.IP3})
-                </Text>
-              </View>
-            ) : (
-              <View />
-            )}
-            {Data.urlData_length > 3 ? (
-              <View
-                style={{
-                  width: Width*.9,
-                  marginLeft:Width*.05,                  height: Height * 0.04,
-                  backgroundColor: '#f67e1e',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
-                  {' '}
-                  D : {urlCollection[3]} ({Data.IP4})
-                </Text>
-              </View>
-            ) : (
-              <View />
-            )}
-            {Data.urlData_length > 4 ? (
-              <View
-                style={{
-                  width: Width*.9,
-                  marginLeft:Width*.05,                  height: Height * 0.04,
-                  backgroundColor: 'purple',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
-                  {' '}
-                  E : {urlCollection[4]} ({Data.IP5})
-                </Text>
-              </View>
-            ) : (
-              <View />
-            )}
+            </TouchableOpacity>
             <View
+              style={{
+                marginTop: -Height * 0.066,
+                marginLeft: Width * 0.3,
+                //   backgroundColor:"pink"
+              }}>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: ScaleSize(22),
+                }}>
+                2021/11/4 17:45
+              </Text>
+            </View>
+          </View>
+          {Data.urlData_length > 0 ? (
+            <View
+              style={{
+                width: Width * 0.9,
+                marginLeft: Width * 0.05,
+                height: Height * 0.04,
+                backgroundColor: 'red',
+                marginBottom: ScaleSize(3),
+              }}>
+              <Text
+                style={styles.rowlegend}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {' '}
+                A : {urlCollection[0]} ({Data.IP1})
+              </Text>
+            </View>
+          ) : (
+            <View />
+          )}
+          {Data.urlData_length > 1 ? (
+            <View
+              style={{
+                width: Width * 0.9,
+                marginLeft: Width * 0.05,
+                height: Height * 0.04,
+                backgroundColor: '#2a82e4',
+                marginBottom: ScaleSize(3),
+              }}>
+              <Text style={styles.rowlegend} numberOfLines={1}>
+                {' '}
+                B : {urlCollection[1]} ({Data.IP2})
+              </Text>
+            </View>
+          ) : (
+            <View />
+          )}
+          {Data.urlData_length > 2 ? (
+            <View
+              style={{
+                width: Width * 0.9,
+                marginLeft: Width * 0.05,
+                height: Height * 0.04,
+                backgroundColor: 'green',
+                marginBottom: ScaleSize(3),
+              }}>
+              <Text style={styles.rowlegend} numberOfLines={1}>
+                {' '}
+                C : {urlCollection[2]} ({Data.IP3})
+              </Text>
+            </View>
+          ) : (
+            <View />
+          )}
+          {Data.urlData_length > 3 ? (
+            <View
+              style={{
+                width: Width * 0.9,
+                marginLeft: Width * 0.05,
+                height: Height * 0.04,
+                backgroundColor: '#f67e1e',
+                marginBottom: ScaleSize(3),
+              }}>
+              <Text style={styles.rowlegend} numberOfLines={1}>
+                {' '}
+                D : {urlCollection[3]} ({Data.IP4})
+              </Text>
+            </View>
+          ) : (
+            <View />
+          )}
+          {Data.urlData_length > 4 ? (
+            <View
+              style={{
+                width: Width * 0.9,
+                marginLeft: Width * 0.05,
+                height: Height * 0.04,
+                backgroundColor: 'purple',
+                marginBottom: ScaleSize(3),
+              }}>
+              <Text style={styles.rowlegend} numberOfLines={1}>
+                {' '}
+                E : {urlCollection[4]} ({Data.IP5})
+              </Text>
+            </View>
+          ) : (
+            <View />
+          )}
+          <View
             style={{
               // backgroundColor:"blue",
               // width:10,
               flexDirection: 'column',
               top: Height * 0.43,
-              left: Width*.01,
+              left: Width * 0.01,
               transform: [{rotate: '-90deg'}],
               position: 'absolute',
               // backgroundColor: '#1f2342',
@@ -229,8 +229,8 @@ class Summarize extends Component {
               ms
             </Text>
           </View>
-              <ScrollView style={{marginLeft: Width * 0.05}}>
-              
+          <View style={{marginLeft: Width * 0.05}}>
+            {/* 折线图 */}
             <LineChart
               width={Width * 0.92}
               height={Width * 0.86}
@@ -256,7 +256,6 @@ class Summarize extends Component {
                   drawGridLines: true,
                   gridColor: gridColor,
                 },
-                
               }}
               zoom={{scaleX: 1, scaleY: 1, xValue: 2}}
               scaleYEnabled={true}
@@ -280,18 +279,73 @@ class Summarize extends Component {
               chartDescription={{text: ''}}
               ref="chart"
             />
-          </ScrollView>
+            {/* 柱状图 */}
+            <BarChart
+              width={Width * 0.92}
+              height={Width * 0.6}
+              bottom={0}
+              data={this.state.config.data}
+              xAxis={this.state.config.xAxis}
+              yAxis={{
+                left: {
+                  axisLineWidth: 1.5,
+                  axisLineColor: gridColor,
+
+                  textColor: gridColor,
+                  enabled: true,
+                  drawGridLines: true,
+                  gridColor: gridColor,
+                },
+                right: {
+                  axisLineWidth: 1.5,
+                  axisLineColor: gridColor,
+
+                  textColor: gridColor,
+                  enabled: true,
+                  drawGridLines: true,
+                  gridColor: gridColor,
+                },
+              }}
+              zoom={{scaleX: 1, scaleY: 1, xValue: 2}}
+              scaleYEnabled={true}
+              scaleXEnabled={true}
+              doubleTapToZoomEnabled={true}
+              dragDecelerationFrictionCoef={0.99}
+              marker={{
+                enabled: true,
+                backgroundTint: processColor('#fff'),
+                markerColor: processColor('#fff'),
+                textColor: processColor('red'),
+              }}
+              legend={{
+                textColor: gridColor,
+                wordWrapEnabled: true,
+                enabled: true,
+                // xEntrySpace:true,
+                form: 'NONE',
+              }}
+              extraOffsets={{bottom: 10}}
+              chartDescription={{text: ''}}
+              ref="chart"
+            />
+            {/* 饼状图 */}
+            <PieChart
+              width={Width * 0.92}
+              height={Width * 0.6}
+              backgroundColor={'red'}
+            />
           </View>
-      );
-    }
-  
+        </ScrollView>
+      </View>
+    );
+  }
 }
 export default Summarize;
 const styles = StyleSheet.create({
-    rowlegend: {
-        color: '#fff',
-        lineHeight: Height * 0.04,
-      },
+  rowlegend: {
+    color: '#fff',
+    lineHeight: Height * 0.04,
+  },
   renderItem: {
     marginBottom: ScaleSize(20),
     borderBottomWidth: ScaleSize(2),
