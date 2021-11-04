@@ -7693,6 +7693,13 @@ react-native-linear-gradient@^2.5.6:
   resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz"
   integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
+react-native-loading-spinner-overlay@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/react-native-loading-spinner-overlay/download/react-native-loading-spinner-overlay-2.0.0.tgz#30934b6f07cb39711020d6b422a02a2a56763a73"
+  integrity sha1-MJNLbwfLOXEQINa0IqAqKlZ2OnM=
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-localize@^2.1.1:
   version "2.1.1"
   resolved "https://registry.nlark.com/react-native-localize/download/react-native-localize-2.1.1.tgz"
