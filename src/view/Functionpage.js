@@ -118,8 +118,8 @@ class Ping extends Component {
         if (urlData[i][j] == ':') {
           str = urlData[i].substring(j + 3);
           getIpAddressesForHostname(str).then((ipAddresses) => {
-            console.log("IP的长度：",ipAddresses.length);
-            ipAddresses=ipAddresses.join('  ')
+            console.log('IP的长度：', ipAddresses.length);
+            ipAddresses = ipAddresses.join('  ');
             switch (i) {
               case 0:
                 Data.IP1 = ipAddresses;
@@ -219,8 +219,7 @@ class Ping extends Component {
       showAlert: false,
     });
   };
-  componentWillMount(){
-    }
+  componentWillMount() {}
 
   componentDidMount() {
     clearTimeout(this.stoptimer);
@@ -438,8 +437,13 @@ class Ping extends Component {
     }
 
     return (
-      <View style={{height:Height,width:Width,position: 'relative',backgroundColor:"pink"}}>
-
+      <View
+        style={{
+          height: Height,
+          width: Width,
+          position: 'relative',
+          backgroundColor: 'pink',
+        }}>
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
@@ -491,7 +495,7 @@ class Ping extends Component {
               // width:10,
               flexDirection: 'column',
               top: Height * 0.2,
-              left: -Width*.025,
+              left: -Width * 0.025,
               transform: [{rotate: '-90deg'}],
               position: 'absolute',
               // backgroundColor: '#1f2342',
@@ -549,7 +553,6 @@ class Ping extends Component {
                   drawGridLines: true,
                   gridColor: gridColor,
                 },
-                
               }}
               zoom={this.state.zoom}
               scaleYEnabled={false}
@@ -574,9 +577,10 @@ class Ping extends Component {
                   backgroundColor: 'red',
                   marginBottom: ScaleSize(3),
                 }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}
-                ellipsizeMode='tail'>
+                <Text
+                  style={styles.rowlegend}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
                   {' '}
                   A : {urlCollection[0]} ({Data.IP1})
                 </Text>
@@ -587,13 +591,12 @@ class Ping extends Component {
             {Data.urlData_length > 1 ? (
               <View
                 style={{
-                  width: Width ,
+                  width: Width,
                   height: Height * 0.04,
                   backgroundColor: '#2a82e4',
                   marginBottom: ScaleSize(3),
                 }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
+                <Text style={styles.rowlegend} numberOfLines={1}>
                   {' '}
                   B : {urlCollection[1]} ({Data.IP2})
                 </Text>
@@ -604,13 +607,12 @@ class Ping extends Component {
             {Data.urlData_length > 2 ? (
               <View
                 style={{
-                  width: Width ,
+                  width: Width,
                   height: Height * 0.04,
                   backgroundColor: 'green',
                   marginBottom: ScaleSize(3),
                 }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
+                <Text style={styles.rowlegend} numberOfLines={1}>
                   {' '}
                   C : {urlCollection[2]} ({Data.IP3})
                 </Text>
@@ -621,13 +623,12 @@ class Ping extends Component {
             {Data.urlData_length > 3 ? (
               <View
                 style={{
-                  width: Width ,
+                  width: Width,
                   height: Height * 0.04,
                   backgroundColor: '#f67e1e',
                   marginBottom: ScaleSize(3),
                 }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
+                <Text style={styles.rowlegend} numberOfLines={1}>
                   {' '}
                   D : {urlCollection[3]} ({Data.IP4})
                 </Text>
@@ -638,13 +639,12 @@ class Ping extends Component {
             {Data.urlData_length > 4 ? (
               <View
                 style={{
-                  width: Width ,
+                  width: Width,
                   height: Height * 0.04,
                   backgroundColor: 'purple',
                   marginBottom: ScaleSize(3),
                 }}>
-                <Text style={styles.rowlegend}
-                numberOfLines={1}>
+                <Text style={styles.rowlegend} numberOfLines={1}>
                   {' '}
                   E : {urlCollection[4]} ({Data.IP5})
                 </Text>
