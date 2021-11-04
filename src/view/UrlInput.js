@@ -11,9 +11,6 @@ import {
   StyleSheet,
   Keyboard,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-
-import {TestURL} from '../controller/AppPageFunction';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
@@ -27,6 +24,7 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      editable:false,
       history_height: Height * 0.3,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
@@ -89,71 +87,68 @@ class Ordinary extends Component {
     let url = Data.InputUrl.match(reg) ? Data.InputUrl.match(reg) : [];
     //url:从输入框正则出来的标准url格式数组
 
-
     let InputUrl = Data.InputUrl.split('\n');
     //InputUrl:
-    // console.log('lalalaurl ' + url);
-    // console.log('lalalainput ' + Data.InputUrl.split('\n'));
+    console.log('lalalaurl ' + url);
+    console.log('lalalainput ' + Data.InputUrl.split('\n'));
     let flag = false;
     Data.errorIndex = [];
+    Data.emptyIndex = [];
     for (let i = 0, j = 0; j < InputUrl.length; ) {
-      if (url[i] != Data.InputUrl.split('\n')[j] + '\n') {
-        if (i == (InputUrl.length-1) && url[(InputUrl.length-1)] == Data.InputUrl.split('\n')[(InputUrl.length-1)]) {
+      if (url[i] != InputUrl[j] + '\n') {
+        if (
+          j == InputUrl.length - 1 &&
+          url[url.length - 1] == InputUrl[InputUrl.length - 1]
+        ) {
           break;
+        } else {
+          if (InputUrl[j].slice(0, 3) == 'www') {
+            InputUrl[j] = 'http://' + InputUrl[j];
+            Data.InputUrl = InputUrl.join('\n');
+          } else if (
+            InputUrl[j].slice(0, 4) != 'http' &&
+            Data.url_suffix.search(InputUrl[j].slice(-3)) != -1
+          ) {
+            InputUrl[j] = 'http://' + InputUrl[j];
+            Data.InputUrl = InputUrl.join('\n');
+          } else Data.errorIndex.push(j);
+          if (InputUrl[j].trim()=='http://'||InputUrl[j].trim()=='') {
+           Data.emptyIndex.push(j);
+           console.log("empty"+Data.emptyIndex);
+          }
         }
-        else{
-        if (InputUrl[j].slice(0, 3) == 'www') {
-          InputUrl[j] = 'http://' + InputUrl[j];
-          Data.InputUrl = InputUrl.join('\n');
-          console.log('变了么？' + InputUrl);
-          this.setState({refresh: !this.state.refresh});
-        }
-        else
-        Data.errorIndex.push(j);
-      }
         j++;
       } else {
         i++;
         j++;
       }
     }
-    // if (InputUrl[errorIndex[errorIndex.length - 1]].match(reg)) {
-    //   console.log('合法了');
-    //   errorIndex.pop();
-    //   Data.errorIndex = errorIndex;
+    console.log("什么类型",InputUrl[0].trim().length,"666");
+    // if(Data.errorIndex.length==1){
+    //   console.log("长度有问题"+url[Data.errorIndex[0]].length);
+    //   console.log("长度有问题2"+InputUrl[Data.errorIndex[0]].length);
     // }
 
-    if (flag) {
-      this.setState({refresh: !this.state.refresh});
-      return;
-    }
     this.setState({refresh: !this.state.refresh});
-    if (url == null) {
-      Toast.message(I18n.t('urlempty'));
-      return;
-    }
+    // if (url == null) {
+    //   Toast.message(I18n.t('urlempty'));
+    //   return;
+    // }
+
     if (url.length > 5) {
       Toast.message(I18n.t('maxfiveurl'));
       return;
     }
-    console.log('清空之前', Data.pingurl);
+
+    // console.log('清空之前', Data.pingurl);
     Data.pingurl = [''];
-    console.log('清空之后', Data.pingurl);
+    // console.log('清空之后', Data.pingurl);
 
     for (let i = 0; i < url.length; i++) {
       Data.pingurl[i] = url[i].trim();
     }
-    console.log('赋值之后', Data.pingurl);
 
-    console.log('我不信了' + this.identify);
-    console.log('为什么', Data.errorIndex);
-    let flag2 = false;
-    if (Data.errorIndex == []) {
-      console.log('啦啦啦');
-    }
-
-    if (!(Data.errorIndex[0]>=0)) {
-      console.log('???');
+    if (!(Data.errorIndex[0] >= 0)&&!(Data.emptyIndex[0] >= 0)) {
       if (Data.pingurl.length != 0) {
         //查重并拆分
         let inputUrl = '';
@@ -162,11 +157,8 @@ class Ordinary extends Component {
           inputUrl = inputUrl + urlStr;
           this.checkHistory(url[i]);
         }
-        // this.checkHistory(inputUrl);
         store.save('history', Data.historyPing);
         this.setState({refresh: !this.state.refresh});
-        console.log(Data.historyPing);
-        console.log('没到这？');
         this.props.navigation.navigate('Ping', {
           urlData: [...InputUrl],
         });
@@ -243,6 +235,36 @@ class Ordinary extends Component {
         }}>
         <TouchableOpacity
           onPress={() => {
+            if(Data.InputUrl==''){
+              Data.InputUrl = Data.InputUrl.trim();
+
+            let a = Data.InputUrl.split('\n');
+
+            if (a[a.length - 1] == '') {
+              a.pop();
+              Data.InputUrl = a.join('\n');
+            }
+            if (Data.InputUrl.split())
+              if (Data.InputUrl.split('\n').length > 4) {
+                Toast.message('最多ping五个');
+                return;
+              }
+            Data.InputUrl =
+              Data.InputUrl.trim() + '\n' + Data.historyPing[index];
+
+            Data.InputUrl = Data.InputUrl.trim();
+
+            this.setState({
+              numberOfUrlinTextInput:0,
+            });
+          
+            }else{
+
+            
+
+            
+            Data.InputUrl = Data.InputUrl.trim();
+
             let a = Data.InputUrl.split('\n');
 
             if (a[a.length - 1] == '') {
@@ -262,6 +284,8 @@ class Ordinary extends Component {
             this.setState({
               numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
             });
+          
+            }
           }}>
           <View
             style={{
@@ -315,7 +339,7 @@ class Ordinary extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          alert(Data.errorIndex);
+          // alert(Data.errorIndex);
           for (let i = 0; i < Data.urlsArr.length; i++) {
             if (Data.urlsArr[i] == item) {
               var key = i;
@@ -422,8 +446,8 @@ class Ordinary extends Component {
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
-                <View>
-                {Data.errorIndex.indexOf(0) >= 0 ? (
+              <View>
+                {Data.emptyIndex.indexOf(0) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -449,7 +473,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(1) >= 0 ? (
+                {Data.emptyIndex.indexOf(1) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -475,7 +499,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(2) >= 0 ? (
+                {Data.emptyIndex.indexOf(2) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -505,7 +529,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(3) >= 0 ? (
+                {Data.emptyIndex.indexOf(3) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -531,7 +555,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(4) >= 0 ? (
+                {Data.emptyIndex.indexOf(4) >= 0 ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -559,7 +583,7 @@ class Ordinary extends Component {
                 )}
               </View>
               <View>
-                {Data.errorIndex.indexOf(0) >= 0 ? (
+                {Data.errorIndex.indexOf(0) >= 0&&!(Data.emptyIndex.indexOf(0) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -585,7 +609,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(1) >= 0 ? (
+                {Data.errorIndex.indexOf(1) >= 0&&!(Data.emptyIndex.indexOf(1) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -611,7 +635,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(2) >= 0 ? (
+                {Data.errorIndex.indexOf(2) >= 0&&!(Data.emptyIndex.indexOf(2) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -641,7 +665,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(3) >= 0 ? (
+                {Data.errorIndex.indexOf(3) >= 0&&!(Data.emptyIndex.indexOf(3) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -667,7 +691,7 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(4) >= 0 ? (
+                {Data.errorIndex.indexOf(4) >= 0&&!(Data.emptyIndex.indexOf(4) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -699,11 +723,11 @@ class Ordinary extends Component {
                   <View
                     style={{
                       position: 'absolute',
-                      top: Height * 0.021,
-                      width: Height * 0.03,
+                      top: Height * 0.022,
+                      width: Height * 0.02,
                       borderRadius: Height * 0.032,
                       marginLeft: ScaleSize(10),
-                      height: Height * 0.028,
+                      height: Height * 0.02,
                       backgroundColor: 'red',
                       opacity: 0.8,
                       alignItems: 'center',
@@ -711,10 +735,10 @@ class Ordinary extends Component {
                     <View style={{}}>
                       <Text
                         style={{
-                          marginTop:-ScaleSize(2.5),
+                          marginTop: -ScaleSize(2.5),
                           color: '#fff',
                           fontWeight: '700',
-                          fontSize: ScaleSize(16),
+                          fontSize: ScaleSize(12),
                         }}>
                         A
                       </Text>
@@ -727,11 +751,11 @@ class Ordinary extends Component {
                   <View
                     style={{
                       position: 'absolute',
-                      top: Height * 0.051,
-                      width: Height * 0.03,
+                      top: Height * 0.052,
+                      width: Height * 0.02,
                       borderRadius: Height * 0.032,
                       marginLeft: ScaleSize(10),
-                      height: Height * 0.028,
+                      height: Height * 0.02,
                       backgroundColor: '#2a82e4',
                       opacity: 0.8,
                       alignItems: 'center',
@@ -739,11 +763,11 @@ class Ordinary extends Component {
                     <View style={{}}>
                       <Text
                         style={{
-                          marginTop:-ScaleSize(2.5),
+                          marginTop: -ScaleSize(2.5),
 
                           color: '#fff',
                           fontWeight: '700',
-                          fontSize: ScaleSize(16),
+                          fontSize: ScaleSize(12),
                         }}>
                         B
                       </Text>
@@ -756,11 +780,11 @@ class Ordinary extends Component {
                   <View
                     style={{
                       position: 'absolute',
-                      top: Height * 0.08,
-                      width: Height * 0.03,
+                      top: Height * 0.082,
+                      width: Height * 0.02,
                       borderRadius: Height * 0.032,
                       marginLeft: ScaleSize(10),
-                      height: Height * 0.028,
+                      height: Height * 0.02,
                       backgroundColor: 'green',
                       opacity: 0.8,
                       alignItems: 'center',
@@ -768,11 +792,11 @@ class Ordinary extends Component {
                     <View style={{}}>
                       <Text
                         style={{
-                          marginTop:-ScaleSize(2.5),
+                          marginTop: -ScaleSize(2.5),
 
                           color: '#fff',
                           fontWeight: '700',
-                          fontSize: ScaleSize(16),
+                          fontSize: ScaleSize(12),
                         }}>
                         C
                       </Text>
@@ -785,11 +809,11 @@ class Ordinary extends Component {
                   <View
                     style={{
                       position: 'absolute',
-                      top: Height * 0.11,
-                      width: Height * 0.03,
+                      top: Height * 0.112,
+                      width: Height * 0.02,
                       borderRadius: Height * 0.032,
                       marginLeft: ScaleSize(10),
-                      height: Height * 0.028,
+                      height: Height * 0.02,
                       backgroundColor: '#f67e1e',
                       opacity: 0.8,
                       alignItems: 'center',
@@ -797,11 +821,11 @@ class Ordinary extends Component {
                     <View style={{}}>
                       <Text
                         style={{
-                          marginTop:-ScaleSize(2.5),
+                          marginTop: -ScaleSize(2.5),
 
                           color: '#fff',
                           fontWeight: '700',
-                          fontSize: ScaleSize(16),
+                          fontSize: ScaleSize(12),
                         }}>
                         D
                       </Text>
@@ -815,10 +839,10 @@ class Ordinary extends Component {
                     style={{
                       position: 'absolute',
                       top: Height * 0.142,
-                      width: Height * 0.03,
+                      width: Height * 0.02,
                       borderRadius: Height * 0.032,
                       marginLeft: ScaleSize(10),
-                      height: Height * 0.028,
+                      height: Height * 0.02,
                       backgroundColor: 'purple',
                       opacity: 0.8,
                       alignItems: 'center',
@@ -826,11 +850,11 @@ class Ordinary extends Component {
                     <View style={{}}>
                       <Text
                         style={{
-                          marginTop:-ScaleSize(2.5),
+                          marginTop: -ScaleSize(2.5),
 
                           color: '#fff',
                           fontWeight: '700',
-                          fontSize: ScaleSize(16),
+                          fontSize: ScaleSize(12),
                         }}>
                         E
                       </Text>
@@ -841,10 +865,25 @@ class Ordinary extends Component {
                 )}
               </View>
               <TextInput
+              ref={input => this.input = input}
                 value={Data.InputUrl}
+
+                numberOfLines={5}
                 autoFocus={true}
                 multiline={true}
+                allowFontScaling={false}
+                blurOnSubmit={false}
+                enablesReturnKeyAutomatically={true}
+                importantForAutofill="auto"
                 placeholder={'https://www.baidu.com'}
+                onBlur={()=>{
+                  this.setState({
+                    numberOfUrlinTextInput:
+                      Data.InputUrl.split('\n').length - 1,
+                  });
+                }}
+
+                
                 onSelectionChange={(event) => {
                   //将当前的光标定位到起点位置
                   let last = 'com|edu|cn|gov|org';
@@ -880,6 +919,7 @@ class Ordinary extends Component {
                   fontSize: ScaleSize(18),
                 }}
                 onChangeText={(value) => {
+                  console.log('我来康康text：' + Data.errorIndex);
                   let index;
                   for (let i = 0; i < Data.InputUrl.split('\n').length; i++) {
                     if (
@@ -888,6 +928,13 @@ class Ordinary extends Component {
                     ) {
                       index = i;
                       Data.errorIndex.splice(Data.errorIndex.indexOf(i), 1);
+                    }
+                    if (
+                      Data.InputUrl.split('\n')[i] != value.split('\n')[i] &&
+                      Data.emptyIndex.indexOf(i) >= 0
+                    ) {
+                      index = i;
+                      Data.emptyIndex.splice(Data.emptyIndex.indexOf(i), 1);
                     }
                     if (Data.InputUrl.split('\n')[i] != value.split('\n')[i]) {
                       index = i;
@@ -939,6 +986,7 @@ class Ordinary extends Component {
                   onPress={() => {
                     Data.InputUrl = '';
                     Data.errorIndex = [];
+                    Data.emptyIndex = [];
                     this.setState({numberOfUrlinTextInput: 0});
                   }}>
                   <View style={{alignItems: 'center'}}>

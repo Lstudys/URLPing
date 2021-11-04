@@ -9,7 +9,7 @@ export default {
   maxfiveurl: 'Ping 5 URLs At Most At A Time',
   selectinputbox: 'Please Select The Input Box First',
   Over: 'complete',
-  reject_Test: 'The url does not contain HTTPS or HTTP',
+  reject_Test: 'Please check the url carefully',
   home: 'Home',
   setting: 'Setting',
   about: 'About',
@@ -21,5 +21,5 @@ export default {
   versionupdatetime: 'Version Update Time',
   iftherearebugsduringuse: 'If there are bugs during use',
   pleasecontact: 'Please Contact',
-  version: 'version: 1.0.0',
+  version: 'version: 1.1.0',
 };
