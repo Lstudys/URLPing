@@ -16,15 +16,16 @@ import store from 'react-native-simple-store';
 import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
-
 class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editable:false,
+      Color:"#1f2342",
+      editable: false,
       history_height: Height * 0.3,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
@@ -36,7 +37,6 @@ class Ordinary extends Component {
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
-
     Data.InputUrl = '';
     Data.pingurl = [''];
     LanguageChange.bind(this)();
@@ -51,6 +51,7 @@ class Ordinary extends Component {
   identify = true;
 
   componentWillMount() {
+    store.get(Data.ThemeColor).then((v,r)=>{if(v==null) this.setState({Color:"#1f2342"}); else{console.log(v);this.setState({Color:v})}});
     // Data.errorIndex=[]
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -112,9 +113,9 @@ class Ordinary extends Component {
             InputUrl[j] = 'http://' + InputUrl[j];
             Data.InputUrl = InputUrl.join('\n');
           } else Data.errorIndex.push(j);
-          if (InputUrl[j].trim()=='http://'||InputUrl[j].trim()=='') {
-           Data.emptyIndex.push(j);
-           console.log("empty"+Data.emptyIndex);
+          if (InputUrl[j].trim() == 'http://' || InputUrl[j].trim() == '') {
+            Data.emptyIndex.push(j);
+            console.log('empty' + Data.emptyIndex);
           }
         }
         j++;
@@ -123,7 +124,7 @@ class Ordinary extends Component {
         j++;
       }
     }
-    console.log("什么类型",InputUrl[0].trim().length,"666");
+    console.log('什么类型', InputUrl[0].trim().length, '666');
     // if(Data.errorIndex.length==1){
     //   console.log("长度有问题"+url[Data.errorIndex[0]].length);
     //   console.log("长度有问题2"+InputUrl[Data.errorIndex[0]].length);
@@ -148,7 +149,7 @@ class Ordinary extends Component {
       Data.pingurl[i] = url[i].trim();
     }
 
-    if (!(Data.errorIndex[0] >= 0)&&!(Data.emptyIndex[0] >= 0)) {
+    if (!(Data.errorIndex[0] >= 0) && !(Data.emptyIndex[0] >= 0)) {
       if (Data.pingurl.length != 0) {
         //查重并拆分
         let inputUrl = '';
@@ -218,7 +219,6 @@ class Ordinary extends Component {
       </View>
     );
   };
-
   renderitem_history = ({item, index}) => {
     let n = item[0].match(/\n/g) == null ? 1 : item[0].match(/\n/g).length;
     let h = Height * 0.03 * n;
@@ -231,60 +231,54 @@ class Ordinary extends Component {
           width: Width * 0.95,
           marginLeft: Width * 0.025,
           marginTop: ScaleSize(20),
-          backgroundColor: '#494b6d',
+          backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
         }}>
         <TouchableOpacity
           onPress={() => {
-            if(Data.InputUrl==''){
+            if (Data.InputUrl == '') {
               Data.InputUrl = Data.InputUrl.trim();
 
-            let a = Data.InputUrl.split('\n');
+              let a = Data.InputUrl.split('\n');
 
-            if (a[a.length - 1] == '') {
-              a.pop();
-              Data.InputUrl = a.join('\n');
-            }
-            if (Data.InputUrl.split())
-              if (Data.InputUrl.split('\n').length > 4) {
-                Toast.message('最多ping五个');
-                return;
+              if (a[a.length - 1] == '') {
+                a.pop();
+                Data.InputUrl = a.join('\n');
               }
-            Data.InputUrl =
-              Data.InputUrl.trim() + '\n' + Data.historyPing[index];
+              if (Data.InputUrl.split())
+                if (Data.InputUrl.split('\n').length > 4) {
+                  Toast.message('最多ping五个');
+                  return;
+                }
+              Data.InputUrl =
+                Data.InputUrl.trim() + '\n' + Data.historyPing[index];
 
-            Data.InputUrl = Data.InputUrl.trim();
+              Data.InputUrl = Data.InputUrl.trim();
 
-            this.setState({
-              numberOfUrlinTextInput:0,
-            });
-          
-            }else{
+              this.setState({
+                numberOfUrlinTextInput: 0,
+              });
+            } else {
+              Data.InputUrl = Data.InputUrl.trim();
 
-            
+              let a = Data.InputUrl.split('\n');
 
-            
-            Data.InputUrl = Data.InputUrl.trim();
-
-            let a = Data.InputUrl.split('\n');
-
-            if (a[a.length - 1] == '') {
-              a.pop();
-              Data.InputUrl = a.join('\n');
-            }
-            if (Data.InputUrl.split())
-              if (Data.InputUrl.split('\n').length > 4) {
-                Toast.message('最多ping五个');
-                return;
+              if (a[a.length - 1] == '') {
+                a.pop();
+                Data.InputUrl = a.join('\n');
               }
-            Data.InputUrl =
-              Data.InputUrl.trim() + '\n' + Data.historyPing[index];
+              if (Data.InputUrl.split())
+                if (Data.InputUrl.split('\n').length > 4) {
+                  Toast.message('最多ping五个');
+                  return;
+                }
+              Data.InputUrl =
+                Data.InputUrl.trim() + '\n' + Data.historyPing[index];
 
-            Data.InputUrl = Data.InputUrl.trim();
+              Data.InputUrl = Data.InputUrl.trim();
 
-            this.setState({
-              numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
-            });
-          
+              this.setState({
+                numberOfUrlinTextInput: this.state.numberOfUrlinTextInput + n,
+              });
             }
           }}>
           <View
@@ -376,14 +370,14 @@ class Ordinary extends Component {
       return (
         <View
           style={{
-            backgroundColor: '#1f2342',
+            backgroundColor: this.state.Color,
             height: Height,
             position: 'relative',
             flex: 1,
           }}>
           <View
             style={{
-              backgroundColor: '#1f2342',
+              backgroundColor: this.state.Color,
               position: 'absolute',
               bottom: ScaleSize(20),
             }}>
@@ -425,7 +419,7 @@ class Ordinary extends Component {
               <FlatList
                 scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
-                style={styles.urlsArrFlatlist}
+                style={{backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",}}
                 horizontal={true}
                 data={Data.urlsArr}
                 renderItem={this._renderRow}
@@ -583,7 +577,8 @@ class Ordinary extends Component {
                 )}
               </View>
               <View>
-                {Data.errorIndex.indexOf(0) >= 0&&!(Data.emptyIndex.indexOf(0) >= 0) ? (
+                {Data.errorIndex.indexOf(0) >= 0 &&
+                !(Data.emptyIndex.indexOf(0) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -609,7 +604,8 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(1) >= 0&&!(Data.emptyIndex.indexOf(1) >= 0) ? (
+                {Data.errorIndex.indexOf(1) >= 0 &&
+                !(Data.emptyIndex.indexOf(1) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -635,7 +631,8 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(2) >= 0&&!(Data.emptyIndex.indexOf(2) >= 0) ? (
+                {Data.errorIndex.indexOf(2) >= 0 &&
+                !(Data.emptyIndex.indexOf(2) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -665,7 +662,8 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(3) >= 0&&!(Data.emptyIndex.indexOf(3) >= 0) ? (
+                {Data.errorIndex.indexOf(3) >= 0 &&
+                !(Data.emptyIndex.indexOf(3) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -691,7 +689,8 @@ class Ordinary extends Component {
                 ) : (
                   <View />
                 )}
-                {Data.errorIndex.indexOf(4) >= 0&&!(Data.emptyIndex.indexOf(4) >= 0) ? (
+                {Data.errorIndex.indexOf(4) >= 0 &&
+                !(Data.emptyIndex.indexOf(4) >= 0) ? (
                   <View
                     style={{
                       position: 'absolute',
@@ -865,9 +864,8 @@ class Ordinary extends Component {
                 )}
               </View>
               <TextInput
-              ref={input => this.input = input}
+                ref={(input) => (this.input = input)}
                 value={Data.InputUrl}
-
                 numberOfLines={5}
                 autoFocus={true}
                 multiline={true}
@@ -876,14 +874,12 @@ class Ordinary extends Component {
                 enablesReturnKeyAutomatically={true}
                 importantForAutofill="auto"
                 placeholder={'https://www.baidu.com'}
-                onBlur={()=>{
+                onBlur={() => {
                   this.setState({
                     numberOfUrlinTextInput:
                       Data.InputUrl.split('\n').length - 1,
                   });
                 }}
-
-                
                 onSelectionChange={(event) => {
                   //将当前的光标定位到起点位置
                   let last = 'com|edu|cn|gov|org';
@@ -969,7 +965,7 @@ class Ordinary extends Component {
                   flexDirection: 'row',
                   width: Width,
                   height: Height * 0.07,
-                  backgroundColor: '#494b6d',
+                  backgroundColor: this.state.Color,
                   alignItems: 'center',
                 }}>
                 <TouchableOpacity
@@ -978,7 +974,7 @@ class Ordinary extends Component {
 
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: '#76779b',
+                    backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -999,7 +995,7 @@ class Ordinary extends Component {
                     marginLeft: Width * 0.02,
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: '#1f2342',
+                    backgroundColor: this.state.Color=="#4588AA"?'#336699':"#2C1F42",
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -1059,9 +1055,6 @@ const styles = StyleSheet.create({
     marginHorizontal: ScaleSize(5),
     // marginBottom: ScaleSize(10),
     // marginTop: ScaleSize(10),
-  },
-  urlsArrFlatlist: {
-    backgroundColor: '#494b6d',
   },
   add: {
     flexDirection: 'row',

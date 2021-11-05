@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {Button, Image} from 'react-native';
+import {UrlInput} from './UrlInput';
 import {
   View,
   Text,
@@ -8,18 +9,22 @@ import {
   StyleSheet,
 } from 'react-native';
 import Drawer from 'react-native-drawer';
-import {SetSpText, ScaleSize, ScaleSizeH} from '../controller/Adaptation';
+import {
+  SetSpText,
+  ScaleSize,
+  ScaleSizeH,
+  ScaleSizeW,
+} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 import {BackHandler, Platform} from 'react-native';
-import {ExitApp,BackAction} from '../controller/AppPageFunction';
+import {ExitApp, BackAction} from '../controller/AppPageFunction';
 import AwesomeAlert from 'react-native-awesome-alerts';
-
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
-
+const ThemeColor = ['#1f2342', '#4588AA'];
 class Ordinary extends Component {
   closeControlPanel = () => {
     this._drawer.close();
@@ -31,7 +36,9 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      Color: '#1f2342',
       showAlert: false,
+      showAlert2: false,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
       refresh: false,
@@ -42,6 +49,7 @@ class Ordinary extends Component {
       currentIndex: -1,
       isLoading: true,
     };
+    //Data.ThemeColor="#1f2342";
 
     LanguageChange.bind(this)();
 
@@ -65,6 +73,17 @@ class Ordinary extends Component {
       showAlert: false,
     });
   };
+  showAlert2 = () => {
+    this.setState({
+      showAlert2: true,
+    });
+  };
+
+  hideAlert2 = () => {
+    this.setState({
+      showAlert2: false,
+    });
+  };
 
   componentDidMount() {
     Data.IP1 = '';
@@ -74,7 +93,10 @@ class Ordinary extends Component {
     Data.IP5 = '';
     Data.InputUrl = '';
     Data.pingurl = [];
-
+    store.get(Data.ThemeColor).then((v, r) => {
+      if (v == null) this.setState({Color: '#1f2342'});
+      else this.setState({Color: v});
+    });
     store.get('history').then((res) => {
       if (res != null) {
         Data.historyPing = res;
@@ -97,15 +119,18 @@ class Ordinary extends Component {
   }
 
   render() {
-    const {showAlert} = this.state;
+    const {showAlert, showAlert2} = this.state;
 
     let navigationView = (
-      <View style={{flex: 1, backgroundColor: '#494b6d'}}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: this.state.Color,
+          height: Height * 1.2,
+        }}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={() => {
-            this.hideAlert();
-          }}
+          onPress={() => {}}
           style={{
             marginTop: ScaleSize(20),
             height: Height * 0.08,
@@ -127,7 +152,7 @@ class Ordinary extends Component {
             }}>
             <Text
               style={{
-                color: '#494b6d',
+                color: '#000000',
                 fontSize: ScaleSize(20),
                 fontWeight: '700',
               }}>
@@ -149,6 +174,61 @@ class Ordinary extends Component {
                 marginTop: ScaleSize(16),
                 width: ScaleSize(30),
                 height: ScaleSize(30),
+                marginBottom: ScaleSize(15),
+                marginHorizontal: ScaleSize(10),
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() => {
+            this.showAlert2();
+          }}
+          style={{
+            marginTop: ScaleSize(5),
+            height: Height * 0.08,
+            backgroundColor: '#fff',
+            width: Width * 0.57,
+            // marginLeft: Width * 0.02,
+            borderColor: '#fff',
+            borderWidth: ScaleSize(4),
+            borderBottomWidth: ScaleSize(2),
+            // borderRadius: ScaleSize(2),
+            // borderBottomRightRadius: ScaleSize(20),
+            // borderTopRightRadius: ScaleSize(20),
+          }}>
+          <View
+            style={{
+              position: 'absolute',
+              right: Width * 0.15,
+              top: Height * 0.017,
+            }}>
+            <Text
+              style={{
+                color: '#000000',
+                fontSize: ScaleSize(20),
+                fontWeight: '700',
+              }}>
+              {I18n.t('Theme')}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: Width * 0.1,
+              height: Width * 0.15,
+              alignItems: 'center',
+              //position: 'absolute',
+              left: Width * 0.01,
+              top: Height * -0.008,
+            }}>
+            <Image
+              source={require('../imgs/Theme.png')}
+              style={{
+                marginTop: ScaleSize(16),
+                width: ScaleSize(35),
+                height: ScaleSize(35),
                 marginBottom: ScaleSize(15),
                 marginHorizontal: ScaleSize(10),
               }}
@@ -241,9 +321,7 @@ class Ordinary extends Component {
             show={showAlert}
             showProgress={false}
             title="Graph URL Ping"
-            message="APP version : v1.1.0        Update Time: 2021/11/3
-
-          "
+            message="APP version : v1.0.0        Update Time: 2021/10/31"
             titleStyle={{
               fontSize: ScaleSize(20),
               fontWeight: '700',
@@ -261,6 +339,12 @@ class Ordinary extends Component {
             showCancelButton={true}
             // showConfirmButton={true}
             cancelText="OK"
+            onDismiss={() => {
+              this.setState({showAlert: false});
+            }}
+            onCancelPressed={() => {
+              this.hideAlert();
+            }}
             // confirmText="Yes, delete it"
             cancelButtonStyle={{
               backgroundColor: '#494b6d',
@@ -272,12 +356,60 @@ class Ordinary extends Component {
               fontSize: ScaleSize(20),
               fontWeight: '700',
             }}
-            onCancelPressed={() => {
-              this.hideAlert();
-            }}
           />
-          <View style={{backgroundColor: '#1f2342'}}>
-            <View style={{height: Height*1.2, position: 'relative'}}>
+
+          <AwesomeAlert
+            onDismiss={() => {
+              this.setState({showAlert2: false});
+            }}
+            show={showAlert2}
+            customView={
+              <View>
+                <View>
+                  <Text style={{fontSize: ScaleSize(20)}}>请选择主题颜色</Text>
+                </View>
+                <View
+                  backgroundColor="#1f2342"
+                  style={{marginTop: ScaleSizeH(10)}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({Color: ThemeColor[0]});
+                      store.update(Data.ThemeColor, ThemeColor[0]);
+                      this.hideAlert2();
+                    }}
+                    style={{
+                      height: ScaleSizeH(50),
+                      width: ScaleSizeW(150),
+                      marginLeft: Width * 0.13,
+                      marginTop: Height * 0.01,
+                    }}>
+                    <Text style={{color: '#fff'}}>蓝紫色</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  backgroundColor="#4588AA"
+                  style={{marginTop: ScaleSizeH(10)}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({Color: ThemeColor[1]});
+                      store.update(Data.ThemeColor, ThemeColor[1]);
+                      this.hideAlert2();
+                    }}
+                    style={{
+                      height: ScaleSizeH(50),
+                      width: ScaleSizeW(150),
+                      marginLeft: Width * 0.13,
+                      marginTop: Height * 0.01,
+                    }}>
+                    <Text style={{color: '#fff'}}>浅蓝色</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            }
+            showProgress={false}
+          />
+          <View style={{backgroundColor: this.state.Color}}>
+            <View style={{height: Height, position: 'relative'}}>
               <TouchableOpacity
                 onPress={() => {
                   this._drawer.open();
@@ -297,7 +429,7 @@ class Ordinary extends Component {
               </TouchableOpacity>
               <Text
                 style={{
-                  color: '#fff',
+                  color: '#FFFFFF',
                   fontSize: SetSpText(85),
                   fontWeight: 'bold',
                   textAlign: 'center',
@@ -334,7 +466,15 @@ class Ordinary extends Component {
                     onPress={() => {
                       this.props.navigation.navigate('UrlInput');
                     }}>
-                    <Text style={styles.pingtext}>GO!</Text>
+                    <Text
+                      style={{
+                        fontSize: SetSpText(60),
+                        color:
+                          this.state.Color == '#4588AA' ? '#4588AA' : '#1f2342',
+                        fontWeight: '700',
+                      }}>
+                      GO!
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
@@ -374,11 +514,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#2a82e4',
     height: ScaleSize(42),
     justifyContent: 'center',
-  },
-  pingtext: {
-    fontSize: SetSpText(60),
-    color: '#1f2342',
-    fontWeight: '700',
   },
   pingwhole: {
     marginHorizontal: ScaleSize(5),

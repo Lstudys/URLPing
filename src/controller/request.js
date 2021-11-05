@@ -1,7 +1,8 @@
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
+import Data from '../modal/data';
 const TABLE_INITIAL_VALUE = 0;
-const TIMER_PERIOD = 1250;
+const TIMER_PERIOD = 1000;
 const SEND_REQUEST_STATUS = 1;
 const RECEIVE_REQUEST_STATUS = 4;
 // 向URL发送请求的函数
@@ -61,11 +62,17 @@ export const SendRequest = function () {
     this.avgTime5 = TABLE_INITIAL_VALUE;
     this.outData = [10000, 10000, 10000, 10000, 10000];
 
-    this.n95 = '';
-    this.n952 = '';
-    this.n953 = '';
-    this.n954 = '';
-    this.n955 = '';
+    this.n95 = 0;
+    this.n952 = 0;
+    this.n953 = 0;
+    this.n954 = 0;
+    this.n955 = 0;
+
+    this.std1 = 0;
+    this.std2 = 0;
+    this.std3 = 0;
+    this.std4 = 0;
+    this.std5 = 0;
 
     const reqTime = this.state.reqTime; // 获取发送请求的持续时间
     const beginTime = new Date().valueOf(); // 点击PING后获取当前时间（分钟），用来控制循环
@@ -76,11 +83,11 @@ export const SendRequest = function () {
     var x4 = 1;
     var x5 = 1;
 
-    var nowTime = ''; // 当前时间
-    var nowTime2s = '';
-    var nowTime3s = '';
-    var nowTime4s = '';
-    var nowTime5s = '';
+    var nowTime = 0; // 当前时间
+    var nowTime2s = 0;
+    var nowTime3s = 0;
+    var nowTime4s = 0;
+    var nowTime5s = 0;
 
     const xhr = new XMLHttpRequest(); // 实例化XMLHttpRequest对象
     const xhr2 = new XMLHttpRequest();
@@ -151,7 +158,8 @@ export const SendRequest = function () {
     }
 
     let xtimeall = hourall + ':' + minuteall + ':' + secondall;
-
+    Data.datatime=xtimeall
+    console.log("变了没："+Data.datatime);
     this.setState({
       urlDatafirst: [],
       urlDatasecond: [],
@@ -441,7 +449,7 @@ export const SendRequest = function () {
               if (value5.time > this.maxTime5) {
                 this.maxTime5 = value5.time;
               }
-              if (this.minTime5 == '') {
+              if (this.minTime5 == 0) {
                 this.minTime5 = value5.time;
               } else if (this.minTime5 > value5.time) {
                 this.minTime5 = value5.time;
@@ -454,6 +462,7 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x5 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+              this.std5=num2;
               if (x5 - 1 > 3) this.outData[4] = this.avgTime5 + 2.5 * num2;
               this.state.p95_arr5.sort(function (a, b) {
                 return a - b;
@@ -553,7 +562,7 @@ export const SendRequest = function () {
               if (value4.time > this.maxTime4) {
                 this.maxTime4 = value4.time;
               }
-              if (this.minTime4 == '') {
+              if (this.minTime4 == 0) {
                 this.minTime4 = value4.time;
               } else if (this.minTime4 > value4.time) {
                 this.minTime4 = value4.time;
@@ -566,6 +575,7 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x4 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+              this.std4=num2;
               if (x4 - 1 > 3) this.outData[3] = this.avgTime4 + 2.5 * num2;
               this.state.p95_arr4.sort(function (a, b) {
                 return a - b;
@@ -666,7 +676,7 @@ export const SendRequest = function () {
               if (value3.time > this.maxTime3) {
                 this.maxTime3 = value3.time;
               }
-              if (this.minTime3 == '') {
+              if (this.minTime3 == 0) {
                 this.minTime3 = value3.time;
               } else if (this.minTime3 > value3.time) {
                 this.minTime3 = value3.time;
@@ -680,6 +690,7 @@ export const SendRequest = function () {
               let num1 = sum / (x3 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
               if (x3 - 1 > 3) this.outData[2] = this.avgTime3 + 2.5 * num2;
+              this.std3=num2;
               this.state.p95_arr3.sort(function (a, b) {
                 return a - b;
               });
@@ -779,7 +790,7 @@ export const SendRequest = function () {
               if (value2.time > this.maxTime2) {
                 this.maxTime2 = value2.time;
               }
-              if (this.minTime2 == '') {
+              if (this.minTime2 == 0) {
                 this.minTime2 = value2.time;
               } else if (this.minTime2 > value2.time) {
                 this.minTime2 = value2.time;
@@ -792,6 +803,8 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x2 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+              this.std2=num2;
+
               if (x2 - 1 > 3) this.outData[1] = this.avgTime2 + 2.5 * num2;
               this.state.p95_arr2.sort(function (a, b) {
                 return a - b;
@@ -896,7 +909,7 @@ export const SendRequest = function () {
                 if (value.time > this.maxTime) {
                   this.maxTime = value.time;
                 }
-                if (this.minTime == '') {
+                if (this.minTime == 0) {
                   this.minTime = value.time;
                 } else if (this.minTime > value.time) {
                   this.minTime = value.time;
@@ -909,6 +922,8 @@ export const SendRequest = function () {
                 });
                 let num1 = sum / (x - 1);
                 let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+                this.std1=num2;
+
                 if (x > 3) this.outData[0] = this.avgTime + 2.5 * num2;
 
                 this.state.p95_arr1.sort(function (a, b) {
