@@ -35,7 +35,6 @@ class Summarize extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     
       urlCollection: Data.urlCollection,
       config: Data.config,
       showAlert: false,
@@ -64,7 +63,17 @@ class Summarize extends Component {
 
   componentDidMount() {
     Data.InputUrl = '';
-    // Data.pingurl = [];
+
+    //使安卓手机物理返回键生效
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
+    }
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind(this));
+    }
   }
 
   next(urlCollection, dataSets, colortempArr) {
@@ -99,33 +108,31 @@ class Summarize extends Component {
   Pie_next(urlCollection, dataSets2) {
     for (let i = 0; i < urlCollection.length; i++) {
       if (urlCollection[i] != '') {
-        dataSets2.push({
-          values: [{value: Data.Piedata[i][1]},
-            {value: Data.Piedata[i][0]},
-       ],
-          config: {
-            colors: [processColor('#2a82e4'), processColor('red')],
-            valueTextSize: ScaleSize(12),
-            valueTextColor: processColor('#fff'),
-            sliceSpace: 5,
-            selectionShift: 13,
-            // xValuePosition: "OUTSIDE_SLICE",
-            // yValuePosition: "OUTSIDE_SLICE",
-            valueFormatter: "#.#'%'",
-            valueLineColor: processColor('green'),
-            valueLinePart1Length: 0.5
-          }
-        });
+        dataSets2.push([
+          {
+            values: [{value: Data.Piedata[i][1]}, {value: Data.Piedata[i][0]}],
+            config: {
+              colors: [processColor('#2a82e4'), processColor('red')],
+              valueTextSize: ScaleSize(12),
+              valueTextColor: processColor('#fff'),
+              sliceSpace: 5,
+              selectionShift: 13,
+              // xValuePosition: "OUTSIDE_SLICE",
+              // yValuePosition: "OUTSIDE_SLICE",
+              valueFormatter: "#.#'%'",
+              valueLineColor: processColor('green'),
+              valueLinePart1Length: 0.5,
+            },
+          },
+        ]);
       }
     }
-    
+
     return {
       data: {
         dataSets2,
       },
     };
-      
-  
   }
   handleSelect(event) {
     // let entry = event.nativeEvent
@@ -134,7 +141,6 @@ class Summarize extends Component {
     // } else {
     //   this.setState({...this.state, selectedEntry: JSON.stringify(entry)})
     // }
-
     // console.log(event.nativeEvent)
   }
 
@@ -144,8 +150,8 @@ class Summarize extends Component {
     const colortempArr = [0, 1, 2, 3, 4];
 
     let config_bar = this.next(Data.pingurl, dataSets, colortempArr);
-let config_Pie=this.Pie_next(Data.pingurl,dataSets2)
-    console.log("这里"+config_Pie);
+    let config_Pie = this.Pie_next(Data.pingurl, dataSets2);
+    console.log('这里' + config_Pie);
     var date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
@@ -437,317 +443,378 @@ let config_Pie=this.Pie_next(Data.pingurl,dataSets2)
               ref="chart"
             />
             <View
-              style={{height: Height * 0.03, width:Width*.8,marginLeft:Width*.05,marginTop:-Height*.035}}>
-                <Text style={{color:"#fff",marginLeft:Width*.11,fontSize:ScaleSize(12)}}>MIN               AVG              N95             MAX</Text>
+              style={{
+                height: Height * 0.03,
+                width: Width * 0.8,
+                marginLeft: Width * 0.05,
+                marginTop: -Height * 0.035,
+              }}>
+              <Text
+                style={{
+                  color: '#fff',
+                  marginLeft: Width * 0.09,
+                  fontSize: ScaleSize(12),
+                }}>
+                MIN{'             '} AVG{'             '} N95{'             '}{' '}
+                MAX
+              </Text>
+            </View>
+            {Data.pingurl.length > 0 ? (
+              <View
+                style={{
+                  height: Height * 0.35,
+                  width: Width * 0.7,
+                  marginTop: -Height * 0.05,
+                }}>
+                <PieChart
+                  style={{height: Height * 0.4}}
+                  logEnabled={true}
+                  data={{
+                    dataSets: config_Pie.data.dataSets2[0],
+                  }}
+                  chartDescription={{
+                    text: 'This is Pie chart description',
+                    textSize: 15,
+                    textColor: processColor('#1f2342'),
+                  }}
+                  legend={{
+                    enabled: true,
+                    textColor: processColor('#1f2342'),
+                    // textSize: ,
+                    form: 'NONE',
+
+                    horizontalAlignment: 'RIGHT',
+                    verticalAlignment: 'CENTER',
+                    orientation: 'VERTICAL',
+                    wordWrapEnabled: true,
+                  }}
+                  // highlights={[{x:2}]}
+
+                  // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
+
+                  entryLabelColor={processColor('green')}
+                  entryLabelTextSize={10}
+                  entryLabelFontFamily={'HelveticaNeue-Medium'}
+                  // drawEntryLabels={true}
+
+                  rotationEnabled={true}
+                  rotationAngle={0}
+                  usePercentValues={true}
+                  // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
+                  // centerTextRadiusPercent={100}
+                  holeRadius={0}
+                  holeColor={processColor('#f0f0f0')}
+                  transparentCircleRadius={20}
+                  transparentCircleColor={processColor('#f0f0f088')}
+                  maxAngle={360}
+                  onSelect={this.handleSelect.bind(this)}
+                  onChange={(event) => console.log(event.nativeEvent)}
+                />
               </View>
-              {Data.pingurl.length>0?<View style={{height:Height*.35,width:Width*.7,marginTop:-Height*.05}}>
-        <PieChart
-            style={{height:Height*.4}}
-            logEnabled={true}
-            data={{
-              dataSets:config_Pie.data.dataSets2[0],
-              config: {
-                colors: [processColor('#2a82e4'), processColor('red')],
-                valueTextSize: ScaleSize(12),
-                valueTextColor: processColor('#fff'),
-                sliceSpace: 5,
-                selectionShift: 13,
-                // xValuePosition: "OUTSIDE_SLICE",
-                // yValuePosition: "OUTSIDE_SLICE",
-                valueFormatter: "#.#'%'",
-                valueLineColor: processColor('green'),
-                valueLinePart1Length: 0.5
-              }
-            }}
-            chartDescription={ {
-              text: 'This is Pie chart description',
-              textSize: 15,
-              textColor: processColor('#1f2342'),
-      
-            }}
+            ) : (
+              <View />
+            )}
+            {Data.pingurl.length > 1 ? (
+              <View
+                style={{
+                  height: Height * 0.35,
+                  width: Width * 0.7,
+                  marginTop: -Height * 0.05,
+                }}>
+                <PieChart
+                  style={{height: Height * 0.4}}
+                  logEnabled={true}
+                  data={{
+                    dataSets: config_Pie.data.dataSets2[1],
+                    config: {
+                      colors: [processColor('#2a82e4'), processColor('red')],
+                      valueTextSize: ScaleSize(12),
+                      valueTextColor: processColor('#fff'),
+                      sliceSpace: 5,
+                      selectionShift: 13,
+                      // xValuePosition: "OUTSIDE_SLICE",
+                      // yValuePosition: "OUTSIDE_SLICE",
+                      valueFormatter: "#.#'%'",
+                      valueLineColor: processColor('green'),
+                      valueLinePart1Length: 0.5,
+                    },
+                  }}
+                  chartDescription={{
+                    text: 'This is Pie chart description',
+                    textSize: 15,
+                    textColor: processColor('#1f2342'),
+                  }}
+                  legend={{
+                    enabled: true,
+                    textColor: processColor('#1f2342'),
+                    // textSize: ,
+                    form: 'NONE',
 
-            legend={{
-              enabled: true,
-              textColor:processColor('#1f2342'),
-              // textSize: ,
-              form: 'NONE',
-      
-              horizontalAlignment: "RIGHT",
-              verticalAlignment: "CENTER",
-              orientation: "VERTICAL",
-              wordWrapEnabled: true
-            }}
-            // highlights={[{x:2}]}
+                    horizontalAlignment: 'RIGHT',
+                    verticalAlignment: 'CENTER',
+                    orientation: 'VERTICAL',
+                    wordWrapEnabled: true,
+                  }}
+                  // highlights={[{x:2}]}
 
-            // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
+                  // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
 
-            entryLabelColor={processColor('green')}
-            entryLabelTextSize={10}
-            entryLabelFontFamily={'HelveticaNeue-Medium'}
-            // drawEntryLabels={true}
+                  entryLabelColor={processColor('green')}
+                  entryLabelTextSize={10}
+                  entryLabelFontFamily={'HelveticaNeue-Medium'}
+                  // drawEntryLabels={true}
 
-            rotationEnabled={true}
-            rotationAngle={0}
-            usePercentValues={true}
-            // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
-            // centerTextRadiusPercent={100}
-            holeRadius={0}
-            holeColor={processColor('#f0f0f0')}
-            transparentCircleRadius={20}
-            transparentCircleColor={processColor('#f0f0f088')}
-            maxAngle={360}
-            onSelect={this.handleSelect.bind(this)}
-            onChange={(event) => console.log(event.nativeEvent)}
-          />
-          </View>
-          :<View/>}
-          {Data.pingurl.length>1?<View style={{height:Height*.35,width:Width*.7,marginTop:-Height*.05}}>
-        <PieChart
-            style={{height:Height*.4}}
-            logEnabled={true}
-            data={{
-              dataSets:config_Pie.data.dataSets2[1],
-              config: {
-                colors: [processColor('#2a82e4'), processColor('red')],
-                valueTextSize: ScaleSize(12),
-                valueTextColor: processColor('#fff'),
-                sliceSpace: 5,
-                selectionShift: 13,
-                // xValuePosition: "OUTSIDE_SLICE",
-                // yValuePosition: "OUTSIDE_SLICE",
-                valueFormatter: "#.#'%'",
-                valueLineColor: processColor('green'),
-                valueLinePart1Length: 0.5
-              }
-            }}
-            chartDescription={ {
-              text: 'This is Pie chart description',
-              textSize: 15,
-              textColor: processColor('#1f2342'),
-      
-            }}
+                  rotationEnabled={true}
+                  rotationAngle={0}
+                  usePercentValues={true}
+                  // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
+                  // centerTextRadiusPercent={100}
+                  holeRadius={0}
+                  holeColor={processColor('#f0f0f0')}
+                  transparentCircleRadius={20}
+                  transparentCircleColor={processColor('#f0f0f088')}
+                  maxAngle={360}
+                  onSelect={this.handleSelect.bind(this)}
+                  onChange={(event) => console.log(event.nativeEvent)}
+                />
+              </View>
+            ) : (
+              <View />
+            )}
+            {Data.pingurl.length > 2 ? (
+              <View
+                style={{
+                  height: Height * 0.35,
+                  width: Width * 0.7,
+                  marginTop: -Height * 0.05,
+                }}>
+                <PieChart
+                  style={{height: Height * 0.4}}
+                  logEnabled={true}
+                  data={{
+                    dataSets: config_Pie.data.dataSets2[2],
+                    config: {
+                      colors: [processColor('#2a82e4'), processColor('red')],
+                      valueTextSize: ScaleSize(12),
+                      valueTextColor: processColor('#fff'),
+                      sliceSpace: 5,
+                      selectionShift: 13,
+                      // xValuePosition: "OUTSIDE_SLICE",
+                      // yValuePosition: "OUTSIDE_SLICE",
+                      valueFormatter: "#.#'%'",
+                      valueLineColor: processColor('green'),
+                      valueLinePart1Length: 0.5,
+                    },
+                  }}
+                  chartDescription={{
+                    text: 'This is Pie chart description',
+                    textSize: 15,
+                    textColor: processColor('#1f2342'),
+                  }}
+                  legend={{
+                    enabled: true,
+                    textColor: processColor('#1f2342'),
+                    // textSize: ,
+                    form: 'NONE',
 
-            legend={{
-              enabled: true,
-              textColor:processColor('#1f2342'),
-              // textSize: ,
-              form: 'NONE',
-      
-              horizontalAlignment: "RIGHT",
-              verticalAlignment: "CENTER",
-              orientation: "VERTICAL",
-              wordWrapEnabled: true
-            }}
-            // highlights={[{x:2}]}
+                    horizontalAlignment: 'RIGHT',
+                    verticalAlignment: 'CENTER',
+                    orientation: 'VERTICAL',
+                    wordWrapEnabled: true,
+                  }}
+                  // highlights={[{x:2}]}
 
-            // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
+                  // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
 
-            entryLabelColor={processColor('green')}
-            entryLabelTextSize={10}
-            entryLabelFontFamily={'HelveticaNeue-Medium'}
-            // drawEntryLabels={true}
+                  entryLabelColor={processColor('green')}
+                  entryLabelTextSize={10}
+                  entryLabelFontFamily={'HelveticaNeue-Medium'}
+                  // drawEntryLabels={true}
 
-            rotationEnabled={true}
-            rotationAngle={0}
-            usePercentValues={true}
-            // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
-            // centerTextRadiusPercent={100}
-            holeRadius={0}
-            holeColor={processColor('#f0f0f0')}
-            transparentCircleRadius={20}
-            transparentCircleColor={processColor('#f0f0f088')}
-            maxAngle={360}
-            onSelect={this.handleSelect.bind(this)}
-            onChange={(event) => console.log(event.nativeEvent)}
-          />
-          </View>
-  :<View/>}
-          {Data.pingurl.length>2?<View style={{height:Height*.35,width:Width*.7,marginTop:-Height*.05}}>
-        <PieChart
-            style={{height:Height*.4}}
-            logEnabled={true}
-            data={{
-              dataSets:config_Pie.data.dataSets2[2],
-              config: {
-                colors: [processColor('#2a82e4'), processColor('red')],
-                valueTextSize: ScaleSize(12),
-                valueTextColor: processColor('#fff'),
-                sliceSpace: 5,
-                selectionShift: 13,
-                // xValuePosition: "OUTSIDE_SLICE",
-                // yValuePosition: "OUTSIDE_SLICE",
-                valueFormatter: "#.#'%'",
-                valueLineColor: processColor('green'),
-                valueLinePart1Length: 0.5
-              }
-            }}
-            chartDescription={ {
-              text: 'This is Pie chart description',
-              textSize: 15,
-              textColor: processColor('#1f2342'),
-      
-            }}
+                  rotationEnabled={true}
+                  rotationAngle={0}
+                  usePercentValues={true}
+                  // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
+                  // centerTextRadiusPercent={100}
+                  holeRadius={0}
+                  holeColor={processColor('#f0f0f0')}
+                  transparentCircleRadius={20}
+                  transparentCircleColor={processColor('#f0f0f088')}
+                  maxAngle={360}
+                  onSelect={this.handleSelect.bind(this)}
+                  onChange={(event) => console.log(event.nativeEvent)}
+                />
+              </View>
+            ) : (
+              <View />
+            )}
+            {Data.pingurl.length > 3 ? (
+              <View
+                style={{
+                  height: Height * 0.35,
+                  width: Width * 0.7,
+                  marginTop: -Height * 0.05,
+                }}>
+                <PieChart
+                  style={{height: Height * 0.4}}
+                  logEnabled={true}
+                  data={{
+                    dataSets: config_Pie.data.dataSets2[3],
+                    config: {
+                      colors: [processColor('#2a82e4'), processColor('red')],
+                      valueTextSize: ScaleSize(12),
+                      valueTextColor: processColor('#fff'),
+                      sliceSpace: 5,
+                      selectionShift: 13,
+                      // xValuePosition: "OUTSIDE_SLICE",
+                      // yValuePosition: "OUTSIDE_SLICE",
+                      valueFormatter: "#.#'%'",
+                      valueLineColor: processColor('green'),
+                      valueLinePart1Length: 0.5,
+                    },
+                  }}
+                  chartDescription={{
+                    text: 'This is Pie chart description',
+                    textSize: 15,
+                    textColor: processColor('#1f2342'),
+                  }}
+                  legend={{
+                    enabled: true,
+                    textColor: processColor('#1f2342'),
+                    // textSize: ,
+                    form: 'NONE',
 
-            legend={{
-              enabled: true,
-              textColor:processColor('#1f2342'),
-              // textSize: ,
-              form: 'NONE',
-      
-              horizontalAlignment: "RIGHT",
-              verticalAlignment: "CENTER",
-              orientation: "VERTICAL",
-              wordWrapEnabled: true
-            }}
-            // highlights={[{x:2}]}
+                    horizontalAlignment: 'RIGHT',
+                    verticalAlignment: 'CENTER',
+                    orientation: 'VERTICAL',
+                    wordWrapEnabled: true,
+                  }}
+                  // highlights={[{x:2}]}
 
-            // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
+                  // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
 
-            entryLabelColor={processColor('green')}
-            entryLabelTextSize={10}
-            entryLabelFontFamily={'HelveticaNeue-Medium'}
-            // drawEntryLabels={true}
+                  entryLabelColor={processColor('green')}
+                  entryLabelTextSize={10}
+                  entryLabelFontFamily={'HelveticaNeue-Medium'}
+                  // drawEntryLabels={true}
 
-            rotationEnabled={true}
-            rotationAngle={0}
-            usePercentValues={true}
-            // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
-            // centerTextRadiusPercent={100}
-            holeRadius={0}
-            holeColor={processColor('#f0f0f0')}
-            transparentCircleRadius={20}
-            transparentCircleColor={processColor('#f0f0f088')}
-            maxAngle={360}
-            onSelect={this.handleSelect.bind(this)}
-            onChange={(event) => console.log(event.nativeEvent)}
-          />
-          </View>
-  :<View/>}
-          {Data.pingurl.length>3?<View style={{height:Height*.35,width:Width*.7,marginTop:-Height*.05}}>
-        <PieChart
-            style={{height:Height*.4}}
-            logEnabled={true}
-            data={{
-              dataSets:config_Pie.data.dataSets2[3],
-              config: {
-                colors: [processColor('#2a82e4'), processColor('red')],
-                valueTextSize: ScaleSize(12),
-                valueTextColor: processColor('#fff'),
-                sliceSpace: 5,
-                selectionShift: 13,
-                // xValuePosition: "OUTSIDE_SLICE",
-                // yValuePosition: "OUTSIDE_SLICE",
-                valueFormatter: "#.#'%'",
-                valueLineColor: processColor('green'),
-                valueLinePart1Length: 0.5
-              }
-            }}
-            chartDescription={ {
-              text: 'This is Pie chart description',
-              textSize: 15,
-              textColor: processColor('#1f2342'),
-      
-            }}
+                  rotationEnabled={true}
+                  rotationAngle={0}
+                  usePercentValues={true}
+                  // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
+                  // centerTextRadiusPercent={100}
+                  holeRadius={0}
+                  holeColor={processColor('#f0f0f0')}
+                  transparentCircleRadius={20}
+                  transparentCircleColor={processColor('#f0f0f088')}
+                  maxAngle={360}
+                  onSelect={this.handleSelect.bind(this)}
+                  onChange={(event) => console.log(event.nativeEvent)}
+                />
+              </View>
+            ) : (
+              <View />
+            )}
+            {Data.pingurl.length > 4 ? (
+              <View
+                style={{
+                  height: Height * 0.35,
+                  width: Width * 0.7,
+                  marginTop: -Height * 0.05,
+                }}>
+                <PieChart
+                  style={{height: Height * 0.4}}
+                  logEnabled={true}
+                  data={{
+                    dataSets: config_Pie.data.dataSets2[4],
+                    config: {
+                      colors: [processColor('#2a82e4'), processColor('red')],
+                      valueTextSize: ScaleSize(12),
+                      valueTextColor: processColor('#fff'),
+                      sliceSpace: 5,
+                      selectionShift: 13,
+                      // xValuePosition: "OUTSIDE_SLICE",
+                      // yValuePosition: "OUTSIDE_SLICE",
+                      valueFormatter: "#.#'%'",
+                      valueLineColor: processColor('green'),
+                      valueLinePart1Length: 0.5,
+                    },
+                  }}
+                  chartDescription={{
+                    text: 'This is Pie chart description',
+                    textSize: 15,
+                    textColor: processColor('#1f2342'),
+                  }}
+                  legend={{
+                    enabled: true,
+                    textColor: processColor('#1f2342'),
+                    // textSize: ,
+                    form: 'NONE',
 
-            legend={{
-              enabled: true,
-              textColor:processColor('#1f2342'),
-              // textSize: ,
-              form: 'NONE',
-      
-              horizontalAlignment: "RIGHT",
-              verticalAlignment: "CENTER",
-              orientation: "VERTICAL",
-              wordWrapEnabled: true
-            }}
-            // highlights={[{x:2}]}
+                    horizontalAlignment: 'RIGHT',
+                    verticalAlignment: 'CENTER',
+                    orientation: 'VERTICAL',
+                    wordWrapEnabled: true,
+                  }}
+                  // highlights={[{x:2}]}
 
-            // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
+                  // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
 
-            entryLabelColor={processColor('green')}
-            entryLabelTextSize={10}
-            entryLabelFontFamily={'HelveticaNeue-Medium'}
-            // drawEntryLabels={true}
+                  entryLabelColor={processColor('green')}
+                  entryLabelTextSize={10}
+                  entryLabelFontFamily={'HelveticaNeue-Medium'}
+                  // drawEntryLabels={true}
 
-            rotationEnabled={true}
-            rotationAngle={0}
-            usePercentValues={true}
-            // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
-            // centerTextRadiusPercent={100}
-            holeRadius={0}
-            holeColor={processColor('#f0f0f0')}
-            transparentCircleRadius={20}
-            transparentCircleColor={processColor('#f0f0f088')}
-            maxAngle={360}
-            onSelect={this.handleSelect.bind(this)}
-            onChange={(event) => console.log(event.nativeEvent)}
-          />
-          </View>
-  :<View/>}
-          {Data.pingurl.length>4?<View style={{height:Height*.35,width:Width*.7,marginTop:-Height*.05}}>
-        <PieChart
-            style={{height:Height*.4}}
-            logEnabled={true}
-            data={{
-              dataSets:config_Pie.data.dataSets2[4],
-              config: {
-                colors: [processColor('#2a82e4'), processColor('red')],
-                valueTextSize: ScaleSize(12),
-                valueTextColor: processColor('#fff'),
-                sliceSpace: 5,
-                selectionShift: 13,
-                // xValuePosition: "OUTSIDE_SLICE",
-                // yValuePosition: "OUTSIDE_SLICE",
-                valueFormatter: "#.#'%'",
-                valueLineColor: processColor('green'),
-                valueLinePart1Length: 0.5
-              }
-            }}
-            chartDescription={ {
-              text: 'This is Pie chart description',
-              textSize: 15,
-              textColor: processColor('#1f2342'),
-      
-            }}
-
-            legend={{
-              enabled: true,
-              textColor:processColor('#1f2342'),
-              // textSize: ,
-              form: 'NONE',
-      
-              horizontalAlignment: "RIGHT",
-              verticalAlignment: "CENTER",
-              orientation: "VERTICAL",
-              wordWrapEnabled: true
-            }}
-            // highlights={[{x:2}]}
-
-            // extraOffsets={{left: 5, top: 5, right: 5, bottom: 5}}
-
-            entryLabelColor={processColor('green')}
-            entryLabelTextSize={10}
-            entryLabelFontFamily={'HelveticaNeue-Medium'}
-            // drawEntryLabels={true}
-
-            rotationEnabled={true}
-            rotationAngle={0}
-            usePercentValues={true}
-            // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
-            // centerTextRadiusPercent={100}
-            holeRadius={0}
-            holeColor={processColor('#f0f0f0')}
-            transparentCircleRadius={20}
-            transparentCircleColor={processColor('#f0f0f088')}
-            maxAngle={360}
-            onSelect={this.handleSelect.bind(this)}
-            onChange={(event) => console.log(event.nativeEvent)}
-          />
-          </View>
-  :<View/>}
+                  rotationEnabled={true}
+                  rotationAngle={0}
+                  usePercentValues={true}
+                  // styledCenterText={{text:'Pie center text!', color: processColor('pink'), fontFamily: 'HelveticaNeue-Medium', size: 20}}
+                  // centerTextRadiusPercent={100}
+                  holeRadius={0}
+                  holeColor={processColor('#f0f0f0')}
+                  transparentCircleRadius={20}
+                  transparentCircleColor={processColor('#f0f0f088')}
+                  maxAngle={360}
+                  onSelect={this.handleSelect.bind(this)}
+                  onChange={(event) => console.log(event.nativeEvent)}
+                />
+              </View>
+            ) : (
+              <View />
+            )}
           </View>
         </ScrollView>
-        
+
+        <View
+          style={{
+            position: 'absolute',
+            top: Height * 0.93,
+            //marginTop: Height * 0.2,
+            // bottom:-Height*.1,
+            flexDirection: 'row',
+            width: Width,
+            height: Height * 0.07,
+            backgroundColor: '#494b6d',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            style={{
+              marginLeft: Width * 0.15,
+              width: Width * 0.7,
+              height: Height * 0.06,
+              backgroundColor: '#1f2342',
+              borderRadius: ScaleSize(10),
+              borderColor: '#fff',
+              borderWidth: ScaleSize(2),
+            }}
+            onPress={() => {
+              this.props.navigation.navigate('Ordinary');
+            }}>
+            <View style={{alignItems: 'center', height: Height * 0.06}}>
+              <Text style={styles.pingtext}>OVER</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -788,7 +855,7 @@ const styles = StyleSheet.create({
   },
   pingtext: {
     fontSize: SetSpText(60),
-    color: '#1f2342',
+    color: '#fff',
     fontWeight: '700',
   },
   pingwhole: {

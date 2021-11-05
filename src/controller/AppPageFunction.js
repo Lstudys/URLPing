@@ -24,7 +24,6 @@ export const BackAction = function () {
       Toast.message('再按一次暂停Ping');
       return true;
     } else {
-
       if (this.firstpress + 2000 > new Date().valueOf()) {
         this.pressnum = 0;
         this.firstpress = 0;
@@ -44,9 +43,8 @@ export const BackAction = function () {
         return true;
       }
     }
-
   } else {
-    Data.InputUrl='';
+    Data.InputUrl = '';
 
     this.props.navigation.navigate('Ordinary');
     this.setState({
@@ -54,7 +52,6 @@ export const BackAction = function () {
     });
     return true;
   }
-
 };
 
 export const ExitApp = function () {
@@ -63,6 +60,8 @@ export const ExitApp = function () {
     BackHandler.exitApp();
     return false;
   }
+  this.props.navigation.navigate('Ordinary');
+
   this.lastBackPressed = Date.now();
   Toast.message('再按一次退出应用');
   return true; //默认行为
