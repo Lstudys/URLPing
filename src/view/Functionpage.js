@@ -18,7 +18,7 @@ import {LanguageChange} from '../component/LanguageChange';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import KeepAwake from 'react-native-keep-awake';
 import AwesomeAlert from 'react-native-awesome-alerts';
-
+import store from 'react-native-simple-store';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const Colors = [
@@ -34,10 +34,11 @@ class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      Colors: '#1f2342',
       showAlert: false,
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
-      tableHead: ['#', 'MIN', 'P50', 'AVG', 'P95', 'MAX','STD', 'ERR'],
+      tableHead: ['#', 'MIN', 'P50', 'AVG', 'P95', 'MAX', 'STD', 'ERR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -89,7 +90,12 @@ class Ping extends Component {
       urlsWitch: true, //刷新页面
     };
     urlCollection = ['', '', '', '', ''];
-
+    store.get(Data.ThemeColor).then((v, r) => {
+      if (v == null) this.setState({Colors: '#1f2342'});
+      else {
+        this.setState({Colors: v});
+      }
+    });
     LanguageChange.bind(this)();
 
     this.setState({refresh: !this.state.refresh});
@@ -297,7 +303,7 @@ class Ping extends Component {
         axisLineColor: gridColor,
         drawLabels: true,
         position: 'BOTTOM',
-        drawGridLines: true,
+        drawGridLines: false,
         gridColor: processColor('#1f2342'),
         gridLineWidth: false,
       },
@@ -349,7 +355,6 @@ class Ping extends Component {
         this.maxTime,
         Math.round(this.std1),
 
-        
         this.error1,
       ],
       [
@@ -462,7 +467,7 @@ class Ping extends Component {
           titleStyle={{
             fontSize: ScaleSize(40),
             fontWeight: '700',
-            color: '#494b6d',
+            color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
           }}
           animatedValue={0.9}
           closeOnTouchOutside={false}
@@ -472,13 +477,15 @@ class Ping extends Component {
           cancelText="Cancel"
           confirmText="Confirm"
           cancelButtonStyle={{
-            backgroundColor: '#494b6d',
+            backgroundColor:
+              this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
           }}
           confirmButtonStyle={{
-            backgroundColor: '#494b6d',
+            backgroundColor:
+              this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
@@ -499,7 +506,11 @@ class Ping extends Component {
             this.hideAlert();
           }}
         />
-        <View style={styles.bottomStyle}>
+        <View
+          style={{
+            height: Height * 1.2,
+            backgroundColor: this.state.Colors,
+          }}>
           <View
             style={{
               // backgroundColor:"blue",
@@ -519,7 +530,6 @@ class Ping extends Component {
               ms
             </Text>
           </View>
-        
 
           <ScrollView style={{marginLeft: Width * 0.05}}>
             <LineChart
@@ -656,7 +666,10 @@ class Ping extends Component {
                 <Row
                   data={state.tableHead}
                   flexArr={[1, 1, 1]}
-                  style={styles.head}
+                  style={{
+                    height: ScaleSize(26),
+                    backgroundColor: this.state.Colors,
+                  }}
                   textStyle={styles.textHead}
                 />
               </Table>
@@ -717,7 +730,8 @@ class Ping extends Component {
               flexDirection: 'row',
               width: Width,
               height: Height * 0.07,
-              backgroundColor: '#494b6d',
+              backgroundColor:
+                this.state.Colors == '#1f2342' ? '#1f2342' : '#4588AA',
               alignItems: 'center',
             }}>
             {/* <TouchableOpacity
@@ -744,48 +758,85 @@ class Ping extends Component {
                 marginLeft: Width * 0.15,
                 width: Width * 0.7,
                 height: Height * 0.06,
-                backgroundColor: '#1f2342',
+                backgroundColor:
+                  this.state.Colors == '#4588AA' ? '#336699' : '#2C1F42',
                 borderRadius: ScaleSize(10),
                 borderColor: '#fff',
                 borderWidth: ScaleSize(2),
               }}
               onPress={() => {
-                Data.compare_data=[];
-                Data.Piedata=[];
+                Data.compare_data = [];
+                Data.Piedata = [];
                 Data.config = this.config;
-                if(Data.pingurl.length>0){
-                  Data.compare_data.push([this.minTime,this.avgTime,this.n95,this.maxTime]);
-                  Data.Piedata.push([this.error1/Data.config.xAxis.valueFormatter.length,1-this.error1/Data.config.xAxis.valueFormatter.length]);
+                if (Data.pingurl.length > 0) {
+                  Data.compare_data.push([
+                    this.minTime,
+                    this.avgTime,
+                    this.n95,
+                    this.maxTime,
+                  ]);
+                  Data.Piedata.push([
+                    this.error1 / Data.config.xAxis.valueFormatter.length,
+                    1 - this.error1 / Data.config.xAxis.valueFormatter.length,
+                  ]);
                   console.log(Data.Piedata);
                 }
-                if(Data.pingurl.length==1){
-                  Data.compare_data.push([0,0,0,0]);
+                if (Data.pingurl.length == 1) {
+                  Data.compare_data.push([0, 0, 0, 0]);
                 }
-                if(Data.pingurl.length>1){
-                  Data.compare_data.push([this.minTime2,this.avgTime2,this.n952,this.maxTime2]);
-                  Data.Piedata.push([this.error2/Data.config.xAxis.valueFormatter.length,1-this.error2/Data.config.xAxis.valueFormatter.length]);
-
+                if (Data.pingurl.length > 1) {
+                  Data.compare_data.push([
+                    this.minTime2,
+                    this.avgTime2,
+                    this.n952,
+                    this.maxTime2,
+                  ]);
+                  Data.Piedata.push([
+                    this.error2 / Data.config.xAxis.valueFormatter.length,
+                    1 - this.error2 / Data.config.xAxis.valueFormatter.length,
+                  ]);
                 }
-                if(Data.pingurl.length>2){
-                  Data.compare_data.push([this.minTime3,this.avgTime3,this.n953,this.maxTime3]);
-                  Data.Piedata.push([this.error3/Data.config.xAxis.valueFormatter.length,1-this.error3/Data.config.xAxis.valueFormatter.length]);
-
+                if (Data.pingurl.length > 2) {
+                  Data.compare_data.push([
+                    this.minTime3,
+                    this.avgTime3,
+                    this.n953,
+                    this.maxTime3,
+                  ]);
+                  Data.Piedata.push([
+                    this.error3 / Data.config.xAxis.valueFormatter.length,
+                    1 - this.error3 / Data.config.xAxis.valueFormatter.length,
+                  ]);
                 }
-                if(Data.pingurl.length>3){
-                  Data.compare_data.push([this.minTime4,this.avgTime4,this.n954,this.maxTime4]);
-                  Data.Piedata.push([this.error4/Data.config.xAxis.valueFormatter.length,1-this.error4/Data.config.xAxis.valueFormatter.length]);
-
+                if (Data.pingurl.length > 3) {
+                  Data.compare_data.push([
+                    this.minTime4,
+                    this.avgTime4,
+                    this.n954,
+                    this.maxTime4,
+                  ]);
+                  Data.Piedata.push([
+                    this.error4 / Data.config.xAxis.valueFormatter.length,
+                    1 - this.error4 / Data.config.xAxis.valueFormatter.length,
+                  ]);
                 }
-                if(Data.pingurl.length>4){
-                  Data.compare_data.push([this.minTime5,this.avgTime5,this.n955,this.maxTime5]);
-                  Data.Piedata.push([this.error5/Data.config.xAxis.valueFormatter.length,1-this.error5/Data.config.xAxis.valueFormatter.length]);
-
+                if (Data.pingurl.length > 4) {
+                  Data.compare_data.push([
+                    this.minTime5,
+                    this.avgTime5,
+                    this.n955,
+                    this.maxTime5,
+                  ]);
+                  Data.Piedata.push([
+                    this.error5 / Data.config.xAxis.valueFormatter.length,
+                    1 - this.error5 / Data.config.xAxis.valueFormatter.length,
+                  ]);
                 }
                 console.log(Data.Piedata);
 
-                console.log("展示 ："+Data.compare_data);
-                Data.urlCollection=urlCollection
-                
+                console.log('展示 ：' + Data.compare_data);
+                Data.urlCollection = urlCollection;
+
                 this.setState(() => ({
                   isPing: false,
                 }));
@@ -814,17 +865,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     lineHeight: Height * 0.04,
   },
-  bottomStyle: {
-    height: Height * 1.2,
-    backgroundColor: '#1f2342',
-  },
   table: {
     marginTop: ScaleSize(20),
     flex: 1,
     width: Width * 0.9,
     marginLeft: Width * 0.05,
   },
-  head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
   row: {height: ScaleSize(26), flexDirection: 'row'},
   cell1: {width: Width * 0.1122, backgroundColor: 'red'},

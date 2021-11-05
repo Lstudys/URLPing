@@ -20,5 +20,6 @@ const Data = {
   urlCollection: [],
   compare_data: [],
   Piedata: [],
+  ThemeColor: '#1f2342',
 };
 export default Data;

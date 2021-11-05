@@ -30,5 +30,6 @@ export default {
     versionupdatetime: '版本更新时间',
     iftherearebugsduringuse: '使用过程中，如果出现bugs',
     pleasecontact: '请联系',
-    version:"版本号：1.1.0"
+    version:"版本号：1.1.0",
+    Theme:"主题颜色",
 };
