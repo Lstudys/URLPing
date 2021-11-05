@@ -17,7 +17,7 @@ import {LanguageChange} from '../component/LanguageChange';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import KeepAwake from 'react-native-keep-awake';
 import AwesomeAlert from 'react-native-awesome-alerts';
-
+import store from 'react-native-simple-store';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const Colors = [
@@ -27,12 +27,14 @@ const Colors = [
   processColor('#f67e1e'),
   processColor('purple'),
 ];
+var Color;
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
 const gridColor = processColor('#fff'); //网格线的颜色
 class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      Colors:Color,
       showAlert: false,
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
@@ -88,7 +90,7 @@ class Ping extends Component {
       urlsWitch: true, //刷新页面
     };
     urlCollection = ['', '', '', '', ''];
-
+store.get(Data.ThemeColor).then((v,r)=>{this.setState({Colors:v})})
     LanguageChange.bind(this)();
 
     this.setState({refresh: !this.state.refresh});
@@ -441,7 +443,7 @@ class Ping extends Component {
           titleStyle={{
             fontSize: ScaleSize(40),
             fontWeight: '700',
-            color: '#494b6d',
+            color: this.state.Colors=="#4588AA"?"#6BA5C2":"#1f2342",
           }}
           animatedValue={0.9}
           closeOnTouchOutside={false}
@@ -451,13 +453,13 @@ class Ping extends Component {
           cancelText="Cancel"
           confirmText="Confirm"
           cancelButtonStyle={{
-            backgroundColor: '#494b6d',
+            backgroundColor: this.state.Colors=="#4588AA"?"#6BA5C2":"#1f2342",
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
           }}
           confirmButtonStyle={{
-            backgroundColor: '#494b6d',
+            backgroundColor: this.state.Colors=="#4588AA"?"#6BA5C2":"#1f2342",
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
@@ -478,7 +480,10 @@ class Ping extends Component {
             this.hideAlert();
           }}
         />
-        <View style={styles.bottomStyle}>
+        <View style={{
+    height: Height * 1.2,
+    backgroundColor: this.state.Colors,
+  }}>
           <View
             style={{
               // backgroundColor:"blue",
@@ -621,7 +626,7 @@ class Ping extends Component {
                 <Row
                   data={state.tableHead}
                   flexArr={[1, 1, 1]}
-                  style={styles.head}
+                  style={{height: ScaleSize(26), backgroundColor: this.state.Colors}}
                   textStyle={styles.textHead}
                 />
               </Table>
@@ -687,17 +692,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     lineHeight: Height * 0.04,
   },
-  bottomStyle: {
-    height: Height * 1.2,
-    backgroundColor: '#1f2342',
-  },
   table: {
     marginTop: ScaleSize(30),
     flex: 1,
     width: Width,
     // marginLeft: Width * 0.05,
   },
-  head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
   row: {height: ScaleSize(26), flexDirection: 'row'},
   cell1: {width: Width * 0.1425, backgroundColor: 'red'},

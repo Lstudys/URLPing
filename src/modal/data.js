@@ -21,5 +21,7 @@ const Data = {
     IP4:'',
     IP5:'',
     urlData_length:0,
+    errorIndex:[],
+    ThemeColor:"#1f2342",
 };
 export default Data;

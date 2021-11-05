@@ -19,14 +19,15 @@ import store from 'react-native-simple-store';
 import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
-
 class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      Color:Colors,
       history_height: Height * 0.3,
       FlatListIsRefreshing: false,
       isPing: false, //判断是否正在Ping
@@ -38,7 +39,7 @@ class Ordinary extends Component {
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
-
+    store.get(Data.ThemeColor).then((v,r)=>{console.log(v);this.setState({Color:v})});
     Data.InputUrl = '';
     Data.pingurl = [''];
     LanguageChange.bind(this)();
@@ -364,7 +365,6 @@ class Ordinary extends Component {
       </View>
     );
   };
-
   renderitem_history = ({item, index}) => {
     let n = item[0].match(/\n/g) == null ? 1 : item[0].match(/\n/g).length;
     let h = Height * 0.03 * n;
@@ -377,7 +377,7 @@ class Ordinary extends Component {
           width: Width * 0.95,
           marginLeft: Width * 0.025,
           marginTop: ScaleSize(20),
-          backgroundColor: '#494b6d',
+          backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -490,14 +490,14 @@ class Ordinary extends Component {
       return (
         <View
           style={{
-            backgroundColor: '#1f2342',
+            backgroundColor: this.state.Color,
             height: Height,
             position: 'relative',
             flex: 1,
           }}>
           <View
             style={{
-              backgroundColor: '#1f2342',
+              backgroundColor: this.state.Color,
               position: 'absolute',
               bottom: ScaleSize(20),
             }}>
@@ -539,7 +539,7 @@ class Ordinary extends Component {
               <FlatList
                 scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
-                style={styles.urlsArrFlatlist}
+                style={{backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",}}
                 horizontal={true}
                 data={Data.urlsArr}
                 renderItem={this._renderRow}
@@ -733,7 +733,7 @@ class Ordinary extends Component {
                   flexDirection: 'row',
                   width: Width,
                   height: Height * 0.07,
-                  backgroundColor: '#494b6d',
+                  backgroundColor: this.state.Color,
                   alignItems: 'center',
                 }}>
                 <TouchableOpacity
@@ -742,7 +742,7 @@ class Ordinary extends Component {
 
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: '#76779b',
+                    backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -762,7 +762,7 @@ class Ordinary extends Component {
                     marginLeft: Width * 0.02,
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: '#1f2342',
+                    backgroundColor: this.state.Color=="#4588AA"?'#336699':"#2C1F42",
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -822,9 +822,6 @@ const styles = StyleSheet.create({
     marginHorizontal: ScaleSize(5),
     // marginBottom: ScaleSize(10),
     // marginTop: ScaleSize(10),
-  },
-  urlsArrFlatlist: {
-    backgroundColor: '#494b6d',
   },
   add: {
     flexDirection: 'row',

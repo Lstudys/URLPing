@@ -22,4 +22,5 @@ export default {
   iftherearebugsduringuse: 'If there are bugs during use',
   pleasecontact: 'Please Contact',
   version: 'version: 1.0.0',
+  Theme:"ThemeColor",
 };
