@@ -28,14 +28,13 @@ const Colors = [
   processColor('#f67e1e'),
   processColor('purple'),
 ];
-var Color;
 const textColors = ['red', '#2a82e4', 'green', '#f67e1e', 'purple'];
 const gridColor = processColor('#fff'); //网格线的颜色
 class Ping extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Colors:Color,
+      Colors:"#1f2342",
       showAlert: false,
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
@@ -91,7 +90,7 @@ class Ping extends Component {
       urlsWitch: true, //刷新页面
     };
     urlCollection = ['', '', '', '', ''];
-store.get(Data.ThemeColor).then((v,r)=>{this.setState({Colors:v})})
+store.get(Data.ThemeColor).then((v,r)=>{if(v==null) this.setState({Colors:"#1f2342"});else{this.setState({Colors:v})}})
     LanguageChange.bind(this)();
 
     this.setState({refresh: !this.state.refresh});
@@ -299,7 +298,7 @@ store.get(Data.ThemeColor).then((v,r)=>{this.setState({Colors:v})})
         axisLineColor: gridColor,
         drawLabels: true,
         position: 'BOTTOM',
-        drawGridLines: true,
+        drawGridLines: false,
         gridColor: processColor('#1f2342'),
         gridLineWidth: false,
       },
@@ -722,7 +721,7 @@ store.get(Data.ThemeColor).then((v,r)=>{this.setState({Colors:v})})
               flexDirection: 'row',
               width: Width,
               height: Height * 0.07,
-              backgroundColor: '#494b6d',
+              backgroundColor: this.state.Colors=="#1f2342"?"#1f2342":"#4588AA",
               alignItems: 'center',
             }}>
             {/* <TouchableOpacity
@@ -749,7 +748,7 @@ store.get(Data.ThemeColor).then((v,r)=>{this.setState({Colors:v})})
                 marginLeft: Width * 0.15,
                 width: Width * 0.7,
                 height: Height * 0.06,
-                backgroundColor: '#1f2342',
+                backgroundColor: this.state.Colors=="#4588AA"?'#336699':"#2C1F42",
                 borderRadius: ScaleSize(10),
                 borderColor: '#fff',
                 borderWidth: ScaleSize(2),

@@ -35,7 +35,7 @@ class Summarize extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     
+      Color:"#1f2342",
       urlCollection: Data.urlCollection,
       config: Data.config,
       showAlert: false,
@@ -63,6 +63,7 @@ class Summarize extends Component {
   identify = true;
 
   componentDidMount() {
+    store.get(Data.ThemeColor).then((v,r)=>{if(v==null) this.setState({Color:"#1f2342"});else{this.setState({Color:v})}})
     Data.InputUrl = '';
     // Data.pingurl = [];
   }
@@ -151,7 +152,7 @@ let config_Pie=this.Pie_next(Data.pingurl,dataSets2)
     let month = date.getMonth() + 1;
     let day = date.getDate();
     return (
-      <View style={{backgroundColor: '#1f2342'}}>
+      <View style={{backgroundColor: this.state.Color}}>
         <ScrollView style={{}}>
           <View
             style={{
@@ -367,7 +368,7 @@ let config_Pie=this.Pie_next(Data.pingurl,dataSets2)
               }}
               xAxis={{
                 // valueFormatter: "none",
-                textColor: processColor('#1f2342'),
+                textColor: processColor(this.state.Color),
                 granularityEnabled: true,
                 granularity:
                   Data.pingurl.length == 3

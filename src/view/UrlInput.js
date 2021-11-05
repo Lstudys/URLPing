@@ -24,7 +24,7 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Color:Colors,
+      Color:"#1f2342",
       editable: false,
       history_height: Height * 0.3,
       FlatListIsRefreshing: false,
@@ -37,7 +37,6 @@ class Ordinary extends Component {
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
-    store.get(Data.ThemeColor).then((v,r)=>{console.log(v);this.setState({Color:v})});
     Data.InputUrl = '';
     Data.pingurl = [''];
     LanguageChange.bind(this)();
@@ -52,6 +51,7 @@ class Ordinary extends Component {
   identify = true;
 
   componentWillMount() {
+    store.get(Data.ThemeColor).then((v,r)=>{if(v==null) this.setState({Color:"#1f2342"}); else{console.log(v);this.setState({Color:v})}});
     // Data.errorIndex=[]
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
