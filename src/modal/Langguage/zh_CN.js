@@ -18,7 +18,7 @@ export default {
     maxfiveurl:'一次最多ping5个网址',
     selectinputbox:'请先选择输入框',
     Over:"完成",
-    reject_Test:"存在网址未包含https或者http协议，请仔细核验",
+    reject_Test:"请仔细核验网址",
     home: '主页',
     about:'关于我们',
     setting: '设置',
@@ -30,6 +30,6 @@ export default {
     versionupdatetime: '版本更新时间',
     iftherearebugsduringuse: '使用过程中，如果出现bugs',
     pleasecontact: '请联系',
-    version:"版本号：1.0.0",
+    version:"版本号：1.1.0",
     Theme:"主题颜色",
 };

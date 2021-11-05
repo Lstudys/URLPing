@@ -7817,7 +7817,7 @@
 
 "react-native-cli@^2.0.1":
   "integrity" "sha1-8s08eqG4OCjN+6Yw4t/YF992bVQ="
-  "resolved" "https://registry.npmjs.org/react-native-cli/-/react-native-cli-2.0.1.tgz"
+  "resolved" "https://registry.npmmirror.com/react-native-cli/download/react-native-cli-2.0.1.tgz"
   "version" "2.0.1"
   dependencies:
     "chalk" "^1.1.1"
