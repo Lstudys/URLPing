@@ -37,7 +37,7 @@ class Ping extends Component {
       showAlert: false,
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
-      tableHead: ['#', 'MIN', 'P50', 'AVG', 'P95', 'MAX', 'ERR'],
+      tableHead: ['#', 'MIN', 'P50', 'AVG', 'P95', 'MAX','STD', 'ERR'],
       refresh: false,
       chartHeight: 0,
       reqTime: 5, // 控制请求发送持续时间的state
@@ -78,7 +78,7 @@ class Ping extends Component {
         wordWrapEnabled: true,
         enabled: true,
         // xEntrySpace:true,
-        form: 'CIRCLE',
+        form: 'NONE',
       },
       secondDataHeight: 120, // 第二个图表数据style属性的bottom值
 
@@ -163,7 +163,11 @@ class Ping extends Component {
   status1 = '';
   sumReqTime = []; // 所有请求时间的数组，用来计算标准差
   error1 = 0;
-
+  std1 = 0;
+  std2 = 0;
+  std3 = 0;
+  std4 = 0;
+  std5 = 0;
   /**
    * 下面是第二个图表的数据
    */
@@ -315,7 +319,7 @@ class Ping extends Component {
 
     //当前数据小于等于本列全部数据时就返回true，否则返回false。
     for (i = 0; i < tableDataArr.length; i++) {
-      if (cellIndex != 6) {
+      if (cellIndex != 7) {
         if (
           currentValue > tableDataArr[i][cellIndex] &&
           tableDataArr[i][cellIndex] != 0
@@ -343,7 +347,9 @@ class Ping extends Component {
         Math.round(this.avgTime),
         Math.round(this.n95),
         this.maxTime,
+        Math.round(this.std1),
 
+        
         this.error1,
       ],
       [
@@ -354,6 +360,7 @@ class Ping extends Component {
         Math.round(this.avgTime2),
         Math.round(this.n952),
         this.maxTime2,
+        Math.round(this.std2),
 
         this.error2,
       ],
@@ -364,6 +371,7 @@ class Ping extends Component {
         Math.round(this.avgTime3),
         Math.round(this.n953),
         this.maxTime3,
+        Math.round(this.std3),
 
         this.error3,
       ],
@@ -374,6 +382,7 @@ class Ping extends Component {
         Math.round(this.avgTime4),
         Math.round(this.n954),
         this.maxTime4,
+        Math.round(this.std4),
 
         this.error4,
       ],
@@ -384,6 +393,7 @@ class Ping extends Component {
         Math.round(this.avgTime5),
         Math.round(this.n955),
         this.maxTime5,
+        Math.round(this.std5),
 
         this.error5,
       ],
@@ -509,24 +519,7 @@ class Ping extends Component {
               ms
             </Text>
           </View>
-          <View
-            style={{
-              // backgroundColor:"blue",
-              // width:10,
-              flexDirection: 'column',
-              top: Height * 0.42,
-              right: Width * 0.2, // transform: [{rotate:'-90deg'}],
-              position: 'absolute',
-              // backgroundColor: '#1f2342',
-            }}>
-            <Text
-              style={{
-                color: '#fff',
-                // width:ScaleSize(20)
-              }}>
-              ( time )
-            </Text>
-          </View>
+        
 
           <ScrollView style={{marginLeft: Width * 0.05}}>
             <LineChart
@@ -757,6 +750,24 @@ class Ping extends Component {
                 borderWidth: ScaleSize(2),
               }}
               onPress={() => {
+                Data.compare_data=[];
+                if(Data.pingurl.length>0){
+                  Data.compare_data.push([this.minTime,this.avgTime,this.n95,this.maxTime]);
+                }
+                if(Data.pingurl.length>1){
+                  Data.compare_data.push([this.minTime2,this.avgTime2,this.n952,this.maxTime2]);
+                }
+                if(Data.pingurl.length>2){
+                  Data.compare_data.push([this.minTime3,this.avgTime3,this.n953,this.maxTime3]);
+                }
+                if(Data.pingurl.length>3){
+                  Data.compare_data.push([this.minTime4,this.avgTime4,this.n954,this.maxTime4]);
+                }
+                if(Data.pingurl.length>4){
+                  Data.compare_data.push([this.minTime5,this.avgTime5,this.n955,this.maxTime5]);
+                }
+                console.log("展示 ："+Data.compare_data);
+                Data.urlCollection=urlCollection
                 Data.config = this.config;
                 this.setState(() => ({
                   isPing: false,
@@ -799,13 +810,13 @@ const styles = StyleSheet.create({
   head: {height: ScaleSize(26), backgroundColor: '#1f2342'},
   wrapper: {flexDirection: 'row'},
   row: {height: ScaleSize(26), flexDirection: 'row'},
-  cell1: {width: Width * 0.1282, backgroundColor: 'red'},
-  cell2: {width: Width * 0.1282, backgroundColor: '#2a82e4'},
-  cell3: {width: Width * 0.1282, backgroundColor: 'green'},
-  cell4: {width: Width * 0.1282, backgroundColor: '#f67e1e'},
-  cell5: {width: Width * 0.1282, backgroundColor: 'purple'},
+  cell1: {width: Width * 0.1122, backgroundColor: 'red'},
+  cell2: {width: Width * 0.1122, backgroundColor: '#2a82e4'},
+  cell3: {width: Width * 0.1122, backgroundColor: 'green'},
+  cell4: {width: Width * 0.1122, backgroundColor: '#f67e1e'},
+  cell5: {width: Width * 0.1122, backgroundColor: 'purple'},
 
-  cellHighLight: {width: Width * 0.1282, backgroundColor: '#fff', opacity: 0.8},
+  cellHighLight: {width: Width * 0.1122, backgroundColor: '#fff', opacity: 0.8},
   textHead: {
     textAlign: 'center',
     color: '#fff',

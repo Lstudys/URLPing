@@ -20,7 +20,13 @@ import {BackHandler, Platform} from 'react-native';
 import {ExitApp, BackAction} from '../controller/AppPageFunction';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {ReloadInstructions} from 'react-native/Libraries/NewAppScreen';
-
+const Colors = [
+  processColor('red'),
+  processColor('#2a82e4'),
+  processColor('green'),
+  processColor('#f67e1e'),
+  processColor('purple'),
+];
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const gridColor = processColor('#fff'); //网格线的颜色
@@ -29,6 +35,7 @@ class Summarize extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      urlCollection: Data.urlCollection,
       config: Data.config,
       showAlert: false,
       FlatListIsRefreshing: false,
@@ -56,30 +63,40 @@ class Summarize extends Component {
 
   componentDidMount() {
     Data.InputUrl = '';
-    Data.pingurl = [];
+    // Data.pingurl = [];
 
-    store.get('history').then((res) => {
-      if (res != null) {
-        Data.historyPing = res;
-        this.setState({refresh: !this.state.refresh});
+  }
+
+ 
+  next(urlCollection, dataSets,colortempArr) {
+    for (let i = 0; i < urlCollection.length; i++) {
+      if (urlCollection[i] != '') {
+        dataSets.push({
+          values: Data.compare_data[i],
+          // label: 'Company A',
+          config: {
+            drawValues: false,
+            colors: [Colors[colortempArr[i]]],
+          },
+        });
       }
-    });
-    //使安卓手机物理返回键生效
-    if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
     }
-    if (this.state.isAbout) {
-      this.props.navigation.navigate('About');
-    }
+    return {
+      data: {
+        dataSets,
+      },
+    };
   }
-
-  componentWillUnmount() {
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind(this));
-    }
-  }
-
   render() {
+    var dataSets = [];
+    const colortempArr = [0, 1, 2, 3, 4];
+
+    let config_bar = this.next(this.state.urlCollection, dataSets,colortempArr);
+
+    var date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
     return (
       <View style={{backgroundColor: '#1f2342', height: Height * 1.2}}>
         <ScrollView>
@@ -110,7 +127,7 @@ class Summarize extends Component {
             <View
               style={{
                 marginTop: -Height * 0.066,
-                marginLeft: Width * 0.3,
+                marginLeft: Width * 0.28,
                 //   backgroundColor:"pink"
               }}>
               <Text
@@ -118,7 +135,7 @@ class Summarize extends Component {
                   color: '#fff',
                   fontSize: ScaleSize(22),
                 }}>
-                2021/11/4 17:45
+                {`${year}/${month}/${day}/${this.state.config.xAxis.valueFormatter[0]}`}
               </Text>
             </View>
           </View>
@@ -284,8 +301,26 @@ class Summarize extends Component {
               width={Width * 0.92}
               height={Width * 0.6}
               bottom={0}
-              data={this.state.config.data}
-              xAxis={this.state.config.xAxis}
+              data={{
+                dataSets: config_bar.data.dataSets,
+                config: {
+                  barWidth: 0.2,
+                  group: {
+                    fromX: 0,
+                    groupSpace: 0.1,
+                    barSpace: 0.1,
+                  },
+                },
+              }}
+              xAxis={{
+                valueFormatter: ['MIN', 'AVG', 'N95', 'MAX'],
+                textColor: processColor('#fff'),
+                granularityEnabled: true,
+                granularity: 1.1,
+                axisMaximum: Data.pingurl.length==1?3:Data.pingurl.length==2?4:Data.pingurl.length==3?4:Data.pingurl.length==4?6:20,
+                axisMinimum: 0,
+                // centerAxisLabels: true,
+              }}
               yAxis={{
                 left: {
                   axisLineWidth: 1.5,
@@ -306,20 +341,20 @@ class Summarize extends Component {
                   gridColor: gridColor,
                 },
               }}
-              zoom={{scaleX: 1, scaleY: 1, xValue: 2}}
+              zoom={{scaleX: 1, scaleY: 1, xValue: 1}}
               scaleYEnabled={true}
               scaleXEnabled={true}
               doubleTapToZoomEnabled={true}
               dragDecelerationFrictionCoef={0.99}
               marker={{
                 enabled: true,
-                backgroundTint: processColor('#fff'),
-                markerColor: processColor('#fff'),
-                textColor: processColor('red'),
+                markerColor: processColor('#F0C0FF8C'),
+                textColor: processColor('white'),
+                markerFontSize: 14,
               }}
               legend={{
                 textColor: gridColor,
-                wordWrapEnabled: true,
+                // wordWrapEnabled: true,
                 enabled: true,
                 // xEntrySpace:true,
                 form: 'NONE',
@@ -332,7 +367,7 @@ class Summarize extends Component {
             <PieChart
               width={Width * 0.92}
               height={Width * 0.6}
-              backgroundColor={'red'}
+              backgroundColor={'blue'}
             />
           </View>
         </ScrollView>

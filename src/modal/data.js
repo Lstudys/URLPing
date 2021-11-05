@@ -16,5 +16,8 @@ const Data = {
   emptyIndex: [],
   url_suffix: '.com.cn.net.edu.mil.org.gov.int',
   config: {},
+  datatime:0,
+  urlCollection:[],
+  compare_data:[],
 };
 export default Data;

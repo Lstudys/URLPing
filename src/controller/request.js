@@ -1,5 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import {Toast} from 'teaset';
+import Data from '../modal/data';
 const TABLE_INITIAL_VALUE = 0;
 const TIMER_PERIOD = 1000;
 const SEND_REQUEST_STATUS = 1;
@@ -66,6 +67,12 @@ export const SendRequest = function () {
     this.n953 = '';
     this.n954 = '';
     this.n955 = '';
+
+    this.std1 = 0;
+    this.std2 = 0;
+    this.std3 = 0;
+    this.std4 = 0;
+    this.std5 = 0;
 
     const reqTime = this.state.reqTime; // 获取发送请求的持续时间
     const beginTime = new Date().valueOf(); // 点击PING后获取当前时间（分钟），用来控制循环
@@ -151,7 +158,8 @@ export const SendRequest = function () {
     }
 
     let xtimeall = hourall + ':' + minuteall + ':' + secondall;
-
+    Data.datatime=xtimeall
+    console.log("变了没："+Data.datatime);
     this.setState({
       urlDatafirst: [],
       urlDatasecond: [],
@@ -454,6 +462,7 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x5 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+              this.std5=num2;
               if (x5 - 1 > 3) this.outData[4] = this.avgTime5 + 2.5 * num2;
               this.state.p95_arr5.sort(function (a, b) {
                 return a - b;
@@ -566,6 +575,7 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x4 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+              this.std4=num2;
               if (x4 - 1 > 3) this.outData[3] = this.avgTime4 + 2.5 * num2;
               this.state.p95_arr4.sort(function (a, b) {
                 return a - b;
@@ -680,6 +690,7 @@ export const SendRequest = function () {
               let num1 = sum / (x3 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
               if (x3 - 1 > 3) this.outData[2] = this.avgTime3 + 2.5 * num2;
+              this.std3=num2;
               this.state.p95_arr3.sort(function (a, b) {
                 return a - b;
               });
@@ -792,6 +803,8 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x2 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+              this.std2=num2;
+
               if (x2 - 1 > 3) this.outData[1] = this.avgTime2 + 2.5 * num2;
               this.state.p95_arr2.sort(function (a, b) {
                 return a - b;
@@ -909,6 +922,8 @@ export const SendRequest = function () {
                 });
                 let num1 = sum / (x - 1);
                 let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
+                this.std1=num2;
+
                 if (x > 3) this.outData[0] = this.avgTime + 2.5 * num2;
 
                 this.state.p95_arr1.sort(function (a, b) {
