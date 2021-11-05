@@ -17,7 +17,6 @@ import { LanguageChange } from '../component/LanguageChange';
 import { BackHandler, Platform } from 'react-native';
 import { ExitApp, BackAction } from '../controller/AppPageFunction';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { color } from 'react-native-reanimated';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const ThemeColor = ["#1f2342", "#4588AA"]
@@ -31,9 +30,8 @@ class Ordinary extends Component {
 
   constructor(props) {
     super(props);
-    var ThemeColor1;
     this.state = {
-      Color: ThemeColor1,
+      Color: "#1f2342",
       showAlert: false,
       showAlert2: false,
       FlatListIsRefreshing: false,
@@ -46,7 +44,8 @@ class Ordinary extends Component {
       currentIndex: -1,
       isLoading: true,
     };
-    store.get(Data.ThemeColor).then((v, r) => { this.setState({ Color: v }) })
+    //Data.ThemeColor="#1f2342";
+    
     LanguageChange.bind(this)();
 
     store.get(Data.pingIndex).then((res) => {
@@ -90,7 +89,8 @@ class Ordinary extends Component {
     Data.IP5 = '';
     Data.InputUrl = '';
     Data.pingurl = [];
-
+    store.get(Data.ThemeColor).then((v, r) => {if(v==null) this.setState({ Color: "#1f2342"});
+    else this.setState({Color:v}) })
     store.get('history').then((res) => {
       if (res != null) {
         Data.historyPing = res;
