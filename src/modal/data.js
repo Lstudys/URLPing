@@ -19,5 +19,6 @@ const Data = {
   datatime:0,
   urlCollection:[],
   compare_data:[],
+  Piedata:[]
 };
 export default Data;

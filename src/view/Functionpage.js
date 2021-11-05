@@ -157,10 +157,10 @@ class Ping extends Component {
 
   maxTime = 0; // 最大时间
   Median = 0;
-  minTime = ''; // 最小时间
+  minTime = 0; // 最小时间
   avgTime = 0; // 平均时间
-  n95 = ''; // 95%的数据
-  status1 = '';
+  n95 = 0; // 95%的数据
+  status1 = 0;
   sumReqTime = []; // 所有请求时间的数组，用来计算标准差
   error1 = 0;
   std1 = 0;
@@ -174,40 +174,40 @@ class Ping extends Component {
   maxTime2 = 0; // 最大时间
   Median2 = 0;
 
-  minTime2 = ''; // 最小时间
+  minTime2 = 0; // 最小时间
   avgTime2 = 0; // 平均时间
-  n952 = ''; // 95%的数据
-  status2 = '';
+  n952 = 0; // 95%的数据
+  status2 = 0;
   sumReqTime2 = []; // 所有请求时间的数组，用来计算标准差
   error2 = 0;
 
   maxTime3 = 0; // 最大时间
   Median3 = 0;
 
-  minTime3 = ''; // 最小时间
+  minTime3 = 0; // 最小时间
   avgTime3 = 0; // 平均时间
-  n953 = ''; // 95%的数据
-  status3 = '';
+  n953 = 0; // 95%的数据
+  status3 = 0;
   sumReqTime3 = []; // 所有请求时间的数组，用来计算标准差
   error3 = 0;
 
   maxTime4 = 0; // 最大时间
   Median4 = 0;
 
-  minTime4 = ''; // 最小时间
+  minTime4 = 0; // 最小时间
   avgTime4 = 0; // 平均时间
-  n954 = ''; // 95%的数据
-  status4 = '';
+  n954 = 0; // 95%的数据
+  status4 = 0;
   sumReqTime4 = []; // 所有请求时间的数组，用来计算标准差
   error4 = 0;
 
   maxTime5 = 0; // 最大时间
   Median5 = 0;
 
-  minTime5 = ''; // 最小时间
+  minTime5 = 0; // 最小时间
   avgTime5 = 0; // 平均时间
-  n955 = ''; // 95%的数据
-  status5 = '';
+  n955 = 0; // 95%的数据
+  status5 = 0;
   sumReqTime5 = []; // 所有请求时间的数组，用来计算标准差
   error5 = 0;
 
@@ -751,24 +751,41 @@ class Ping extends Component {
               }}
               onPress={() => {
                 Data.compare_data=[];
+                Data.Piedata=[];
+                Data.config = this.config;
                 if(Data.pingurl.length>0){
                   Data.compare_data.push([this.minTime,this.avgTime,this.n95,this.maxTime]);
+                  Data.Piedata.push([this.error1/Data.config.xAxis.valueFormatter.length,1-this.error1/Data.config.xAxis.valueFormatter.length]);
+                  console.log(Data.Piedata);
+                }
+                if(Data.pingurl.length==1){
+                  Data.compare_data.push([0,0,0,0]);
                 }
                 if(Data.pingurl.length>1){
                   Data.compare_data.push([this.minTime2,this.avgTime2,this.n952,this.maxTime2]);
+                  Data.Piedata.push([this.error2/Data.config.xAxis.valueFormatter.length,1-this.error2/Data.config.xAxis.valueFormatter.length]);
+
                 }
                 if(Data.pingurl.length>2){
                   Data.compare_data.push([this.minTime3,this.avgTime3,this.n953,this.maxTime3]);
+                  Data.Piedata.push([this.error3/Data.config.xAxis.valueFormatter.length,1-this.error3/Data.config.xAxis.valueFormatter.length]);
+
                 }
                 if(Data.pingurl.length>3){
                   Data.compare_data.push([this.minTime4,this.avgTime4,this.n954,this.maxTime4]);
+                  Data.Piedata.push([this.error4/Data.config.xAxis.valueFormatter.length,1-this.error4/Data.config.xAxis.valueFormatter.length]);
+
                 }
                 if(Data.pingurl.length>4){
                   Data.compare_data.push([this.minTime5,this.avgTime5,this.n955,this.maxTime5]);
+                  Data.Piedata.push([this.error5/Data.config.xAxis.valueFormatter.length,1-this.error5/Data.config.xAxis.valueFormatter.length]);
+
                 }
+                console.log(Data.Piedata);
+
                 console.log("展示 ："+Data.compare_data);
                 Data.urlCollection=urlCollection
-                Data.config = this.config;
+                
                 this.setState(() => ({
                   isPing: false,
                 }));

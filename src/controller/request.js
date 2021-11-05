@@ -62,11 +62,11 @@ export const SendRequest = function () {
     this.avgTime5 = TABLE_INITIAL_VALUE;
     this.outData = [10000, 10000, 10000, 10000, 10000];
 
-    this.n95 = '';
-    this.n952 = '';
-    this.n953 = '';
-    this.n954 = '';
-    this.n955 = '';
+    this.n95 = 0;
+    this.n952 = 0;
+    this.n953 = 0;
+    this.n954 = 0;
+    this.n955 = 0;
 
     this.std1 = 0;
     this.std2 = 0;
@@ -83,11 +83,11 @@ export const SendRequest = function () {
     var x4 = 1;
     var x5 = 1;
 
-    var nowTime = ''; // 当前时间
-    var nowTime2s = '';
-    var nowTime3s = '';
-    var nowTime4s = '';
-    var nowTime5s = '';
+    var nowTime = 0; // 当前时间
+    var nowTime2s = 0;
+    var nowTime3s = 0;
+    var nowTime4s = 0;
+    var nowTime5s = 0;
 
     const xhr = new XMLHttpRequest(); // 实例化XMLHttpRequest对象
     const xhr2 = new XMLHttpRequest();
@@ -449,7 +449,7 @@ export const SendRequest = function () {
               if (value5.time > this.maxTime5) {
                 this.maxTime5 = value5.time;
               }
-              if (this.minTime5 == '') {
+              if (this.minTime5 == 0) {
                 this.minTime5 = value5.time;
               } else if (this.minTime5 > value5.time) {
                 this.minTime5 = value5.time;
@@ -562,7 +562,7 @@ export const SendRequest = function () {
               if (value4.time > this.maxTime4) {
                 this.maxTime4 = value4.time;
               }
-              if (this.minTime4 == '') {
+              if (this.minTime4 == 0) {
                 this.minTime4 = value4.time;
               } else if (this.minTime4 > value4.time) {
                 this.minTime4 = value4.time;
@@ -676,7 +676,7 @@ export const SendRequest = function () {
               if (value3.time > this.maxTime3) {
                 this.maxTime3 = value3.time;
               }
-              if (this.minTime3 == '') {
+              if (this.minTime3 == 0) {
                 this.minTime3 = value3.time;
               } else if (this.minTime3 > value3.time) {
                 this.minTime3 = value3.time;
@@ -790,7 +790,7 @@ export const SendRequest = function () {
               if (value2.time > this.maxTime2) {
                 this.maxTime2 = value2.time;
               }
-              if (this.minTime2 == '') {
+              if (this.minTime2 == 0) {
                 this.minTime2 = value2.time;
               } else if (this.minTime2 > value2.time) {
                 this.minTime2 = value2.time;
@@ -909,7 +909,7 @@ export const SendRequest = function () {
                 if (value.time > this.maxTime) {
                   this.maxTime = value.time;
                 }
-                if (this.minTime == '') {
+                if (this.minTime == 0) {
                   this.minTime = value.time;
                 } else if (this.minTime > value.time) {
                   this.minTime = value.time;
