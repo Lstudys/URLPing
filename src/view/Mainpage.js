@@ -321,7 +321,7 @@ class Ordinary extends Component {
             show={showAlert}
             showProgress={false}
             title="Graph URL Ping"
-            message="APP version : v1.0.0        Update Time: 2021/10/31"
+            message="APP version : v1.0.0        Update Time: 2021/11/5"
             titleStyle={{
               fontSize: ScaleSize(20),
               fontWeight: '700',
@@ -409,7 +409,7 @@ class Ordinary extends Component {
             showProgress={false}
           />
           <View style={{backgroundColor: this.state.Color}}>
-            <View style={{height: Height, position: 'relative'}}>
+            <View style={{height: Height*1.25, position: 'relative'}}>
               <TouchableOpacity
                 onPress={() => {
                   this._drawer.open();

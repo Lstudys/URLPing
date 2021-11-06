@@ -19,6 +19,7 @@ import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import KeepAwake from 'react-native-keep-awake';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import store from 'react-native-simple-store';
+
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const Colors = [
