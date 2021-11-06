@@ -8,6 +8,7 @@ import {
   processColor,
   BackHandler,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {SendRequest} from '../controller/request';
 import {LineChart} from 'react-native-charts-wrapper';
@@ -463,18 +464,21 @@ class Ping extends Component {
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
-          title="Stop Ping?"
+          title="Make a summary?"
           titleStyle={{
-            fontSize: ScaleSize(40),
+            fontSize: ScaleSize(20),
             fontWeight: '700',
             color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
           }}
           animatedValue={0.9}
-          closeOnTouchOutside={false}
+          closeOnTouchOutside={true}
+          onDismiss={() => {
+            this.setState({showAlert: false});
+          }}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           showConfirmButton={true}
-          cancelText="Cancel"
+          cancelText="Quit"
           confirmText="Confirm"
           cancelButtonStyle={{
             backgroundColor:
@@ -500,10 +504,89 @@ class Ping extends Component {
           }}
           onConfirmPressed={() => {
             this.hideAlert();
-            this.props.navigation.navigate('UrlInput');
+            {
+              Data.compare_data = [];
+              Data.Piedata = [];
+              Data.config = this.config;
+              if (Data.pingurl.length > 0) {
+                Data.compare_data.push([
+                  this.minTime,
+                  this.avgTime,
+                  this.n95,
+                  this.maxTime,
+                ]);
+                Data.Piedata.push([
+                  this.error1 / Data.config.xAxis.valueFormatter.length,
+                  1 - this.error1 / Data.config.xAxis.valueFormatter.length,
+                ]);
+                console.log(Data.Piedata);
+              }
+              if (Data.pingurl.length == 1) {
+                Data.compare_data.push([0, 0, 0, 0]);
+              }
+              if (Data.pingurl.length > 1) {
+                Data.compare_data.push([
+                  this.minTime2,
+                  this.avgTime2,
+                  this.n952,
+                  this.maxTime2,
+                ]);
+                Data.Piedata.push([
+                  this.error2 / Data.config.xAxis.valueFormatter.length,
+                  1 - this.error2 / Data.config.xAxis.valueFormatter.length,
+                ]);
+              }
+              if (Data.pingurl.length > 2) {
+                Data.compare_data.push([
+                  this.minTime3,
+                  this.avgTime3,
+                  this.n953,
+                  this.maxTime3,
+                ]);
+                Data.Piedata.push([
+                  this.error3 / Data.config.xAxis.valueFormatter.length,
+                  1 - this.error3 / Data.config.xAxis.valueFormatter.length,
+                ]);
+              }
+              if (Data.pingurl.length > 3) {
+                Data.compare_data.push([
+                  this.minTime4,
+                  this.avgTime4,
+                  this.n954,
+                  this.maxTime4,
+                ]);
+                Data.Piedata.push([
+                  this.error4 / Data.config.xAxis.valueFormatter.length,
+                  1 - this.error4 / Data.config.xAxis.valueFormatter.length,
+                ]);
+              }
+              if (Data.pingurl.length > 4) {
+                Data.compare_data.push([
+                  this.minTime5,
+                  this.avgTime5,
+                  this.n955,
+                  this.maxTime5,
+                ]);
+                Data.Piedata.push([
+                  this.error5 / Data.config.xAxis.valueFormatter.length,
+                  1 - this.error5 / Data.config.xAxis.valueFormatter.length,
+                ]);
+              }
+              console.log(Data.Piedata);
+
+              console.log('展示 ：' + Data.compare_data);
+              Data.urlCollection = urlCollection;
+
+              this.setState(() => ({
+                isPing: false,
+              }));
+              this.props.navigation.navigate('Summarize');
+              ('Summarize');
+            }
           }}
           onCancelPressed={() => {
             this.hideAlert();
+            this.props.navigation.navigate('UrlInput');
           }}
         />
         <View
@@ -841,6 +924,7 @@ class Ping extends Component {
                   isPing: false,
                 }));
                 this.props.navigation.navigate('Summarize');
+                ('Summarize');
               }}>
               <View style={{alignItems: 'center', height: Height * 0.06}}>
                 <Text style={styles.pingtext}>OVER</Text>
@@ -972,5 +1056,19 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     height: ScaleSize(42),
     justifyContent: 'center',
+  },
+  deleteimage: {
+    height: ScaleSize(20),
+    width: ScaleSize(20),
+    // backgroundColor: 'black',
+    //color: 'red',
+  },
+  delete: {
+    position: 'absolute',
+    right: ScaleSize(10),
+    top: ScaleSize(15),
+    marginRight: ScaleSize(0),
+    marginTop: ScaleSize(-10),
+    // backgroundColor: 'black',
   },
 });

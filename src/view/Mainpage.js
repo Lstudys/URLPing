@@ -340,7 +340,7 @@ class Ordinary extends Component {
             // showConfirmButton={true}
             cancelText="OK"
             onDismiss={() => {
-              this.setState({showAlert: false});
+              this.hideAlert();
             }}
             onCancelPressed={() => {
               this.hideAlert();

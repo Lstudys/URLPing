@@ -801,15 +801,16 @@ class Summarize extends Component {
             flexDirection: 'row',
             width: Width,
             height: Height * 0.07,
-            backgroundColor: '#494b6d',
             alignItems: 'center',
+            backgroundColor: this.state.Color,
           }}>
           <TouchableOpacity
             style={{
-              marginLeft: Width * 0.15,
-              width: Width * 0.7,
+              marginLeft: Width * 0.08,
+              width: Width * 0.4,
               height: Height * 0.06,
-              backgroundColor: '#1f2342',
+              backgroundColor:
+                this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
               borderRadius: ScaleSize(10),
               borderColor: '#fff',
               borderWidth: ScaleSize(2),
@@ -817,8 +818,36 @@ class Summarize extends Component {
             onPress={() => {
               this.props.navigation.navigate('Ordinary');
             }}>
-            <View style={{alignItems: 'center', height: Height * 0.06}}>
-              <Text style={styles.pingtext}>OVER</Text>
+            <View
+              style={{
+                alignItems: 'center',
+                height: Height * 0.06,
+                width: Width * 0.4,
+              }}>
+              <Text style={styles.pingtext}>Quit</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              marginLeft: Width * 0.02,
+              width: Width * 0.4,
+              height: Height * 0.06,
+              backgroundColor:
+                this.state.Color == '#4588AA' ? '#336699' : '#2C1F42',
+              borderRadius: ScaleSize(10),
+              borderColor: '#fff',
+              borderWidth: ScaleSize(2),
+            }}
+            onPress={() => {
+              this.props.navigation.navigate('Ordinary');
+            }}>
+            <View
+              style={{
+                alignItems: 'center',
+                height: Height * 0.06,
+                width: Width * 0.4,
+              }}>
+              <Text style={styles.pingtext}>Export</Text>
             </View>
           </TouchableOpacity>
         </View>
