@@ -128,20 +128,19 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-defaultConfig {
-        multiDexEnabled true
-    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.luckyxmobile.graphurlping"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.1.0"
+        versionName "1.0.0"
     }
     splits {
         abi {
@@ -152,7 +151,12 @@ defaultConfig {
         }
     }
     signingConfigs {
-       
+        // release {
+        //     storeFile file(TEST_RELEASE_STORE_FILE)
+        //     storePassword TEST_RELEASE_STORE_PASSWORD
+        //     keyAlias TEST_RELEASE_KEY_ALIAS
+        //     keyPassword TEST_RELEASE_KEY_PASSWORD
+        // }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -164,7 +168,13 @@ defaultConfig {
         debug {
             signingConfig signingConfigs.debug
         }
-       
+        // release {
+        //     // Caution! In production, you need to generate your own keystore file.
+        //     // see https://reactnative.dev/docs/signed-apk-android.
+        //     signingConfig signingConfigs.release
+        //     minifyEnabled enableProguardInReleaseBuilds
+        //     proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        // }
     }
 
     // applicationVariants are e.g. debug, release
@@ -184,8 +194,9 @@ defaultConfig {
 }
 
 dependencies {
-    compile project(':react-native-keep-awake')
-  implementation 'com.android.support:multidex:2.0.1' //enter the latest multidex version
+      compile project(':@react-native-community_cameraroll')
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
