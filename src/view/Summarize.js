@@ -8,18 +8,21 @@ import {
   StyleSheet,
   processColor,
   ScrollView,
+  Alert,
 } from 'react-native';
-import Drawer from 'react-native-drawer';
+import {Toast} from 'teaset';
+import CameraRoll from "@react-native-community/cameraroll";
+import { captureScreen, captureRef } from 'react-native-view-shot';
+import ViewShot from "react-native-view-shot";
+import RNFS from 'react-native-fs';
+import RNFetchBlob from 'rn-fetch-blob';
 import {LineChart, BarChart, PieChart} from 'react-native-charts-wrapper';
-import {SetSpText, ScaleSize, ScaleSizeH} from '../controller/Adaptation';
+import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
-import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
 import {BackHandler, Platform} from 'react-native';
-import {ExitApp, BackAction} from '../controller/AppPageFunction';
-import AwesomeAlert from 'react-native-awesome-alerts';
-import {ReloadInstructions} from 'react-native/Libraries/NewAppScreen';
+import { BackAction} from '../controller/AppPageFunction';
 const Colors = [
   processColor('red'),
   processColor('#2a82e4'),
@@ -30,10 +33,50 @@ const Colors = [
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const gridColor = processColor('#fff'); //网格线的颜色
+const dirs = RNFS.ExternalDirectoryPath; // 外部文件，共享目录的绝对路径（仅限android）
+// var RNFS = require('react-native-fs');
+var uploadUrl = 'http://example.com/'; 
+var files = [
+  {
+    name: 'test1',
+    filename: 'test1.w4a',
+    filepath: RNFS.DocumentDirectoryPath + '/test1.w4a',
+    filetype: 'audio/x-m4a'
+  }, {
+    name: 'test2',
+    filename: 'test2.w4a',
+    filepath: RNFS.DocumentDirectoryPath + '/test2.w4a',
+    filetype: 'audio/x-m4a'
+  }
+];
+var uploadBegin = (response) => {
+  var jobId = response.jobId;
+  console.log('UPLOAD HAS BEGUN! JobId: ' + jobId);
+};
+
+var uploadProgress = (response) => {
+  var percentage = Math.floor((response.totalBytesSent/response.totalBytesExpectedToSend) * 100);
+  console.log('UPLOAD IS ' + percentage + '% DONE!');
+};
+// require the module
+// var RNFS = require('react-native-fs');
+
+// create a path you want to write to
+// :warning: on iOS, you cannot write into `RNFS.MainBundlePath`,
+// but `RNFS.DocumentDirectoryPath` exists on both platforms and is writable
+var path = RNFS.DocumentDirectoryPath + '/test.txt';
+
+// write the file
+
+
 
 class Summarize extends Component {
+
+ 
   constructor(props) {
     super(props);
+   
+    this.mainViewRef = React.createRef();
     this.state = {
       Color: '#1f2342',
       urlCollection: Data.urlCollection,
@@ -59,9 +102,35 @@ class Summarize extends Component {
       }
     });
     console.log('传过来了吗？ ', Data.config);
-  }
+    console.log(path);
+    RNFS.uploadFiles({
+      toUrl: uploadUrl,
+      files: files,
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
+      fields: {
+        'hello': 'world',
+      },
+      begin: uploadBegin,
+      progress: uploadProgress
+    }).promise.then((response) => {
+        if (response.statusCode == 200) {
+          console.log('FILES UPLOADED!'); // response.statusCode, response.headers, response.body
+        } else {
+          console.log('SERVER ERROR');
+        }
+      })
+      .catch((err) => {
+        if(err.description === "cancelled") {
+          // cancelled by user
+        }
+        console.log(err);
+      });
+      }
   identify = true;
-
+  
   componentDidMount() {
     store.get(Data.ThemeColor).then((v, r) => {
       if (v == null) this.setState({Color: '#1f2342'});
@@ -73,13 +142,13 @@ class Summarize extends Component {
 
     //使安卓手机物理返回键生效
     if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', ExitApp.bind(this));
+      BackHandler.addEventListener('hardwareBackPress', BackAction.bind(this));
     }
   }
 
   componentWillUnmount() {
     if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress', ExitApp.bind(this));
+      BackHandler.removeEventListener('hardwareBackPress', BackAction.bind(this));
     }
   }
 
@@ -150,8 +219,97 @@ class Summarize extends Component {
     // }
     // console.log(event.nativeEvent)
   }
+  async shareScreenShot() {
+    const { makingImage } = this.state;
+    if (makingImage) return;
 
+    this.setState({ makingImage: true }, async () => {
+      try {
+        const captureConfig = {
+          format: 'png',
+          quality: 0.7,
+          // result: Platform.OS==='ios'? 'data-uri':'base64',
+          // result: 'tmpfile',
+          result: 'base64',
+          width: 750,
+        };
+        let imgBase64 = '';
+        try {
+          imgBase64 = await captureScreen(captureConfig);
+        } catch (e) {
+          try {
+            imgBase64 = await captureRef(this.mainViewRef.current, captureConfig);
+          } catch (ex) {
+            throw ex;
+          }
+        }
+        this.imgBase64 = imgBase64;
+        this.setState({ showTitle: true });
+        const screenShotShowImg = `data:image/png;base64,${this.imgBase64}`;
+        //FIXME screenShotShowImg可直接在Image中展示
+        // console.log('this.screenShotShowImg====', this.screenShotShowImg);
+        this.saveImage(screenShotShowImg);
+      } catch (e) {
+        // ${e.toString()}`
+        Alert.alert(`Screenshot failed, please try again later`);
+        console.log(e);
+      } finally {
+        this.setState({ makingImage: false });
+      }
+    });
+  }
+  async saveImage(screenShotShowImg) {
+    Toast.message('Picture saving...');
+    // if (IS_IOS) {
+    //   CameraRoll.saveToCameraRoll(screenShotShowImg).then((result) => {
+    //     Toast.message(`保存成功！地址如下：\n${result}`);
+    //   }).catch((error) => {
+    //     Toast.message(`保存失败！\n${error}`);
+    //   });
+    // } else {
+    //调用该方法是 对 截屏的图片进行拼接，仅限Android端拼接，IOS的我不会，切此处的base64Img是未进行拼接‘data:image/png;base64’字段的base64图片格式
+    // await NativeModules.UtilsModule.contactImage(base64Img).then((newImg) => {
+    //   // console.log('path====', newImg);
+    //   const screenShotShowImg = `data:image/png;base64,${newImg}`;
+    
+    // }, (ex) => {
+    //   console.log('ex====', ex);
+    // });
+      //不经过拼接直接保存到相册
+      // 地址如下：\n${result}
+      this.saveForAndroid(screenShotShowImg, (result) => {
+        Toast.message(`Save success！`);
+      }, () => {
+        Toast.message('Save failed！');
+      });
+    
+    
+  }
+
+saveForAndroid(base64Img, success, fail) {
+  console.log("这是什么外部路径？",dirs);
+  const downloadDest = `${dirs}/${((Math.random() * 10000000) || 0)}.png`;
+  const imageDatas = base64Img.split('data:image/png;base64,');
+  const imageData = imageDatas[1];
+  RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then((result) => {
+    console.log('result=====', result);
+    try {
+      CameraRoll.saveToCameraRoll(downloadDest).then((e1) => {
+        console.log('success', e1);
+        success && success(e1);
+      }).catch((e2) => {
+        console.log('failed', e2);
+        Alert.alert('App has no storage permission, please go to Settings to enable.');
+      });
+    } catch (e3) {
+      console.log('catch', e3);
+      fail && fail();
+    }
+  });
+}
+ 
   render() {
+
     var dataSets = [];
     var dataSets2 = [];
     const colortempArr = [0, 1, 2, 3, 4];
@@ -164,8 +322,11 @@ class Summarize extends Component {
     let month = date.getMonth() + 1;
     let day = date.getDate();
     return (
-      <View style={{backgroundColor: this.state.Color}}>
-        <ScrollView style={{}}>
+      <View style={{} } ref={this.mainViewRef}>
+
+        <ScrollView style={{backgroundColor: this.state.Color}} >
+        <ViewShot onCapture={this.onCapture} captureMode="mount">
+
           <View
             style={{
               height: Height * 0.08,
@@ -428,8 +589,8 @@ class Summarize extends Component {
                 },
               }}
               zoom={{scaleX: 1, scaleY: 1, xValue: 1}}
-              scaleYEnabled={true}
-              scaleXEnabled={true}
+              scaleYEnabled={false}
+              scaleXEnabled={false}
               doubleTapToZoomEnabled={true}
               dragDecelerationFrictionCoef={0.99}
               marker={{
@@ -790,6 +951,7 @@ class Summarize extends Component {
               <View />
             )}
           </View>
+          </ViewShot>
         </ScrollView>
 
         <View
@@ -815,10 +977,11 @@ class Summarize extends Component {
               borderWidth: ScaleSize(2),
             }}
             onPress={() => {
-              this.props.navigation.navigate('Ordinary');
+              this.shareScreenShot();
+              // this.props.navigation.navigate('Ordinary');
             }}>
             <View style={{alignItems: 'center', height: Height * 0.06}}>
-              <Text style={styles.pingtext}>OVER</Text>
+              <Text style={styles.pingtext}>Stop</Text>
             </View>
           </TouchableOpacity>
         </View>

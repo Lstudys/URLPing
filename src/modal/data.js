@@ -21,5 +21,12 @@ const Data = {
   compare_data: [],
   Piedata: [],
   ThemeColor: '#1f2342',
+  pioneerData:[0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+
+    ]
 };
 export default Data;
