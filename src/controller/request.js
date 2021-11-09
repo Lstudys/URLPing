@@ -172,12 +172,16 @@ export const SendRequest = function () {
     var start_scale3 = false;
     var start_scale4 = false;
     var start_scale5 = false;
-
+    let numberChart_refresh=0;
     this.chart_refresh = setInterval(() => {
+      numberChart_refresh++;
       if (this.state.isPing == false) return;
       this.setState({
         chartLabels: this.state.chartLabels.concat([xtimeall]),
       });
+      console.log("真的不大于吗？",numberChart_refresh);
+      
+      console.log(Data.pioneerData.length);
       let flag1 = false;
       let flag2 = false;
       let flag3 = false;
@@ -272,6 +276,7 @@ export const SendRequest = function () {
       let minuteall1 = new Date().getMinutes();
       let secondall1 = new Date().getSeconds();
       let hourall1 = new Date().getHours();
+      
 
       if (
         (secondall1 - secondall == 40 && minuteall1 == minuteall) ||
@@ -305,7 +310,11 @@ export const SendRequest = function () {
       ) {
         start_scale5 = true;
       }
+      if(numberChart_refresh>40&&scale_flag){
+      Data.pioneerData=[...Data.pioneerData,0];
 
+      // Data.pioneerData=[...Data.pioneerData,0];
+      }
       if (
         start_scale1 == true &&
         scale_flag == true &&
@@ -324,7 +333,7 @@ export const SendRequest = function () {
         start_scale4 == false &&
         start_scale5 == false
       ) {
-        let scale_switch = 0.025;
+        let scale_switch = 0.022;
         this.resetZoom(scale_switch);
       } else if (
         start_scale1 == true &&
@@ -334,7 +343,7 @@ export const SendRequest = function () {
         start_scale4 == false &&
         start_scale5 == false
       ) {
-        let scale_switch = 0.03;
+        let scale_switch = 0.023;
         this.resetZoom(scale_switch);
       } else if (
         start_scale1 == true &&
@@ -344,7 +353,7 @@ export const SendRequest = function () {
         start_scale4 == true &&
         start_scale5 == false
       ) {
-        let scale_switch = 0.038;
+        let scale_switch = 0.025;
         this.resetZoom(scale_switch);
       } else if (
         start_scale1 == true &&
@@ -354,7 +363,7 @@ export const SendRequest = function () {
         start_scale4 == true &&
         start_scale5 == true
       ) {
-        let scale_switch = 0.044;
+        let scale_switch = 0.028;
         this.resetZoom(scale_switch);
       }
 

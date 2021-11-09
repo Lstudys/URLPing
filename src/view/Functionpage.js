@@ -288,10 +288,24 @@ class Ping extends Component {
             color: Colors[colortempArr[i]],
             mode: 'LINEAR',
             drawCircles: false,
-            lineWidth: 2.2,
+            lineWidth: 1.3,
           },
         });
       }
+      dataSets.push({
+        textColor: processColor('#1f2342'),
+        // axisLineColor: gridColor,
+        values: Data.pioneerData,
+        // label: `${urlCollection[i]}(${iptempArr[i]})`,
+        config: {
+          // textColor: '#fff',
+          drawValues: false,
+          color: processColor('#fff'),
+          mode: 'LINEAR',
+          drawCircles: false,
+          lineWidth: 0.1,
+        },
+      });
     }
     return {
       data: {

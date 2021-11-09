@@ -33,11 +33,49 @@ const Colors = [
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 const gridColor = processColor('#fff'); //网格线的颜色
+const dirs = RNFS.ExternalDirectoryPath; // 外部文件，共享目录的绝对路径（仅限android）
+// var RNFS = require('react-native-fs');
+var uploadUrl = 'http://example.com/'; 
+var files = [
+  {
+    name: 'test1',
+    filename: 'test1.w4a',
+    filepath: RNFS.DocumentDirectoryPath + '/test1.w4a',
+    filetype: 'audio/x-m4a'
+  }, {
+    name: 'test2',
+    filename: 'test2.w4a',
+    filepath: RNFS.DocumentDirectoryPath + '/test2.w4a',
+    filetype: 'audio/x-m4a'
+  }
+];
+var uploadBegin = (response) => {
+  var jobId = response.jobId;
+  console.log('UPLOAD HAS BEGUN! JobId: ' + jobId);
+};
+
+var uploadProgress = (response) => {
+  var percentage = Math.floor((response.totalBytesSent/response.totalBytesExpectedToSend) * 100);
+  console.log('UPLOAD IS ' + percentage + '% DONE!');
+};
+// require the module
+// var RNFS = require('react-native-fs');
+
+// create a path you want to write to
+// :warning: on iOS, you cannot write into `RNFS.MainBundlePath`,
+// but `RNFS.DocumentDirectoryPath` exists on both platforms and is writable
+var path = RNFS.DocumentDirectoryPath + '/test.txt';
+
+// write the file
+
+
 
 class Summarize extends Component {
-  
+
+ 
   constructor(props) {
     super(props);
+   
     this.mainViewRef = React.createRef();
     this.state = {
       Color: '#1f2342',
@@ -64,11 +102,35 @@ class Summarize extends Component {
       }
     });
     console.log('传过来了吗？ ', Data.config);
-  }
+    console.log(path);
+    RNFS.uploadFiles({
+      toUrl: uploadUrl,
+      files: files,
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
+      fields: {
+        'hello': 'world',
+      },
+      begin: uploadBegin,
+      progress: uploadProgress
+    }).promise.then((response) => {
+        if (response.statusCode == 200) {
+          console.log('FILES UPLOADED!'); // response.statusCode, response.headers, response.body
+        } else {
+          console.log('SERVER ERROR');
+        }
+      })
+      .catch((err) => {
+        if(err.description === "cancelled") {
+          // cancelled by user
+        }
+        console.log(err);
+      });
+      }
   identify = true;
-  onCapture = uri => {
-    console.log("do something with ", uri);
-  }
+  
   componentDidMount() {
     store.get(Data.ThemeColor).then((v, r) => {
       if (v == null) this.setState({Color: '#1f2342'});
@@ -188,7 +250,8 @@ class Summarize extends Component {
         // console.log('this.screenShotShowImg====', this.screenShotShowImg);
         this.saveImage(screenShotShowImg);
       } catch (e) {
-        Alert.alert(`截图失败，请稍后再试${e.toString()}`);
+        // ${e.toString()}`
+        Alert.alert(`Screenshot failed, please try again later`);
         console.log(e);
       } finally {
         this.setState({ makingImage: false });
@@ -196,7 +259,7 @@ class Summarize extends Component {
     });
   }
   async saveImage(screenShotShowImg) {
-    Toast.message('图片保存中...');
+    Toast.message('Picture saving...');
     // if (IS_IOS) {
     //   CameraRoll.saveToCameraRoll(screenShotShowImg).then((result) => {
     //     Toast.message(`保存成功！地址如下：\n${result}`);
@@ -208,22 +271,23 @@ class Summarize extends Component {
     // await NativeModules.UtilsModule.contactImage(base64Img).then((newImg) => {
     //   // console.log('path====', newImg);
     //   const screenShotShowImg = `data:image/png;base64,${newImg}`;
-    //
+    
     // }, (ex) => {
     //   console.log('ex====', ex);
     // });
       //不经过拼接直接保存到相册
+      // 地址如下：\n${result}
       this.saveForAndroid(screenShotShowImg, (result) => {
-        Toast.message(`保存成功！地址如下：\n${result}`);
+        Toast.message(`Save success！`);
       }, () => {
-        Toast.message('保存失败！');
+        Toast.message('Save failed！');
       });
     
     
   }
 
 saveForAndroid(base64Img, success, fail) {
-  const dirs = RNFS.ExternalDirectoryPath; // 外部文件，共享目录的绝对路径（仅限android）
+  console.log("这是什么外部路径？",dirs);
   const downloadDest = `${dirs}/${((Math.random() * 10000000) || 0)}.png`;
   const imageDatas = base64Img.split('data:image/png;base64,');
   const imageData = imageDatas[1];
@@ -235,7 +299,7 @@ saveForAndroid(base64Img, success, fail) {
         success && success(e1);
       }).catch((e2) => {
         console.log('failed', e2);
-        Alert.alert('没有读写权限。请在[设置]-[应用权限]-[XX应用]开启');
+        Alert.alert('App has no storage permission, please go to Settings to enable.');
       });
     } catch (e3) {
       console.log('catch', e3);
@@ -245,6 +309,7 @@ saveForAndroid(base64Img, success, fail) {
 }
  
   render() {
+
     var dataSets = [];
     var dataSets2 = [];
     const colortempArr = [0, 1, 2, 3, 4];
