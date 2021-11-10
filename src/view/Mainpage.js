@@ -50,7 +50,12 @@ class Ordinary extends Component {
       isLoading: true,
     };
     //Data.ThemeColor="#1f2342";
-
+    Data.pioneerData=[0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      ]
     LanguageChange.bind(this)();
 
     store.get(Data.pingIndex).then((res) => {

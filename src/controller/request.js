@@ -179,6 +179,8 @@ export const SendRequest = function () {
       this.setState({
         chartLabels: this.state.chartLabels.concat([xtimeall]),
       });
+
+      
       console.log("真的不大于吗？",numberChart_refresh);
       
       console.log(Data.pioneerData.length);
@@ -310,7 +312,9 @@ export const SendRequest = function () {
       ) {
         start_scale5 = true;
       }
-      if(numberChart_refresh>40&&scale_flag){
+
+      
+      if(numberChart_refresh>40){
       Data.pioneerData=[...Data.pioneerData,0];
 
       // Data.pioneerData=[...Data.pioneerData,0];
