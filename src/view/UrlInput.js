@@ -37,6 +37,12 @@ class Ordinary extends Component {
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
+    Data.pioneerData=[0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      ]
     Data.InputUrl = '';
     Data.pingurl = [''];
     LanguageChange.bind(this)();
