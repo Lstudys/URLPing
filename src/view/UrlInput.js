@@ -16,7 +16,7 @@ import store from 'react-native-simple-store';
 import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -24,7 +24,7 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Color:"#1f2342",
+      Color: '#1f2342',
       editable: false,
       history_height: Height * 0.3,
       FlatListIsRefreshing: false,
@@ -51,7 +51,13 @@ class Ordinary extends Component {
   identify = true;
 
   componentWillMount() {
-    store.get(Data.ThemeColor).then((v,r)=>{if(v==null) this.setState({Color:"#1f2342"}); else{console.log(v);this.setState({Color:v})}});
+    store.get(Data.ThemeColor).then((v, r) => {
+      if (v == null) this.setState({Color: '#1f2342'});
+      else {
+        console.log(v);
+        this.setState({Color: v});
+      }
+    });
     // Data.errorIndex=[]
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -196,10 +202,11 @@ class Ordinary extends Component {
               store.save(Data.pingIndex, Data.Ping);
             }}
             placeholder={I18n.t('input')}
-            style={styles.input}></TextInput>
-        </View>
-        {/*第一个不包含删除按钮*/}
-
+            style={styles.input}>
+            {' '}
+          </TextInput>{' '}
+        </View>{' '}
+        {/*第一个不包含删除按钮*/}{' '}
         <View style={styles.delete}>
           <TouchableOpacity
             onPress={() => {
@@ -213,9 +220,9 @@ class Ordinary extends Component {
             <Image
               source={require('../imgs/delete.png')}
               style={styles.deleteimage}
-            />
-          </TouchableOpacity>
-        </View>
+            />{' '}
+          </TouchableOpacity>{' '}
+        </View>{' '}
       </View>
     );
   };
@@ -231,7 +238,8 @@ class Ordinary extends Component {
           width: Width * 0.95,
           marginLeft: Width * 0.025,
           marginTop: ScaleSize(20),
-          backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
+          backgroundColor:
+            this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -295,10 +303,11 @@ class Ordinary extends Component {
                 color: '#fff',
                 fontSize: SetSpText(35),
               }}>
-              {item}
-            </Text>
-          </View>
-        </TouchableOpacity>
+              {' '}
+              {item}{' '}
+            </Text>{' '}
+          </View>{' '}
+        </TouchableOpacity>{' '}
         <View
           style={{
             alignSelf: 'center',
@@ -320,10 +329,10 @@ class Ordinary extends Component {
                   marginBottom: ScaleSize(15),
                   marginHorizontal: ScaleSize(10),
                 }}
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
+              />{' '}
+            </View>{' '}
+          </TouchableOpacity>{' '}
+        </View>{' '}
       </View>
     );
   };
@@ -348,7 +357,7 @@ class Ordinary extends Component {
           this.setState({focus: true});
         }}
         style={styles.renderRow}>
-        <Text style={styles._renderRowitem}>{item}</Text>
+        <Text style={styles._renderRowitem}> {item} </Text>{' '}
       </TouchableOpacity>
     );
   };
@@ -407,8 +416,8 @@ class Ordinary extends Component {
                 refreshing={this.state.FlatListIsRefreshing}
                 renderItem={this.renderitem_history}
                 data={Data.historyPing}
-              />
-            </View>
+              />{' '}
+            </View>{' '}
             <View
               style={{
                 height: Height * 0.062,
@@ -419,12 +428,15 @@ class Ordinary extends Component {
               <FlatList
                 scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
-                style={{backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",}}
+                style={{
+                  backgroundColor:
+                    this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
+                }}
                 horizontal={true}
                 data={Data.urlsArr}
                 renderItem={this._renderRow}
-              />
-            </View>
+              />{' '}
+            </View>{' '}
             <View
               style={{
                 position: 'relative',
@@ -441,6 +453,7 @@ class Ordinary extends Component {
                 borderRadius: ScaleSize(20),
               }}>
               <View>
+                {' '}
                 {Data.emptyIndex.indexOf(0) >= 0 ? (
                   <View
                     style={{
@@ -460,13 +473,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        EMPTY
-                      </Text>
-                    </View>
+                        EMPTY{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.emptyIndex.indexOf(1) >= 0 ? (
                   <View
                     style={{
@@ -486,13 +499,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        EMPTY
-                      </Text>
-                    </View>
+                        EMPTY{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.emptyIndex.indexOf(2) >= 0 ? (
                   <View
                     style={{
@@ -516,13 +529,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        EMPTY
-                      </Text>
-                    </View>
+                        EMPTY{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.emptyIndex.indexOf(3) >= 0 ? (
                   <View
                     style={{
@@ -542,13 +555,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        EMPTY
-                      </Text>
-                    </View>
+                        EMPTY{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.emptyIndex.indexOf(4) >= 0 ? (
                   <View
                     style={{
@@ -568,15 +581,16 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        EMPTY
-                      </Text>
-                    </View>
+                        EMPTY{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
-              </View>
+                )}{' '}
+              </View>{' '}
               <View>
+                {' '}
                 {Data.errorIndex.indexOf(0) >= 0 &&
                 !(Data.emptyIndex.indexOf(0) >= 0) ? (
                   <View
@@ -597,13 +611,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        ERROR
-                      </Text>
-                    </View>
+                        ERROR{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.errorIndex.indexOf(1) >= 0 &&
                 !(Data.emptyIndex.indexOf(1) >= 0) ? (
                   <View
@@ -624,13 +638,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        ERROR
-                      </Text>
-                    </View>
+                        ERROR{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.errorIndex.indexOf(2) >= 0 &&
                 !(Data.emptyIndex.indexOf(2) >= 0) ? (
                   <View
@@ -655,13 +669,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        ERROR
-                      </Text>
-                    </View>
+                        ERROR{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.errorIndex.indexOf(3) >= 0 &&
                 !(Data.emptyIndex.indexOf(3) >= 0) ? (
                   <View
@@ -682,13 +696,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        ERROR
-                      </Text>
-                    </View>
+                        ERROR{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.errorIndex.indexOf(4) >= 0 &&
                 !(Data.emptyIndex.indexOf(4) >= 0) ? (
                   <View
@@ -709,15 +723,16 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(16),
                         }}>
-                        ERROR
-                      </Text>
-                    </View>
+                        ERROR{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
-              </View>
+                )}{' '}
+              </View>{' '}
               <View>
+                {' '}
                 {Data.InputUrl.split('\n').length > 0 ? (
                   <View
                     style={{
@@ -739,13 +754,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(12),
                         }}>
-                        A
-                      </Text>
-                    </View>
+                        A{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.InputUrl.split('\n').length > 1 ? (
                   <View
                     style={{
@@ -768,13 +783,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(12),
                         }}>
-                        B
-                      </Text>
-                    </View>
+                        B{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.InputUrl.split('\n').length > 2 ? (
                   <View
                     style={{
@@ -797,13 +812,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(12),
                         }}>
-                        C
-                      </Text>
-                    </View>
+                        C{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.InputUrl.split('\n').length > 3 ? (
                   <View
                     style={{
@@ -826,13 +841,13 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(12),
                         }}>
-                        D
-                      </Text>
-                    </View>
+                        D{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
+                )}{' '}
                 {Data.InputUrl.split('\n').length > 4 ? (
                   <View
                     style={{
@@ -855,14 +870,14 @@ class Ordinary extends Component {
                           fontWeight: '700',
                           fontSize: ScaleSize(12),
                         }}>
-                        E
-                      </Text>
-                    </View>
+                        E{' '}
+                      </Text>{' '}
+                    </View>{' '}
                   </View>
                 ) : (
                   <View />
-                )}
-              </View>
+                )}{' '}
+              </View>{' '}
               <TextInput
                 ref={(input) => (this.input = input)}
                 value={Data.InputUrl}
@@ -956,8 +971,8 @@ class Ordinary extends Component {
 
                   this.setState({refresh: !this.state.refresh});
                 }}
-              />
-            </View>
+              />{' '}
+            </View>{' '}
             {!this.state.keyBoardHeight ? (
               <View
                 style={{
@@ -974,7 +989,8 @@ class Ordinary extends Component {
 
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
+                    backgroundColor:
+                      this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -986,30 +1002,30 @@ class Ordinary extends Component {
                     this.setState({numberOfUrlinTextInput: 0});
                   }}>
                   <View style={{alignItems: 'center'}}>
-                    <Text style={styles.pingtext}>Clear</Text>
-                  </View>
-                </TouchableOpacity>
-
+                    <Text style={styles.pingtext}> Clear </Text>{' '}
+                  </View>{' '}
+                </TouchableOpacity>{' '}
                 <TouchableOpacity
                   style={{
                     marginLeft: Width * 0.02,
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: this.state.Color=="#4588AA"?'#336699':"#2C1F42",
+                    backgroundColor:
+                      this.state.Color == '#4588AA' ? '#336699' : '#2C1F42',
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
                   }}
                   onPress={this.PING}>
                   <View style={{alignItems: 'center', height: Height * 0.06}}>
-                    <Text style={styles.pingtext}>PING!</Text>
-                  </View>
-                </TouchableOpacity>
+                    <Text style={styles.pingtext}> PING! </Text>{' '}
+                  </View>{' '}
+                </TouchableOpacity>{' '}
               </View>
             ) : (
               <View />
-            )}
-          </View>
+            )}{' '}
+          </View>{' '}
         </View>
       );
     }
