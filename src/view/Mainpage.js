@@ -50,12 +50,58 @@ class Ordinary extends Component {
       isLoading: true,
     };
     //Data.ThemeColor="#1f2342";
-    Data.pioneerData=[0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      ]
+    Data.pioneerData = [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ];
     LanguageChange.bind(this)();
 
     store.get(Data.pingIndex).then((res) => {
@@ -345,7 +391,7 @@ class Ordinary extends Component {
             // showConfirmButton={true}
             cancelText="OK"
             onDismiss={() => {
-              this.setState({showAlert: false});
+              this.setState({showPermissionAlert: false});
             }}
             onCancelPressed={() => {
               this.hideAlert();
@@ -414,7 +460,7 @@ class Ordinary extends Component {
             showProgress={false}
           />
           <View style={{backgroundColor: this.state.Color}}>
-            <View style={{height: Height*1.25, position: 'relative'}}>
+            <View style={{height: Height * 1.25, position: 'relative'}}>
               <TouchableOpacity
                 onPress={() => {
                   this._drawer.open();

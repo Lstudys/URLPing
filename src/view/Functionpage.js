@@ -478,19 +478,22 @@ class Ping extends Component {
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
-          title="Stop Ping?"
+          title="Make a summary?"
           titleStyle={{
-            fontSize: ScaleSize(40),
+            fontSize: ScaleSize(20),
             fontWeight: '700',
             color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
           }}
           animatedValue={0.9}
-          closeOnTouchOutside={false}
+          closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           showConfirmButton={true}
-          cancelText="Cancel"
+          cancelText="Quit"
           confirmText="Confirm"
+          onDismiss={() => {
+            this.setState({showAlert: false});
+          }}
           cancelButtonStyle={{
             backgroundColor:
               this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
@@ -515,10 +518,87 @@ class Ping extends Component {
           }}
           onConfirmPressed={() => {
             this.hideAlert();
-            this.props.navigation.navigate('UrlInput');
+
+            Data.compare_data = [];
+            Data.Piedata = [];
+            Data.config = this.config;
+            if (Data.pingurl.length > 0) {
+              Data.compare_data.push([
+                this.minTime,
+                this.avgTime,
+                this.n95,
+                this.maxTime,
+              ]);
+              Data.Piedata.push([
+                this.error1 / Data.config.xAxis.valueFormatter.length,
+                1 - this.error1 / Data.config.xAxis.valueFormatter.length,
+              ]);
+              console.log(Data.Piedata);
+            }
+            if (Data.pingurl.length == 1) {
+              Data.compare_data.push([0, 0, 0, 0]);
+            }
+            if (Data.pingurl.length > 1) {
+              Data.compare_data.push([
+                this.minTime2,
+                this.avgTime2,
+                this.n952,
+                this.maxTime2,
+              ]);
+              Data.Piedata.push([
+                this.error2 / Data.config.xAxis.valueFormatter.length,
+                1 - this.error2 / Data.config.xAxis.valueFormatter.length,
+              ]);
+            }
+            if (Data.pingurl.length > 2) {
+              Data.compare_data.push([
+                this.minTime3,
+                this.avgTime3,
+                this.n953,
+                this.maxTime3,
+              ]);
+              Data.Piedata.push([
+                this.error3 / Data.config.xAxis.valueFormatter.length,
+                1 - this.error3 / Data.config.xAxis.valueFormatter.length,
+              ]);
+            }
+            if (Data.pingurl.length > 3) {
+              Data.compare_data.push([
+                this.minTime4,
+                this.avgTime4,
+                this.n954,
+                this.maxTime4,
+              ]);
+              Data.Piedata.push([
+                this.error4 / Data.config.xAxis.valueFormatter.length,
+                1 - this.error4 / Data.config.xAxis.valueFormatter.length,
+              ]);
+            }
+            if (Data.pingurl.length > 4) {
+              Data.compare_data.push([
+                this.minTime5,
+                this.avgTime5,
+                this.n955,
+                this.maxTime5,
+              ]);
+              Data.Piedata.push([
+                this.error5 / Data.config.xAxis.valueFormatter.length,
+                1 - this.error5 / Data.config.xAxis.valueFormatter.length,
+              ]);
+            }
+            console.log(Data.Piedata);
+
+            console.log('展示 ：' + Data.compare_data);
+            Data.urlCollection = urlCollection;
+
+            this.setState(() => ({
+              isPing: false,
+            }));
+            this.props.navigation.navigate('Summarize');
           }}
           onCancelPressed={() => {
             this.hideAlert();
+            this.props.navigation.navigate('UrlInput');
           }}
         />
         <View
@@ -737,7 +817,7 @@ class Ping extends Component {
               </Table>
             </View>
           </View>
-          <View
+          {/* <View
             style={{
               position: 'absolute',
               top: Height * 0.93,
@@ -749,25 +829,6 @@ class Ping extends Component {
                 this.state.Colors == '#1f2342' ? '#1f2342' : '#4588AA',
               alignItems: 'center',
             }}>
-            {/* <TouchableOpacity
-                  style={{
-                    marginLeft: Width * 0.08,
-
-                    width: Width * 0.4,
-                    height: Height * 0.06,
-                    backgroundColor: '#76779b',
-                    borderRadius: ScaleSize(10),
-                    borderColor: '#fff',
-                    borderWidth: ScaleSize(2),
-                  }}
-                  onPress={() => {
-                   
-                  }}>
-                  <View style={{alignItems: 'center'}}>
-                    <Text style={styles.pingtext}>Clear</Text>
-                  </View>
-                </TouchableOpacity> */}
-
             <TouchableOpacity
               style={{
                 marginLeft: Width * 0.15,
@@ -861,7 +922,7 @@ class Ping extends Component {
                 <Text style={styles.pingtext}>OVER</Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
         <KeepAwake />
       </View>

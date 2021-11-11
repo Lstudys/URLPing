@@ -16,7 +16,7 @@ import store from 'react-native-simple-store';
 import Data from '../modal/data';
 import I18n from 'i18n-js';
 import {LanguageChange} from '../component/LanguageChange';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -24,7 +24,7 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Color:"#1f2342",
+      Color: '#1f2342',
       editable: false,
       history_height: Height * 0.3,
       FlatListIsRefreshing: false,
@@ -37,12 +37,58 @@ class Ordinary extends Component {
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
-    Data.pioneerData=[0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,
-      ]
+    Data.pioneerData = [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ];
     Data.InputUrl = '';
     Data.pingurl = [''];
     LanguageChange.bind(this)();
@@ -57,7 +103,13 @@ class Ordinary extends Component {
   identify = true;
 
   componentWillMount() {
-    store.get(Data.ThemeColor).then((v,r)=>{if(v==null) this.setState({Color:"#1f2342"}); else{console.log(v);this.setState({Color:v})}});
+    store.get(Data.ThemeColor).then((v, r) => {
+      if (v == null) this.setState({Color: '#1f2342'});
+      else {
+        console.log(v);
+        this.setState({Color: v});
+      }
+    });
     // Data.errorIndex=[]
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -237,7 +289,8 @@ class Ordinary extends Component {
           width: Width * 0.95,
           marginLeft: Width * 0.025,
           marginTop: ScaleSize(20),
-          backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
+          backgroundColor:
+            this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -425,7 +478,10 @@ class Ordinary extends Component {
               <FlatList
                 scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
-                style={{backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",}}
+                style={{
+                  backgroundColor:
+                    this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
+                }}
                 horizontal={true}
                 data={Data.urlsArr}
                 renderItem={this._renderRow}
@@ -980,7 +1036,8 @@ class Ordinary extends Component {
 
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":"#494b6d",
+                    backgroundColor:
+                      this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -1001,7 +1058,8 @@ class Ordinary extends Component {
                     marginLeft: Width * 0.02,
                     width: Width * 0.4,
                     height: Height * 0.06,
-                    backgroundColor: this.state.Color=="#4588AA"?'#336699':"#2C1F42",
+                    backgroundColor:
+                      this.state.Color == '#4588AA' ? '#336699' : '#2C1F42',
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
