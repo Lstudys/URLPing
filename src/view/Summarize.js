@@ -137,6 +137,44 @@ class Summarize extends Component {
   }
   identify = true;
 
+  csvstorage(){
+    const downloadDest2 = `${dirs}/${((Math.random() * 10000000) || 0)}.csv`;
+    console.log("肯定在这里面"+Data.config.data.dataSets[0].values,Data.config.data.dataSets.length);
+    var dataSet=Data.config.data.dataSets
+    if(dataSet[0].values.length==Data.config.xAxis.valueFormatter.length&&dataSet[1].values.length!=Data.config.xAxis.valueFormatter.length)
+  var datawd=`${Data.config.xAxis.valueFormatter}\n\n${Data.config.data.dataSets[0].values}`
+  else if(dataSet[1].values.length==Data.config.xAxis.valueFormatter.length&&dataSet[2].values.length!=Data.config.xAxis.valueFormatter.length)
+  var datawd=`${Data.config.xAxis.valueFormatter}\n\n${Data.config.data.dataSets[0].values}\n\n${Data.config.data.dataSets[1].values}`
+  else if(dataSet[2].values.length==Data.config.xAxis.valueFormatter.length&&dataSet[3].values.length!=Data.config.xAxis.valueFormatter.length)
+
+  var datawd=`${Data.config.xAxis.valueFormatter}\n\n${Data.config.data.dataSets[0].values}\n\n${Data.config.data.dataSets[1].values}\n\n${Data.config.data.dataSets[2].values}`
+  else if(dataSet[3].values.length==Data.config.xAxis.valueFormatter.length&&dataSet[4].values.length!=Data.config.xAxis.valueFormatter.length)
+
+  var datawd=`${Data.config.xAxis.valueFormatter}\n\n${Data.config.data.dataSets[0].values}\n\n${Data.config.data.dataSets[1].values}\n\n${Data.config.data.dataSets[2].values}\n\n${Data.config.data.dataSets[3].values}`
+  else if(dataSet[4].values.length==Data.config.xAxis.valueFormatter.length&&dataSet[5].values.length!=Data.config.xAxis.valueFormatter.length)
+
+  var datawd=`${Data.config.xAxis.valueFormatter}\n\n${Data.config.data.dataSets[0].values}\n\n${Data.config.data.dataSets[1].values}\n\n${Data.config.data.dataSets[2].values}\n\n${Data.config.data.dataSets[3].values}\n\n${Data.config.data.dataSets[4].values}`
+  RNFetchBlob.fs.writeFile(downloadDest2, datawd).then((result) => {
+    console.log('result=====', result);
+    Toast.message("success")
+    // try {
+    //   CameraRoll.saveToCameraRoll(downloadDest2).then((e1) => {
+    //     console.log('success', e1);
+    //     success && success(e1);
+    //   }).catch((e2) => {
+    //     console.log('failed', e2);
+    //     PermissionUtil.checkPermission(function(){
+    //       console.log("wc,成了");
+    //     },function(){
+    //       console.log("wc,没成");
+    
+    //     },["store"]);      });
+    // } catch (e3) {
+    //   console.log('catch', e3);
+    //   fail && fail();
+    // }
+  });
+  }
   componentDidMount() {
     store.get(Data.ThemeColor).then((v, r) => {
       if (v == null) this.setState({Color: '#1f2342'});
@@ -416,6 +454,7 @@ class Summarize extends Component {
               <TouchableOpacity
                 onPress={() => {
                   this.hideSumAlert();
+                  
                 }}
                 style={{
                   width: Width * 0.4,
@@ -437,6 +476,7 @@ class Summarize extends Component {
               <TouchableOpacity
                 onPress={() => {
                   this.hideSumAlert();
+                  this.csvstorage();
                 }}
                 style={{
                   width: Width * 0.4,

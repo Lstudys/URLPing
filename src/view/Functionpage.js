@@ -276,6 +276,7 @@ class Ping extends Component {
     dataSets,
   ) {
     for (let i = 0; i < urlCollection.length; i++) {
+      
       if (urlCollection[i] != '') {
         dataSets.push({
           textColor: gridColor,
