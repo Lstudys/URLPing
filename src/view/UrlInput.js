@@ -33,7 +33,7 @@ class Ordinary extends Component {
       currentUrlindex: -1,
       focus: false,
 
-      keyBoardHeight: 0,
+      keyBoardHeight: 1,
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };

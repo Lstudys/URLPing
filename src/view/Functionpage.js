@@ -530,6 +530,8 @@ class Ping extends Component {
                 this.n95,
                 this.maxTime,
               ]);
+              Data.values=[this.state.values,this.state.values2,this.state.values3,this.state.values4,this.state.values5]
+              console.log("这个有毛病没？",Data.values);
               Data.Piedata.push([
                 this.error1 / Data.config.xAxis.valueFormatter.length,
                 1 - this.error1 / Data.config.xAxis.valueFormatter.length,
