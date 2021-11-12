@@ -352,7 +352,7 @@ class Ordinary extends Component {
               ellipsizeMode={'tail'}
               style={{
                 color: '#fff',
-                fontSize: SetSpText(35),
+                fontSize: SetSpText(34),
               }}>
               {item}
             </Text>
@@ -403,7 +403,7 @@ class Ordinary extends Component {
             Data.InputUrl.slice(0, this.state.currentIndex) +
             Data.urlsArr[key] +
             Data.InputUrl.slice(this.state.currentIndex);
-          this.setState({refresh: !this.state.refresh});
+          // this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
         }}
         style={styles.renderRow}>
@@ -974,7 +974,7 @@ class Ordinary extends Component {
                   width: Width * 0.8,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
-                  fontSize: ScaleSize(18),
+                  fontSize: SetSpText(36),            
                 }}
                 onChangeText={(value) => {
                   console.log('我来康康text：' + Data.errorIndex);
@@ -1111,7 +1111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pingtext: {
-    fontSize: SetSpText(50),
+    fontSize: SetSpText(54),
     color: '#fff',
     fontWeight: '700',
   },
@@ -1146,7 +1146,7 @@ const styles = StyleSheet.create({
     borderRadius: ScaleSize(20),
   },
   _renderRowitem: {
-    fontSize: SetSpText(35),
+    fontSize: SetSpText(34),
     marginTop: ScaleSize(5),
     color: '#fff',
     fontWeight: '700',

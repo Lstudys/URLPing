@@ -204,7 +204,7 @@ class Ordinary extends Component {
             <Text
               style={{
                 color: '#000000',
-                fontSize: ScaleSize(20),
+                fontSize: SetSpText(34),
                 fontWeight: '700',
               }}>
               {I18n.t('home')}
@@ -259,7 +259,7 @@ class Ordinary extends Component {
             <Text
               style={{
                 color: '#000000',
-                fontSize: ScaleSize(20),
+                fontSize: SetSpText(34),
                 fontWeight: '700',
               }}>
               {I18n.t('Theme')}
@@ -316,7 +316,7 @@ class Ordinary extends Component {
               <Text
                 style={{
                   color: '#494b6d',
-                  fontSize: ScaleSize(20),
+                  fontSize: SetSpText(34),
                   fontWeight: '700',
                 }}>
                 {I18n.t('about')}
@@ -324,7 +324,7 @@ class Ordinary extends Component {
               <Text
                 style={{
                   color: '#494b6d',
-                  fontSize: ScaleSize(12),
+                  fontSize: SetSpText(26),
                   fontWeight: '700',
                 }}>
                 {I18n.t('version')}
@@ -374,7 +374,7 @@ class Ordinary extends Component {
             title="Graph URL Ping"
             message="APP version : v1.0.0        Update Time: 2021/11/5"
             titleStyle={{
-              fontSize: ScaleSize(20),
+              fontSize: SetSpText(36),
               fontWeight: '700',
               color: '#494b6d',
             }}
@@ -383,7 +383,7 @@ class Ordinary extends Component {
               width: Width * 0.55,
               marginTop: ScaleSize(20),
               marginBottom: ScaleSize(20),
-              fontSize: ScaleSize(16),
+              fontSize: SetSpText(34),
             }}
             closeOnTouchOutside={true}
             closeOnHardwareBackPress={true}
@@ -391,7 +391,7 @@ class Ordinary extends Component {
             // showConfirmButton={true}
             cancelText="OK"
             onDismiss={() => {
-              this.setState({showPermissionAlert: false});
+              this.setState({showAlert: false});
             }}
             onCancelPressed={() => {
               this.hideAlert();
@@ -404,7 +404,7 @@ class Ordinary extends Component {
               alignItems: 'center',
             }}
             cancelButtonTextStyle={{
-              fontSize: ScaleSize(20),
+              fontSize: SetSpText(34),
               fontWeight: '700',
             }}
           />
@@ -417,7 +417,7 @@ class Ordinary extends Component {
             customView={
               <View>
                 <View>
-                  <Text style={{fontSize: ScaleSize(20)}}>请选择主题颜色</Text>
+                  <Text style={{fontSize: SetSpText(36),fontWeight: '700',}}>请选择主题颜色</Text>
                 </View>
                 <View
                   backgroundColor="#1f2342"
@@ -434,7 +434,7 @@ class Ordinary extends Component {
                       marginLeft: Width * 0.13,
                       marginTop: Height * 0.01,
                     }}>
-                    <Text style={{color: '#fff'}}>蓝紫色</Text>
+                    <Text style={{fontSize: SetSpText(34),color: '#fff'}}>蓝紫色</Text>
                   </TouchableOpacity>
                 </View>
                 <View
@@ -452,7 +452,7 @@ class Ordinary extends Component {
                       marginLeft: Width * 0.13,
                       marginTop: Height * 0.01,
                     }}>
-                    <Text style={{color: '#fff'}}>浅蓝色</Text>
+                    <Text style={{fontSize: SetSpText(34),color: '#fff'}}>浅蓝色</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -481,7 +481,7 @@ class Ordinary extends Component {
               <Text
                 style={{
                   color: '#FFFFFF',
-                  fontSize: SetSpText(85),
+                  fontSize: SetSpText(90),
                   fontWeight: 'bold',
                   textAlign: 'center',
                   marginTop: ScaleSize(160),
@@ -511,7 +511,7 @@ class Ordinary extends Component {
                     alignItems: 'center',
                     position: 'absolute',
                     right: Width * 0.03,
-                    top: Height * 0.006,
+                    top: Height * 0.003,
                   }}>
                   <TouchableOpacity
                     onPress={() => {
@@ -519,7 +519,7 @@ class Ordinary extends Component {
                     }}>
                     <Text
                       style={{
-                        fontSize: SetSpText(60),
+                        fontSize: SetSpText(72),
                         color:
                           this.state.Color == '#4588AA' ? '#4588AA' : '#1f2342',
                         fontWeight: '700',

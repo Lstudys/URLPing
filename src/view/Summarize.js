@@ -427,7 +427,7 @@ class Summarize extends Component {
           showProgress={false}
           title="Types"
           titleStyle={{
-            fontSize: ScaleSize(40),
+            fontSize: SetSpText(36),
             marginTop: ScaleSize(-25),
             fontWeight: '700',
             color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
@@ -513,7 +513,7 @@ class Summarize extends Component {
           showProgress={false}
           title="App has no storage permission."
           titleStyle={{
-            fontSize: ScaleSize(20),
+            fontSize: SetSpText(36),
             fontWeight: '700',
             color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
           }}
@@ -532,7 +532,7 @@ class Summarize extends Component {
               this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
             height: Height * 0.05,
             width: Width * 0.25,
-            alignItems: 'center',
+            alignItems: 'center'
           }}
           confirmButtonStyle={{
             backgroundColor:
@@ -542,11 +542,11 @@ class Summarize extends Component {
             alignItems: 'center',
           }}
           cancelButtonTextStyle={{
-            fontSize: ScaleSize(18),
+            fontSize: SetSpText(34),
             fontWeight: '700',
           }}
           confirmButtonTextStyle={{
-            fontSize: ScaleSize(18),
+            fontSize: SetSpText(34),
             fontWeight: '700',
           }}
           onConfirmPressed={() => {
@@ -586,14 +586,14 @@ class Summarize extends Component {
 
               <View
                 style={{
-                  marginTop: -Height * 0.066,
+                  marginTop: -Height * 0.06,
                   marginLeft: Width * 0.28,
                   //   backgroundColor:"pink"
                 }}>
                 <Text
                   style={{
                     color: '#fff',
-                    fontSize: ScaleSize(22),
+                    fontSize: SetSpText(36),
                   }}>
                   {`${year}/${month}/${day}  ${this.state.config.xAxis.valueFormatter[0]}`}
                 </Text>
@@ -1253,6 +1253,7 @@ class Summarize extends Component {
 export default Summarize;
 const styles = StyleSheet.create({
   rowlegend: {
+    fontSize: SetSpText(34),
     color: '#fff',
     lineHeight: Height * 0.04,
   },
@@ -1285,7 +1286,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pingtext: {
-    fontSize: SetSpText(60),
+    fontSize:SetSpText(50),
     color: '#fff',
     fontWeight: '700',
   },
@@ -1342,7 +1343,7 @@ const styles = StyleSheet.create({
     marginTop: ScaleSize(-10),
   },
   alertBtntext: {
-    fontSize: SetSpText(40),
+    fontSize: SetSpText(34),
     color: 'black',
     fontWeight: '700',
     textAlign: 'center',
