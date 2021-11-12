@@ -33,7 +33,7 @@ class Ordinary extends Component {
       currentUrlindex: -1,
       focus: false,
 
-      keyBoardHeight: 1,
+      keyBoardHeight: 0,
       currentIndex: -1,
       numberOfUrlinTextInput: 0,
     };
@@ -147,14 +147,27 @@ class Ordinary extends Component {
     //url:从输入框正则出来的标准url格式数组
 
     let InputUrl = Data.InputUrl.split('\n');
+    
+    //筛选合格的inputUrl
+    InputUrl=InputUrl.filter(function(value){
+      return value.trim()!="";
+    })
+    
+    Data.InputUrl = InputUrl.join('\n');
     //InputUrl:
+    console.log('DataInput_03 '+InputUrl)
     console.log('lalalaurl ' + url);
     console.log('lalalainput ' + Data.InputUrl.split('\n'));
     let flag = false;
     Data.errorIndex = [];
     Data.emptyIndex = [];
     for (let i = 0, j = 0; j < InputUrl.length; ) {
-      if (url[i] != InputUrl[j] + '\n') {
+      if (
+        url[i] != InputUrl[j] + '\n' &&
+        url[i] != InputUrl[j] + '\n' + '\n' &&
+        url[i] != InputUrl[j] + '\n' + '\n' + '\n' &&
+        url[i] != InputUrl[j] + '\n' + '\n' + '\n' + '\n'
+      ) {
         if (
           j == InputUrl.length - 1 &&
           url[url.length - 1] == InputUrl[InputUrl.length - 1]
@@ -171,10 +184,7 @@ class Ordinary extends Component {
             InputUrl[j] = 'http://' + InputUrl[j];
             Data.InputUrl = InputUrl.join('\n');
           } else Data.errorIndex.push(j);
-          if (InputUrl[j].trim() == 'http://' || InputUrl[j].trim() == '') {
-            Data.emptyIndex.push(j);
-            console.log('empty' + Data.emptyIndex);
-          }
+
         }
         j++;
       } else {
@@ -503,140 +513,7 @@ class Ordinary extends Component {
                 borderRadius: ScaleSize(20),
               }}>
               <View>
-                {Data.emptyIndex.indexOf(0) >= 0 ? (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: Height * 0.02,
-                      width: Width * 0.9,
-                      borderRadius: ScaleSize(5),
-                      marginLeft: -ScaleSize(4),
-                      height: Height * 0.028,
-                      backgroundColor: '#2a82e4',
-                      opacity: 0.8,
-                    }}>
-                    <View style={{marginLeft: Width * 0.72}}>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: '700',
-                          fontSize: ScaleSize(16),
-                        }}>
-                        EMPTY
-                      </Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View />
-                )}
-                {Data.emptyIndex.indexOf(1) >= 0 ? (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: Height * 0.05,
-                      width: Width * 0.9,
-                      borderRadius: ScaleSize(5),
-                      marginLeft: -ScaleSize(4),
-                      height: Height * 0.028,
-                      backgroundColor: '#2a82e4',
-                      opacity: 0.8,
-                    }}>
-                    <View style={{marginLeft: Width * 0.72}}>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: '700',
-                          fontSize: ScaleSize(16),
-                        }}>
-                        EMPTY
-                      </Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View />
-                )}
-                {Data.emptyIndex.indexOf(2) >= 0 ? (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: Height * 0.08,
-                      width: Width * 0.9,
-                      borderRadius: ScaleSize(5),
-                      marginLeft: -ScaleSize(4),
-                      height: Height * 0.028,
-                      backgroundColor: '#2a82e4',
-                      opacity: 0.8,
-                    }}>
-                    <View
-                      style={{
-                        marginLeft: Width * 0.72,
-                        marginTop: Height * 0.001,
-                      }}>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: '700',
-                          fontSize: ScaleSize(16),
-                        }}>
-                        EMPTY
-                      </Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View />
-                )}
-                {Data.emptyIndex.indexOf(3) >= 0 ? (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: Height * 0.11,
-                      width: Width * 0.9,
-                      borderRadius: ScaleSize(5),
-                      marginLeft: -ScaleSize(4),
-                      height: Height * 0.028,
-                      backgroundColor: '#2a82e4',
-                      opacity: 0.8,
-                    }}>
-                    <View style={{marginLeft: Width * 0.72}}>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: '700',
-                          fontSize: ScaleSize(16),
-                        }}>
-                        EMPTY
-                      </Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View />
-                )}
-                {Data.emptyIndex.indexOf(4) >= 0 ? (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: Height * 0.14,
-                      width: Width * 0.9,
-                      borderRadius: ScaleSize(5),
-                      marginLeft: -ScaleSize(4),
-                      height: Height * 0.032,
-                      backgroundColor: '#2a82e4',
-                      opacity: 0.8,
-                    }}>
-                    <View style={{marginLeft: Width * 0.72}}>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: '700',
-                          fontSize: ScaleSize(16),
-                        }}>
-                        EMPTY
-                      </Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View />
-                )}
+                {/*有关empty视图的部分删除 */}
               </View>
               <View>
                 {Data.errorIndex.indexOf(0) >= 0 &&
