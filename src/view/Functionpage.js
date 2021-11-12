@@ -276,7 +276,6 @@ class Ping extends Component {
     dataSets,
   ) {
     for (let i = 0; i < urlCollection.length; i++) {
-      
       if (urlCollection[i] != '') {
         dataSets.push({
           textColor: gridColor,
@@ -476,6 +475,7 @@ class Ping extends Component {
           position: 'relative',
           backgroundColor: 'pink',
         }}>
+        {/* 返回弹窗 */}
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
@@ -530,8 +530,14 @@ class Ping extends Component {
                 this.n95,
                 this.maxTime,
               ]);
-              Data.values=[this.state.values,this.state.values2,this.state.values3,this.state.values4,this.state.values5]
-              console.log("这个有毛病没？",Data.values);
+              Data.values = [
+                this.state.values,
+                this.state.values2,
+                this.state.values3,
+                this.state.values4,
+                this.state.values5,
+              ];
+              console.log('这个有毛病没？', Data.values);
               Data.Piedata.push([
                 this.error1 / Data.config.xAxis.valueFormatter.length,
                 1 - this.error1 / Data.config.xAxis.valueFormatter.length,
@@ -604,6 +610,25 @@ class Ping extends Component {
             this.props.navigation.navigate('UrlInput');
           }}
         />
+        {/* 点击网址弹窗 */}
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="测试"
+          titleStyle={{
+            fontSize: ScaleSize(20),
+            fontWeight: '700',
+            color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+          }}
+          animatedValue={0.9}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={false}
+          // onDismiss={() => {
+          //   this.setState({showAlert: false});
+          // }}
+        />
         <View
           style={{
             height: Height * 1.2,
@@ -672,90 +697,100 @@ class Ping extends Component {
 
           <View style={{position: 'absolute', top: Height * 0.44}}>
             {Data.urlData_length > 0 ? (
-              <View
-                style={{
-                  width: Width * 0.9,
-                  marginLeft: Width * 0.05,
-                  height: Height * 0.04,
-                  backgroundColor: 'red',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text
-                  style={styles.rowlegend}
-                  numberOfLines={1}
-                  ellipsizeMode="tail">
-                  {' '}
-                  A : {urlCollection[0]} ({Data.IP1})
-                </Text>
-              </View>
+              <TouchableOpacity onPress={() => {}}>
+                <View
+                  style={{
+                    width: Width * 0.9,
+                    marginLeft: Width * 0.05,
+                    height: Height * 0.04,
+                    backgroundColor: 'red',
+                    marginBottom: ScaleSize(3),
+                  }}>
+                  <Text
+                    style={styles.rowlegend}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {' '}
+                    A : {urlCollection[0]} ({Data.IP1})
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ) : (
               <View />
             )}
             {Data.urlData_length > 1 ? (
-              <View
-                style={{
-                  width: Width * 0.9,
-                  marginLeft: Width * 0.05,
-                  height: Height * 0.04,
-                  backgroundColor: '#2a82e4',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend} numberOfLines={1}>
-                  {' '}
-                  B : {urlCollection[1]} ({Data.IP2})
-                </Text>
-              </View>
+              <TouchableOpacity onPress={() => {}}>
+                <View
+                  style={{
+                    width: Width * 0.9,
+                    marginLeft: Width * 0.05,
+                    height: Height * 0.04,
+                    backgroundColor: '#2a82e4',
+                    marginBottom: ScaleSize(3),
+                  }}>
+                  <Text style={styles.rowlegend} numberOfLines={1}>
+                    {' '}
+                    B : {urlCollection[1]} ({Data.IP2})
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ) : (
               <View />
             )}
             {Data.urlData_length > 2 ? (
-              <View
-                style={{
-                  width: Width * 0.9,
-                  marginLeft: Width * 0.05,
-                  height: Height * 0.04,
-                  backgroundColor: 'green',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend} numberOfLines={1}>
-                  {' '}
-                  C : {urlCollection[2]} ({Data.IP3})
-                </Text>
-              </View>
+              <TouchableOpacity onPress={() => {}}>
+                <View
+                  style={{
+                    width: Width * 0.9,
+                    marginLeft: Width * 0.05,
+                    height: Height * 0.04,
+                    backgroundColor: 'green',
+                    marginBottom: ScaleSize(3),
+                  }}>
+                  <Text style={styles.rowlegend} numberOfLines={1}>
+                    {' '}
+                    C : {urlCollection[2]} ({Data.IP3})
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ) : (
               <View />
             )}
             {Data.urlData_length > 3 ? (
-              <View
-                style={{
-                  width: Width * 0.9,
-                  marginLeft: Width * 0.05,
-                  height: Height * 0.04,
-                  backgroundColor: '#f67e1e',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend} numberOfLines={1}>
-                  {' '}
-                  D : {urlCollection[3]} ({Data.IP4})
-                </Text>
-              </View>
+              <TouchableOpacity onPress={() => {}}>
+                <View
+                  style={{
+                    width: Width * 0.9,
+                    marginLeft: Width * 0.05,
+                    height: Height * 0.04,
+                    backgroundColor: '#f67e1e',
+                    marginBottom: ScaleSize(3),
+                  }}>
+                  <Text style={styles.rowlegend} numberOfLines={1}>
+                    {' '}
+                    D : {urlCollection[3]} ({Data.IP4})
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ) : (
               <View />
             )}
             {Data.urlData_length > 4 ? (
-              <View
-                style={{
-                  width: Width * 0.9,
-                  marginLeft: Width * 0.05,
-                  height: Height * 0.04,
-                  backgroundColor: 'purple',
-                  marginBottom: ScaleSize(3),
-                }}>
-                <Text style={styles.rowlegend} numberOfLines={1}>
-                  {' '}
-                  E : {urlCollection[4]} ({Data.IP5})
-                </Text>
-              </View>
+              <TouchableOpacity onPress={() => {}}>
+                <View
+                  style={{
+                    width: Width * 0.9,
+                    marginLeft: Width * 0.05,
+                    height: Height * 0.04,
+                    backgroundColor: 'purple',
+                    marginBottom: ScaleSize(3),
+                  }}>
+                  <Text style={styles.rowlegend} numberOfLines={1}>
+                    {' '}
+                    E : {urlCollection[4]} ({Data.IP5})
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ) : (
               <View />
             )}

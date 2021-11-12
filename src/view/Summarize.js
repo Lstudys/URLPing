@@ -144,27 +144,20 @@ class Summarize extends Component {
       Data.config.data.dataSets.length,
     );
     var dataSet = Data.config.data.dataSets;
-      console.log("这个行不行"+Data.config.data.dataSets[1].values,Data.config.data.dataSets[3].values);
-    if (
-      Data.pingurl.length==1
-    )
+    console.log(
+      '这个行不行' + Data.config.data.dataSets[1].values,
+      Data.config.data.dataSets[3].values,
+    );
+    if (Data.pingurl.length == 1)
       var datawd = `${Data.config.xAxis.valueFormatter}\n${Data.values[0]}`;
-    else if (
-      Data.pingurl.length==2
-    )
+    else if (Data.pingurl.length == 2)
       var datawd = `${Data.config.xAxis.valueFormatter}\n${Data.values[0]}\n${Data.values[1]}`;
-    else if (
-      Data.pingurl.length==3
-    )
+    else if (Data.pingurl.length == 3)
       var datawd = `${Data.config.xAxis.valueFormatter}\n${Data.values[0]}\n${Data.values[1]}\n${Data.values[2]}`;
-    else if (
-      Data.pingurl.length==4
-    )
+    else if (Data.pingurl.length == 4)
       var datawd = `${Data.config.xAxis.valueFormatter}\n${Data.values[0]}\n${Data.values[1]}\n${Data.values[2]}\n${Data.values[3]}`;
-    else if (
-      Data.pingurl.length==5
-    )
-    var datawd = `${Data.config.xAxis.valueFormatter}\n${Data.values[0]}\n${Data.values[1]}\n${Data.values[2]}\n${Data.values[3]}\n${Data.values[4]}`;
+    else if (Data.pingurl.length == 5)
+      var datawd = `${Data.config.xAxis.valueFormatter}\n${Data.values[0]}\n${Data.values[1]}\n${Data.values[2]}\n${Data.values[3]}\n${Data.values[4]}`;
     RNFetchBlob.fs.writeFile(downloadDest2, datawd).then((result) => {
       console.log('result=====', result);
       Toast.message('success');
@@ -212,7 +205,6 @@ class Summarize extends Component {
       showSumAlert: false,
     });
   };
-
   showPermissonAlert = () => {
     this.setState({
       showPermissonAlert: true,
@@ -388,7 +380,7 @@ class Summarize extends Component {
             })
             .catch((e2) => {
               console.log('failed', e2);
-              // this.setState({showPermissonAlert: true});
+              this.setState({showPermissionAlert: true});
               // PermissionUtil.checkPermission(
               //   function () {
               //     console.log('wc,成了');
@@ -437,14 +429,15 @@ class Summarize extends Component {
           closeOnHardwareBackPress={false}
           showCancelButton={false}
           showConfirmButton={false}
-          onDismiss={() => {
-            this.setState({showSumAlert: false});
-          }}
+          // onDismiss={() => {
+          //   this.setState({showSumAlert: false});
+          // }}
           customView={
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  this.hideSumAlert(), this.shareScreenShot();
+                  this.setState({showSumAlert: false});
+                  this.shareScreenShot();
                 }}
                 style={{
                   width: Width * 0.4,
@@ -519,14 +512,14 @@ class Summarize extends Component {
           }}
           message="please go to Settings to enable."
           animatedValue={0.9}
-          closeOnTouchOutside={true}
+          closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           showConfirmButton={true}
           confirmText="Confirm"
-          onDismiss={() => {
-            this.setState({showPermissionAlert: false});
-          }}
+          // onDismiss={() => {
+          //   this.setState({showPermissionAlert: false});
+          // }}
           cancelButtonStyle={{
             backgroundColor:
               this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
@@ -550,7 +543,7 @@ class Summarize extends Component {
             fontWeight: '700',
           }}
           onConfirmPressed={() => {
-            this.hidePermissonAlert();
+            this.setState({showPermissionAlert: false});
             Permissions.openSettings();
           }}
           onCancelPressed={() => {
@@ -595,7 +588,7 @@ class Summarize extends Component {
                     color: '#fff',
                     fontSize: ScaleSize(22),
                   }}>
-                  {`${year}/${month}/${day}  ${this.state.config.xAxis.valueFormatter[0]}`}
+                  {`${year}/${month}/${day}/${this.state.config.xAxis.valueFormatter[0]}`}
                 </Text>
               </View>
             </View>
