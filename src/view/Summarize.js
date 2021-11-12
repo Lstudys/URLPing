@@ -187,12 +187,14 @@ class Summarize extends Component {
     });
   }
   componentDidMount() {
+    console.log("1        " +this.state.Colors)
     store.get(Data.ThemeColor).then((v, r) => {
       if (v == null) this.setState({Color: '#1f2342'});
       else {
-        this.setState({Color: v});
+        this.setState({Colors: v});
       }
     });
+    console.log(this.state.Colors)
     Data.InputUrl = '';
 
     //使安卓手机物理返回键生效
@@ -562,7 +564,7 @@ class Summarize extends Component {
             <View
               style={{
                 height: Height * 0.08,
-                borderBottomColor: '#fff',
+                borderBottomColor: this.state.Colors=='#FFFFFF'?'#000000':'#FFFFFF',
                 borderBottomWidth: ScaleSize(2),
                 marginBottom: Height * 0.04,
               }}>
@@ -571,16 +573,25 @@ class Summarize extends Component {
                   this.props.navigation.navigate('Ordinary');
                 }}>
                 <View>
-                  <Image
-                    source={require('../imgs/back.png')}
+                  {this.state.Colors=='#FFFFFF'?<Image
+                    source={require('../imgs/2.png')}
                     style={{
-                      marginTop: ScaleSize(16),
-                      width: ScaleSize(30),
-                      height: ScaleSize(30),
+                      marginTop: ScaleSize(10),
+                      width: ScaleSize(35),
+                      height: ScaleSize(35),
                       marginBottom: ScaleSize(15),
                       marginHorizontal: ScaleSize(10),
                     }}
-                  />
+                  />:<Image
+                  source={require('../imgs/back.png')}
+                  style={{
+                    marginTop: ScaleSize(16),
+                    width: ScaleSize(30),
+                    height: ScaleSize(30),
+                    marginBottom: ScaleSize(15),
+                    marginHorizontal: ScaleSize(10),
+                  }}
+                />}
                 </View>
               </TouchableOpacity>
 
@@ -592,7 +603,7 @@ class Summarize extends Component {
                 }}>
                 <Text
                   style={{
-                    color: '#fff',
+                    color: this.state.Colors=='#FFFFFF'?'#000000':'#fff',
                     fontSize: SetSpText(36),
                   }}>
                   {`${year}/${month}/${day}  ${this.state.config.xAxis.valueFormatter[0]}`}
@@ -717,21 +728,21 @@ class Summarize extends Component {
                 yAxis={{
                   left: {
                     axisLineWidth: 1.5,
-                    axisLineColor: gridColor,
+                    axisLineColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
 
-                    textColor: gridColor,
+                    textColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                     enabled: true,
                     drawGridLines: true,
-                    gridColor: gridColor,
+                    gridColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                   },
                   right: {
                     axisLineWidth: 1.5,
-                    axisLineColor: gridColor,
+                    axisLineColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
 
-                    textColor: gridColor,
+                    textColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                     enabled: true,
                     drawGridLines: true,
-                    gridColor: gridColor,
+                    gridColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                   },
                 }}
                 zoom={{scaleX: 1, scaleY: 1, xValue: 2}}
@@ -742,8 +753,8 @@ class Summarize extends Component {
                 marker={{
                   enabled: true,
                   backgroundTint: processColor('#fff'),
-                  markerColor: processColor('#fff'),
-                  textColor: processColor('red'),
+                  markerColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
+                  textColor: processColor(this.state.Colors=='#FFFFFF'?'#FFFFFF':'red'),
                 }}
                 legend={{
                   textColor: gridColor,
@@ -774,7 +785,7 @@ class Summarize extends Component {
                 }}
                 xAxis={{
                   // valueFormatter: "none",
-                  textColor: processColor(this.state.Color),
+                  textColor: processColor(this.state.Colors),
                   granularityEnabled: true,
                   granularity:
                     Data.pingurl.length == 3
@@ -804,21 +815,21 @@ class Summarize extends Component {
                 yAxis={{
                   left: {
                     axisLineWidth: 1.5,
-                    axisLineColor: gridColor,
+                    axisLineColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
 
-                    textColor: gridColor,
+                    textColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                     enabled: true,
                     drawGridLines: true,
-                    gridColor: gridColor,
+                    gridColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                   },
                   right: {
                     axisLineWidth: 1.5,
-                    axisLineColor: gridColor,
+                    axisLineColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
 
-                    textColor: gridColor,
+                    textColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                     enabled: true,
                     drawGridLines: true,
-                    gridColor: gridColor,
+                    gridColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                   },
                 }}
                 zoom={{scaleX: 1, scaleY: 1, xValue: 1}}
@@ -852,7 +863,7 @@ class Summarize extends Component {
                 }}>
                 <Text
                   style={{
-                    color: '#fff',
+                    color: this.state.Colors=='#FFFFFF'?'#000000':'#fff',
                     marginLeft: Width * 0.09,
                     fontSize: ScaleSize(12),
                   }}>
@@ -1197,7 +1208,7 @@ class Summarize extends Component {
             width: Width,
             height: Height * 0.07,
             alignItems: 'center',
-            backgroundColor: this.state.Color,
+            backgroundColor: this.state.Colors == '#4588AA' ? '#6BA5C2' : (this.state.Colors=='#FFFFFF'?'#FFFFFF':'#1f2342'),
           }}>
           <TouchableOpacity
             style={{
@@ -1205,7 +1216,7 @@ class Summarize extends Component {
               width: Width * 0.4,
               height: Height * 0.06,
               backgroundColor:
-                this.state.Color == '#4588AA' ? '#336699' : '#2C1F42',
+              this.state.Colors == '#4588AA' ? '#6BA5C2' : (this.state.Colors=='#FFFFFF'?'#000000':'#1f2342'),
               borderRadius: ScaleSize(10),
               borderColor: '#fff',
               borderWidth: ScaleSize(2),
@@ -1228,7 +1239,7 @@ class Summarize extends Component {
               width: Width * 0.4,
               height: Height * 0.06,
               backgroundColor:
-                this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
+              this.state.Color == '#4588AA' ? '#6BA5C2' : (this.state.Colors=='#FFFFFF'?'#000000':'#1f2342'),
               borderRadius: ScaleSize(10),
               borderColor: '#fff',
               borderWidth: ScaleSize(2),

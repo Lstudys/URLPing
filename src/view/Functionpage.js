@@ -97,6 +97,7 @@ class Ping extends Component {
       if (v == null) this.setState({Colors: '#1f2342'});
       else {
         this.setState({Colors: v});
+        console.log(this.state.Colors)
       }
     });
     LanguageChange.bind(this)();
@@ -348,10 +349,10 @@ class Ping extends Component {
         dataSets,
       },
       xAxis: {
-        textColor: gridColor,
+        textColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
         valueFormatter: chartLabels,
         axisLineWidth: 1.5,
-        axisLineColor: gridColor,
+        axisLineColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
         drawLabels: true,
         position: 'BOTTOM',
         drawGridLines: false,
@@ -517,7 +518,7 @@ class Ping extends Component {
           titleStyle={{
             fontSize: SetSpText(36),
             fontWeight: '700',
-            color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+            color:this.state.Colors == '#4588AA' ? '#6BA5C2' : (this.state.Colors=='#FFFFFF'?'#000000':'#1f2342'),
           }}
           animatedValue={0.9}
           closeOnTouchOutside={true}
@@ -528,14 +529,14 @@ class Ping extends Component {
           confirmText="Confirm"
           cancelButtonStyle={{          
             backgroundColor:
-              this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+            this.state.Colors == '#4588AA' ? '#6BA5C2' : (this.state.Colors=='#FFFFFF'?'#000000':'#1f2342'),
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
           }}
           confirmButtonStyle={{
             backgroundColor:
-              this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+            this.state.Colors == '#4588AA' ? '#6BA5C2' : (this.state.Colors=='#FFFFFF'?'#000000':'#1f2342'),
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
@@ -706,21 +707,21 @@ class Ping extends Component {
               yAxis={{
                 left: {
                   axisLineWidth: 1.5,
-                  axisLineColor: gridColor,
+                  axisLineColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
 
-                  textColor: gridColor,
+                  textColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                   enabled: true,
                   drawGridLines: true,
-                  gridColor: gridColor,
+                  gridColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                 },
                 right: {
                   axisLineWidth: 1.5,
-                  axisLineColor: gridColor,
+                  axisLineColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
 
-                  textColor: gridColor,
+                  textColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                   enabled: true,
                   drawGridLines: true,
-                  gridColor: gridColor,
+                  gridColor: processColor(this.state.Colors=='#FFFFFF'?'#000000':'#fff'),
                 },
               }}
               zoom={this.state.zoom}
@@ -840,7 +841,7 @@ class Ping extends Component {
               <View />
             )}
             <View style={styles.table}>
-              <Table borderStyle={{borderWidth: 1, borderColor: '#fff'}}>
+              <Table borderStyle={{borderWidth: 1, borderColor: this.state.Colors=='#FFFFFF'?'#000000':'#fff'}}>
                 <Row
                   data={state.tableHead}
                   flexArr={[1, 1, 1]}
@@ -848,11 +849,16 @@ class Ping extends Component {
                     height: ScaleSize(26),
                     backgroundColor: this.state.Colors,
                   }}
-                  textStyle={styles.textHead}
+                  textStyle= {{
+                    textAlign: 'center',
+                    color: this.state.Colors=='#FFFFFF'?'#000000':'#fff',
+                    fontWeight: 'bold',
+                    fontSize: ScaleSize(15),
+                  }}
                 />
               </Table>
 
-              <Table borderStyle={{borderWidth: 1, borderColor: '#fff'}}>
+              <Table borderStyle={{borderWidth: 1, borderColor: this.state.Colors=='#FFFFFF'?'#000000':'#fff'}}>
                 {tableData.map((rowData, rowIndex) => {
                   return (
                     <TableWrapper key={rowIndex} style={styles.row}>
