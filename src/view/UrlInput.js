@@ -290,7 +290,7 @@ class Ordinary extends Component {
           marginLeft: Width * 0.025,
           marginTop: ScaleSize(20),
           backgroundColor:
-            this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
+          this.state.Color=="#4588AA"?"#6BA5C2":(this.state.Color=='#FFFFFF'?'#333333':"#494b6d"),
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -352,7 +352,7 @@ class Ordinary extends Component {
               ellipsizeMode={'tail'}
               style={{
                 color: '#fff',
-                fontSize: SetSpText(35),
+                fontSize: SetSpText(34),
               }}>
               {item}
             </Text>
@@ -403,7 +403,7 @@ class Ordinary extends Component {
             Data.InputUrl.slice(0, this.state.currentIndex) +
             Data.urlsArr[key] +
             Data.InputUrl.slice(this.state.currentIndex);
-          this.setState({refresh: !this.state.refresh});
+          // this.setState({refresh: !this.state.refresh});
           this.setState({focus: true});
         }}
         style={styles.renderRow}>
@@ -429,14 +429,14 @@ class Ordinary extends Component {
       return (
         <View
           style={{
-            backgroundColor: this.state.Color,
+            backgroundColor: this.state.Color=="#4588AA"?"#4588AA":(this.state.Color=='#FFFFFF'?'#CCCCCC':"#1f2342"),
             height: Height,
             position: 'relative',
             flex: 1,
           }}>
           <View
             style={{
-              backgroundColor: this.state.Color,
+              backgroundColor: this.state.Color=="#4588AA"?"#4588AA":(this.state.Color=='#FFFFFF'?'#CCCCCC':"#1f2342"),
               position: 'absolute',
               bottom: ScaleSize(20),
             }}>
@@ -478,10 +478,7 @@ class Ordinary extends Component {
               <FlatList
                 scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
-                style={{
-                  backgroundColor:
-                    this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
-                }}
+                style={{backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":(this.state.Color=='#FFFFFF'?'#333333':"#494b6d"),}}
                 horizontal={true}
                 data={Data.urlsArr}
                 renderItem={this._renderRow}
@@ -974,7 +971,7 @@ class Ordinary extends Component {
                   width: Width * 0.8,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
-                  fontSize: ScaleSize(18),
+                  fontSize: SetSpText(36),            
                 }}
                 onChangeText={(value) => {
                   console.log('我来康康text：' + Data.errorIndex);
@@ -1027,7 +1024,7 @@ class Ordinary extends Component {
                   flexDirection: 'row',
                   width: Width,
                   height: Height * 0.07,
-                  backgroundColor: this.state.Color,
+                  backgroundColor: this.state.Color=="#4588AA"?"#4588AA":(this.state.Color=='#FFFFFF'?'#CCCCCC':"#1f2342"),
                   alignItems: 'center',
                 }}>
                 <TouchableOpacity
@@ -1037,7 +1034,7 @@ class Ordinary extends Component {
                     width: Width * 0.4,
                     height: Height * 0.06,
                     backgroundColor:
-                      this.state.Color == '#4588AA' ? '#6BA5C2' : '#494b6d',
+                    this.state.Color=="#4588AA"?"#6BA5C2":(this.state.Color=='#FFFFFF'?'#666666':"#494b6d"),
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -1059,7 +1056,7 @@ class Ordinary extends Component {
                     width: Width * 0.4,
                     height: Height * 0.06,
                     backgroundColor:
-                      this.state.Color == '#4588AA' ? '#336699' : '#2C1F42',
+                    this.state.Color=="#4588AA"?'#336699':(this.state.Color=='#FFFFFF'?'#000000':"#2C1F42"),
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -1111,7 +1108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pingtext: {
-    fontSize: SetSpText(50),
+    fontSize: SetSpText(54),
     color: '#fff',
     fontWeight: '700',
   },
@@ -1146,7 +1143,7 @@ const styles = StyleSheet.create({
     borderRadius: ScaleSize(20),
   },
   _renderRowitem: {
-    fontSize: SetSpText(35),
+    fontSize: SetSpText(34),
     marginTop: ScaleSize(5),
     color: '#fff',
     fontWeight: '700',
