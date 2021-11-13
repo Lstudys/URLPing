@@ -24,7 +24,7 @@ import {ExitApp, BackAction} from '../controller/AppPageFunction';
 import AwesomeAlert from 'react-native-awesome-alerts';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
-const ThemeColor = ['#1f2342', '#4588AA'];
+const ThemeColor = ['#1f2342', '#4588AA','#FFFFFF'];
 class Ordinary extends Component {
   closeControlPanel = () => {
     this._drawer.close();
@@ -188,8 +188,8 @@ class Ordinary extends Component {
             backgroundColor: '#fff',
             width: Width * 0.57,
             // marginLeft: Width * 0.02,
-            borderColor: '#fff',
-            borderWidth: ScaleSize(4),
+            borderColor: this.state.Color==ThemeColor[2]?'#000000':'#fff',
+            //borderWidth: ScaleSize(4),
             borderBottomWidth: ScaleSize(2),
             // borderRadius: ScaleSize(2),
             // borderBottomRightRadius: ScaleSize(20),
@@ -204,7 +204,7 @@ class Ordinary extends Component {
             <Text
               style={{
                 color: '#000000',
-                fontSize: ScaleSize(20),
+                fontSize: SetSpText(34),
                 fontWeight: '700',
               }}>
               {I18n.t('home')}
@@ -243,8 +243,8 @@ class Ordinary extends Component {
             backgroundColor: '#fff',
             width: Width * 0.57,
             // marginLeft: Width * 0.02,
-            borderColor: '#fff',
-            borderWidth: ScaleSize(4),
+            borderColor: this.state.Color==ThemeColor[2]?'#000000':'#fff',
+            //borderWidth: ScaleSize(4),
             borderBottomWidth: ScaleSize(2),
             // borderRadius: ScaleSize(2),
             // borderBottomRightRadius: ScaleSize(20),
@@ -259,7 +259,7 @@ class Ordinary extends Component {
             <Text
               style={{
                 color: '#000000',
-                fontSize: ScaleSize(20),
+                fontSize: SetSpText(34),
                 fontWeight: '700',
               }}>
               {I18n.t('Theme')}
@@ -299,8 +299,8 @@ class Ordinary extends Component {
               backgroundColor: '#fff',
               width: Width * 0.55,
               // marginLeft: Width * 0.02,
-              borderColor: '#fff',
-              borderWidth: ScaleSize(4),
+              borderColor: this.state.Color==ThemeColor[2]?'#000000':'#fff',
+              //borderWidth: ScaleSize(2),
               borderBottomWidth: ScaleSize(2),
               // borderRadius: ScaleSize(2),
               // borderBottomRightRadius: ScaleSize(20),
@@ -315,16 +315,16 @@ class Ordinary extends Component {
               }}>
               <Text
                 style={{
-                  color: '#494b6d',
-                  fontSize: ScaleSize(20),
+                  color: '#000000',
+                  fontSize: SetSpText(34),
                   fontWeight: '700',
                 }}>
                 {I18n.t('about')}
               </Text>
               <Text
                 style={{
-                  color: '#494b6d',
-                  fontSize: ScaleSize(12),
+                  color:'#000000',
+                  fontSize: SetSpText(26),
                   fontWeight: '700',
                 }}>
                 {I18n.t('version')}
@@ -374,16 +374,17 @@ class Ordinary extends Component {
             title="Graph URL Ping"
             message="APP version : v1.0.0        Update Time: 2021/11/5"
             titleStyle={{
-              fontSize: ScaleSize(20),
+              fontSize: SetSpText(36),
               fontWeight: '700',
-              color: '#494b6d',
+              color: '#000000',
             }}
             messageStyle={{
+              color:'#000000',
               // backgroundColor:"#fff",
               width: Width * 0.55,
               marginTop: ScaleSize(20),
               marginBottom: ScaleSize(20),
-              fontSize: ScaleSize(16),
+              fontSize: SetSpText(34),
             }}
             closeOnTouchOutside={true}
             closeOnHardwareBackPress={true}
@@ -391,20 +392,20 @@ class Ordinary extends Component {
             // showConfirmButton={true}
             cancelText="OK"
             onDismiss={() => {
-              this.setState({showPermissionAlert: false});
+              this.setState({showAlert: false});
             }}
             onCancelPressed={() => {
               this.hideAlert();
             }}
             // confirmText="Yes, delete it"
             cancelButtonStyle={{
-              backgroundColor: '#494b6d',
+              backgroundColor: this.state.Color == '#4588AA' ? '#4588AA' : (this.state.Color==ThemeColor[2]?'#000000':'#1f2342'),
               height: Height * 0.05,
               width: Width * 0.65,
               alignItems: 'center',
             }}
             cancelButtonTextStyle={{
-              fontSize: ScaleSize(20),
+              fontSize: SetSpText(34),
               fontWeight: '700',
             }}
           />
@@ -416,8 +417,8 @@ class Ordinary extends Component {
             show={showAlert2}
             customView={
               <View>
-                <View>
-                  <Text style={{fontSize: ScaleSize(20)}}>请选择主题颜色</Text>
+                <View style={{marginLeft:ScaleSizeW(25)}}>
+                  <Text style={{fontSize: ScaleSize(20)}}>选择主题颜色</Text>
                 </View>
                 <View
                   backgroundColor="#1f2342"
@@ -434,7 +435,7 @@ class Ordinary extends Component {
                       marginLeft: Width * 0.13,
                       marginTop: Height * 0.01,
                     }}>
-                    <Text style={{color: '#fff'}}>蓝紫色</Text>
+                    <Text style={{fontSize: SetSpText(30),color: '#fff'}}>蓝紫色</Text>
                   </TouchableOpacity>
                 </View>
                 <View
@@ -452,7 +453,25 @@ class Ordinary extends Component {
                       marginLeft: Width * 0.13,
                       marginTop: Height * 0.01,
                     }}>
-                    <Text style={{color: '#fff'}}>浅蓝色</Text>
+                    <Text style={{fontSize: SetSpText(30),color: '#fff'}}>浅蓝色</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  backgroundColor='#E6E6E6'
+                  style={{marginTop: ScaleSizeH(10)}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({Color: ThemeColor[2]});
+                      store.update(Data.ThemeColor, ThemeColor[2]);
+                      this.hideAlert2();
+                    }}
+                    style={{
+                      height: ScaleSizeH(50),
+                      width: ScaleSizeW(150),
+                      marginLeft: Width * 0.15,
+                      marginTop: Height * 0.01,
+                    }}>
+                    <Text style={{fontSize:SetSpText(30),color: '#000000'}}>白色</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -466,22 +485,31 @@ class Ordinary extends Component {
                   this._drawer.open();
                 }}>
                 <View>
-                  <Image
-                    source={require('../imgs/draw.png')}
+                  {this.state.Color==ThemeColor[2]?<Image
+                    source={require('../imgs/1.png')}
                     style={{
-                      marginTop: ScaleSize(16),
+                      marginTop: ScaleSize(10),
                       width: ScaleSize(35),
-                      height: ScaleSize(35),
+                      height: ScaleSize(45),
                       marginBottom: ScaleSize(15),
                       marginHorizontal: ScaleSize(10),
                     }}
-                  />
+                  />:<Image
+                  source={require('../imgs/draw.png')}
+                  style={{
+                    marginTop: ScaleSize(16),
+                    width: ScaleSize(35),
+                    height: ScaleSize(35),
+                    marginBottom: ScaleSize(15),
+                    marginHorizontal: ScaleSize(10),
+                  }}
+                />}
                 </View>
               </TouchableOpacity>
               <Text
                 style={{
-                  color: '#FFFFFF',
-                  fontSize: SetSpText(85),
+                  color: this.state.Color==ThemeColor[2]?'#000000':'#FFFFFF',
+                  fontSize: SetSpText(90),
                   fontWeight: 'bold',
                   textAlign: 'center',
                   marginTop: ScaleSize(160),
@@ -500,9 +528,9 @@ class Ordinary extends Component {
                   backgroundColor: '#fff',
                   width: Width * 0.9,
                   marginLeft: Width * 0.05,
-                  borderColor: '#fff',
+                  borderColor: this.state.Color==ThemeColor[2]?'#000000':'#FFFFFF',
                   borderWidth: ScaleSize(4),
-                  borderBottomWidth: ScaleSize(2),
+                  borderBottomWidth: ScaleSize(4),
                   borderRadius: ScaleSize(20),
                 }}>
                 <View
@@ -511,7 +539,7 @@ class Ordinary extends Component {
                     alignItems: 'center',
                     position: 'absolute',
                     right: Width * 0.03,
-                    top: Height * 0.006,
+                    top: Height * 0.003,
                   }}>
                   <TouchableOpacity
                     onPress={() => {
@@ -519,9 +547,9 @@ class Ordinary extends Component {
                     }}>
                     <Text
                       style={{
-                        fontSize: SetSpText(60),
+                        fontSize: SetSpText(72),
                         color:
-                          this.state.Color == '#4588AA' ? '#4588AA' : '#1f2342',
+                        this.state.Color == '#4588AA' ? '#4588AA' : (this.state.Color==ThemeColor[2]?'#000000':'#1f2342'),
                         fontWeight: '700',
                       }}>
                       GO!

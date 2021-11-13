@@ -37,6 +37,7 @@ class Ping extends Component {
     this.state = {
       Colors: '#1f2342',
       showAlert: false,
+      showAlert2: false,
       scaleX: 1.05,
       zoom: {scaleX: 1, scaleY: 1, xValue: 2},
       tableHead: ['#', 'MIN', 'P50', 'AVG', 'P95', 'MAX', 'STD', 'ERR'],
@@ -89,12 +90,14 @@ class Ping extends Component {
       checked: true,
       chartDisplay: false,
       urlsWitch: true, //刷新页面
+      message: '',
     };
     urlCollection = ['', '', '', '', ''];
     store.get(Data.ThemeColor).then((v, r) => {
       if (v == null) this.setState({Colors: '#1f2342'});
       else {
         this.setState({Colors: v});
+        console.log(this.state.Colors);
       }
     });
     LanguageChange.bind(this)();
@@ -231,6 +234,40 @@ class Ping extends Component {
       showAlert: false,
     });
   };
+
+  showAlert2 = (key) => {
+    if (key == 0) {
+      this.setState({
+        message: urlCollection[0] + '\n' + Data.IP1,
+      });
+    } else if (key == 1) {
+      this.setState({
+        message: urlCollection[1] + '\n' + Data.IP2,
+      });
+    } else if (key == 2) {
+      this.setState({
+        message: urlCollection[2] + '\n' + Data.IP3,
+      });
+    } else if (key == 3) {
+      this.setState({
+        message: urlCollection[3] + '\n' + Data.IP4,
+      });
+    } else if (key == 4) {
+      this.setState({
+        message: urlCollection[4] + '\n' + Data.IP5,
+      });
+    }
+    this.setState({
+      showAlert2: true,
+    });
+  };
+
+  hideAlert2 = () => {
+    this.setState({
+      showAlert2: false,
+    });
+  };
+
   componentWillMount() {}
 
   componentDidMount() {
@@ -312,10 +349,14 @@ class Ping extends Component {
         dataSets,
       },
       xAxis: {
-        textColor: gridColor,
+        textColor: processColor(
+          this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+        ),
         valueFormatter: chartLabels,
         axisLineWidth: 1.5,
-        axisLineColor: gridColor,
+        axisLineColor: processColor(
+          this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+        ),
         drawLabels: true,
         position: 'BOTTOM',
         drawGridLines: false,
@@ -359,7 +400,6 @@ class Ping extends Component {
   }
 
   render() {
-    const {showAlert} = this.state;
     const tableDataArr = [
       [
         'A',
@@ -477,13 +517,18 @@ class Ping extends Component {
         }}>
         {/* 返回弹窗 */}
         <AwesomeAlert
-          show={showAlert}
+          show={this.state.showAlert}
           showProgress={false}
           title="Make a summary?"
           titleStyle={{
-            fontSize: ScaleSize(20),
+            fontSize: SetSpText(36),
             fontWeight: '700',
-            color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+            color:
+              this.state.Colors == '#4588AA'
+                ? '#6BA5C2'
+                : this.state.Colors == '#FFFFFF'
+                ? '#000000'
+                : '#1f2342',
           }}
           animatedValue={0.9}
           closeOnTouchOutside={true}
@@ -492,29 +537,34 @@ class Ping extends Component {
           showConfirmButton={true}
           cancelText="Quit"
           confirmText="Confirm"
-          onDismiss={() => {
-            this.setState({showAlert: false});
-          }}
           cancelButtonStyle={{
             backgroundColor:
-              this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+              this.state.Colors == '#4588AA'
+                ? '#6BA5C2'
+                : this.state.Colors == '#FFFFFF'
+                ? '#000000'
+                : '#1f2342',
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
           }}
           confirmButtonStyle={{
             backgroundColor:
-              this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+              this.state.Colors == '#4588AA'
+                ? '#6BA5C2'
+                : this.state.Colors == '#FFFFFF'
+                ? '#000000'
+                : '#1f2342',
             height: Height * 0.05,
             width: Width * 0.25,
             alignItems: 'center',
           }}
           cancelButtonTextStyle={{
-            fontSize: ScaleSize(18),
+            fontSize: SetSpText(34),
             fontWeight: '700',
           }}
           confirmButtonTextStyle={{
-            fontSize: ScaleSize(18),
+            fontSize: SetSpText(34),
             fontWeight: '700',
           }}
           onConfirmPressed={() => {
@@ -610,24 +660,41 @@ class Ping extends Component {
             this.props.navigation.navigate('UrlInput');
           }}
         />
-        {/* 点击网址弹窗 */}
         <AwesomeAlert
-          show={showAlert}
+          show={this.state.showAlert2}
           showProgress={false}
-          title="测试"
+          title="URL"
+          message={this.state.message}
           titleStyle={{
-            fontSize: ScaleSize(20),
+            fontSize: SetSpText(36),
             fontWeight: '700',
-            color: this.state.Colors == '#4588AA' ? '#6BA5C2' : '#1f2342',
+            color: '#494b6d',
+          }}
+          messageStyle={{
+            // width: Width * 0.55,
+            marginTop: ScaleSize(20),
+            marginBottom: ScaleSize(20),
+            fontSize: SetSpText(34),
           }}
           animatedValue={0.9}
-          closeOnTouchOutside={true}
+          closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={false}
-          // onDismiss={() => {
-          //   this.setState({showAlert: false});
-          // }}
+          showCancelButton={true}
+          // showConfirmButton={true}
+          cancelText="OK"
+          onCancelPressed={() => {
+            this.hideAlert2();
+          }}
+          cancelButtonStyle={{
+            backgroundColor: '#494b6d',
+            height: Height * 0.05,
+            width: Width * 0.65,
+            alignItems: 'center',
+          }}
+          cancelButtonTextStyle={{
+            fontSize: SetSpText(34),
+            fontWeight: '700',
+          }}
         />
         <View
           style={{
@@ -647,6 +714,7 @@ class Ping extends Component {
             }}>
             <Text
               style={{
+                fontSize: SetSpText(28),
                 color: '#fff',
                 // width:ScaleSize(20)
               }}>
@@ -664,21 +732,33 @@ class Ping extends Component {
               yAxis={{
                 left: {
                   axisLineWidth: 1.5,
-                  axisLineColor: gridColor,
+                  axisLineColor: processColor(
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                  ),
 
-                  textColor: gridColor,
+                  textColor: processColor(
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                  ),
                   enabled: true,
                   drawGridLines: true,
-                  gridColor: gridColor,
+                  gridColor: processColor(
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                  ),
                 },
                 right: {
                   axisLineWidth: 1.5,
-                  axisLineColor: gridColor,
+                  axisLineColor: processColor(
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                  ),
 
-                  textColor: gridColor,
+                  textColor: processColor(
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                  ),
                   enabled: true,
                   drawGridLines: true,
-                  gridColor: gridColor,
+                  gridColor: processColor(
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                  ),
                 },
               }}
               zoom={this.state.zoom}
@@ -697,105 +777,113 @@ class Ping extends Component {
 
           <View style={{position: 'absolute', top: Height * 0.44}}>
             {Data.urlData_length > 0 ? (
-              <TouchableOpacity onPress={() => {}}>
-                <View
-                  style={{
-                    width: Width * 0.9,
-                    marginLeft: Width * 0.05,
-                    height: Height * 0.04,
-                    backgroundColor: 'red',
-                    marginBottom: ScaleSize(3),
-                  }}>
-                  <Text
-                    style={styles.rowlegend}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {' '}
-                    A : {urlCollection[0]} ({Data.IP1})
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View
+                style={{
+                  width: Width * 0.9,
+                  marginLeft: Width * 0.05,
+                  height: Height * 0.04,
+                  backgroundColor: 'red',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text
+                  style={styles.rowlegend}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  onPress={() => this.showAlert2(0)}>
+                  {' '}
+                  A : {urlCollection[0]} ({Data.IP1})
+                </Text>
+              </View>
             ) : (
               <View />
             )}
             {Data.urlData_length > 1 ? (
-              <TouchableOpacity onPress={() => {}}>
-                <View
-                  style={{
-                    width: Width * 0.9,
-                    marginLeft: Width * 0.05,
-                    height: Height * 0.04,
-                    backgroundColor: '#2a82e4',
-                    marginBottom: ScaleSize(3),
-                  }}>
-                  <Text style={styles.rowlegend} numberOfLines={1}>
-                    {' '}
-                    B : {urlCollection[1]} ({Data.IP2})
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View
+                style={{
+                  width: Width * 0.9,
+                  marginLeft: Width * 0.05,
+                  height: Height * 0.04,
+                  backgroundColor: '#2a82e4',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text
+                  style={styles.rowlegend}
+                  numberOfLines={1}
+                  onPress={() => this.showAlert2(1)}>
+                  {' '}
+                  B : {urlCollection[1]} ({Data.IP2})
+                </Text>
+              </View>
             ) : (
               <View />
             )}
             {Data.urlData_length > 2 ? (
-              <TouchableOpacity onPress={() => {}}>
-                <View
-                  style={{
-                    width: Width * 0.9,
-                    marginLeft: Width * 0.05,
-                    height: Height * 0.04,
-                    backgroundColor: 'green',
-                    marginBottom: ScaleSize(3),
-                  }}>
-                  <Text style={styles.rowlegend} numberOfLines={1}>
-                    {' '}
-                    C : {urlCollection[2]} ({Data.IP3})
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View
+                style={{
+                  width: Width * 0.9,
+                  marginLeft: Width * 0.05,
+                  height: Height * 0.04,
+                  backgroundColor: 'green',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text
+                  style={styles.rowlegend}
+                  numberOfLines={1}
+                  onPress={() => this.showAlert2(2)}>
+                  {' '}
+                  C : {urlCollection[2]} ({Data.IP3})
+                </Text>
+              </View>
             ) : (
               <View />
             )}
             {Data.urlData_length > 3 ? (
-              <TouchableOpacity onPress={() => {}}>
-                <View
-                  style={{
-                    width: Width * 0.9,
-                    marginLeft: Width * 0.05,
-                    height: Height * 0.04,
-                    backgroundColor: '#f67e1e',
-                    marginBottom: ScaleSize(3),
-                  }}>
-                  <Text style={styles.rowlegend} numberOfLines={1}>
-                    {' '}
-                    D : {urlCollection[3]} ({Data.IP4})
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View
+                style={{
+                  width: Width * 0.9,
+                  marginLeft: Width * 0.05,
+                  height: Height * 0.04,
+                  backgroundColor: '#f67e1e',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text
+                  style={styles.rowlegend}
+                  numberOfLines={1}
+                  onPress={() => this.showAlert2(3)}>
+                  {' '}
+                  D : {urlCollection[3]} ({Data.IP4})
+                </Text>
+              </View>
             ) : (
               <View />
             )}
             {Data.urlData_length > 4 ? (
-              <TouchableOpacity onPress={() => {}}>
-                <View
-                  style={{
-                    width: Width * 0.9,
-                    marginLeft: Width * 0.05,
-                    height: Height * 0.04,
-                    backgroundColor: 'purple',
-                    marginBottom: ScaleSize(3),
-                  }}>
-                  <Text style={styles.rowlegend} numberOfLines={1}>
-                    {' '}
-                    E : {urlCollection[4]} ({Data.IP5})
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View
+                style={{
+                  width: Width * 0.9,
+                  marginLeft: Width * 0.05,
+                  height: Height * 0.04,
+                  backgroundColor: 'purple',
+                  marginBottom: ScaleSize(3),
+                }}>
+                <Text
+                  style={styles.rowlegend}
+                  numberOfLines={1}
+                  onPress={() => this.showAlert2(4)}>
+                  {' '}
+                  E : {urlCollection[4]} ({Data.IP5})
+                </Text>
+              </View>
             ) : (
               <View />
             )}
             <View style={styles.table}>
-              <Table borderStyle={{borderWidth: 1, borderColor: '#fff'}}>
+              <Table
+                borderStyle={{
+                  borderWidth: 1,
+                  borderColor:
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                }}>
                 <Row
                   data={state.tableHead}
                   flexArr={[1, 1, 1]}
@@ -803,11 +891,21 @@ class Ping extends Component {
                     height: ScaleSize(26),
                     backgroundColor: this.state.Colors,
                   }}
-                  textStyle={styles.textHead}
+                  textStyle={{
+                    textAlign: 'center',
+                    color: this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                    fontWeight: 'bold',
+                    fontSize: ScaleSize(15),
+                  }}
                 />
               </Table>
 
-              <Table borderStyle={{borderWidth: 1, borderColor: '#fff'}}>
+              <Table
+                borderStyle={{
+                  borderWidth: 1,
+                  borderColor:
+                    this.state.Colors == '#FFFFFF' ? '#000000' : '#fff',
+                }}>
                 {tableData.map((rowData, rowIndex) => {
                   return (
                     <TableWrapper key={rowIndex} style={styles.row}>
@@ -976,6 +1074,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   rowlegend: {
+    fontSize: SetSpText(34),
     color: '#fff',
     lineHeight: Height * 0.04,
   },
