@@ -551,7 +551,11 @@ class Summarize extends Component {
             this.setState({showPermissionAlert: false});
           }}
         />
-        <ScrollView style={{backgroundColor: this.state.Colors}}>
+        <ScrollView
+          style={{
+            backgroundColor: this.state.Colors,
+            marginBottom: Height * 0.07,
+          }}>
           <ViewShot onCapture={this.onCapture} captureMode="mount">
             <View
               style={{
@@ -1222,6 +1226,7 @@ class Summarize extends Component {
             flexDirection: 'row',
             width: Width,
             height: Height * 0.07,
+            marginBottom: Height * 0.17,
             alignItems: 'center',
             backgroundColor:
               this.state.Colors == '#4588AA'
@@ -1235,12 +1240,12 @@ class Summarize extends Component {
               marginLeft: Width * 0.06,
               width: Width * 0.4,
               height: Height * 0.06,
-              // backgroundColor:
-              //   this.state.Colors == '#4588AA'
-              //     ? '#6BA5C2'
-              //     : this.state.Colors == '#FFFFFF'
-              //     ? '#000000'
-              //     : '#1f2342',
+              backgroundColor:
+                this.state.Colors == '#4588AA'
+                  ? '#6BA5C2'
+                  : this.state.Colors == '#FFFFFF'
+                  ? '#666666'
+                  : '#494b6d',
               borderRadius: ScaleSize(10),
               borderColor: '#fff',
               borderWidth: ScaleSize(2),
@@ -1265,6 +1270,12 @@ class Summarize extends Component {
               borderRadius: ScaleSize(10),
               borderColor: '#fff',
               borderWidth: ScaleSize(2),
+              backgroundColor:
+                this.state.Colors == '#4588AA'
+                  ? '#336699'
+                  : this.state.Colors == '#FFFFFF'
+                  ? '#000000'
+                  : '#2C1F42',
             }}
             onPress={() => {
               this.setState({showSumAlert: 'true'});
