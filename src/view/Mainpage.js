@@ -199,7 +199,7 @@ class Ordinary extends Component {
             style={{
               position: 'absolute',
               right: Width * 0.2,
-              top: Height * 0.017,
+              top: Height * 0.025,
             }}>
             <Text
               style={{
@@ -232,7 +232,7 @@ class Ordinary extends Component {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           activeOpacity={0.9}
           onPress={() => {
             this.showAlert2();
@@ -285,7 +285,7 @@ class Ordinary extends Component {
               }}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style={{position: 'absolute', bottom: ScaleSize(30)}}>
           <TouchableOpacity
@@ -311,7 +311,7 @@ class Ordinary extends Component {
               style={{
                 position: 'absolute',
                 right: Width * 0.08,
-                top: Height * 0.006,
+                top: Height * 0.01,
               }}>
               <Text
                 style={{
@@ -509,7 +509,7 @@ class Ordinary extends Component {
               <Text
                 style={{
                   color: this.state.Color==ThemeColor[2]?'#000000':'#FFFFFF',
-                  fontSize: SetSpText(90),
+                  fontSize: SetSpText(80),
                   fontWeight: 'bold',
                   textAlign: 'center',
                   marginTop: ScaleSize(160),
@@ -523,8 +523,8 @@ class Ordinary extends Component {
                   this.props.navigation.navigate('UrlInput');
                 }}
                 style={{
-                  marginTop: ScaleSize(10),
-                  height: Height * 0.08,
+                  marginTop: ScaleSize(-10),
+                  height: Height * 0.09,
                   backgroundColor: '#fff',
                   width: Width * 0.9,
                   marginLeft: Width * 0.05,
@@ -535,11 +535,11 @@ class Ordinary extends Component {
                 }}>
                 <View
                   style={{
-                    width: Width * 0.18,
+                    width: Width * 0.3,
                     alignItems: 'center',
                     position: 'absolute',
-                    right: Width * 0.03,
-                    top: Height * 0.003,
+                    left: Width * 0.62,
+                    top: Height * 0.015,
                   }}>
                   <TouchableOpacity
                     onPress={() => {
@@ -547,12 +547,12 @@ class Ordinary extends Component {
                     }}>
                     <Text
                       style={{
-                        fontSize: SetSpText(72),
+                        fontSize: SetSpText(52),
                         color:
                         this.state.Color == '#4588AA' ? '#4588AA' : (this.state.Color==ThemeColor[2]?'#000000':'#1f2342'),
                         fontWeight: '700',
                       }}>
-                      GO!
+                      PING!
                     </Text>
                   </TouchableOpacity>
                 </View>

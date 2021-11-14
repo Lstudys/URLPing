@@ -18,6 +18,8 @@ target 'GraphURLPing' do
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
+  pod 'RNCClipboard', :path => '../node_modules/@react-native-clipboard/clipboard'
+
   target 'GraphURLPingTests' do
     inherit! :complete
     # Pods for testing

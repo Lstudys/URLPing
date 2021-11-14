@@ -19,6 +19,8 @@ import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import KeepAwake from 'react-native-keep-awake';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import store from 'react-native-simple-store';
+import Clipboard from '@react-native-clipboard/clipboard';
+import {Toast} from 'teaset';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -90,7 +92,8 @@ class Ping extends Component {
       checked: true,
       chartDisplay: false,
       urlsWitch: true, //刷新页面
-      message: '',
+      message_title: '',
+      message_IP: '',
     };
     urlCollection = ['', '', '', '', ''];
     store.get(Data.ThemeColor).then((v, r) => {
@@ -223,6 +226,8 @@ class Ping extends Component {
 
   config = {};
 
+
+
   showAlert = () => {
     this.setState({
       showAlert: true,
@@ -237,24 +242,39 @@ class Ping extends Component {
 
   showAlert2 = (key) => {
     if (key == 0) {
+      let arr = Data.IP1.split('  ');
+      Data.IP1 = arr.join('\n');
       this.setState({
-        message: urlCollection[0] + '\n' + Data.IP1,
+        message_title: urlCollection[0],
+        message_IP: Data.IP1,
       });
     } else if (key == 1) {
+      let arr2 = Data.IP2.split('  ');
+      Data.IP2 = arr2.join('\n');
       this.setState({
-        message: urlCollection[1] + '\n' + Data.IP2,
+        message_title: urlCollection[1],
+        message_IP: Data.IP2,
       });
     } else if (key == 2) {
+      let arr3 = Data.IP3.split('  ');
+      Data.IP3 = arr3.join('\n');
       this.setState({
-        message: urlCollection[2] + '\n' + Data.IP3,
+        message_title: urlCollection[2],
+        message_IP: Data.IP3,
       });
     } else if (key == 3) {
+      let arr4 = Data.IP4.split('  ');
+      Data.IP4 = arr4.join('\n');
       this.setState({
-        message: urlCollection[3] + '\n' + Data.IP4,
+        message_title: urlCollection[3],
+        message_IP: Data.IP4,
       });
     } else if (key == 4) {
+      let arr5 = Data.IP5.split('  ');
+      Data.IP5 = arr5.join('\n');
       this.setState({
-        message: urlCollection[4] + '\n' + Data.IP5,
+        message_title: urlCollection[4],
+        message_IP: Data.IP5,
       });
     }
     this.setState({
@@ -400,6 +420,10 @@ class Ping extends Component {
   }
 
   render() {
+    let copyToClipboard = () => {
+      Toast.message("Copy success !")
+      Clipboard.setString(this.state.message_IP);
+    };
     const tableDataArr = [
       [
         'A',
@@ -519,7 +543,7 @@ class Ping extends Component {
         <AwesomeAlert
           show={this.state.showAlert}
           showProgress={false}
-          title="Make a summary?"
+          title="Are you sure you want to quit"
           titleStyle={{
             fontSize: SetSpText(36),
             fontWeight: '700',
@@ -530,12 +554,15 @@ class Ping extends Component {
                 ? '#000000'
                 : '#1f2342',
           }}
+          onDismiss={() => {
+            this.setState({showAlert: false});
+          }}
           animatedValue={0.9}
           closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           showConfirmButton={true}
-          cancelText="Quit"
+          cancelText="cancel"
           confirmText="Confirm"
           cancelButtonStyle={{
             backgroundColor:
@@ -570,101 +597,101 @@ class Ping extends Component {
           onConfirmPressed={() => {
             this.hideAlert();
 
-            Data.compare_data = [];
-            Data.Piedata = [];
-            Data.config = this.config;
-            if (Data.pingurl.length > 0) {
-              Data.compare_data.push([
-                this.minTime,
-                this.avgTime,
-                this.n95,
-                this.maxTime,
-              ]);
-              Data.values = [
-                this.state.values,
-                this.state.values2,
-                this.state.values3,
-                this.state.values4,
-                this.state.values5,
-              ];
-              console.log('这个有毛病没？', Data.values);
-              Data.Piedata.push([
-                this.error1 / Data.config.xAxis.valueFormatter.length,
-                1 - this.error1 / Data.config.xAxis.valueFormatter.length,
-              ]);
-              console.log(Data.Piedata);
-            }
-            if (Data.pingurl.length == 1) {
-              Data.compare_data.push([0, 0, 0, 0]);
-            }
-            if (Data.pingurl.length > 1) {
-              Data.compare_data.push([
-                this.minTime2,
-                this.avgTime2,
-                this.n952,
-                this.maxTime2,
-              ]);
-              Data.Piedata.push([
-                this.error2 / Data.config.xAxis.valueFormatter.length,
-                1 - this.error2 / Data.config.xAxis.valueFormatter.length,
-              ]);
-            }
-            if (Data.pingurl.length > 2) {
-              Data.compare_data.push([
-                this.minTime3,
-                this.avgTime3,
-                this.n953,
-                this.maxTime3,
-              ]);
-              Data.Piedata.push([
-                this.error3 / Data.config.xAxis.valueFormatter.length,
-                1 - this.error3 / Data.config.xAxis.valueFormatter.length,
-              ]);
-            }
-            if (Data.pingurl.length > 3) {
-              Data.compare_data.push([
-                this.minTime4,
-                this.avgTime4,
-                this.n954,
-                this.maxTime4,
-              ]);
-              Data.Piedata.push([
-                this.error4 / Data.config.xAxis.valueFormatter.length,
-                1 - this.error4 / Data.config.xAxis.valueFormatter.length,
-              ]);
-            }
-            if (Data.pingurl.length > 4) {
-              Data.compare_data.push([
-                this.minTime5,
-                this.avgTime5,
-                this.n955,
-                this.maxTime5,
-              ]);
-              Data.Piedata.push([
-                this.error5 / Data.config.xAxis.valueFormatter.length,
-                1 - this.error5 / Data.config.xAxis.valueFormatter.length,
-              ]);
-            }
-            console.log(Data.Piedata);
+            // Data.compare_data = [];
+            // Data.Piedata = [];
+            // Data.config = this.config;
+            // if (Data.pingurl.length > 0) {
+            //   Data.compare_data.push([
+            //     this.minTime,
+            //     this.avgTime,
+            //     this.n95,
+            //     this.maxTime,
+            //   ]);
+            //   Data.values = [
+            //     this.state.values,
+            //     this.state.values2,
+            //     this.state.values3,
+            //     this.state.values4,
+            //     this.state.values5,
+            //   ];
+            //   console.log('这个有毛病没？', Data.values);
+            //   Data.Piedata.push([
+            //     this.error1 / Data.config.xAxis.valueFormatter.length,
+            //     1 - this.error1 / Data.config.xAxis.valueFormatter.length,
+            //   ]);
+            //   console.log(Data.Piedata);
+            // }
+            // if (Data.pingurl.length == 1) {
+            //   Data.compare_data.push([0, 0, 0, 0]);
+            // }
+            // if (Data.pingurl.length > 1) {
+            //   Data.compare_data.push([
+            //     this.minTime2,
+            //     this.avgTime2,
+            //     this.n952,
+            //     this.maxTime2,
+            //   ]);
+            //   Data.Piedata.push([
+            //     this.error2 / Data.config.xAxis.valueFormatter.length,
+            //     1 - this.error2 / Data.config.xAxis.valueFormatter.length,
+            //   ]);
+            // }
+            // if (Data.pingurl.length > 2) {
+            //   Data.compare_data.push([
+            //     this.minTime3,
+            //     this.avgTime3,
+            //     this.n953,
+            //     this.maxTime3,
+            //   ]);
+            //   Data.Piedata.push([
+            //     this.error3 / Data.config.xAxis.valueFormatter.length,
+            //     1 - this.error3 / Data.config.xAxis.valueFormatter.length,
+            //   ]);
+            // }
+            // if (Data.pingurl.length > 3) {
+            //   Data.compare_data.push([
+            //     this.minTime4,
+            //     this.avgTime4,
+            //     this.n954,
+            //     this.maxTime4,
+            //   ]);
+            //   Data.Piedata.push([
+            //     this.error4 / Data.config.xAxis.valueFormatter.length,
+            //     1 - this.error4 / Data.config.xAxis.valueFormatter.length,
+            //   ]);
+            // }
+            // if (Data.pingurl.length > 4) {
+            //   Data.compare_data.push([
+            //     this.minTime5,
+            //     this.avgTime5,
+            //     this.n955,
+            //     this.maxTime5,
+            //   ]);
+            //   Data.Piedata.push([
+            //     this.error5 / Data.config.xAxis.valueFormatter.length,
+            //     1 - this.error5 / Data.config.xAxis.valueFormatter.length,
+            //   ]);
+            // }
+            // console.log(Data.Piedata);
 
-            console.log('展示 ：' + Data.compare_data);
-            Data.urlCollection = urlCollection;
+            // console.log('展示 ：' + Data.compare_data);
+            // Data.urlCollection = urlCollection;
 
-            this.setState(() => ({
-              isPing: false,
-            }));
-            this.props.navigation.navigate('Summarize');
+            // this.setState(() => ({
+            //   isPing: false,
+            // }));
+            this.props.navigation.navigate('UrlInput');
           }}
           onCancelPressed={() => {
             this.hideAlert();
-            this.props.navigation.navigate('UrlInput');
+            // this.props.navigation.navigate('UrlInput');
           }}
         />
         <AwesomeAlert
           show={this.state.showAlert2}
           showProgress={false}
-          title="URL"
-          message={this.state.message}
+          title={this.state.message_title}
+          message={this.state.message_IP}
           titleStyle={{
             fontSize: SetSpText(36),
             fontWeight: '700',
@@ -680,18 +707,33 @@ class Ping extends Component {
           closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
-          // showConfirmButton={true}
-          cancelText="OK"
+          showConfirmButton={true}
+          cancelText="Cancel"
+          confirmText="Copy"
+          // onDismiss={() => {
+          //   this.hideAlert2();
+          // }}
           onCancelPressed={() => {
             this.hideAlert2();
           }}
+          onConfirmPressed={copyToClipboard}
           cancelButtonStyle={{
             backgroundColor: '#494b6d',
             height: Height * 0.05,
-            width: Width * 0.65,
+            width: Width * 0.3,
             alignItems: 'center',
           }}
           cancelButtonTextStyle={{
+            fontSize: SetSpText(34),
+            fontWeight: '700',
+          }}
+          confirmButtonStyle={{
+            backgroundColor: '#494b6d',
+            height: Height * 0.05,
+            width: Width * 0.3,
+            alignItems: 'center',
+          }}
+          confirmButtonTextStyle={{
             fontSize: SetSpText(34),
             fontWeight: '700',
           }}
@@ -725,7 +767,7 @@ class Ping extends Component {
           <ScrollView style={{marginLeft: Width * 0.05}}>
             <LineChart
               width={Width * 0.92}
-              height={Width * 0.86}
+              height={Width * 0.9}
               bottom={0}
               data={this.config.data}
               xAxis={this.config.xAxis}
@@ -775,7 +817,7 @@ class Ping extends Component {
           </ScrollView>
           {/* 弹窗 */}
 
-          <View style={{position: 'absolute', top: Height * 0.44}}>
+          <View style={{position: 'absolute', top: Height * 0.48}}>
             {Data.urlData_length > 0 ? (
               <View
                 style={{
@@ -1074,7 +1116,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   rowlegend: {
-    fontSize: SetSpText(34),
+    fontSize: ScaleSize(14),
     color: '#fff',
     lineHeight: Height * 0.04,
   },

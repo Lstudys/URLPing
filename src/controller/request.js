@@ -159,7 +159,6 @@ export const SendRequest = function () {
 
     let xtimeall = hourall + ':' + minuteall + ':' + secondall;
     Data.datatime=xtimeall
-    console.log("变了没："+Data.datatime);
     this.setState({
       urlDatafirst: [],
       urlDatasecond: [],
@@ -181,9 +180,7 @@ export const SendRequest = function () {
       });
 
       
-      console.log("真的不大于吗？",numberChart_refresh);
       
-      console.log(Data.pioneerData.length);
       let flag1 = false;
       let flag2 = false;
       let flag3 = false;
