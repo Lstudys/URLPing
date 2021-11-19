@@ -36,6 +36,7 @@ class Ordinary extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      disabled_drawer:false,
       Color: '#1f2342',
       showAlert: false,
       showAlert2: false,
@@ -291,6 +292,7 @@ class Ordinary extends Component {
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={() => {
+              this.setState({disabled_drawer:true})
               this.showAlert();
             }}
             style={{
@@ -361,18 +363,22 @@ class Ordinary extends Component {
         <Drawer
           ref={(ref) => (this._drawer = ref)}
           content={navigationView}
+          // captureGestures={true}
+          acceptTap={true}
+          acceptPan={true}
           openDrawerOffset={0.45} // 20% gap on the right side of drawer
           closedDrawerOffset={-3}
           tweenHandler={(ratio) => ({
             main: {opacity: (2 - ratio) / 2 + 0.4},
           })}
           type="static"
-          tapToClose={true}>
+          disabled={this.state.disabled_drawer}
+          tapToClose={false}>
           <AwesomeAlert
             show={showAlert}
             showProgress={false}
             title="Graph URL Ping"
-            message="APP version : v1.0.0        Update Time: 2021/11/5"
+            message="APP version : v1.0.0        Update Time: 2021/11/19"
             titleStyle={{
               fontSize: SetSpText(36),
               fontWeight: '700',
@@ -386,12 +392,15 @@ class Ordinary extends Component {
               marginBottom: ScaleSize(20),
               fontSize: SetSpText(34),
             }}
-            closeOnTouchOutside={true}
+            useNativeDriver={true}
+            closeOnTouchOutside={false}
             closeOnHardwareBackPress={true}
             showCancelButton={true}
             // showConfirmButton={true}
             cancelText="OK"
             onDismiss={() => {
+              this.setState({disabled_drawer:false})
+
               this.setState({showAlert: false});
             }}
             onCancelPressed={() => {
@@ -512,7 +521,7 @@ class Ordinary extends Component {
                   fontSize: SetSpText(80),
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  marginTop: ScaleSize(160),
+                  marginTop: ScaleSize(155),
                   marginBottom: ScaleSizeH(100),
                 }}>
                 {I18n.t('title')}
@@ -523,7 +532,7 @@ class Ordinary extends Component {
                   this.props.navigation.navigate('UrlInput');
                 }}
                 style={{
-                  marginTop: ScaleSize(-10),
+                  marginTop: ScaleSize(-15),
                   height: Height * 0.09,
                   backgroundColor: '#fff',
                   width: Width * 0.9,

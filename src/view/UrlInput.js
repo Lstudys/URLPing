@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {Image,BackHandler, Platform} from 'react-native';
 import {Toast} from 'teaset';
 import {
   View,
@@ -11,6 +11,8 @@ import {
   StyleSheet,
   Keyboard,
 } from 'react-native';
+// import {} from 'react-native';
+import {BackAction,ExitApp} from '../controller/AppPageFunction';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
@@ -139,6 +141,10 @@ class Ordinary extends Component {
     });
   }
   PING = () => {
+    if(Data.InputUrl==''){
+      Toast.message(I18n.t('urlempty'))
+      return;
+    }
     Platform.OS;
     //正则分割字符串
     let last = 'com|edu|cn|gov|org';
@@ -523,10 +529,12 @@ class Ordinary extends Component {
                       borderRadius: ScaleSize(5),
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
-                      backgroundColor: 'red',
+                      borderBottomColor:"red",
+                      borderBottomWidth:ScaleSize(2),
+                      // backgroundColor: 'red',
                       opacity: 0.8,
                     }}>
-                    <View style={{marginLeft: Width * 0.72}}>
+                    {/* <View style={{marginLeft: Width * 0.72}}>
                       <Text
                         style={{
                           color: '#fff',
@@ -535,7 +543,7 @@ class Ordinary extends Component {
                         }}>
                         ERROR
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                 ) : (
                   <View />
@@ -550,10 +558,12 @@ class Ordinary extends Component {
                       borderRadius: ScaleSize(5),
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
-                      backgroundColor: 'red',
+                      borderBottomColor:"red",
+                      borderBottomWidth:ScaleSize(2),
+                      // backgroundColor: 'red',
                       opacity: 0.8,
                     }}>
-                    <View style={{marginLeft: Width * 0.72}}>
+                    {/* <View style={{marginLeft: Width * 0.72}}>
                       <Text
                         style={{
                           color: '#fff',
@@ -562,7 +572,7 @@ class Ordinary extends Component {
                         }}>
                         ERROR
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                 ) : (
                   <View />
@@ -577,10 +587,12 @@ class Ordinary extends Component {
                       borderRadius: ScaleSize(5),
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
-                      backgroundColor: 'red',
+                      // backgroundColor: 'red',
+                      borderBottomColor:"red",
+                      borderBottomWidth:ScaleSize(2),
                       opacity: 0.8,
                     }}>
-                    <View
+                    {/* <View
                       style={{
                         marginLeft: Width * 0.72,
                         marginTop: Height * 0.001,
@@ -593,7 +605,7 @@ class Ordinary extends Component {
                         }}>
                         ERROR
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                 ) : (
                   <View />
@@ -608,10 +620,12 @@ class Ordinary extends Component {
                       borderRadius: ScaleSize(5),
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
-                      backgroundColor: 'red',
+                      // backgroundColor: 'red',
+                      borderBottomColor:"red",
+                      borderBottomWidth:ScaleSize(2),
                       opacity: 0.8,
                     }}>
-                    <View style={{marginLeft: Width * 0.72}}>
+                    {/* <View style={{marginLeft: Width * 0.72}}>
                       <Text
                         style={{
                           color: '#fff',
@@ -620,7 +634,7 @@ class Ordinary extends Component {
                         }}>
                         ERROR
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                 ) : (
                   <View />
@@ -635,10 +649,12 @@ class Ordinary extends Component {
                       borderRadius: ScaleSize(5),
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.032,
-                      backgroundColor: 'red',
+                      // backgroundColor: 'red',
+                      borderBottomColor:"red",
+                      borderBottomWidth:ScaleSize(2),
                       opacity: 0.8,
                     }}>
-                    <View style={{marginLeft: Width * 0.72}}>
+                    {/* <View style={{marginLeft: Width * 0.72}}>
                       <Text
                         style={{
                           color: '#fff',
@@ -647,7 +663,7 @@ class Ordinary extends Component {
                         }}>
                         ERROR
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                 ) : (
                   <View />

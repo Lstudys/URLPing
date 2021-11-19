@@ -562,7 +562,7 @@ class Ping extends Component {
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           showConfirmButton={true}
-          cancelText="cancel"
+          cancelText="Cancel"
           confirmText="Confirm"
           cancelButtonStyle={{
             backgroundColor:
@@ -681,6 +681,12 @@ class Ping extends Component {
             //   isPing: false,
             // }));
             this.props.navigation.navigate('UrlInput');
+            Data.pioneerData=[0,0,0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0,0,0,
+              ]
           }}
           onCancelPressed={() => {
             this.hideAlert();
@@ -690,8 +696,8 @@ class Ping extends Component {
         <AwesomeAlert
           show={this.state.showAlert2}
           showProgress={false}
-          title={this.state.message_title}
-          message={this.state.message_IP}
+          // title={this.state.message_title}
+          message={this.state.message_title+"\n"+this.state.message_IP}
           titleStyle={{
             fontSize: SetSpText(36),
             fontWeight: '700',
@@ -1116,7 +1122,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   rowlegend: {
-    fontSize: ScaleSize(14),
+    fontSize: ScaleSize(15),
     color: '#fff',
     lineHeight: Height * 0.04,
   },
