@@ -21,6 +21,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import store from 'react-native-simple-store';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Toast} from 'teaset';
+import I18n from 'i18n-js';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -543,7 +544,7 @@ class Ping extends Component {
         <AwesomeAlert
           show={this.state.showAlert}
           showProgress={false}
-          title="Are you sure you want to quit"
+          title= {I18n.t('quitAlert')}
           titleStyle={{
             fontSize: SetSpText(36),
             fontWeight: '700',
@@ -562,8 +563,8 @@ class Ping extends Component {
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           showConfirmButton={true}
-          cancelText="Cancel"
-          confirmText="Confirm"
+          cancelText={I18n.t('cancel')}
+          confirmText={I18n.t('confirm')}
           cancelButtonStyle={{
             backgroundColor:
               this.state.Colors == '#4588AA'
@@ -689,8 +690,9 @@ class Ping extends Component {
               ]
           }}
           onCancelPressed={() => {
-            this.hideAlert();
-            // this.props.navigation.navigate('UrlInput');
+            this.setState({
+              showAlert: false,
+            });            // this.props.navigation.navigate('UrlInput');
           }}
         />
         <AwesomeAlert
@@ -714,13 +716,15 @@ class Ping extends Component {
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           showConfirmButton={true}
-          cancelText="Cancel"
-          confirmText="Copy"
-          // onDismiss={() => {
-          //   this.hideAlert2();
-          // }}
+          cancelText={I18n.t('cancel')}
+          confirmText={I18n.t('copy')}
+          onDismiss={() => {
+            this.setState({showAlert2: false});
+          }}
           onCancelPressed={() => {
-            this.hideAlert2();
+            // this.setState({showAlert: false});
+
+            this.setState({showAlert2: false});
           }}
           onConfirmPressed={copyToClipboard}
           cancelButtonStyle={{

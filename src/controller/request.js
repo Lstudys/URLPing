@@ -135,11 +135,11 @@ export const SendRequest = function () {
       sumtime: TABLE_INITIAL_VALUE, // 每次请求的响应时长的总和
     };
 
-    xhr.timeout = 5000; // 设置超时时间（5秒）
-    xhr2.timeout = 5000;
-    xhr3.timeout = 5000;
-    xhr4.timeout = 5000;
-    xhr5.timeout = 5000;
+    xhr.timeout = 500; // 设置超时时间（5秒）
+    xhr2.timeout = 500;
+    xhr3.timeout = 500;
+    xhr4.timeout = 500;
+    xhr5.timeout = 500;
 
     let minuteall = new Date().getMinutes();
     let secondall = new Date().getSeconds();
@@ -172,12 +172,14 @@ export const SendRequest = function () {
     var start_scale4 = false;
     var start_scale5 = false;
     let numberChart_refresh=0;
+
     this.chart_refresh = setInterval(() => {
       numberChart_refresh++;
       if (this.state.isPing == false) return;
       this.setState({
         chartLabels: this.state.chartLabels.concat([xtimeall]),
       });
+      // console.log("我来看看"+this.state.chartLabels);
 
       
       
@@ -191,10 +193,12 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatafirst.length; i++) {
         let Data = this.state.urlDatafirst[i].xTimeall;
         let yData1 = this.state.urlDatafirst[i].yData;
-        if (Data >= xData && Data < xData + 1) {
+        if (Data >= xData && Data <= xData + 1) {
           this.setState({
             values: this.state.values.concat([yData1]),
           });
+          console.log("我来看看"+this.state.values);
+
           flag1 = true;
           scale_flag = true;
         }
@@ -203,10 +207,12 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatasecond.length; i++) {
         let Data2 = this.state.urlDatasecond[i].xTimeall;
         let yData2 = this.state.urlDatasecond[i].yData;
-        if (Data2 >= xData && Data2 < xData + 1) {
+        if (Data2 >= xData && Data2 <= xData + 1) {
           this.setState({
             values2: this.state.values2.concat([yData2]),
           });
+          console.log("我来看看2"+this.state.values2);
+
           flag2 = true;
           scale_flag = true;
         }
@@ -215,7 +221,7 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatathrid.length; i++) {
         let Data3 = this.state.urlDatathrid[i].xTimeall;
         let yData3 = this.state.urlDatathrid[i].yData;
-        if (Data3 >= xData && Data3 < xData + 1) {
+        if (Data3 >= xData && Data3 <= xData + 1) {
           this.setState({
             values3: this.state.values3.concat([yData3]),
           });
@@ -227,7 +233,7 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatafour.length; i++) {
         let Data4 = this.state.urlDatafour[i].xTimeall;
         let yData4 = this.state.urlDatafour[i].yData;
-        if (Data4 >= xData && Data4 < xData + 1) {
+        if (Data4 >= xData && Data4 <= xData + 1) {
           this.setState({
             values4: this.state.values4.concat([yData4]),
           });
@@ -239,7 +245,7 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatafive.length; i++) {
         let Data5 = this.state.urlDatafive[i].xTimeall;
         let yData5 = this.state.urlDatafive[i].yData;
-        if (Data5 >= xData && Data5 < xData + 1) {
+        if (Data5 >= xData && Data5 <= xData + 1) {
           this.setState({
             values5: this.state.values5.concat([yData5]),
           });
@@ -247,27 +253,27 @@ export const SendRequest = function () {
           scale_flag = true;
         }
       }
-      if (flag1 == false) {
+      if (numberChart_refresh>2&&flag1 == false) {
         this.setState({
           values: this.state.values.concat(null),
         });
       }
-      if (flag2 == false) {
+      if (numberChart_refresh>2&&flag2 == false) {
         this.setState({
           values2: this.state.values2.concat(null),
         });
       }
-      if (flag3 == false) {
+      if (numberChart_refresh>2&&flag3 == false) {
         this.setState({
           values3: this.state.values3.concat(null),
         });
       }
-      if (flag4 == false) {
+      if (numberChart_refresh>2&&flag4 == false) {
         this.setState({
           values4: this.state.values4.concat(null),
         });
       }
-      if (flag5 == false) {
+      if (numberChart_refresh>2&&flag5 == false) {
         this.setState({
           values5: this.state.values5.concat(null),
         });
@@ -324,7 +330,7 @@ export const SendRequest = function () {
         start_scale4 == false &&
         start_scale5 == false
       ) {
-        let scale_switch = 0.018;
+        let scale_switch = 0.02;
         this.resetZoom(scale_switch);
       } else if (
         start_scale1 == true &&

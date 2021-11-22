@@ -9,6 +9,7 @@ import {Toast} from 'teaset';
 import store from 'react-native-simple-store';
 import data from '../modal/data';
 import Data from '../modal/data';
+import I18n from 'i18n-js';
 
 export const BackAction = function(){
   this.props.navigation.navigate('Ordinary');
@@ -24,7 +25,7 @@ export const ExitApp = function () {
   this.props.navigation.navigate('Ordinary');
 
   this.lastBackPressed = Date.now();
-  Toast.message('再按一次退出应用');
+  Toast.message(I18n.t('aboutDetails'));
   return true; //默认行为
 };
 

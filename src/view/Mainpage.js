@@ -378,7 +378,7 @@ class Ordinary extends Component {
             show={showAlert}
             showProgress={false}
             title="Graph URL Ping"
-            message="APP version : v1.0.0        Update Time: 2021/11/19"
+            message={I18n.t('aboutDetails')}
             titleStyle={{
               fontSize: SetSpText(36),
               fontWeight: '700',
