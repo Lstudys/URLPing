@@ -14,7 +14,7 @@ export default {
     add:'添加',
     test:'测试中',
     nourladded:'尚未添加需要Ping的网址',
-    urlempty:'输入网址不能有空',
+    urlempty:'输入网址不能为空',
     maxfiveurl:'一次最多ping5个网址',
     selectinputbox:'请先选择输入框',
     Over:"完成",
@@ -37,5 +37,10 @@ export default {
     quitAlert:"确定要离开吗?",
     cancel:"取消",
     confirm:"确定",
-    copy:"复制"
+    copy:"复制",
+    ok:"关闭",
+    max_five_site:"最多测试五个站点",
+    Copy_success:"复制成功"
+
+
 };

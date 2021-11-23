@@ -14,7 +14,7 @@ const Data = {
   urlData_length: 0,
   errorIndex: [],
   emptyIndex: [],
-  url_suffix: '.com.cn.net.edu.mil.org.gov.int',
+  url_suffix: 'com.cn.net.edu.mil.org.gov.int',
   config: {},
   datatime: 0,
   urlCollection: [],
@@ -27,6 +27,8 @@ const Data = {
     0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,
     ],
-    values:[]
+    values:[],
+    showAlert_back:false,
+    
 };
 export default Data;

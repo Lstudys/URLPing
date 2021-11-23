@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image,BackHandler, Platform} from 'react-native';
+import {Image, BackHandler, Platform} from 'react-native';
 import {Toast} from 'teaset';
 import {
   View,
@@ -11,8 +11,7 @@ import {
   StyleSheet,
   Keyboard,
 } from 'react-native';
-// import {} from 'react-native';
-import {BackAction,ExitApp} from '../controller/AppPageFunction';
+import {BackAction, ExitApp} from '../controller/AppPageFunction';
 import {SetSpText, ScaleSize} from '../controller/Adaptation';
 import store from 'react-native-simple-store';
 import Data from '../modal/data';
@@ -141,30 +140,29 @@ class Ordinary extends Component {
     });
   }
   PING = () => {
-    if(Data.InputUrl==''){
-      Toast.message(I18n.t('urlempty'))
+    if (Data.InputUrl == '') {
+      Toast.message(I18n.t('urlempty'));
       return;
     }
     Platform.OS;
     //正则分割字符串
-    let last = 'com|edu|cn|gov|org';
+    let last = 'com|edu|cn|gov|org|net|int|mil';
     let reg = new RegExp('https?://(www.)?\\w+(.(' + last + '))+\n*', 'g');
     let url = Data.InputUrl.match(reg) ? Data.InputUrl.match(reg) : [];
     //url:从输入框正则出来的标准url格式数组
 
     let InputUrl = Data.InputUrl.split('\n');
-    
+
     //筛选合格的inputUrl
-    InputUrl=InputUrl.filter(function(value){
-      return value.trim()!="";
-    })
-    
+    InputUrl = InputUrl.filter(function (value) {
+      return value.trim() != '';
+    });
+
     Data.InputUrl = InputUrl.join('\n');
     //InputUrl:
-    console.log('DataInput_03 '+InputUrl)
+    console.log('DataInput_03 ' + InputUrl);
     console.log('lalalaurl ' + url);
     console.log('lalalainput ' + Data.InputUrl.split('\n'));
-    let flag = false;
     Data.errorIndex = [];
     Data.emptyIndex = [];
     for (let i = 0, j = 0; j < InputUrl.length; ) {
@@ -190,7 +188,6 @@ class Ordinary extends Component {
             InputUrl[j] = 'http://' + InputUrl[j];
             Data.InputUrl = InputUrl.join('\n');
           } else Data.errorIndex.push(j);
-
         }
         j++;
       } else {
@@ -199,30 +196,15 @@ class Ordinary extends Component {
       }
     }
     console.log('什么类型', InputUrl[0].trim().length, '666');
-    // if(Data.errorIndex.length==1){
-    //   console.log("长度有问题"+url[Data.errorIndex[0]].length);
-    //   console.log("长度有问题2"+InputUrl[Data.errorIndex[0]].length);
-    // }
-
     this.setState({refresh: !this.state.refresh});
-    // if (url == null) {
-    //   Toast.message(I18n.t('urlempty'));
-    //   return;
-    // }
-
     if (url.length > 5) {
       Toast.message(I18n.t('maxfiveurl'));
       return;
     }
-
-    // console.log('清空之前', Data.pingurl);
     Data.pingurl = [''];
-    // console.log('清空之后', Data.pingurl);
-
     for (let i = 0; i < url.length; i++) {
       Data.pingurl[i] = url[i].trim();
     }
-
     if (!(Data.errorIndex[0] >= 0) && !(Data.emptyIndex[0] >= 0)) {
       if (Data.pingurl.length != 0) {
         //查重并拆分
@@ -306,7 +288,11 @@ class Ordinary extends Component {
           marginLeft: Width * 0.025,
           marginTop: ScaleSize(20),
           backgroundColor:
-          this.state.Color=="#4588AA"?"#6BA5C2":(this.state.Color=='#FFFFFF'?'#333333':"#494b6d"),
+            this.state.Color == '#4588AA'
+              ? '#6BA5C2'
+              : this.state.Color == '#FFFFFF'
+              ? '#333333'
+              : '#494b6d',
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -321,7 +307,7 @@ class Ordinary extends Component {
               }
               if (Data.InputUrl.split())
                 if (Data.InputUrl.split('\n').length > 4) {
-                  Toast.message('最多ping五个');
+                  Toast.message(I18n.t('max_five_site'));
                   return;
                 }
               Data.InputUrl =
@@ -343,7 +329,7 @@ class Ordinary extends Component {
               }
               if (Data.InputUrl.split())
                 if (Data.InputUrl.split('\n').length > 4) {
-                  Toast.message('最多ping五个');
+                  Toast.message(I18n.t('max_five_site'));
                   return;
                 }
               Data.InputUrl =
@@ -445,14 +431,24 @@ class Ordinary extends Component {
       return (
         <View
           style={{
-            backgroundColor: this.state.Color=="#4588AA"?"#4588AA":(this.state.Color=='#FFFFFF'?'#CCCCCC':"#1f2342"),
+            backgroundColor:
+              this.state.Color == '#4588AA'
+                ? '#4588AA'
+                : this.state.Color == '#FFFFFF'
+                ? '#CCCCCC'
+                : '#1f2342',
             height: Height,
             position: 'relative',
             flex: 1,
           }}>
           <View
             style={{
-              backgroundColor: this.state.Color=="#4588AA"?"#4588AA":(this.state.Color=='#FFFFFF'?'#CCCCCC':"#1f2342"),
+              backgroundColor:
+                this.state.Color == '#4588AA'
+                  ? '#4588AA'
+                  : this.state.Color == '#FFFFFF'
+                  ? '#CCCCCC'
+                  : '#1f2342',
               position: 'absolute',
               bottom: ScaleSize(20),
             }}>
@@ -494,7 +490,14 @@ class Ordinary extends Component {
               <FlatList
                 scrollEnabled={true}
                 keyboardShouldPersistTaps={'handled'}
-                style={{backgroundColor: this.state.Color=="#4588AA"?"#6BA5C2":(this.state.Color=='#FFFFFF'?'#333333':"#494b6d"),}}
+                style={{
+                  backgroundColor:
+                    this.state.Color == '#4588AA'
+                      ? '#6BA5C2'
+                      : this.state.Color == '#FFFFFF'
+                      ? '#333333'
+                      : '#494b6d',
+                }}
                 horizontal={true}
                 data={Data.urlsArr}
                 renderItem={this._renderRow}
@@ -515,9 +518,7 @@ class Ordinary extends Component {
                 backgroundColor: '#fff',
                 borderRadius: ScaleSize(20),
               }}>
-              <View>
-                {/*有关empty视图的部分删除 */}
-              </View>
+              <View>{/*有关empty视图的部分删除 */}</View>
               <View>
                 {Data.errorIndex.indexOf(0) >= 0 &&
                 !(Data.emptyIndex.indexOf(0) >= 0) ? (
@@ -529,8 +530,8 @@ class Ordinary extends Component {
                       borderRadius: ScaleSize(5),
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
-                      borderBottomColor:"red",
-                      borderBottomWidth:ScaleSize(2),
+                      borderBottomColor: 'red',
+                      borderBottomWidth: ScaleSize(2),
                       // backgroundColor: 'red',
                       opacity: 0.8,
                     }}>
@@ -558,8 +559,8 @@ class Ordinary extends Component {
                       borderRadius: ScaleSize(5),
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
-                      borderBottomColor:"red",
-                      borderBottomWidth:ScaleSize(2),
+                      borderBottomColor: 'red',
+                      borderBottomWidth: ScaleSize(2),
                       // backgroundColor: 'red',
                       opacity: 0.8,
                     }}>
@@ -588,8 +589,8 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       // backgroundColor: 'red',
-                      borderBottomColor:"red",
-                      borderBottomWidth:ScaleSize(2),
+                      borderBottomColor: 'red',
+                      borderBottomWidth: ScaleSize(2),
                       opacity: 0.8,
                     }}>
                     {/* <View
@@ -621,8 +622,8 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.028,
                       // backgroundColor: 'red',
-                      borderBottomColor:"red",
-                      borderBottomWidth:ScaleSize(2),
+                      borderBottomColor: 'red',
+                      borderBottomWidth: ScaleSize(2),
                       opacity: 0.8,
                     }}>
                     {/* <View style={{marginLeft: Width * 0.72}}>
@@ -650,8 +651,8 @@ class Ordinary extends Component {
                       marginLeft: -ScaleSize(4),
                       height: Height * 0.032,
                       // backgroundColor: 'red',
-                      borderBottomColor:"red",
-                      borderBottomWidth:ScaleSize(2),
+                      borderBottomColor: 'red',
+                      borderBottomWidth: ScaleSize(2),
                       opacity: 0.8,
                     }}>
                     {/* <View style={{marginLeft: Width * 0.72}}>
@@ -825,7 +826,7 @@ class Ordinary extends Component {
                 blurOnSubmit={false}
                 enablesReturnKeyAutomatically={true}
                 importantForAutofill="auto"
-                placeholder={'https://www.baidu.com'}
+                placeholder={'https://www.bing.com'}
                 onBlur={() => {
                   this.setState({
                     numberOfUrlinTextInput:
@@ -843,7 +844,7 @@ class Ordinary extends Component {
                     Data.InputUrl.match(reg) == null
                       ? 0
                       : Data.InputUrl.match(reg).length;
-                  // if(Data.InputUrl.split('\n').length>4) {
+                  // if(Data.InputUrl.split('\n').length>5) {
                   //   Toast.message("最多ping五个")
                   //   return ;
                   // }
@@ -864,10 +865,17 @@ class Ordinary extends Component {
                   width: Width * 0.8,
                   // marginLeft: Width * 0.05,
                   position: 'absolute',
-                  fontSize: SetSpText(36),            
+                  fontSize: SetSpText(36),
                 }}
                 onChangeText={(value) => {
-                  console.log('我来康康text：' + Data.errorIndex);
+                  if (
+                    value.substr(value.length - 1, 1) == '\n' &&
+                    Data.InputUrl.split('\n').length > 4
+                  ) {
+                    Toast.message(I18n.t('max_five_site'));
+                    return;
+                  }
+                  console.log('是这个不：' + Data.InputUrl.split('\n').length);
                   let index;
                   for (let i = 0; i < Data.InputUrl.split('\n').length; i++) {
                     if (
@@ -894,14 +902,13 @@ class Ordinary extends Component {
                   // }
 
                   if (Data.InputUrl.split('\n').length > 5) {
-                    Toast.message('最多ping五个');
+                    Toast.message(I18n.t('max_five_site'));
                     let a = Data.InputUrl.split('\n');
                     a.splice(index, 1);
                     Data.InputUrl = a.join('\n');
+                    return;
 
                     this.setState({refresh: !this.state.refresh});
-
-                    return;
                   }
                   console.log('次数' + this.state.numberOfUrlinTextInput);
                   Data.InputUrl = value;
@@ -917,7 +924,12 @@ class Ordinary extends Component {
                   flexDirection: 'row',
                   width: Width,
                   height: Height * 0.07,
-                  backgroundColor: this.state.Color=="#4588AA"?"#4588AA":(this.state.Color=='#FFFFFF'?'#CCCCCC':"#1f2342"),
+                  backgroundColor:
+                    this.state.Color == '#4588AA'
+                      ? '#4588AA'
+                      : this.state.Color == '#FFFFFF'
+                      ? '#CCCCCC'
+                      : '#1f2342',
                   alignItems: 'center',
                 }}>
                 <TouchableOpacity
@@ -927,7 +939,11 @@ class Ordinary extends Component {
                     width: Width * 0.4,
                     height: Height * 0.06,
                     backgroundColor:
-                    this.state.Color=="#4588AA"?"#6BA5C2":(this.state.Color=='#FFFFFF'?'#666666':"#494b6d"),
+                      this.state.Color == '#4588AA'
+                        ? '#6BA5C2'
+                        : this.state.Color == '#FFFFFF'
+                        ? '#666666'
+                        : '#494b6d',
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),
@@ -949,7 +965,11 @@ class Ordinary extends Component {
                     width: Width * 0.4,
                     height: Height * 0.06,
                     backgroundColor:
-                    this.state.Color=="#4588AA"?'#336699':(this.state.Color=='#FFFFFF'?'#000000':"#2C1F42"),
+                      this.state.Color == '#4588AA'
+                        ? '#336699'
+                        : this.state.Color == '#FFFFFF'
+                        ? '#000000'
+                        : '#2C1F42',
                     borderRadius: ScaleSize(10),
                     borderColor: '#fff',
                     borderWidth: ScaleSize(2),

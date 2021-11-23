@@ -253,27 +253,27 @@ export const SendRequest = function () {
           scale_flag = true;
         }
       }
-      if (numberChart_refresh>2&&flag1 == false) {
+      if (flag1 == false) {
         this.setState({
           values: this.state.values.concat(null),
         });
       }
-      if (numberChart_refresh>2&&flag2 == false) {
+      if (flag2 == false) {
         this.setState({
           values2: this.state.values2.concat(null),
         });
       }
-      if (numberChart_refresh>2&&flag3 == false) {
+      if (flag3 == false) {
         this.setState({
           values3: this.state.values3.concat(null),
         });
       }
-      if (numberChart_refresh>2&&flag4 == false) {
+      if (flag4 == false) {
         this.setState({
           values4: this.state.values4.concat(null),
         });
       }
-      if (numberChart_refresh>2&&flag5 == false) {
+      if (flag5 == false) {
         this.setState({
           values5: this.state.values5.concat(null),
         });

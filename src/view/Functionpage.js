@@ -227,8 +227,6 @@ class Ping extends Component {
 
   config = {};
 
-
-
   showAlert = () => {
     this.setState({
       showAlert: true,
@@ -421,8 +419,9 @@ class Ping extends Component {
   }
 
   render() {
+    const {showAlert,showAlert2}=this.state
     let copyToClipboard = () => {
-      Toast.message("Copy success !")
+      Toast.message(I18n.t('Copy_success'));
       Clipboard.setString(this.state.message_IP);
     };
     const tableDataArr = [
@@ -542,9 +541,9 @@ class Ping extends Component {
         }}>
         {/* 返回弹窗 */}
         <AwesomeAlert
-          show={this.state.showAlert}
+          show={showAlert}
           showProgress={false}
-          title= {I18n.t('quitAlert')}
+          title={I18n.t('quitAlert')}
           titleStyle={{
             fontSize: SetSpText(36),
             fontWeight: '700',
@@ -597,109 +596,71 @@ class Ping extends Component {
           }}
           onConfirmPressed={() => {
             this.hideAlert();
-
-            // Data.compare_data = [];
-            // Data.Piedata = [];
-            // Data.config = this.config;
-            // if (Data.pingurl.length > 0) {
-            //   Data.compare_data.push([
-            //     this.minTime,
-            //     this.avgTime,
-            //     this.n95,
-            //     this.maxTime,
-            //   ]);
-            //   Data.values = [
-            //     this.state.values,
-            //     this.state.values2,
-            //     this.state.values3,
-            //     this.state.values4,
-            //     this.state.values5,
-            //   ];
-            //   console.log('这个有毛病没？', Data.values);
-            //   Data.Piedata.push([
-            //     this.error1 / Data.config.xAxis.valueFormatter.length,
-            //     1 - this.error1 / Data.config.xAxis.valueFormatter.length,
-            //   ]);
-            //   console.log(Data.Piedata);
-            // }
-            // if (Data.pingurl.length == 1) {
-            //   Data.compare_data.push([0, 0, 0, 0]);
-            // }
-            // if (Data.pingurl.length > 1) {
-            //   Data.compare_data.push([
-            //     this.minTime2,
-            //     this.avgTime2,
-            //     this.n952,
-            //     this.maxTime2,
-            //   ]);
-            //   Data.Piedata.push([
-            //     this.error2 / Data.config.xAxis.valueFormatter.length,
-            //     1 - this.error2 / Data.config.xAxis.valueFormatter.length,
-            //   ]);
-            // }
-            // if (Data.pingurl.length > 2) {
-            //   Data.compare_data.push([
-            //     this.minTime3,
-            //     this.avgTime3,
-            //     this.n953,
-            //     this.maxTime3,
-            //   ]);
-            //   Data.Piedata.push([
-            //     this.error3 / Data.config.xAxis.valueFormatter.length,
-            //     1 - this.error3 / Data.config.xAxis.valueFormatter.length,
-            //   ]);
-            // }
-            // if (Data.pingurl.length > 3) {
-            //   Data.compare_data.push([
-            //     this.minTime4,
-            //     this.avgTime4,
-            //     this.n954,
-            //     this.maxTime4,
-            //   ]);
-            //   Data.Piedata.push([
-            //     this.error4 / Data.config.xAxis.valueFormatter.length,
-            //     1 - this.error4 / Data.config.xAxis.valueFormatter.length,
-            //   ]);
-            // }
-            // if (Data.pingurl.length > 4) {
-            //   Data.compare_data.push([
-            //     this.minTime5,
-            //     this.avgTime5,
-            //     this.n955,
-            //     this.maxTime5,
-            //   ]);
-            //   Data.Piedata.push([
-            //     this.error5 / Data.config.xAxis.valueFormatter.length,
-            //     1 - this.error5 / Data.config.xAxis.valueFormatter.length,
-            //   ]);
-            // }
-            // console.log(Data.Piedata);
-
-            // console.log('展示 ：' + Data.compare_data);
-            // Data.urlCollection = urlCollection;
-
-            // this.setState(() => ({
-            //   isPing: false,
-            // }));
             this.props.navigation.navigate('UrlInput');
-            Data.pioneerData=[0,0,0,0,0,0,0,0,0,0,
-              0,0,0,0,0,0,0,0,0,0,
-              0,0,0,0,0,0,0,0,0,0,
-              0,0,0,0,0,0,0,0,0,0,
-              0,0,0,0,0,0,0,0,0,0,
-              ]
+            Data.pioneerData = [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ];
           }}
           onCancelPressed={() => {
             this.setState({
               showAlert: false,
-            });            // this.props.navigation.navigate('UrlInput');
+            }); // this.props.navigation.navigate('UrlInput');
           }}
         />
         <AwesomeAlert
-          show={this.state.showAlert2}
+          show={showAlert2}
           showProgress={false}
           // title={this.state.message_title}
-          message={this.state.message_title+"\n"+this.state.message_IP}
+          message={this.state.message_title + '\n'+'\n' + this.state.message_IP}
           titleStyle={{
             fontSize: SetSpText(36),
             fontWeight: '700',

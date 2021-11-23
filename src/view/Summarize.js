@@ -161,22 +161,6 @@ class Summarize extends Component {
     RNFetchBlob.fs.writeFile(downloadDest2, datawd).then((result) => {
       console.log('result=====', result);
       Toast.message('success');
-      // try {
-      //   CameraRoll.saveToCameraRoll(downloadDest2).then((e1) => {
-      //     console.log('success', e1);
-      //     success && success(e1);
-      //   }).catch((e2) => {
-      //     console.log('failed', e2);
-      //     PermissionUtil.checkPermission(function(){
-      //       console.log("wc,成了");
-      //     },function(){
-      //       console.log("wc,没成");
-
-      //     },["store"]);      });
-      // } catch (e3) {
-      //   console.log('catch', e3);
-      //   fail && fail();
-      // }
     });
   }
   componentDidMount() {
@@ -570,18 +554,7 @@ class Summarize extends Component {
                   this.props.navigation.navigate('Ordinary');
                 }}>
                 <View>
-                  {this.state.Colors == '#FFFFFF' ? (
-                    <Image
-                      source={require('../imgs/2.png')}
-                      style={{
-                        marginTop: ScaleSize(10),
-                        width: ScaleSize(35),
-                        height: ScaleSize(35),
-                        marginBottom: ScaleSize(15),
-                        marginHorizontal: ScaleSize(10),
-                      }}
-                    />
-                  ) : (
+                  
                     <Image
                       source={require('../imgs/back.png')}
                       style={{
@@ -592,7 +565,7 @@ class Summarize extends Component {
                         marginHorizontal: ScaleSize(10),
                       }}
                     />
-                  )}
+                  
                 </View>
               </TouchableOpacity>
 

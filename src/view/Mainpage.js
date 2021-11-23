@@ -182,7 +182,7 @@ class Ordinary extends Component {
         }}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={() => {}}
+          onPress={this.closeControlPanel}
           style={{
             marginTop: ScaleSize(20),
             height: Height * 0.08,
@@ -397,7 +397,7 @@ class Ordinary extends Component {
             closeOnHardwareBackPress={true}
             showCancelButton={true}
             // showConfirmButton={true}
-            cancelText="OK"
+            cancelText={I18n.t('ok')}
             onDismiss={() => {
               this.setState({disabled_drawer:false})
 
@@ -494,16 +494,7 @@ class Ordinary extends Component {
                   this._drawer.open();
                 }}>
                 <View>
-                  {this.state.Color==ThemeColor[2]?<Image
-                    source={require('../imgs/1.png')}
-                    style={{
-                      marginTop: ScaleSize(10),
-                      width: ScaleSize(35),
-                      height: ScaleSize(45),
-                      marginBottom: ScaleSize(15),
-                      marginHorizontal: ScaleSize(10),
-                    }}
-                  />:<Image
+                  <Image
                   source={require('../imgs/draw.png')}
                   style={{
                     marginTop: ScaleSize(16),
@@ -512,7 +503,7 @@ class Ordinary extends Component {
                     marginBottom: ScaleSize(15),
                     marginHorizontal: ScaleSize(10),
                   }}
-                />}
+                />
                 </View>
               </TouchableOpacity>
               <Text

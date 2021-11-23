@@ -28,5 +28,10 @@ export default {
   quitAlert:"Are you sure you want to quit?",
   cancel:"Cancel",
   confirm:"Confirm",
-  copy:"Copy"
+  copy:"Copy",
+  ok:"OK",
+  max_five_site:"Test up to five sites simultaneously",
+  Copy_success:"Copy success",
+
+
 };
