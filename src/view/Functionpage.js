@@ -689,7 +689,7 @@ class Ping extends Component {
           }}
           onConfirmPressed={copyToClipboard}
           cancelButtonStyle={{
-            backgroundColor: '#494b6d',
+            backgroundColor: '#1f2342',
             height: Height * 0.05,
             width: Width * 0.3,
             alignItems: 'center',
@@ -699,7 +699,7 @@ class Ping extends Component {
             fontWeight: '700',
           }}
           confirmButtonStyle={{
-            backgroundColor: '#494b6d',
+            backgroundColor: '#1f2342',
             height: Height * 0.05,
             width: Width * 0.3,
             alignItems: 'center',

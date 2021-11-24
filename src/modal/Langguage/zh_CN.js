@@ -32,7 +32,7 @@ export default {
     pleasecontact: '请联系',
     version:"版本号：1.0.0",
     Theme:"主题颜色",
-    aboutDetails:"版本号: v1.0.0\n更新时间: 2021/11/19",
+    aboutDetails:"版本号: v1.0.0\n更新时间: 2021/11/24",
     DoublePress:"再按一次退出应用",
     quitAlert:"确定要离开吗?",
     cancel:"取消",

@@ -42,7 +42,7 @@ export const SendRequest = function () {
     this.maxTime3 = TABLE_INITIAL_VALUE;
     this.maxTime4 = TABLE_INITIAL_VALUE;
     this.maxTime5 = TABLE_INITIAL_VALUE;
-    
+
     this.Median = TABLE_INITIAL_VALUE;
     this.Median2 = TABLE_INITIAL_VALUE;
     this.Median3 = TABLE_INITIAL_VALUE;
@@ -135,11 +135,11 @@ export const SendRequest = function () {
       sumtime: TABLE_INITIAL_VALUE, // 每次请求的响应时长的总和
     };
 
-    xhr.timeout = 500; // 设置超时时间（5秒）
-    xhr2.timeout = 500;
-    xhr3.timeout = 500;
-    xhr4.timeout = 500;
-    xhr5.timeout = 500;
+    xhr.timeout = 5000; // 设置超时时间（5秒）
+    xhr2.timeout = 5000;
+    xhr3.timeout = 5000;
+    xhr4.timeout = 5000;
+    xhr5.timeout = 5000;
 
     let minuteall = new Date().getMinutes();
     let secondall = new Date().getSeconds();
@@ -158,7 +158,7 @@ export const SendRequest = function () {
     }
 
     let xtimeall = hourall + ':' + minuteall + ':' + secondall;
-    Data.datatime=xtimeall
+    Data.datatime = xtimeall;
     this.setState({
       urlDatafirst: [],
       urlDatasecond: [],
@@ -171,18 +171,14 @@ export const SendRequest = function () {
     var start_scale3 = false;
     var start_scale4 = false;
     var start_scale5 = false;
-    let numberChart_refresh=0;
-
+    let numberChart_refresh = 0;
     this.chart_refresh = setInterval(() => {
       numberChart_refresh++;
       if (this.state.isPing == false) return;
       this.setState({
         chartLabels: this.state.chartLabels.concat([xtimeall]),
       });
-      // console.log("我来看看"+this.state.chartLabels);
 
-      
-      
       let flag1 = false;
       let flag2 = false;
       let flag3 = false;
@@ -193,12 +189,10 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatafirst.length; i++) {
         let Data = this.state.urlDatafirst[i].xTimeall;
         let yData1 = this.state.urlDatafirst[i].yData;
-        if (Data >= xData && Data <= xData + 1) {
+        if (Data >= xData && Data < xData + 1) {
           this.setState({
             values: this.state.values.concat([yData1]),
           });
-          console.log("我来看看"+this.state.values);
-
           flag1 = true;
           scale_flag = true;
         }
@@ -207,12 +201,10 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatasecond.length; i++) {
         let Data2 = this.state.urlDatasecond[i].xTimeall;
         let yData2 = this.state.urlDatasecond[i].yData;
-        if (Data2 >= xData && Data2 <= xData + 1) {
+        if (Data2 >= xData && Data2 < xData + 1) {
           this.setState({
             values2: this.state.values2.concat([yData2]),
           });
-          console.log("我来看看2"+this.state.values2);
-
           flag2 = true;
           scale_flag = true;
         }
@@ -221,7 +213,7 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatathrid.length; i++) {
         let Data3 = this.state.urlDatathrid[i].xTimeall;
         let yData3 = this.state.urlDatathrid[i].yData;
-        if (Data3 >= xData && Data3 <= xData + 1) {
+        if (Data3 >= xData && Data3 < xData + 1) {
           this.setState({
             values3: this.state.values3.concat([yData3]),
           });
@@ -233,7 +225,7 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatafour.length; i++) {
         let Data4 = this.state.urlDatafour[i].xTimeall;
         let yData4 = this.state.urlDatafour[i].yData;
-        if (Data4 >= xData && Data4 <= xData + 1) {
+        if (Data4 >= xData && Data4 < xData + 1) {
           this.setState({
             values4: this.state.values4.concat([yData4]),
           });
@@ -245,7 +237,7 @@ export const SendRequest = function () {
       for (let i = 0; i < this.state.urlDatafive.length; i++) {
         let Data5 = this.state.urlDatafive[i].xTimeall;
         let yData5 = this.state.urlDatafive[i].yData;
-        if (Data5 >= xData && Data5 <= xData + 1) {
+        if (Data5 >= xData && Data5 < xData + 1) {
           this.setState({
             values5: this.state.values5.concat([yData5]),
           });
@@ -253,27 +245,27 @@ export const SendRequest = function () {
           scale_flag = true;
         }
       }
-      if (flag1 == false) {
+      if (numberChart_refresh > 2 && flag1 == false) {
         this.setState({
           values: this.state.values.concat(null),
         });
       }
-      if (flag2 == false) {
+      if (numberChart_refresh > 2 && flag2 == false) {
         this.setState({
           values2: this.state.values2.concat(null),
         });
       }
-      if (flag3 == false) {
+      if (numberChart_refresh > 2 && flag3 == false) {
         this.setState({
           values3: this.state.values3.concat(null),
         });
       }
-      if (flag4 == false) {
+      if (numberChart_refresh > 2 && flag4 == false) {
         this.setState({
           values4: this.state.values4.concat(null),
         });
       }
-      if (flag5 == false) {
+      if (numberChart_refresh > 2 && flag5 == false) {
         this.setState({
           values5: this.state.values5.concat(null),
         });
@@ -281,7 +273,6 @@ export const SendRequest = function () {
       let minuteall1 = new Date().getMinutes();
       let secondall1 = new Date().getSeconds();
       let hourall1 = new Date().getHours();
-      
 
       if (
         (secondall1 - secondall == 40 && minuteall1 == minuteall) ||
@@ -316,11 +307,10 @@ export const SendRequest = function () {
         start_scale5 = true;
       }
 
-      
-      if(numberChart_refresh>40){
-      Data.pioneerData=[...Data.pioneerData,0];
+      if (numberChart_refresh > 40) {
+        Data.pioneerData = [...Data.pioneerData, 0];
 
-      // Data.pioneerData=[...Data.pioneerData,0];
+        // Data.pioneerData=[...Data.pioneerData,0];
       }
       if (
         start_scale1 == true &&
@@ -330,7 +320,7 @@ export const SendRequest = function () {
         start_scale4 == false &&
         start_scale5 == false
       ) {
-        let scale_switch = 0.02;
+        let scale_switch = 0.018;
         this.resetZoom(scale_switch);
       } else if (
         start_scale1 == true &&
@@ -478,19 +468,20 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x5 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-              this.std5=num2;
+              this.std5 = num2;
               if (x5 - 1 > 3) this.outData[4] = this.avgTime5 + 2.5 * num2;
               this.state.p95_arr5.sort(function (a, b) {
                 return a - b;
               });
-              if(x5<=2){
-                this.Median5=0
-              }
-              else if(x5%2!=0){
-                this.Median5=this.state.p95_arr5[(x5-1)/2]
-              }
-              else{
-                this.Median5=(this.state.p95_arr5[x5/2]+this.state.p95_arr5[(x5-2)/2])/2
+              if (x5 <= 2) {
+                this.Median5 = 0;
+              } else if (x5 % 2 != 0) {
+                this.Median5 = this.state.p95_arr5[(x5 - 1) / 2];
+              } else {
+                this.Median5 =
+                  (this.state.p95_arr5[x5 / 2] +
+                    this.state.p95_arr5[(x5 - 2) / 2]) /
+                  2;
               }
               let division = ((x5 - 1) / 20) * 19;
               if (x5 - 1 > 2)
@@ -591,19 +582,20 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x4 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-              this.std4=num2;
+              this.std4 = num2;
               if (x4 - 1 > 3) this.outData[3] = this.avgTime4 + 2.5 * num2;
               this.state.p95_arr4.sort(function (a, b) {
                 return a - b;
               });
-              if(x4<=2){
-                this.Median4=0
-              }
-              else if(x4%2!=0){
-                this.Median4=this.state.p95_arr4[(x4-1)/2]
-              }
-              else{
-                this.Median4=(this.state.p95_arr4[x4/2]+this.state.p95_arr4[(x4-2)/2])/2
+              if (x4 <= 2) {
+                this.Median4 = 0;
+              } else if (x4 % 2 != 0) {
+                this.Median4 = this.state.p95_arr4[(x4 - 1) / 2];
+              } else {
+                this.Median4 =
+                  (this.state.p95_arr4[x4 / 2] +
+                    this.state.p95_arr4[(x4 - 2) / 2]) /
+                  2;
               }
               let division = ((x4 - 1) / 20) * 19;
               if (x4 - 1 > 2)
@@ -706,18 +698,19 @@ export const SendRequest = function () {
               let num1 = sum / (x3 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
               if (x3 - 1 > 3) this.outData[2] = this.avgTime3 + 2.5 * num2;
-              this.std3=num2;
+              this.std3 = num2;
               this.state.p95_arr3.sort(function (a, b) {
                 return a - b;
               });
-              if(x3<=2){
-                this.Median3=0
-              }
-              else if(x3%2!=0){
-                this.Median3=this.state.p95_arr3[(x3-1)/2]
-              }
-              else{
-                this.Median3=(this.state.p95_arr3[x3/2]+this.state.p95_arr3[(x3-2)/2])/2
+              if (x3 <= 2) {
+                this.Median3 = 0;
+              } else if (x3 % 2 != 0) {
+                this.Median3 = this.state.p95_arr3[(x3 - 1) / 2];
+              } else {
+                this.Median3 =
+                  (this.state.p95_arr3[x3 / 2] +
+                    this.state.p95_arr3[(x3 - 2) / 2]) /
+                  2;
               }
               let division = ((x3 - 1) / 20) * 19;
               if (x3 - 1 > 2)
@@ -819,20 +812,21 @@ export const SendRequest = function () {
               });
               let num1 = sum / (x2 - 1);
               let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-              this.std2=num2;
+              this.std2 = num2;
 
               if (x2 - 1 > 3) this.outData[1] = this.avgTime2 + 2.5 * num2;
               this.state.p95_arr2.sort(function (a, b) {
                 return a - b;
               });
-              if(x2<=2){
-                this.Median2=0
-              }
-              else if(x2%2!=0){
-                this.Median2=this.state.p95_arr2[(x2-1)/2]
-              }
-              else{
-                this.Median2=(this.state.p95_arr2[x2/2]+this.state.p95_arr2[(x2/2)-1])/2
+              if (x2 <= 2) {
+                this.Median2 = 0;
+              } else if (x2 % 2 != 0) {
+                this.Median2 = this.state.p95_arr2[(x2 - 1) / 2];
+              } else {
+                this.Median2 =
+                  (this.state.p95_arr2[x2 / 2] +
+                    this.state.p95_arr2[x2 / 2 - 1]) /
+                  2;
               }
               let division = ((x2 - 1) / 20) * 19;
               if (x2 - 1 > 2)
@@ -938,21 +932,22 @@ export const SendRequest = function () {
                 });
                 let num1 = sum / (x - 1);
                 let num2 = Math.sqrt(num1); // num2是标准差,平均数减去标准差就是95%的数据分布点
-                this.std1=num2;
+                this.std1 = num2;
 
                 if (x > 3) this.outData[0] = this.avgTime + 2.5 * num2;
 
                 this.state.p95_arr1.sort(function (a, b) {
                   return a - b;
                 });
-                if(x<=2){
-                  this.Median=0
-                }
-                else if(x%2!=0){
-                  this.Median=this.state.p95_arr1[(x-1)/2]
-                }
-                else{
-                  this.Median=(this.state.p95_arr1[x/2]+this.state.p95_arr1[(x-2)/2])/2
+                if (x <= 2) {
+                  this.Median = 0;
+                } else if (x % 2 != 0) {
+                  this.Median = this.state.p95_arr1[(x - 1) / 2];
+                } else {
+                  this.Median =
+                    (this.state.p95_arr1[x / 2] +
+                      this.state.p95_arr1[(x - 2) / 2]) /
+                    2;
                 }
                 // console.log('p95_arr1' + this.state.p95_arr1);
                 let division = ((x - 1) / 20) * 19;

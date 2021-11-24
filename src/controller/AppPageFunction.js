@@ -25,7 +25,7 @@ export const ExitApp = function () {
   this.props.navigation.navigate('Ordinary');
 
   this.lastBackPressed = Date.now();
-  Toast.message(I18n.t('aboutDetails'));
+  Toast.message(I18n.t('DoublePress'));
   return true; //默认行为
 };
 

@@ -2,7 +2,7 @@
   package="com.luckyxmobile.graphurlping">
 
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
 
     <application
     android:requestLegacyExternalStorage="true"

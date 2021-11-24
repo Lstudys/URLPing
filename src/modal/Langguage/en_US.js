@@ -23,7 +23,7 @@ export default {
   pleasecontact: 'Please Contact',
   version: 'version: 1.0.0',
   Theme:"ThemeColor",
-  aboutDetails:"APP Version: v1.0.0\nUpdate Time: 2021/11/19",
+  aboutDetails:"APP Version: v1.0.0\nUpdate Time: 2021/11/24",
   DoublePress:"Press again to exit the application",
   quitAlert:"Are you sure you want to quit?",
   cancel:"Cancel",

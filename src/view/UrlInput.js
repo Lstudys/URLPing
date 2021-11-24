@@ -868,6 +868,9 @@ class Ordinary extends Component {
                   fontSize: SetSpText(36),
                 }}
                 onChangeText={(value) => {
+                  if(value=="\n"){
+                    return;
+                  }
                   if (
                     value.substr(value.length - 1, 1) == '\n' &&
                     Data.InputUrl.split('\n').length > 4
@@ -896,6 +899,7 @@ class Ordinary extends Component {
                       index = i;
                     }
                   }
+                  
                   console.log('这里' + index);
                   // for(let i=0;i<Data.InputUrl.split('\n').length;i++){
 
@@ -910,6 +914,7 @@ class Ordinary extends Component {
 
                     this.setState({refresh: !this.state.refresh});
                   }
+                  
                   console.log('次数' + this.state.numberOfUrlinTextInput);
                   Data.InputUrl = value;
 

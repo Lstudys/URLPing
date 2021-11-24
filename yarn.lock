@@ -7749,6 +7749,11 @@ react-native-cli@^2.0.1:
     prompt "^0.2.14"
     semver "^5.0.3"
 
+react-native-dialog@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.npmmirror.com/react-native-dialog/download/react-native-dialog-9.2.0.tgz#16a8221140895daad996fd0e39132e1a24b00ab8"
+  integrity sha1-FqgiEUCJXarZlv0OORMuGiSwCrg=
+
 react-native-dns-lookup@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/react-native-dns-lookup/-/react-native-dns-lookup-1.0.3.tgz"
